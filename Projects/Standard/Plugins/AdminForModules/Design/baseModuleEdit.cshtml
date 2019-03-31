@@ -1,0 +1,55 @@
+@{ Layout = nameof(Plugins.ModuleAdmin) + "/Design/baseAdmin.cshtml"; }
+
+<script type='text/javascript'>
+$(document).ready(function(){
+    $("#block").hide();
+    changeTitle("Редактирование модуля: @Module.Caption (@Module.UrlName)");
+    $(".i_adminmenu ul").show();
+
+    $("#loading_img, #res").hide();
+
+    $("form#config_form").requestJSON({
+        before: function () {  },
+        after: function (result, message)
+        {
+            if (message.length > 0) alert(message);
+        }
+    });
+});
+</script>
+@RenderSection("scripts", false)
+<form id="config_form" action="/admin/madmin/@Module.UrlName/ConfigurationSave" method="post">
+    <table width='100%' id='table_results' class='admtable'>
+        <tr>
+            <th style="min-width:150px;" width='50%'>Параметр</th>
+            <th width='50%'>Значение</th>
+        </tr>
+        <tr>
+            <td>Название модуля (заголовок):</td>
+            <td><b>@Module.Caption</b></td>
+        </tr>
+        <tr>
+            <td>Класс модуля:</td>
+            <td><b>@Module.GetType().FullName</b></td>
+        </tr>
+        <tr class="registered">
+            <td>ID модуля:</td>
+            <td><b>@Module.ID</b></td>
+        </tr>
+        <tr class="registered">
+            <td>URL-доступное имя модуля:</td>
+            <td><input type='text' name='ModuleName' length='10' maxlength='10' value='@Module.UrlName'></td>
+        </tr>
+        @RenderSection("ModuleConfiguration", false)
+        <tr>
+            <td colspan='2'>
+                <span style="color:red;">Обратите внимание - при сохранении настроек модуля сам модуль перезагружается.</span><br />
+                <input type="submit" value="Сохранить" />
+                <div id='res' style="margin:5px 10px;padding:5px;"></div>
+                <div id='config'></div>
+            </td>
+        </tr>
+    </table>
+</form>
+
+@RenderBody()

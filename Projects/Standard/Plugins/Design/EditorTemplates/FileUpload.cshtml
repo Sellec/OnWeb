@@ -1,0 +1,127 @@
+﻿@using System.ComponentModel.DataAnnotations
+
+@{
+    /**
+     *
+     * */
+    var values = new List<int>();
+    var isMultiple = false;
+    var type = ViewData.ModelMetadata.ModelType;
+    var propertyName = string.IsNullOrEmpty(ViewData.TemplateInfo.HtmlFieldPrefix) ? $"TmpFileUpload_{new Random().Next(100000, 999999)}" : ViewData.TemplateInfo.HtmlFieldPrefix;
+
+    var interfaceType = TraceCore.Types.TypeHelpers.ExtractGenericInterface(type, typeof(IEnumerable<>));
+    if (type.IsArray)
+    {
+        type = type.GetElementType();
+        isMultiple = true;
+        if (type == typeof(int) && ViewData.ModelMetadata.Model != null) { values.AddRange((int[])ViewData.ModelMetadata.Model); }
+    }
+    else if (interfaceType != null)
+    {
+        type = interfaceType.GenericTypeArguments[0];
+        isMultiple = true;
+        if (type == typeof(int) && ViewData.ModelMetadata.Model != null) { values.AddRange((IEnumerable<int>)ViewData.ModelMetadata.Model); }
+    }
+    else if (type == typeof(int) && ViewData.ModelMetadata.Model != null) { values.Add((int)ViewData.ModelMetadata.Model); }
+    else if (type == typeof(int?) && ViewData.ModelMetadata.Model != null) { values.Add((int)ViewData.ModelMetadata.Model); }
+
+    var allowed = type == typeof(int) || (!isMultiple && type == typeof(int?));
+    if (!allowed) { throw new ArgumentException($"Для загрузчика файлов допустим тип данных int?, int, int[] или IEnumerable<int> или его производные. Тип '{ViewData.ModelMetadata.ModelType}' недопустим.", nameof(propertyName)); }
+
+    var htmlAttributesSource = ViewData.ContainsKey("htmlAttributes") ? ViewData["htmlAttributes"] : new Dictionary<string, object>();
+    IDictionary<string, object> htmlAttributes = new Dictionary<string, object>();
+    if (htmlAttributesSource != null)
+    {
+        if (htmlAttributesSource is IDictionary<string, object>) { htmlAttributes = htmlAttributesSource as IDictionary<string, object>; }
+        else { htmlAttributes = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributesSource); }
+    }
+
+    /**
+     *
+     * */
+    var label = htmlAttributes?.GetValueOrDefault("label", "Выберите файл")?.ToString() ?? "Выберите файл";
+    var containerID = $"FileUploadField_{propertyName.Replace(".", "_")}";
+
+    var optionsFromAttributes = htmlAttributes?.GetValueOrDefault("uploadOptions");
+    if (optionsFromAttributes != null)
+    {
+        var typeDictionary = TraceCore.Types.TypeHelpers.ExtractGenericInterface(optionsFromAttributes.GetType(), typeof(IDictionary<,>));
+        if (typeDictionary != null)
+        {
+            var dictSimple = (optionsFromAttributes as System.Collections.IDictionary);
+
+            if (typeDictionary.GenericTypeArguments[0] != typeof(string) || typeDictionary.GenericTypeArguments[1] != typeof(object) || dictSimple.IsReadOnly)
+            {
+                var newUploadOptions = new Dictionary<string, object>();
+                foreach (var key in dictSimple.Keys) { newUploadOptions[key.ToString()] = $"{dictSimple[key]}"; }
+                optionsFromAttributes = newUploadOptions;
+            }
+        }
+        else { optionsFromAttributes = HtmlHelper.AnonymousObjectToHtmlAttributes(optionsFromAttributes); }
+    }
+    else { optionsFromAttributes = new Dictionary<string, object>(); }
+
+    var presentOptionsFromAttributes = ViewData.ContainsKey("presentOptions") ? ViewData["presentOptions"] as FilePresentOptions : null;
+    if (presentOptionsFromAttributes == null) { presentOptionsFromAttributes = new FilePresentOptions(); }
+
+    var uploadOptions = optionsFromAttributes as IDictionary<string, object>;
+    uploadOptions["formData"] = new { moduleName = "" };
+
+    if (this.Module != null) { uploadOptions["formData"] = new { moduleName = this.Module.Name }; }
+    uploadOptions["multiple"] = isMultiple;
+
+    Modules.FileManager.MVC.FileRenderOptions options = null;
+    switch ((FileType)(ViewData.ModelMetadata.AdditionalValues.GetValueOrDefault(nameof(FileDataTypeAttribute.FileType)) ?? FileType.File))
+    {
+        case FileType.Image:
+            var imagePresentOptions = presentOptionsFromAttributes as ImagePresentOptions;
+            var htmlSizes = new List<string>();
+            if (imagePresentOptions != null && imagePresentOptions.MaxWidth.HasValue) { htmlSizes.Add($"max-width:{imagePresentOptions.MaxWidth}px;width: expression(this.width > {imagePresentOptions.MaxWidth } ? {imagePresentOptions.MaxWidth}: true);"); }
+            if (imagePresentOptions != null && imagePresentOptions.MaxHeight.HasValue) { htmlSizes.Add($"max-height:{imagePresentOptions.MaxHeight}px;height: expression(this.height > {imagePresentOptions.MaxHeight } ? {imagePresentOptions.MaxHeight}: true);"); }
+            var htmlSizesAttrs = "style='" + string.Join("; ", htmlSizes) + "'";
+            options = new Modules.FileManager.MVC.FileRenderOptions()
+            {
+                UploadedFileInfoJS = " \"<img alt='файл №\" + data + \"' src='/fm/image/\" + data + \"' " + htmlSizesAttrs + ">\" ",
+                UploadedFileInfo = new Func<int, string>(IdFile => $"<img alt='файл №{IdFile}' src='/fm/image/{IdFile}' {htmlSizesAttrs}>")
+            };
+            break;
+
+        case FileType.File:
+        default:
+            options = new Modules.FileManager.MVC.FileRenderOptions()
+            {
+                UploadedFileInfoJS = " \"<label>файл №\" + data + \"</label>\" ",
+                UploadedFileInfo = new Func<int, string>(IdFile => $"<label>файл №{IdFile}</label>")
+            };
+            break;
+    }
+}
+
+<script type='text/javascript'>
+    $(function(){
+        @containerID = $("#@containerID").requestFileUploadSingle(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(uploadOptions)));
+        @(containerID).getElement().bind("requestFileUploadSingleAfter", function(e, result, message, data) {
+            @(containerID).reset();
+            if (message.length > 0) alert(message);
+            if (result == JsonResult.OK) $("div#FileUploadField_Files_@containerID").@(isMultiple ? "append" : "html")("<span class='FileUploadField' data-idfile='" + data + "'><input type='button' class='buttonDelete' value='X'>&nbsp;<input type='checkbox' checked name='@(propertyName)[]' value='" + data + "'>&nbsp;" + @Html.Raw(options.UploadedFileInfoJS) + "</span>");
+            $("div#FileUploadField_Files_@containerID input.buttonDelete").unbind("click").click(function(){ $(this).parent().remove(); });
+        });
+    });
+</script>
+<div class="FileUploadField" id="@containerID">@label</div>
+<div id="FileUploadField_Files_@containerID">
+    @if (values != null)
+    {
+        foreach (var IdFile in values.Where(x => x > 0))
+        {
+            //var file = filesList.GetValueOrDefault(IdFile);
+            //str += $"<span class='FileUploadField {(file == null ? "FileNotFound" : "")}' data-idfile='{IdFile}'>";
+            <span class="FileUploadField" data-idfile="@IdFile">
+                <input type="button" class="buttonDelete" value="X">&nbsp;
+                <input type="checkbox" checked name="@(propertyName)[]" value="@IdFile">&nbsp;
+                @*str += $"<label>{file?.NameFile ?? "Файл не найден"}</label>";*@
+                @Html.Raw(options.UploadedFileInfo(IdFile))
+            </span>
+        }
+    }
+</div>

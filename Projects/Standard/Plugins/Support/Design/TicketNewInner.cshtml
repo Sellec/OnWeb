@@ -1,0 +1,62 @@
+@model Support.Model.Ticket
+<link rel="stylesheet" type="text/css" href="/data/js/uploadify/uploadify.css">
+
+<script type='text/javascript'>
+    $(function ()
+    {
+        $("div#js-ticket-form").requestJSON({
+            before: function ()
+            {
+                $("#loading_img").fadeIn();
+            },
+            after: function (result, message, data)
+            {
+                $("#mod_error").html(message.replace(/\n/g, '<br />')).show();
+                open_modal("#mod_error");
+
+                $(".loading_img").fadeOut();
+            }
+        });
+    });
+
+</script>
+
+<div class="login-block">
+    <div id="enter_reg" class="pass_block notop cover">
+        <div class="login-block-inner">
+
+                <div class="enter-block" id="enter_reg">   
+                    <form action='/@Module.Name/TicketSave' method='post' id='js-ticket-form' class='pass_inner'>
+
+                        <div class="login-form__row">
+                            @Html.TextBoxFor(model => model.email, new { @class = "style-input", placeholder = Html.DisplayNameFor(model => model.email) })
+                            @Html.ValidationMessageFor(model => model.email)
+                            @Html.ValidationMessageFor(model => model.EmailOrPhone)
+                        </div>
+                        <div class="login-form__row">
+                            @Html.TextBoxFor(model => model.phone, new { @class = "style-input", placeholder = Html.DisplayNameFor(model => model.phone) })
+                            @Html.ValidationMessageFor(model => model.phone)
+                            @Html.ValidationMessageFor(model => model.EmailOrPhone)
+                        </div>
+                        <div class="login-form__row">
+                            @Html.TextBoxFor(model => model.name, new { @class = "style-input", placeholder = Html.DisplayNameFor(model => model.name) })
+                            @Html.ValidationMessageFor(model => model.name)
+                        </div>
+                        <div class="login-form__row">
+                            @*Html.LabelFor(model => model.password)*@
+                            @Html.PasswordFor(model => model.password, new { @class = "style-input", placeholder = Html.DisplayNameFor(model => model.password), id = "pass" })<br />
+                            @Html.ValidationMessageFor(model => model.password)
+                        </div>
+                        @*
+                        <div class="login-form__row center-row recaptcha">
+                            @Html.RecaptchaInvisible("Отправить", new { @class = "input-submit" })
+                        </div>
+                        *@
+
+                    </form>
+                    <div id="req_result" class="result"></div>
+                </div>
+           
+        </div>
+    </div>
+</div>

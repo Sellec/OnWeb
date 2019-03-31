@@ -1,0 +1,84 @@
+﻿ 0. ОБЯЗАТЕЛЬНО! Проблемы с локальной рабочей областью и изменением файлов в дочерних проектах во время отладки.
+	Если вы пользуетесь режимом "Локальная рабочая область" в VisualStudio 2015 и ниже (2017 и выше не проверялось), то этот режим ломает механизм отслеживания файлов ASP.NET, который позволяет перекомпилировать представления и менять ресурсы "на лету" во время отладки.
+	VisualStudio перехватывает все события изменения файлов и подменяет их имена, в результате чего DirectoryMonitor ASP.NET не может отследить изменение файлов. 
+	Таким образом, изменение файла в основном проекте либо в дочерних (подключенных через OnWeb.Providers.TraceResourceProvider.SourceDevelopmentPathList) не создает событие изменения файла и не запускается сброс кеширования и перекомпиляция представления.
+ 
+ 1. Порядок сборки проектов.
+	Все проекты подключаются в конечный проект (наподобие SiteEKGF).
+	Он должен включать (минимально): 
+		TraceCore
+		TraceCore.Standard
+		OnWeb
+		OnWeb.Design
+		OnWeb.Design.Additionals
+		OnWeb.Modules
+
+	При наличии других проектов, которые переопределяют стандартные ресурсы (например, OnWeb.Modules.Tender переопределяет ресурс Data/Temp/Auth/login.cshtml из OnWeb.Modules),
+	переопределяющие проекты должны прописаться в основном проекте ПОСЛЕ базовых. То есть в SiteEKGF.csproj цепочка проектов должна выглядеть так:
+
+    <ProjectReference Include="..\..\TraceEngine\OnWeb.Modules\OnWeb.Modules.csproj">
+	....
+    </ProjectReference>
+    <ProjectReference Include="..\..\TraceEngine\OnWeb.Modules.Tender\OnWeb.Modules.Tender.csproj">
+	....
+    </ProjectReference>
+
+	Если будет наоборот, то сначала скопируются ресурсы из OnWeb.Modules.Tender, затем перезапишутся ресурсами из OnWeb.Modules.
+
+2. Если ругается на EntityFramework и подобное - 
+
+3. Соглашение о наименовании: мастер-шаблоны должны называться baseХХХ.
+	Это НЕобязательное условие, но предварительная компиляция игнорирует такие шаблоны, поэтому, чтобы не получать ошибку прекомпиляции, следует соблюдать правило.
+
+4. web.config должен содержать следующую минимально необходимую информацию:
+<configuration>
+  <configSections>
+    <sectionGroup name="system.web.webPages.razor" type="System.Web.WebPages.Razor.Configuration.RazorWebSectionGroup, System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35">
+      <section name="host" type="System.Web.WebPages.Razor.Configuration.HostSection, System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35" requirePermission="false" />
+      <section name="pages" type="System.Web.WebPages.Razor.Configuration.RazorPagesSection, System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35" requirePermission="false" />
+    </sectionGroup>
+  </configSections>
+  <appSettings>
+    <add key="webpages:Version" value="3.0.0.0" />
+  </appSettings>
+  <system.web>
+    <globalization requestEncoding="utf-8" responseEncoding="utf-8" fileEncoding="utf-8" />
+    <compilation debug="true" targetFramework="4.5.2">
+      <assemblies>
+        <add assembly="System.Web.Abstractions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35" />
+        <add assembly="System.Web.Routing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35" />
+        <add assembly="System.Data.Linq, Version=4.0.0.0, Culture=neutral, PublicKeyToken=B77A5C561934E089" />
+        <add assembly="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35" />
+      </assemblies>
+    </compilation>
+    <httpRuntime targetFramework="4.5.2" requestValidationMode="0.0" requestPathInvalidCharacters="" />
+    <customErrors mode="Off" />
+  </system.web>
+  <runtime>
+    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+      <dependentAssembly>
+        <assemblyIdentity name="Newtonsoft.Json" publicKeyToken="30ad4fe6b2a6aeed" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-12.0.0.0" newVersion="12.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="EntityFramework" publicKeyToken="b77a5c561934e089" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-6.0.0.0" newVersion="6.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.WebPages.Razor" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="1.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Helpers" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="1.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.WebPages" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="1.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Mvc" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="1.0.0.0-5.2.7.0" newVersion="5.2.7.0" />
+      </dependentAssembly>
+    </assemblyBinding>
+  </runtime>

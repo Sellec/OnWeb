@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <BaseIntermediateOutputPath>objMVC</BaseIntermediateOutputPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{97E67E63-4E52-48B7-93D3-775B3FFAC10D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OnWeb</RootNamespace>
+    <AssemblyName>OnWeb.CoreBind</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\DebugMVC\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\DebugMVC\OnWeb.CoreBind.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\ReleaseMVC\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\ReleaseMVC\OnWeb.CoreBind.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>D:\Projects\TraceStudio\SigningKeys\OnUtils.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ManagedInjector-x64">
+      <HintPath>..\..\..\External Libraries\ManagedInjector\ManagedInjector-x64.dll</HintPath>
+    </Reference>
+    <Reference Include="ManagedInjector-x86">
+      <HintPath>..\..\..\External Libraries\ManagedInjector\ManagedInjector-x86.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web">
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\System.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CoreBind\Modules\Configuration\SaveModel.cs" />
+    <Compile Include="CoreBind\Modules\ModuleControllerUser.cs" />
+    <Compile Include="CoreBind\Providers\ResourceProvider.cs" />
+    <Compile Include="CoreBind\Routing\ControllerTypeAdmin.cs" />
+    <Compile Include="CoreBind\Modules\ModuleControllerAdmin.cs" />
+    <Compile Include="CoreBind\Routing\ModuleControllerDefaultAttribute.cs" />
+    <Compile Include="CoreBind\_Initialize\WebRazorHostFactoryInjector.cs" />
+    <Compile Include="CoreBind\_Initialize\WebInitializer.cs" />
+    <Compile Include="CoreBind\ApplicationCoreSingleton.cs" />
+    <Compile Include="CoreBind\ApplicationCore.cs" />
+    <Compile Include="CoreBind\HttpApplication.cs" />
+    <Compile Include="CoreBind\Razor\TraceViewPage.cs" />
+    <Compile Include="CoreBind\Binders\JsonDictionaryModelBinder.cs" />
+    <Compile Include="CoreBind\Binders\TraceModelBinder.cs" />
+    <Compile Include="CoreBind\Exceptions\ActionResultException.cs" />
+    <Compile Include="CoreBind\Extensions\ModelMetadataExtension.cs" />
+    <Compile Include="CoreBind\Extensions\ModelStateDictionaryExtension.cs" />
+    <Compile Include="CoreBind\Extensions\ResponseException.cs" />
+    <Compile Include="CoreBind\ModuleExtensions\CustomFields\Extensions\HtmlHelperExtension.cs" />
+    <Compile Include="CoreBind\ModuleExtensions\CustomFields\MetadataAndValues\FieldModelMetadata.cs" />
+    <Compile Include="CoreBind\ModuleExtensions\CustomFields\MetadataAndValues\FieldValueProvider.cs" />
+    <Compile Include="CoreBind\ModuleExtensions\CustomFields\MetadataAndValues\FieldValueProviderFactory.cs" />
+    <Compile Include="CoreBind\ModuleExtensions\CustomFields\MetadataAndValues\FieldValueProviderResult.cs" />
+    <Compile Include="CoreBind\_Initialize\ModuleInitializer.cs" />
+    <Compile Include="CoreBind\Modules\Internal\ModuleControllerInternalErrors.cs" />
+    <Compile Include="CoreBind\Modules\Internal\ModuleInternalErrors.cs" />
+    <Compile Include="CoreBind\Modules\ModuleActionAttribute.cs" />
+    <Compile Include="CoreBind\Modules\ModuleActionInvoker.cs" />
+    <Compile Include="CoreBind\Modules\ModuleControllerBase.cs" />
+    <Compile Include="CoreBind\Razor\RazorBuildProvider.cs" />
+    <Compile Include="CoreBind\Razor\RazorHost.cs" />
+    <Compile Include="CoreBind\Razor\RazorHostFactory.cs" />
+    <Compile Include="CoreBind\Razor\WebStartup.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CoreBind\Providers\EmbeddedResourceProvider.cs" />
+    <Compile Include="CoreBind\Providers\TraceControllerProvider.cs" />
+    <Compile Include="CoreBind\Providers\TraceJsonValueProvider.cs" />
+    <Compile Include="CoreBind\Providers\TraceJsonValueProviderFactory.cs" />
+    <Compile Include="CoreBind\Providers\TraceModelMetadataProvider.cs" />
+    <Compile Include="CoreBind\Providers\TraceModelMultipleMetadataProvider.cs" />
+    <Compile Include="CoreBind\Providers\TraceSessionStateCacheProvider.cs" />
+    <Compile Include="CoreBind\Providers\TraceSessionStateProvider.cs" />
+    <Compile Include="CoreBind\Razor\HtmlMarkupParser.cs" />
+    <Compile Include="CoreBind\Razor\RazorResources.cs" />
+    <Compile Include="CoreBind\Routing\AreaConstants.cs" />
+    <Compile Include="CoreBind\Routing\ControllerRouteConstraint.cs" />
+    <Compile Include="CoreBind\Routing\ControllerType.cs" />
+    <Compile Include="CoreBind\Routing\ControllerTypeDefault.cs" />
+    <Compile Include="CoreBind\Routing\ControllerTypeFactory.cs" />
+    <Compile Include="CoreBind\Routing\HttpContextExtensions.cs" />
+    <Compile Include="CoreBind\Routing\LanguageRouteConstraint.cs" />
+    <Compile Include="CoreBind\Routing\Manager.cs" />
+    <Compile Include="CoreBind\Routing\RouteHandler.cs" />
+    <Compile Include="CoreBind\Routing\RoutesDefaults.cs" />
+    <Compile Include="CoreBind\Types\NSJsonResult.cs" />
+    <Compile Include="CoreBind\Types\RequestAnswerType.cs" />
+    <Compile Include="CoreBind\Types\ResultWData.cs" />
+    <Compile Include="CoreBind\WebCore\Types\RequestSpecificItem.cs" />
+    <Compile Include="CoreBind\WebUtils\RazorRenderHelper.cs" />
+    <Compile Include="CoreBind\WebUtils\TypeHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\External Libraries\Madaa.Lib.Win.Services\Madaa.Lib.Win.Services.csproj">
+      <Project>{cbaa3a56-3772-4120-874d-c13f182d49f0}</Project>
+      <Name>Madaa.Lib.Win.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\Core.csproj">
+      <Project>{f61ffcc5-3711-4d42-916a-ef83032f542a}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Fody">
+      <Version>3.3.5</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.Mvc">
+      <Version>5.2.7</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.Razor">
+      <Version>3.2.7</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.WebPages">
+      <Version>3.2.7</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
+      <Version>2.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="ModuleInit.Fody">
+      <Version>1.9.0</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="OnUtils.Application">
+      <Version>0.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="OnUtils">
+      <Version>0.1.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="OnUtils.Data.EntityFramework">
+      <Version>0.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="OnUtils.Tasks.Hangfire">
+      <Version>0.1.1</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CoreBind\Razor\RazorResources.resx">
+      <DependentUpon>RazorResources.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="FodyWeavers.xml">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CoreBind\AspNet\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -1,0 +1,23 @@
+﻿CREATE TYPE [dbo].[TVP_WordCase] AS TABLE (
+    [NominativeSingle]      NVARCHAR (100) DEFAULT ('') NOT NULL,
+    [NominativeTwo]         NVARCHAR (100) DEFAULT ('') NOT NULL,
+    [NominativeMultiple]    NVARCHAR (100) DEFAULT ('') NOT NULL,
+    [GenitiveSingle]        NVARCHAR (100) DEFAULT ('') NOT NULL,
+    [GenitiveTwo]           NVARCHAR (100) DEFAULT ('') NOT NULL,
+    [GenitiveMultiple]      NVARCHAR (100) DEFAULT ('') NOT NULL,
+    [DativeSingle]          NVARCHAR (100) DEFAULT ('') NOT NULL,
+    [DativeTwo]             NVARCHAR (100) DEFAULT ('') NOT NULL,
+    [DativeMultiple]        NVARCHAR (100) DEFAULT ('') NOT NULL,
+    [AccusativeSingle]      NVARCHAR (100) DEFAULT ('') NOT NULL,
+    [AccusativeTwo]         NVARCHAR (100) DEFAULT ('') NOT NULL,
+    [AccusativeMultiple]    NVARCHAR (100) DEFAULT ('') NOT NULL,
+    [InstrumentalSingle]    NVARCHAR (100) DEFAULT ('') NOT NULL,
+    [InstrumentalTwo]       NVARCHAR (100) DEFAULT ('') NOT NULL,
+    [InstrumentalMultiple]  NVARCHAR (100) DEFAULT ('') NOT NULL,
+    [PrepositionalSingle]   NVARCHAR (100) DEFAULT ('') NOT NULL,
+    [PrepositionalTwo]      NVARCHAR (100) DEFAULT ('') NOT NULL,
+    [PrepositionalMultiple] NVARCHAR (100) DEFAULT ('') NOT NULL,
+    [IsNewSingle]           BIT            DEFAULT ((1)) NOT NULL,
+    [IsNewTwo]              BIT            DEFAULT ((1)) NOT NULL,
+    [IsNewMultiple]         BIT            DEFAULT ((1)) NOT NULL);
+

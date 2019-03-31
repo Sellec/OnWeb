@@ -1,0 +1,109 @@
+@model Register.Model.Register
+@{ 
+    Layout = "baseCommon.cshtml";
+    Title = "Регистрация";
+}
+
+@section head { <link rel="stylesheet" type="text/css" href="/data/js/uploadify/uploadify.css"> }
+
+@if (!UserManager.Instance.isAuthorized)
+{
+    <script type='text/javascript'>
+        $(function ()
+        {
+            $("#reg_form").requestJSON({
+                before: function ()
+                {
+                    var res = '';
+                    if ($('#pass').val() != $('#pass2').val()) res = res + ' ' + '&rarr; Пароль и подтверждение пароля должны совпадать!<br />';
+                    if (res.length > 0)
+                    {
+                        alert(res);
+                        $("#mod_error").html(res);
+                        open_modal("#mod_error");
+                        return false;
+                    } else
+                    {
+                        $("#loading_img").fadeIn();
+                    }
+                },
+                after: function (result, message, data)
+                {
+                    $("#mod_error").html(message.replace(/\n/g, '<br />')).show();
+                    open_modal("#mod_error");
+                    //if (message.length > 0) alert(message);
+
+                    $("#req_result").html(nl2br(message));
+
+                    $(".loading_img").fadeOut();
+
+                    if (result == JsonResult.OK) $('#reg_form').hide();
+                }
+            });
+        });
+    </script>
+}
+
+@section breadcrumbs {
+    <!-- (breadcrumbs) -->
+    <div class="breadcrumbs inner-breadcrumbs">
+        <div class="breadcrumbs__cover cover">
+            <div class="breadcrumbs__links">
+                <a typeof="v:Breadcrumb" href="/" class="breadcrumbs__link">Главная</a>
+                <span class="breadcrumbs__arrow"></span>
+                <p class="breadcrumbs__last">Регистрация</p>
+            </div>
+        </div>
+    </div>
+    <!-- End (breadcrumbs) -->
+}
+
+<div class="login-block">
+    <div id="enter_reg" class="pass_block notop cover">
+        <div class="login-block-inner">
+            <h1>Регистрация</h1>
+            @if (UserManager.Instance.isAuthorized)
+            {
+                <p class="pass_inner pages">Вы уже зарегистрированы, можете продолжать работу с сайтом.</p>
+                <p class="pass_inner pages"><a href="/customer" title="">Перейти к настройкам</a>, <a href="/customer/pchange" title="">Сменить пароль</a>, <a href="/login/logout" title="">Выйти из профиля</a></p>
+            }
+            else
+            {
+                <div class="enter-block" id="enter_reg">   
+                    <form action='@(Url.CreateRoute<Modules.Register.ModuleRegisterController>(x=>x.RegisterSave(null)))' method='post' id='reg_form' class='pass_inner'>
+
+                        <div class="site_reginfo">@Html.Raw(Config.Get("site_reginfo", ""))</div>
+                        <div class="login-form__row">
+                            @Html.TextBoxFor(model => model.email, new { @class = "style-input", placeholder = Html.DisplayNameFor(model => model.email) })
+                            @Html.ValidationMessageFor(model => model.email)
+                            @Html.ValidationMessageFor(model => model.EmailOrPhone)
+                        </div>
+                        <div class="login-form__row">
+                            @Html.TextBoxFor(model => model.phone, new { @class = "style-input", placeholder = Html.DisplayNameFor(model => model.phone) })
+                            @Html.ValidationMessageFor(model => model.phone)
+                            @Html.ValidationMessageFor(model => model.EmailOrPhone)
+                        </div>
+                        <div class="login-form__row">
+                            @Html.TextBoxFor(model => model.name, new { @class = "style-input", placeholder = Html.DisplayNameFor(model => model.name) })
+                            @Html.ValidationMessageFor(model => model.name)
+                        </div>
+                        <div class="login-form__row">
+                            @*Html.LabelFor(model => model.password)*@
+                            @Html.PasswordFor(model => model.password, new { @class = "style-input", placeholder = Html.DisplayNameFor(model => model.password), id = "pass" })<br />
+                            @Html.ValidationMessageFor(model => model.password)
+                        </div>
+                        <div class="login-form__row">
+                            <input type='password' class='style-input' name='password2' placeholder='Повторите пароль' id='pass2' />
+                        </div>
+                        <div class="login-form__row center-row">
+                            @Html.RecaptchaInvisible("Зарегистрироваться", new { @class = "input-submit" })
+                            @* @CaptchManager.reRender("regReCaptcha1", "regReCaptcha2") *@
+                        </div>
+                        <a href="@(Url.CreateRoute<Modules.Auth.ModuleAuthController>(x=>x.Index()))" title="" class="er_enter">У меня есть аккаунт!</a>
+                    </form>
+                    <div id="req_result" class="result"></div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

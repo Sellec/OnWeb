@@ -1,0 +1,65 @@
+@model Exception
+@{ 
+    Layout = "baseCommon.cshtml";
+    Title = "Отсутствует доступ к странице";
+    var userContextCurrent = AppCore.GetUserContextManager().GetCurrentUserContext();
+}
+
+@section breadcrumbs {
+    <!-- (breadcrumbs) -->
+    <div class="breadcrumbs inner-breadcrumbs">
+        <div class="breadcrumbs__cover cover">
+            <div class="breadcrumbs__links">
+                <a typeof="v:Breadcrumb" href="/" class="breadcrumbs__link">Главная</a>
+                <span class="breadcrumbs__arrow"></span>
+                <p class="breadcrumbs__last">Отсутствует доступ к странице</p>
+            </div>
+        </div>
+    </div>
+    <!-- End (breadcrumbs) -->
+}
+
+<div class="login-block">
+    <div class="cover">
+        <div class="login-block-inner">
+            <h1>Отсутствует доступ!</h1>
+            <div class="enter-block" id="enter_reg">
+                <div class="result">
+                    Уважаемый посетитель! У Вас отсутствует доступ к данной странице.
+                    @if (Model != null && !string.IsNullOrEmpty(Model.Message))
+                    {
+                        <div style="font-style: italic;font-weight: bold;margin-top:10px;">
+                            @Html.Raw(Model.Message)
+                        </div>
+                    }
+                </div>
+
+                @if (userContextCurrent.IsGuest)
+                {
+                    <form action='/login/login' method='post' id="enter_login">
+                        @Html.Hidden("urlFrom", Url.RequestContext.HttpContext.Request.Url.PathAndQuery)
+
+                        <div class="nopadding"><p>@Html.Raw(Config.site_loginfo)</p></div>
+
+                        <div class="login-form__row">
+                            <input name='login' type='text' class='style-input' placeholder='Электронная почта' />
+                        </div>
+                        <div class="login-form__row">
+                            <input name='pass' type='password' class='style-input' placeholder='Пароль' />
+                        </div>
+                        <div class="login-form__row center-row">
+                        </div>
+                        <div class="login-form__row">
+                            @Html.RecaptchaInvisible("Войти", new { @class = "input-submit" })
+                        </div>
+                        <div class="login-form__row login-links">
+                            <a href="/login/restore" title="Восстановление забытого пароля">Не помню пароль</a>
+                            <a href="/reg" title="">Регистрация</a>
+                        </div>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

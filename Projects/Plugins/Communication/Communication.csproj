@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>OnWeb.Plugins.Communication</AssemblyName>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Version>0.1.1</Version>
+    <Authors>Sellec</Authors>
+    <Company>TraceStudio</Company>
+    <Product>OnWeb</Product>
+    <Description>Плагин, добавляющий сервисы отправки смс-сообщений (через Amazon SNS), сообщений через Telegram-бота, Email-коннектор (через Amazon SES).</Description>
+    <Copyright>Copyright © Петров Дмитрий 2016</Copyright>
+    <IncludeSymbols>True</IncludeSymbols>
+    <IncludeSource>True</IncludeSource>
+    <PackageLicenseUrl>https://github.com/Sellec/OnWeb/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Sellec/OnWeb</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Sellec/OnWeb</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <RootNamespace>OnWeb.Plugins.Communication</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\OnWeb.Plugins.Communication.xml</DocumentationFile>
+    <OutputPath>bin\Debug</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>bin\Release</OutputPath>
+    <DocumentationFile>bin\Release\OnWeb.Plugins.Communication.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Core\**" />
+    <EmbeddedResource Remove="Core\**" />
+    <None Remove="Core\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.CloudWatchLogs" Version="3.3.100.2" />
+    <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.3.100.2" />
+    <PackageReference Include="Telegram.Bot" Version="14.10.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Core.csproj" />
+  </ItemGroup>
+
+  <Target Name="CopyPackage" AfterTargets="Pack">
+    <Exec Command="xcopy /y &quot;$(ProjectDir)bin\$(ConfigurationName)\*.nupkg&quot; &quot;$(SolutionDir)..\Build\$(ConfigurationName)\&quot;&#xD;&#xA;" />
+  </Target>
+</Project>

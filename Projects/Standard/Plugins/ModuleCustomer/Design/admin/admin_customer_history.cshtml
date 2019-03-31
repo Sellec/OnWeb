@@ -1,0 +1,71 @@
+@model Customer.Model.History
+
+<script type='text/javascript'>
+    $(function ()
+    {
+        $("#dc_from, #dc_to").datepicker({
+            firstDay: "1",
+            dateFormat: 'dd.mm.yy',
+            maxDate: "+0D",
+            closeText: 'Закрыть',
+            prevText: 'Предыдущий',
+            nextText: 'Следующий',
+            currentText: 'Сегодня',
+            monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+            monthNamesShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+            dayNames: ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'],
+            dayNamesShort: ['вск', 'пнд', 'втр', 'срд', 'чтв', 'птн', 'сбт'],
+            dayNamesMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+            weekHeader: 'Не',
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: '',
+            changeMonth: true,
+            changeYear: true,
+        });
+
+        $('#dc_from').datepicker('setDate', '@Model.DateStart.ToString("dd.MM.yyyy")');
+        $('#dc_to').datepicker('setDate', '@Model.DateEnd.ToString("dd.MM.yyyy")');
+    });
+</script>
+
+История
+
+<div id="date_cal">
+    <form action='' method='post'>
+        с <input type="text" name="datestart" id="dc_from" /> по <input type="text" name="dateend" id="dc_to" /> <input type='submit' id='dc_update' value='Обновить'>
+    </form>
+</div>
+
+<table id='history' class="tablesorter" width="100%">
+    <thead>
+        <tr>
+            <th class="filter" style="width:120px;">Дата события</th>
+            <th class="filter" colspan='2'>Событие</th>
+            <th class="filter" style="width:200px;">Кто делал</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Records.Count == 0)
+        {
+            <tr>
+                <td colspan='3'>За указанный период нет записей истории.</td>
+            </tr>
+        }
+        else
+        {
+            foreach (var ad in Model.Records)
+            {
+                <tr>
+                    <td>@ad.DateChangeBase.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                    <td>@ad.CaptionRecord</td>
+                    <td>@ad.NameRecord</td>
+                    <td>
+                        @if (ad.UserChange != null)
+                        { <a href='/admin/mnadmin/@Module.Name/users_edit/@ad.IdUserChange' target='_blank'>@ad.UserChange.ToString()</a>}
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

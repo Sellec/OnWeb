@@ -1,0 +1,184 @@
+@model Customer.Model.AdminRolesManage
+
+<script type='text/javascript'>
+    var Roles = @Model.Roles.jsobject();
+    var Role = null;
+
+    function updateRoles()
+    {
+        try
+        {
+            $('#rolesTable').tablefill(Roles, function(tr_elem, data){
+                $(tr_elem).find('td').each(function(ichild){
+                    if (ichild == 0) $(this).text(data.NameRole);
+                });
+
+                $(tr_elem).find(".delete").click(function(){ roleActions(data, 'delete') });
+                $(tr_elem).find(".edit").click(function(){ roleActions(data, 'edit') });
+            });
+
+        } catch(err) { alert(err); }
+    }
+
+    function roleActions(data, action)
+    {
+        try
+        {
+            $('#rolesTableResult').text('');
+
+            if (action == 'add')
+            {
+                Role = data;
+                $("input[name=IdRole]").val(0);
+                $("input[name=NameRole]").val('');
+                updatePermissionsFromRole({});
+
+                $("td#roleTable th#roleCaption").text("Добавление новой роли");
+                $("td#roleTable").show();
+            }
+            else if (action == 'edit')
+            {
+                Role = data;
+                $("input[name=IdRole]").val(data.IdRole);
+                $("input[name=NameRole]").val(data.NameRole);
+                updatePermissionsFromRole(data.Permissions);
+
+                $("td#roleTable th#roleCaption").text("Редактирование роли '" + data.NameRole + "'");
+                $("td#roleTable").show();
+            }
+            else if (action == 'delete')
+            {
+                if (confirm('Вы действительно хотите удалить роль "' + data.NameRole + '"?'))
+                {
+                    $.requestJSON('/admin/madmin/@Module.Name/roleDelete/' + data.IdRole, null, function(result, message){
+                        if (result == JsonResult.OK)
+                        {
+                            delete Roles[data.IdRole];
+                            updateRoles();
+                        }
+                        if (message != null && message.length > 0) $("#rolesTableResult").html(message);
+                    });
+                }
+            }
+        }
+        catch(err) { $("#rolesTableResult").html(err); }
+    }
+
+    function updatePermissionsFromRole(Permissions)
+    {
+        try
+        {
+            $("select#plistPermissions option:selected").prop("selected", false);
+
+            if (Permissions != undefined)
+            {
+                $.each(Permissions, function(key, value){
+                    $("select#plistPermissions option[Value='" + value + "']").prop('selected', true);
+                });
+            }
+        }
+        catch(err) { alert(err); }
+    }
+
+    $(document).ready(function(){
+        changeTitle('Настройка ролей');
+        $("#block").hide();
+
+        $("input.ButtonClose").click(function(){
+            $(this).parent().parent().closest('td').hide();
+        }).click();
+
+        $("input#roleAdd").click(function(){
+            roleActions(null, 'add');
+        });
+
+        $('form#roleForm').submit(function(e){
+            roleActions(Role, 'save');
+            e.preventDefault();
+        });
+
+        $("form#roleForm").requestJSON({
+            after: function(result, message, data){
+                if (result == JsonResult.OK)
+                {
+                    $("td#roleTable").hide();
+
+                    Roles[data.IdRole] = data;
+                    updateRoles();
+                }
+                if (message != null && message.length > 0) $("#roleTableResult").html(message);
+            }
+        });
+
+
+        updateRoles();
+
+    });
+</script>
+<h2>Настройка ролей</h2>
+
+<table>
+    <tr>
+        <td id='rolesTable' style='vertical-align:top;'>
+
+            <table id='rolesTable' style="width:450px;" class='tablesorter'>
+                <thead>
+                    <tr>
+                        <th colspan='2'>Роли системы доступа | <input type='button' id='roleAdd' value='Добавить'></th>
+                    </tr>
+                    <tr>
+                        <th>Название</th>
+                        <th style="width:200px">Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr id='obraz' style='display:none;background-color:#efefef;'>
+                        <td></td>
+                        <td>
+                            <input type='button' class='edit' value='Редактировать'><br>
+                            <input type='button' class='delete' value='Удалить'>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div id='rolesTableResult'></div>
+
+        </td>
+        <td id='roleTable' style='padding-left:20px;vertical-align:top;'>
+
+            <form method='post' id='roleForm' action="/admin/madmin/@Module.Name/roleSave">
+                <input type='hidden' name='IdRole'>
+                <table id='roleTable' style="width:700px;" class='tablesorter'>
+                    <thead>
+                        <tr>
+                            <th colspan='2' id="roleCaption"></th>
+                        </tr>
+                        <tr>
+                            <th width="150">Параметр</th>
+                            <th>Значение</th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td>Название:</td>
+                        <td><input type='text' name='NameRole'></td>
+                    </tr>
+                    <tr>
+                        <td>Разрешения:</td>
+                        <td>
+                            @Html.ListBox("Permissions", Model.ModulesPermissions, new { id = "plistPermissions", size = 20, style = "width:100%" })<br />
+                            <small>* Двойной щелчок снимает выделение с разрешения.</small><br>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan='2'>
+                            <input type='submit' value='Сохранить'>
+                            <input type='button' value='Отменить' class='ButtonClose'>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <div id='roleTableResult'></div>
+
+        </td>
+    </tr>
+</table>

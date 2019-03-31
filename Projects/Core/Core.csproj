@@ -1,0 +1,57 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup Label="Globals">
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <!--<TargetFramework>netcoreapp2.0</TargetFramework>-->
+    <!--<TargetFramework>netstandard2.0</TargetFramework>-->
+    <PackageId>OnWeb.Core</PackageId>
+    <Description>Ядро веб-движка для работы с ASP.NET. Не привязан к конкретной реализации ASP.NET - MVC или Core.</Description>
+    <Company>TraceStudio</Company>
+    <Product>OnWeb</Product>
+    <Authors>Sellec</Authors>
+    <Version>0.1.1</Version>
+    <Copyright>Copyright © Петров Дмитрий 2016</Copyright>
+    <AssemblyName>OnWeb.Core</AssemblyName>
+    <RootNamespace>OnWeb</RootNamespace>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>D:\Projects\TraceStudio\SigningKeys\OnUtils.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
+    <PackageLicenseUrl>https://github.com/Sellec/OnWeb/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Sellec/OnWeb</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Sellec/OnWeb</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\OnWeb.Core.xml</DocumentationFile>
+    <OutputPath>bin\Debug</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\OnWeb.Core.xml</DocumentationFile>
+    <OutputPath>bin\Release</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="FodyWeavers.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="libphonenumber-csharp" Version="8.10.8" />
+    <PackageReference Include="Mime-Detective" Version="0.0.5" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.6.0" />
+    <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
+    <PackageReference Include="OnUtils.Application" Version="0.1.1" />
+    <PackageReference Include="OnUtils" Version="0.1.1.1" />
+    <PackageReference Include="OnUtils.Data.EntityFramework" Version="0.1.1" />
+    <PackageReference Include="Ude.NetStandard" Version="1.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Plugins\ModuleRegister\" />
+    <Folder Include="Utils\External\DaData\" />
+  </ItemGroup>
+</Project>

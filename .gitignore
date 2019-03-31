@@ -1,0 +1,36 @@
+﻿################################################################################
+# Данный GITIGNORE-файл был автоматически создан Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/Build/
+/BuildSolutions/.vs
+/External Libraries/**/bin
+/External Libraries/**/obj
+/External Libraries/**/Build
+/External Libraries/**/Intermediate
+/External Libraries/**/.vs
+/External Libraries/**/*proj.user
+/NuGet/**/bin
+/NuGet/**/obj
+/NuGet/**/content
+/NuGet/**/lib
+/NuGet/**/src
+/NuGet/**/NuGet.log
+/NuGet/**/*.nupkg
+/NuGet/**/*.nupkg.bak
+
+/Projects/**/web.Debug.config
+/Projects/**/web.Release.config
+/Projects/**/bin
+/Projects/**/obj
+/Projects/**/FodyWeavers.xsd
+/Projects/**/*proj.user
+
+/Projects/CoreBind/NetFramework/objMVC
+/Projects/TestSite/NetFramework/Symlinks
+/Projects/DB/TraceWeb.DB.dbmdl
+
+/Projects/DB/TraceWeb.DB.jfm
+/Projects/DB/Core.DB.dbmdl
+/Projects/DB/Core.DB.jfm

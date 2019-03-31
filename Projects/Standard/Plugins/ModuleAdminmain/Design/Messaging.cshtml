@@ -1,0 +1,62 @@
+<script type='text/javascript'>
+    $(document).ready(function(){
+        $("#block").hide();
+
+        changeTitle('Рассылки и уведомления');
+
+        $("input.ShowJournal").click(function ()
+        {
+            $("#containerForLoading").html("<img src='/data/img/loading.gif'>").requestLoad("/admin/madmin/@Module.UrlName/MonitorJournal/" + $(this).data("guid"), null, function (result, message)
+            {
+                if (message.length > 0) alert(message);
+            });
+        })
+    });
+</script>
+<h2>Рассылки и уведомления</h2>
+
+<table width='100%'>
+    <tr>
+        <td style='vertical-align:top;width:570px;min-width:570px;'>
+            @{ var services = AppContext.GetData<Core.Messaging.IMessagingManager>().Providers.OrderBy(x => x.ServiceName).ToList(); }
+            <h4>Зарегистрированных сервисов: <span id="countRegistered">@services.Count</span></h4>
+            <table class='tablesorter' width="100%">
+                <thead>
+                    <tr>
+                        <th style="width:150px">Название</th>
+                        <th style="width:200px">Поддержка входящих/исходящих сообщений</th>
+                        <th style="width:120px">Длина очереди исходящих сообщений</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                @if (services.Count == 0)
+                {
+                    <tr id='not_founded' style='display:none;'>
+                        <td class="center" colspan='10'>
+                            Ничего не найдено.
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var service in services)
+                    {
+                        <tr>
+                            <td class="left">@service.ServiceName</td>
+                            <td class="left">@(service.IsSupportsIncoming ? "Да" : "Нет")/@(service.IsSupportsOutcoming ? "Да" : "Нет")</td>
+                            <td class="left">@(service.IsSupportsOutcoming ? service.GetOutcomingQueueLength().ToString() : "Не поддерживается")</td>
+                            <td>
+                                <input disabled type="button" class="ServiceDetails" data-guid="" value="Подробно"><br />
+                                <input disabled type="button" class="ServiceCustomize" data-guid="" value="Настройка"><br />
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+
+        </td>
+        <td style='width:50px;'></td>
+        <td style='width:100%;vertical-align:top;align:left;padding-top:21px;' id="containerForLoading"></td>
+    </tr>
+</table>
+

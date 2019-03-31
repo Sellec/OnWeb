@@ -1,0 +1,2 @@
+﻿(function(){bender.editor=!0;bender.test({"test deselect is working on IE 11":function(){CKEDITOR.env.ie&&11==CKEDITOR.env.version||assert.ignore();bender.editorBot.create({name:"editor1",config:{height:500}},function(a){var b=a.editor;a.setHtmlWithSelection("[\x3cp\x3eTest sentence for color change\x3c/p\x3e]");setTimeout(function(){resume(function(){b.execCommand("deselectRange");var a=b.getSelection().getRanges()[0].endOffset-b.getSelection().getRanges()[0].startOffset;assert.areEqual(0,a,"size shoud be zero.")})},
+3E3,b);wait()})}})})();

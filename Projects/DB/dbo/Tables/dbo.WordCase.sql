@@ -1,0 +1,25 @@
+﻿CREATE TABLE [dbo].[WordCase] (
+    [NominativeSingle]      NVARCHAR (100) NOT NULL,
+    [NominativeTwo]         NVARCHAR (100) CONSTRAINT [DF_WordCase_NominativeTwo] DEFAULT ('') NOT NULL,
+    [NominativeMultiple]    NVARCHAR (100) CONSTRAINT [DF_WordCase_NominativeMultiple] DEFAULT ('') NOT NULL,
+    [GenitiveSingle]        NVARCHAR (100) CONSTRAINT [DF_WordCase_GenitiveSingle] DEFAULT ('') NOT NULL,
+    [GenitiveTwo]           NVARCHAR (100) CONSTRAINT [DF_WordCase_GenitiveTwo] DEFAULT ('') NOT NULL,
+    [GenitiveMultiple]      NVARCHAR (100) CONSTRAINT [DF_WordCase_GenitiveMultiple] DEFAULT ('') NOT NULL,
+    [DativeSingle]          NVARCHAR (100) CONSTRAINT [DF_WordCase_DativeSingle] DEFAULT ('') NOT NULL,
+    [DativeTwo]             NVARCHAR (100) CONSTRAINT [DF_WordCase_DativeTwo] DEFAULT ('') NOT NULL,
+    [DativeMultiple]        NVARCHAR (100) CONSTRAINT [DF_WordCase_DativeMultiple] DEFAULT ('') NOT NULL,
+    [AccusativeSingle]      NVARCHAR (100) CONSTRAINT [DF_WordCase_AccusativeSingle] DEFAULT ('') NOT NULL,
+    [AccusativeTwo]         NVARCHAR (100) CONSTRAINT [DF_WordCase_AccusativeTwo] DEFAULT ('') NOT NULL,
+    [AccusativeMultiple]    NVARCHAR (100) CONSTRAINT [DF_WordCase_AccusativeMultiple] DEFAULT ('') NOT NULL,
+    [InstrumentalSingle]    NVARCHAR (100) CONSTRAINT [DF_WordCase_InstrumentalSingle] DEFAULT ('') NOT NULL,
+    [InstrumentalTwo]       NVARCHAR (100) CONSTRAINT [DF_WordCase_InstrumentalTwo] DEFAULT ('') NOT NULL,
+    [InstrumentalMultiple]  NVARCHAR (100) CONSTRAINT [DF_WordCase_InstrumentalMultiple] DEFAULT ('') NOT NULL,
+    [PrepositionalSingle]   NVARCHAR (100) CONSTRAINT [DF_WordCase_PrepositionalSingle] DEFAULT ('') NOT NULL,
+    [PrepositionalTwo]      NVARCHAR (100) CONSTRAINT [DF_WordCase_PrepositionalTwo] DEFAULT ('') NOT NULL,
+    [PrepositionalMultiple] NVARCHAR (100) CONSTRAINT [DF_WordCase_PrepositionalMultiple] DEFAULT ('') NOT NULL,
+    [IsNewSingle]           BIT            CONSTRAINT [DF_WordCase_IsNewSingle] DEFAULT ((1)) NOT NULL,
+    [IsNewTwo]              BIT            CONSTRAINT [DF_WordCase_IsNewTwo] DEFAULT ((1)) NOT NULL,
+    [IsNewMultiple]         BIT            CONSTRAINT [DF_WordCase_IsNewMultiple] DEFAULT ((1)) NOT NULL,
+    CONSTRAINT [PK_WordCase] PRIMARY KEY CLUSTERED ([NominativeSingle] ASC)
+);
+

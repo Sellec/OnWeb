@@ -1,0 +1,21 @@
+@model IEnumerable<Items.ItemBase>
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>@Url.ContentFullPath("")/</loc>
+        <lastmod>@DateTime.Now.ToString("yyyy-MM-dd")</lastmod>
+    </url>
+    @foreach (var pair in Model)
+    {
+        <url>
+            <loc>@Url.ContentFullPath(pair.Url).Replace("&", "&amp;")</loc>
+            <lastmod>
+                @if (pair.DateChangeBase != null)
+                { <text>@pair.DateChangeBase.ToString("yyyy-MM-dd")</text> }
+                else
+                { <text>@DateTime.Now.ToString("yyyy-MM-dd")</text> }
+            </lastmod>
+        </url>
+    }
+</urlset>

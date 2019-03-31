@@ -1,0 +1,110 @@
+@model Materials.DB.News
+@{ 
+    Layout = "baseMaterial.cshtml";
+    Title = Model.name;
+}
+
+@section breadcrumbs {
+    <!-- (breadcrumbs) -->
+    <div class="breadcrumbs inner-breadcrumbs">
+        <div class="breadcrumbs__cover cover">
+            <div class="breadcrumbs__links">
+                <a typeof="v:Breadcrumb" href="/" class="breadcrumbs__link">Главная</a>
+                <span class="breadcrumbs__arrow"></span>
+                <a typeof="v:Breadcrumb" href="/news" class="breadcrumbs__link">Новости недвижимости</a> @*/@Module.Name/newsAll*@
+                <span class="breadcrumbs__arrow"></span>
+                <p class="breadcrumbs__last">@Model.name</p>
+            </div>
+        </div>
+    </div>
+    <!-- End (breadcrumbs) -->
+}
+
+<!-- (new-page) -->
+<div class="new-page">
+    <div class="new-page__cover cover">
+        <div class="new-page__content clearfix">
+            <div class="new-detail-content">
+                <div class="new-detail-text">
+                    <h1 class="new-detail-text__title">@Model.name</h1>
+                    <div class="new-detail-text__date">Дата публикации: @Model.date.ToString("dd.MM.yyyy")</div>
+
+                    @Html.Raw(Model.text)
+                </div>
+                <div class="text-social">
+                    <div class="text-social__content">
+                        <div class="text-social__label">Поделиться</div>
+                        <div class="text-social__list">
+                            <div class="text-social__list-content">
+                                <div class="text-social__item">
+                                    <div class="ya-share2" data-services="vkontakte" data-counter=""></div>
+                                </div>
+                                <div class="text-social__item">
+                                    <div class="ya-share2" data-services="facebook" data-counter=""></div>
+                                </div>
+                                <div class="text-social__item">
+                                    <div class="ya-share2" data-services="twitter" data-counter=""></div>
+                                </div>
+                                <div class="text-social__item">
+                                    <div class="ya-share2" data-services="gplus" data-counter=""></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="new-left-bar">
+                @*
+                <div class="search-news">
+                    <form name="form" action="#" method="POST">
+                        <input type="text" name="search" value="" placeholder="Поиск" class="search-news__input">
+                        <button type="submit" name="submit" class="search-news__submit"></button>
+                    </form>
+                </div>
+                *@
+                <div class="category-nav">
+                    <h3 class="category-nav__title">Меню по разделам</h3>
+                    <ul class="category-nav__list">
+                        <li class="category-nav__item active">
+                            <a href="#" class="category-nav__link">Новости недвижимости</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            @{
+                var module = ModulesManager.getModule<Realty.Module>();
+                var news = module?.GetNewsList(5) ?? new List<Materials.DB.News>();
+                var iteration = 1;
+
+                <div class="new-right-bar">
+                    <div class="list-popular-news">
+                        <h3 class="list-popular-news__title">Популярное</h3>
+                        <div class="list-popular-news__content">
+                            @foreach (var item in news)
+                            {
+                                if (Model is Materials.DB.News && (Model as Materials.DB.News).id == item.id) { continue; }
+
+                                <div class="popular-new-item">
+                                    <h5 class="popular-new-item__title">
+                                        <a href="@item.Url" class="popular-new-item__title-link">@Html.Raw(item.name)</a>
+                                    </h5>
+                                    <div class="popular-new-item__date">@item.date.ToString("dd.MM.yyyy")</div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!-- End (new-page) -->
+
+@section scripts {
+    <script type="text/javascript">
+        $(function ()
+        {
+        });
+    </script>
+}

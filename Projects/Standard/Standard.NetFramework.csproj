@@ -1,0 +1,1991 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.2.8.2\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.2.8.2\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <UseGlobalApplicationHostFile />
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
+    <TypeScriptToolsVersion>3.0</TypeScriptToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>D:\Projects\TraceStudio\SigningKeys\OnUtils.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C844D3BE-EC89-4A5F-B54E-B07D9DFCB4C9}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OnWeb</RootNamespace>
+    <AssemblyName>OnWeb.Standard</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <UseIISExpress>false</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\OnWeb.Standard.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.Mvc">
+      <Version>5.2.7</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
+      <Version>2.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Web.Infrastructure">
+      <Version>1.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.WebPages">
+      <Version>3.2.7</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.Razor">
+      <Version>3.2.7</Version>
+    </PackageReference>
+    <PackageReference Include="SevenZipSharp">
+      <Version>0.64.0</Version>
+    </PackageReference>
+    <PackageReference Include="OnUtils.Application">
+      <Version>0.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="OnUtils">
+      <Version>0.1.1.1</Version>
+    </PackageReference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.ApplicationServices">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Design\Additionals\ClassicStructures\PhotoList.cs" />
+    <Compile Include="Design\Additionals\Extension\ButtonHtmlExtensions.cs" />
+    <Compile Include="Design\Additionals\Extension\DropDownListHtmlExtensions.cs" />
+    <Compile Include="Design\Additionals\Extension\HtmlExtension.cs" />
+    <Compile Include="Design\Additionals\Extension\ListBoxHtmlExtensions.cs" />
+    <Compile Include="Design\Additionals\Extension\SelectListItemExtension.cs" />
+    <Compile Include="Design\Additionals\Helpers\FormExtensions.cs" />
+    <Compile Include="Design\Additionals\Helpers\HtmlHelpers.cs" />
+    <Compile Include="Design\Additionals\Helpers\PHPHelpers.cs" />
+    <Compile Include="Design\Additionals\Helpers\UrlHelpers.cs" />
+    <Compile Include="Design\Additionals\IntExtensions.cs" />
+    <Compile Include="Design\Additionals\Plugins\CaptchaExtension.cs" />
+    <Compile Include="Design\Additionals\Plugins\EditableMenuExtension.cs" />
+    <Compile Include="Design\Additionals\Plugins\Model\EditableMenu.cs" />
+    <Compile Include="Plugins\AdminForModules\Menu\IAdminMenuProvider.cs" />
+    <Compile Include="Plugins\AdminForModules\Menu\MenuAction.cs" />
+    <Compile Include="Plugins\ModuleCustomer\ModuleStandard.cs" />
+    <Compile Include="Plugins\ModuleCustomer\NetSpecific\NetFramework\CustomerModelValidator.cs" />
+    <Compile Include="Plugins\ModuleCustomer\Startup.cs" />
+    <Compile Include="Plugins\ModuleFileManager\DB\File.cs" />
+    <Compile Include="Plugins\ModuleFileManager\FileManager.cs" />
+    <Compile Include="Plugins\ModuleFileManager\MVC\FileDataTypeAttribute.cs" />
+    <Compile Include="Plugins\ModuleFileManager\MVC\FileType.cs" />
+    <Compile Include="Plugins\ModuleAdminmain\DataContext.cs" />
+    <Compile Include="Plugins\ModuleAdminmain\Design\Model\JournalDetails.cs" />
+    <Compile Include="Plugins\ModuleAdminmain\Design\Model\JournalsList.cs" />
+    <Compile Include="Plugins\ModuleAdminmain\Model\AdminMainModelInfoPage.cs" />
+    <Compile Include="Plugins\ModuleAdminmain\Model\EditableMenu.cs" />
+    <Compile Include="Plugins\ModuleAdminmain\Model\Modules.cs" />
+    <Compile Include="Plugins\ModuleAdminmain\Model\RouteInfo.cs" />
+    <Compile Include="Plugins\ModuleAdminmain\Model\Routing.cs" />
+    <Compile Include="Plugins\ModuleAdminmain\Model\RoutingModule.cs" />
+    <Compile Include="Plugins\ModuleAdminmain\Module.cs" />
+    <Compile Include="Plugins\ModuleAdminmain\ModuleController.cs" />
+    <Compile Include="Plugins\ModuleAdminmain\Startup.cs" />
+    <Compile Include="Plugins\ModuleAdmin\Extensions.cs" />
+    <Compile Include="Plugins\ModuleAdmin\Module.cs" />
+    <Compile Include="Plugins\ModuleAdmin\ModuleController.cs" />
+    <Compile Include="Plugins\ModuleAdmin\Startup.cs" />
+    <Compile Include="Plugins\ModuleFileManager\Startup.cs" />
+    <Compile Include="Plugins\ModuleRegister\Model\PreparedForRegister.cs" />
+    <Compile Include="Plugins\ModuleRegister\Model\Register.cs" />
+    <Compile Include="Plugins\ModuleRegister\Module.cs" />
+    <Compile Include="Plugins\Universal\PaginationHelper.cs" />
+    <Compile Include="Plugins\Universal\Pagination\InfoCount.cs" />
+    <Compile Include="Plugins\Universal\Pagination\ListViewOptions.cs" />
+    <Compile Include="Plugins\Universal\Pagination\PagedView.cs" />
+    <Compile Include="Plugins\Universal\Pagination\PaginationViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Plugins\ModuleAuth\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\css\Auth\modules.auth.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <Compile Include="Design\Model\Message.cs" />
+    <None Include="Data\css\admin.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\font-awesome.min.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\hot-sneaks\images\animated-overlay.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\hot-sneaks\images\ui-bg_diagonals-small_40_db4865_40x40.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\hot-sneaks\images\ui-bg_diagonals-small_50_93c3cd_40x40.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\hot-sneaks\images\ui-bg_diagonals-small_50_ff3853_40x40.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\hot-sneaks\images\ui-bg_diagonals-small_75_ccd232_40x40.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\hot-sneaks\images\ui-bg_dots-medium_80_ffff38_4x4.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\hot-sneaks\images\ui-bg_dots-small_35_35414f_2x2.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\hot-sneaks\images\ui-bg_flat_75_ba9217_40x100.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\hot-sneaks\images\ui-bg_flat_75_ffffff_40x100.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\hot-sneaks\images\ui-bg_white-lines_85_f7f7ba_40x100.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\hot-sneaks\images\ui-icons_454545_256x240.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\hot-sneaks\images\ui-icons_88a206_256x240.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\hot-sneaks\images\ui-icons_c02669_256x240.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\hot-sneaks\images\ui-icons_e1e463_256x240.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\hot-sneaks\images\ui-icons_ffeb33_256x240.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\hot-sneaks\images\ui-icons_ffffff_256x240.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\hot-sneaks\jquery-ui-1.10.3.custom.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\hot-sneaks\jquery-ui-1.10.3.custom.min.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\animated-overlay.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-bg_diagonals-small_40_db4865_40x40.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-bg_diagonals-small_50_93c3cd_40x40.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-bg_diagonals-small_50_ff3853_40x40.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-bg_diagonals-small_75_ccd232_40x40.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-bg_diagonals-thick_90_eeeeee_40x40.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-bg_dots-medium_80_ffff38_4x4.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-bg_dots-small_35_35414f_2x2.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-bg_flat_0_aaaaaa_40x100.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-bg_flat_15_cd0a0a_40x100.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-bg_flat_75_ba9217_40x100.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-bg_flat_75_ffffff_40x100.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-bg_glass_100_e4f1fb_1x400.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-bg_glass_50_3baae3_1x400.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-bg_glass_55_fbf9ee_1x400.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-bg_glass_65_ffffff_1x400.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-bg_glass_75_dadada_1x400.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-bg_glass_75_e6e6e6_1x400.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-bg_glass_80_d7ebf9_1x400.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-bg_glass_95_fef1ec_1x400.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-bg_highlight-hard_100_f2f5f7_1x100.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-bg_highlight-hard_70_000000_1x100.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-bg_highlight-soft_100_deedf7_1x100.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-bg_highlight-soft_25_ffef8f_1x100.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-bg_highlight-soft_75_cccccc_1x100.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-bg_white-lines_85_f7f7ba_40x100.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-icons_222222_256x240.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-icons_2694e8_256x240.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-icons_2e83ff_256x240.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-icons_3d80b3_256x240.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-icons_454545_256x240.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-icons_72a7cf_256x240.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-icons_888888_256x240.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-icons_88a206_256x240.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-icons_c02669_256x240.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-icons_cd0a0a_256x240.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-icons_e1e463_256x240.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-icons_ffeb33_256x240.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\images\ui-icons_ffffff_256x240.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\jquery-ui-clear.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\jquery-ui.custom.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\jquery.fancybox.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\jquery.ui.datepicker.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\jquery.wysiwyg.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\jqueryslidemenu.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\main.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\plugins.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\print.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\style.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\sunny\images\animated-overlay.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\sunny\images\ui-bg_diagonals-medium_20_d34d17_40x40.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\sunny\images\ui-bg_flat_30_cccccc_40x100.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\sunny\images\ui-bg_flat_50_5c5c5c_40x100.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\sunny\images\ui-bg_gloss-wave_45_817865_500x100.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\sunny\images\ui-bg_gloss-wave_60_fece2f_500x100.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\sunny\images\ui-bg_gloss-wave_70_ffdd57_500x100.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\sunny\images\ui-bg_gloss-wave_90_fff9e5_500x100.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\sunny\images\ui-bg_highlight-soft_100_feeebd_1x100.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\sunny\images\ui-bg_inset-soft_30_ffffff_1x100.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\sunny\images\ui-icons_3d3d3d_256x240.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\sunny\images\ui-icons_bd7b00_256x240.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\sunny\images\ui-icons_d19405_256x240.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\sunny\images\ui-icons_eb990f_256x240.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\sunny\images\ui-icons_ed9f26_256x240.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\sunny\images\ui-icons_fadc7a_256x240.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\sunny\images\ui-icons_ffe180_256x240.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\css\sunny\jquery-ui-1.10.4.custom.min.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\img\admin\gear_wheel.png" />
+    <None Include="Data\img\admin\icon_main.png" />
+    <None Include="Data\img\admin\left_bg.gif" />
+    <None Include="Data\img\admin\left_panel.gif" />
+    <None Include="Data\img\admin\top_panel.gif" />
+    <None Include="Data\img\design\accept.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\img\design\loading.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\img\design\off.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\common.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\countdown.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper00.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper01.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper02.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper10.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper11.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper12.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper20.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper21.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper22.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper30.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper31.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper32.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper40.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper41.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper42.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper50.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper51.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper52.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper60.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper61.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper62.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper70.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper71.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper72.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper80.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper81.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper82.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper90.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper91.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cdown\images\flipper92.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\cuf.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\adapters\jquery.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\build-config.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\ckeditor.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\config.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\contents.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\lang\en.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\lang\ru.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\about\dialogs\about.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\about\dialogs\hidpi\logo_ckeditor.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\about\dialogs\logo_ckeditor.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\autosave\css\autosave.min.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\autosave\js\extensions.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\brclear\brclear.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\ckeditortablecellsselection\ckeditortablecellsselection.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\ckeditortablecellsselection\js\tablecellsselection.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\ckeditortablecellsselection\styles\tablecellsselection.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\clipboard\dialogs\paste.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\colordialog\dialogs\colordialog.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\colordialog\dialogs\colordialog.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\copyformatting\cursors\cursor-disabled.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\copyformatting\cursors\cursor.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\copyformatting\styles\copyformatting.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\deselect\tests\deselect.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\dialog\dialogDefinition.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\div\dialogs\div.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\emojione\dialogs\emojione.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\emojione\styles\emojione-awesome.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\emojione\styles\emojione.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\find\dialogs\find.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\flash\dialogs\flash.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\flash\images\placeholder.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\forms\dialogs\button.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\forms\dialogs\checkbox.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\forms\dialogs\form.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\forms\dialogs\hiddenfield.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\forms\dialogs\radio.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\forms\dialogs\select.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\forms\dialogs\textarea.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\forms\dialogs\textfield.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\forms\images\hiddenfield.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\googledocs\dialogs\googledocs.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\googledocs\dialogs\googledocs.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\icons.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\icons_hidpi.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\iframe\dialogs\iframe.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\iframe\images\placeholder.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\image\dialogs\image.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\image\images\noimage.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\link\dialogs\anchor.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\link\dialogs\link.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\link\images\anchor.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\link\images\hidpi\anchor.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\liststyle\dialogs\liststyle.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\magicline\images\hidpi\icon-rtl.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\magicline\images\hidpi\icon.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\magicline\images\icon-rtl.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\magicline\images\icon.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\pagebreak\images\pagebreak.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\pastefromexcel\tests\pastefromexcel.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\pastefromword\filter\default.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\preview\preview.html">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\scayt\dialogs\options.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\scayt\dialogs\toolbar.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\scayt\skins\moono-lisa\scayt.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\showblocks\images\block_address.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\showblocks\images\block_blockquote.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\showblocks\images\block_div.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\showblocks\images\block_h1.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\showblocks\images\block_h2.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\showblocks\images\block_h3.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\showblocks\images\block_h4.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\showblocks\images\block_h5.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\showblocks\images\block_h6.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\showblocks\images\block_p.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\showblocks\images\block_pre.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\dialogs\smiley.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\angel_smile.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\angel_smile.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\angry_smile.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\angry_smile.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\broken_heart.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\broken_heart.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\confused_smile.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\confused_smile.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\cry_smile.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\cry_smile.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\devil_smile.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\devil_smile.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\embaressed_smile.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\embarrassed_smile.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\embarrassed_smile.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\envelope.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\envelope.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\heart.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\heart.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\kiss.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\kiss.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\lightbulb.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\lightbulb.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\omg_smile.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\omg_smile.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\regular_smile.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\regular_smile.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\sad_smile.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\sad_smile.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\shades_smile.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\shades_smile.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\teeth_smile.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\teeth_smile.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\thumbs_down.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\thumbs_down.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\thumbs_up.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\thumbs_up.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\tongue_smile.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\tongue_smile.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\tounge_smile.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\whatchutalkingabout_smile.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\whatchutalkingabout_smile.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\wink_smile.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\smiley\images\wink_smile.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\af.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\ar.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\az.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\bg.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\ca.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\cs.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\cy.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\da.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\de-ch.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\de.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\el.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\en-gb.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\en.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\eo.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\es.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\et.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\eu.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\fa.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\fi.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\fr-ca.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\fr.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\gl.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\he.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\hr.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\hu.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\id.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\it.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\ja.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\km.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\ko.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\ku.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\lt.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\lv.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\nb.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\nl.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\no.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\oc.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\pl.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\pt-br.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\pt.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\ru.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\si.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\sk.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\sl.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\sq.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\sv.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\th.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\tr.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\tt.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\ug.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\uk.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\vi.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\zh-cn.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\zh.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\lang\_translationstatus.txt">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\specialchar\dialogs\specialchar.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\spoiler\css\spoiler.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\spoiler\images\minus.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\spoiler\images\plus.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\tabletools\dialogs\tableCell.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\table\dialogs\table.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\templates\dialogs\templates.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\templates\dialogs\templates.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\templates\templates\default.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\templates\templates\images\template1.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\templates\templates\images\template2.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\templates\templates\images\template3.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\wsc\dialogs\ciframe.html">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\wsc\dialogs\tmpFrameset.html">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\wsc\dialogs\wsc.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\wsc\dialogs\wsc.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\wsc\dialogs\wsc_ie.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\wsc\skins\moono-lisa\wsc.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\.temp\css\dialog.css" />
+    <None Include="Data\js\eckeditor\skins\bootstrapck\.temp\css\dialog_ie.css" />
+    <None Include="Data\js\eckeditor\skins\bootstrapck\.temp\css\dialog_ie7.css" />
+    <None Include="Data\js\eckeditor\skins\bootstrapck\.temp\css\dialog_ie8.css" />
+    <None Include="Data\js\eckeditor\skins\bootstrapck\.temp\css\dialog_iequirks.css" />
+    <None Include="Data\js\eckeditor\skins\bootstrapck\.temp\css\dialog_opera.css" />
+    <None Include="Data\js\eckeditor\skins\bootstrapck\.temp\css\editor.css" />
+    <None Include="Data\js\eckeditor\skins\bootstrapck\.temp\css\editor_gecko.css" />
+    <None Include="Data\js\eckeditor\skins\bootstrapck\.temp\css\editor_ie.css" />
+    <None Include="Data\js\eckeditor\skins\bootstrapck\.temp\css\editor_ie7.css" />
+    <None Include="Data\js\eckeditor\skins\bootstrapck\.temp\css\editor_ie8.css" />
+    <None Include="Data\js\eckeditor\skins\bootstrapck\.temp\css\editor_iequirks.css" />
+    <None Include="Data\js\eckeditor\skins\bootstrapck\dialog.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\dialog_ie.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\dialog_ie7.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\dialog_ie8.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\dialog_iequirks.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\dialog_opera.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\editor.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\editor_gecko.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\editor_ie.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\editor_ie7.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\editor_ie8.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\editor_iequirks.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\icons.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\icons_hidpi.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\images\arrow.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\images\close.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\images\hidpi\close.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\images\hidpi\lock-open.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\images\hidpi\lock.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\images\hidpi\refresh.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\images\lock-open.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\images\lock.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\images\refresh.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\sample\bootstrapck-sample.html">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\sample\css\bootstrapck-sample.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\sample\js\analytics.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\sample\js\jquery-1.11.0.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\styles.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\jquery.mjs.nestedSortable.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\lang\lang.en.php">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\lang\lang.ru.php">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\lib\jquery-tree\css\jQuery.Tree.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\lib\jquery-tree\css\jQuery.Tree1.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\lib\jquery-tree\img\checkbox-checked.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\lib\jquery-tree\img\checkbox-partial.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\lib\jquery-tree\img\checkbox-unchecked.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\lib\jquery-tree\jQuery.Tree.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\lib\jquery-tree\jQuery.Tree1.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\lib\jquery-tree\test.html">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\lib\jquery-tree\test1.html">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\plugins.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\script.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\user_bar.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\libs\jquery.tablesorter\jquery.tablesorter.widgets.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\swfupload\buttons\FullyTransparent_65x29.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\swfupload\buttons\SmallSpyGlassWithTransperancy_17x18.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\swfupload\buttons\TestImageNoText_65x29.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\swfupload\buttons\TestImageWithText_65x29.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\swfupload\buttons\XPButtonNoText_61x22.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\swfupload\buttons\XPButtonUploadText_61x22.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\swfupload\images\btn.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\swfupload\images\progress.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\swfupload\images\white50.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\swfupload\swfupload.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\swfupload\swfupload.queue.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\swfupload\swfupload.swf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\swfupload\upload.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\langs\readme.md">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\skins\lightgray\fonts\readme.md">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\skins\lightgray\fonts\tinymce-small.eot">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\skins\lightgray\fonts\tinymce-small.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\skins\lightgray\fonts\tinymce-small.woff">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\skins\lightgray\fonts\tinymce.eot">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\skins\lightgray\fonts\tinymce.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\skins\lightgray\fonts\tinymce.woff">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\swfupload\deploy.bat">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\swfupload\ExternalCall.as">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\swfupload\FileItem.as">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\swfupload\SWFUpload v2.as3proj">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\swfupload\SWFUpload.as">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\img\files\argumentzero.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\img\files\notfound.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\pastefromexcel\.gitignore">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\pastefromexcel\.jscsrc">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\pastefromexcel\.jshintrc">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\pastefromexcel\LICENSE.md">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\pastefromexcel\README.md">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\scayt\CHANGELOG.md">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\scayt\LICENSE.md">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\scayt\README.md">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\wsc\LICENSE.md">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\wsc\README.md">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\README.md">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\readme.md">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\scss\browser-specific\gecko\editor_gecko.scss">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\scss\browser-specific\ie7\dialog_ie7.scss">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\scss\browser-specific\ie7\editor_ie7.scss">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\scss\browser-specific\ie8\dialog_ie8.scss">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\scss\browser-specific\ie8\editor_ie8.scss">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\scss\browser-specific\iequirks\dialog_iequirks.scss">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\scss\browser-specific\iequirks\editor_iequirks.scss">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\scss\browser-specific\ie\dialog_ie.scss">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\scss\browser-specific\ie\editor_ie.scss">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\scss\browser-specific\opera\dialog_opera.scss">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\scss\components\editor.scss">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\scss\components\_colorpanel.scss">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\scss\components\_elementspath.scss">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\scss\components\_mainui.scss">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\scss\components\_menu.scss">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\scss\components\_panel.scss">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\scss\components\_presets.scss">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\scss\components\_reset.scss">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\scss\components\_richcombo.scss">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\scss\components\_toolbar.scss">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\scss\config\_colors.scss">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\scss\config\_config.scss">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\scss\config\_defaults.scss">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\skins\bootstrapck\scss\dialog\dialog.scss">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\temp\baseCommon.cshtml" />
+    <None Include="Data\temp\editablemenu2.cshtml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\temp\error404NotFound.cshtml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\temp\error403NotAllowed.cshtml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\temp\error401NotAuthorized.cshtml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\temp\Message.cshtml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\temp\header.cshtml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\temp\errorHandled.cshtml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\temp\scripts.cshtml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\admin.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\ajax.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\ajaxupload.3.5.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\imgareaselect.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\jquery.arcticmodal-0.3.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\jquery.cookie.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\jquery.easing.1.3.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\jquery.fancybox.pack.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\jquery.floatThead.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\jquery.form.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\jquery.matchHeight-min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\jquery.metadata.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\jquery.tablefill.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\libs\jquery.tablesorter\jquery.tablesorter.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\libs\jquery.tablesorter\jquery.tablesorter.pager.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\jquery.timers.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\jquery.wysiwyg.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\jqueryslidemenu.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\lightbox.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\openapi.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\time.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\timepicker.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\jquery.tinymce.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\langs\ru.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\license.txt">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\advlist\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\anchor\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\autolink\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\autoresize\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\autosave\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\bbcode\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\charmap\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\code\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\contextmenu\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\directionality\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\emoticons\img\smiley-cool.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\emoticons\img\smiley-cry.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\emoticons\img\smiley-embarassed.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\emoticons\img\smiley-foot-in-mouth.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\emoticons\img\smiley-frown.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\emoticons\img\smiley-innocent.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\emoticons\img\smiley-kiss.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\emoticons\img\smiley-laughing.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\emoticons\img\smiley-money-mouth.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\emoticons\img\smiley-sealed.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\emoticons\img\smiley-smile.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\emoticons\img\smiley-surprised.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\emoticons\img\smiley-tongue-out.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\emoticons\img\smiley-undecided.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\emoticons\img\smiley-wink.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\emoticons\img\smiley-yell.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\emoticons\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\example\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\example_dependency\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\fullpage\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\fullscreen\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\hr\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\image\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\importcss\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\insertdatetime\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\layer\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\legacyoutput\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\link\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\lists\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\media\moxieplayer.swf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\media\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\nonbreaking\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\noneditable\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\pagebreak\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\paste\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\preview\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\print\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\save\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\searchreplace\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\spellchecker\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\tabfocus\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\table\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\template\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\textcolor\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\visualblocks\css\visualblocks.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\visualblocks\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\visualchars\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\plugins\wordcount\plugin.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\skins\lightgray\content.inline.min.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\skins\lightgray\content.min.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\skins\lightgray\fonts\tinymce-small.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\skins\lightgray\fonts\tinymce.svg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\skins\lightgray\img\anchor.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\skins\lightgray\img\loader.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\skins\lightgray\img\object.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\skins\lightgray\img\trans.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\skins\lightgray\img\wline.gif">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\skins\lightgray\skin.ie7.min.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\skins\lightgray\skin.min.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\themes\modern\theme.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\tinymce\tinymce.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\uploadify\jquery.uploadify.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\uploadify\license.txt">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\uploadify\uploadify-cancel.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\uploadify\uploadify.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\uploadify\uploadify.swf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\work.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\libs\jquery.tablesorter\themes\theme.default.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\libs\jquery.uploadfile\jquery.uploadfile.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\libs\jquery.uploadfile\jquery.uploadfile.min.js">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\libs\jquery.uploadfile\uploadfile.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\libs\jquery.uploadfile\uploadfile.custom.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\temp\editablemenu.cshtml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\CHANGES.md">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\LICENSE.md">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\ckeditortablecellsselection\.gitattributes">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\ckeditortablecellsselection\.gitignore">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\ckeditortablecellsselection\LICENSE">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\ckeditortablecellsselection\README.md">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\deselect\.editorconfig">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\deselect\.gitignore">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\deselect\.jscsrc">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\deselect\.jshintrc">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\deselect\LICENSE.md">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\deselect\README.md">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\emojione\.bower.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\emojione\bower.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\emojione\README.md">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\floating-tools\README.md">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\eckeditor\plugins\pastefromexcel\.editorconfig">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="ModuleExtensions\CustomFields\Design\FieldEdit.cshtml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="ModuleExtensions\CustomFields\Design\Item.cshtml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="ModuleExtensions\CustomFields\Design\SchemesEdit.cshtml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\img\loading.gif" />
+    <Content Include="Data\img\flick\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Data\img\flick\images\ui-bg_flat_0_eeeeee_40x100.png" />
+    <Content Include="Data\img\flick\images\ui-bg_flat_55_ffffff_40x100.png" />
+    <Content Include="Data\img\flick\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Data\img\flick\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Data\img\flick\images\ui-bg_highlight-soft_100_f6f6f6_1x100.png" />
+    <Content Include="Data\img\flick\images\ui-bg_highlight-soft_25_0073ea_1x100.png" />
+    <Content Include="Data\img\flick\images\ui-bg_highlight-soft_50_dddddd_1x100.png" />
+    <Content Include="Data\img\flick\images\ui-icons_0073ea_256x240.png" />
+    <Content Include="Data\img\flick\images\ui-icons_454545_256x240.png" />
+    <Content Include="Data\img\flick\images\ui-icons_666666_256x240.png" />
+    <Content Include="Data\img\flick\images\ui-icons_ff0084_256x240.png" />
+    <Content Include="Data\img\flick\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Data\img\flick\jquery-ui-1.8.custom.css" />
+    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_comments_view.tpl" />
+    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_editablemenu_moduleurls.tpl" />
+    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_languages.tpl" />
+    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_rss_templ.tpl" />
+    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_zones.tpl" />
+    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_zones_ae.tpl" />
+    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_zones_moduleurls.tpl" />
+    <Content Include="web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Plugins\AdminForModules\Design\baseModuleEdit.cshtml" />
+    <Content Include="Plugins\AdminForModules\Design\ModuleEdit.cshtml" />
+    <Content Include="Plugins\ModuleAdmin\Design\admin.cshtml" />
+    <Content Include="Plugins\ModuleAdmin\Design\baseAdmin.cshtml" />
+    <Content Include="Plugins\ModuleAdmin\Design\error404NotFound.cshtml" />
+    <Content Include="Plugins\ModuleAdmin\Design\errorHandled.cshtml" />
+    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_addresses.cshtml" />
+    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_editablemenu.cshtml" />
+    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_editablemenu_ae.cshtml" />
+    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_info.cshtml" />
+    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_modules.cshtml" />
+    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_modules_extensions.cshtml" />
+    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_rss.cshtml" />
+    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_sitemap.cshtml" />
+    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_sitemap_templ.cshtml" />
+    <Content Include="Plugins\ModuleAdminmain\Design\JournalDetails.cshtml" />
+    <Content Include="Plugins\ModuleAdminmain\Design\Journals.cshtml" />
+    <Content Include="Plugins\ModuleAdminmain\Design\Messaging.cshtml" />
+    <Content Include="Plugins\ModuleAdminmain\Design\MessagingService.cshtml" />
+    <Content Include="Plugins\ModuleAdminmain\Design\Monitor.cshtml" />
+    <Content Include="Plugins\ModuleAdminmain\Design\MonitorJournal.cshtml" />
+    <Content Include="Plugins\ModuleAdminmain\Design\routing.cshtml" />
+    <Content Include="Plugins\ModuleAdminmain\Design\routing_module.cshtml" />
+    <Content Include="Plugins\Universal\Design\PaginationBlock.cshtml" />
+    <Content Include="Plugins\ModuleRegister\Design\register.cshtml" />
+    <Content Include="Plugins\ModuleRegister\Design\registerInner.cshtml" />
+    <Content Include="Plugins\ModuleRegister\Design\RegisterNotificationEmail.cshtml" />
+    <Content Include="Plugins\ModuleRegister\Design\register_del.cshtml" />
+    <Content Include="Plugins\ModuleRegister\Design\register_mail1.cshtml" />
+    <Content Include="Plugins\ModuleRegister\Design\register_mail2.cshtml" />
+    <Content Include="Plugins\ModuleRegister\Design\register_mail_admin.cshtml" />
+    <Content Include="Plugins\ModuleRegister\Design\register_mail_ban.cshtml" />
+    <Content Include="Plugins\ModuleRegister\Design\register_mail_decline.cshtml" />
+    <Content Include="Plugins\ModuleRegister\Design\register_mail_decline_admin.cshtml" />
+    <Content Include="Plugins\ModuleRegister\Design\register_result.cshtml" />
+    <Content Include="Plugins\ModuleRegister\Design\register_success.cshtml" />
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CoreBind\NetFramework\CoreBind.NetFramework.csproj">
+      <Project>{97e67e63-4e52-48b7-93d3-775b3ffac10d}</Project>
+      <Name>CoreBind.NetFramework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{f61ffcc5-3711-4d42-916a-ef83032f542a}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Design\JS\RequestJSON.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>15751</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

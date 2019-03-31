@@ -1,0 +1,65 @@
+@model List<DB.menus>
+
+<script type='text/javascript'>
+    $(document).ready(function () {
+        $("#block").hide();
+
+        changeTitle('Просмотр списка редактируемых меню');
+        $(".i_adminmenu ul").show();
+
+        $('a.link_ext', this).click(function (e) {
+            e.preventDefault();
+
+            var url = $(this).attr('href').replace("mnadmin", "madmin");
+            $("#containerForLoading").requestLoad(url, null, function (result, message) {
+                if (message.length > 0) alert(message);
+            });
+        });
+
+        $('a.link_delete', this).click(function (e) {
+            e.preventDefault();
+
+            var link = $(this);
+            if (confirm("Вы действительно хотите удалить это меню?")) {
+                $.requestJSON($(this).attr('href'), null, function (result, message) {
+                    if (message.length > 0) alert(message);
+                    if (result == JsonResult.OK) $(link).closest('tr').remove();
+                });
+            }
+        });
+
+    });
+</script>
+
+    <table>
+    <tr>
+        <td width="600" style="vertical-align:top;">
+            <h2>Просмотр списка редактируемых меню</h2>
+
+            <table width="100%" class="tablesorter admtable">
+                <tr>
+                    <th width="15">ID</th>
+                    <th>Название</th>
+                    <th width="150">Действия</th>
+                </tr>
+                @foreach (var menu in Model)
+                {
+                    <tr>
+                        <td>@menu.id</td>
+                        <td>@menu.name</td>
+                        <td>
+                            <a href="/admin/mnadmin/@Module.Name/editablemenu_edit/@menu.id" class="link_ext">Редактировать</a><br />
+                            <a href="/admin/madmin/@Module.Name/editablemenu_delete/@menu.id" class="link_delete">Удалить</a>
+                        </td>
+                    </tr>
+                }
+            </table>
+
+        </td>
+        <td width="5"></td>
+        <td id="containerForLoading" width="600" style="vertical-align:top;"></td>
+    </tr>
+</table>
+
+
+

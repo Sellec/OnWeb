@@ -1,0 +1,84 @@
+@model Auth.Design.Model.ModuleSettings
+@{ Layout = "AdminForModules/Design/baseModuleEdit.cshtml"; }
+
+@{ 
+    var d = Module.Config;
+}
+
+@section scripts {
+<script type='text/javascript'>
+    $(document).ready(function () {
+
+        $('select[name=eventLoginSuccess]').val('@Module.Config.Get("eventLoginSuccess", 0)');
+        $('select[name=eventLoginError]').val('@Module.Config.Get("eventLoginError", 0)');
+        $('select[name=eventLoginUpdate]').val('@Module.Config.Get("eventLoginUpdate", 0)');
+        $('select[name=eventLogout]').val('@Module.Config.Get("eventLogout", 0)');
+        $('select[name=RoleUser]').val('@Module.Config.Get("RoleUser", 0)');
+        $('select[name=RoleGuest]').val('@Module.Config.Get("RoleGuest", 0)');
+    });
+
+</script>
+}
+
+@section ModuleConfiguration {
+    <tr>
+        <td>Роль, присваиваемая авторизованным пользователям:</td>
+        <td>
+            <select name='RoleUser'>
+                <option value='0'>Не выбрано</option>
+                @foreach (var role in Model.Roles)
+                { <option value='@role.IdRole'>@role.NameRole</option> }
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>Роль, присваиваемая гостям:</td>
+        <td>
+            <select name='RoleGuest'>
+                <option value='0'>Не выбрано</option>
+                @foreach (var role in Model.Roles)
+                { <option value='@role.IdRole'>@role.NameRole</option> }
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>Событие удачной авторизации:</td>
+        <td>
+            <select name='eventLoginSuccess'>
+                <option value='0'>Не выбрано</option>
+                @foreach (var event_ in Model.EventTypes)
+                { <option value='@event_.IdEventType'>@event_.NameEventType</option> }
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>Событие неудачной авторизации:</td>
+        <td>
+            <select name='eventLoginError'>
+                <option value='0'>Не выбрано</option>
+                @foreach (var event_ in Model.EventTypes)
+                { <option value='@event_.IdEventType'>@event_.NameEventType</option> }
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>Событие обновления после периода неактивности:</td>
+        <td>
+            <select name='eventLoginUpdate'>
+                <option value='0'>Не выбрано</option>
+                @foreach (var event_ in Model.EventTypes)
+                { <option value='@event_.IdEventType'>@event_.NameEventType</option> }
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>Событие выхода:</td>
+        <td>
+            <select name='eventLogout'>
+                <option value='0'>Не выбрано</option>
+                @foreach (var event_ in Model.EventTypes)
+                { <option value='@event_.IdEventType'>@event_.NameEventType</option> }
+            </select>
+        </td>
+    </tr>
+}

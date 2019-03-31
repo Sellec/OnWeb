@@ -1,0 +1,62 @@
+@model Adminmain.Model.RoutingModule
+
+<script type='text/javascript'>
+    $(document).ready(function ()
+    {
+        try
+        {
+            $("#block").hide();
+
+            $("input.routeEdit").click(function ()
+            {
+                console.log("123");
+                var obj = $(this).data('route');
+                console.log(obj);
+
+                $("div#routeEdit").show();
+
+                console.log(obj.Route.@nameof(DB.Routing.IdModule) + "_" + obj.Route.@nameof(DB.Routing.Action));
+
+                $("[name=@nameof(DB.Routing.IdRoutingType)]").val(obj.Route.@nameof(DB.Routing.IdRoutingType));
+                $("[name=@nameof(DB.Routing.Action)]").val(obj.Route.@nameof(DB.Routing.IdModule) + "_" + obj.Route.@nameof(DB.Routing.Action));
+                $("[name=@nameof(DB.Routing.Arguments)]").val(obj.Route.@nameof(DB.Routing.Arguments));
+                $("[name=@nameof(DB.Routing.IdItem)]").val(obj.@nameof(Adminmain.Model.RouteInfo.ItemName));
+                $("[name=@nameof(DB.Routing.UrlFull)]").val(obj.Route.@nameof(DB.Routing.UrlFull));
+            });
+        } catch (err) { alert(err); }
+    });
+
+</script>
+<h4>Маршрутизация модуля '@Model.Module.Caption (@Model.Module.Name, @Model.Module.NameBase)'</h4>
+<div id="routeEdit" style="display: none;">
+    <form>
+        <label for="@nameof(DB.Routing.IdRoutingType)">Тип маршрута: </label> @Html.DropDownList(nameof(DB.Routing.IdRoutingType), Model.RoutingTypes)<br />
+        <label for="@nameof(DB.Routing.Action)">Модуль и Action: </label> @Html.DropDownList(nameof(DB.Routing.Action), Model.ModulesActions)<br />
+        <label for="@nameof(DB.Routing.Arguments)">Аргументы: </label> @Html.TextArea(nameof(DB.Routing.Arguments), new { rows = 3, cols = 50 })<br />
+        <label for="@nameof(DB.Routing.IdItem)">Объект, к которому привязан маршрут: </label> @Html.TextBox(nameof(DB.Routing.IdItem))<br />
+        <label for="@nameof(DB.Routing.UrlFull)">Адрес маршрута: </label> @Html.TextBox(nameof(DB.Routing.UrlFull))<br />
+    </form>
+</div>
+<table class="tablesorter">
+    <thead>
+        <tr>
+            <th style="width:100px">Тип маршрута</th>
+            <th style="width:150px">Вызываемый action</th>
+            <th style="width:150px">Параметры вызова action</th>
+            <th style="width:100px">Объект, к которому привязан маршрут</th>
+            <th>Адрес маршрута</th>
+            <th style="width:100px">Действия</th>
+        </tr>
+    </thead>
+        @foreach (var route in Model.Routes)  
+        {
+            <tr>
+                <td>@(route.Route.RouteType?.NameTranslationType)</td>    
+                <td>@(Model.ModulesActions.Where(x=> x.Value == $"{route.Route.IdModule}_{route.Route.Action}").FirstOrDefault()?.Text)</td>
+                <td>@route.Route.Arguments</td>
+                <td>@route.ItemName</td>
+                <td>@route.Route.UrlFull</td>
+                <td>@Html.Button(new { @class = "routeEdit", value = "Редактировать", data_route = Html.AsJSON(route) })</td>
+            </tr>
+        }
+</table>

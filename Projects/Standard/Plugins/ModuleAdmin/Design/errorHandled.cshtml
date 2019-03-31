@@ -1,0 +1,18 @@
+@model Exception
+@{
+    Layout = "baseAdmin.cshtml";
+    Title = "Ошибка!";
+    var userContextCurrent = AppCore.GetUserContextManager().GetCurrentUserContext();
+}
+
+<div class="site-error-page">
+    <div class="cover">
+
+        <h1>Ошибка!</h1>
+        <p>Уважаемый посетитель! Во время обработки запроса возникла ошибка. Если она повторяется, то обратитесь, пожалуйста, к администратору сайта.</p>
+
+        <div style="font-style: italic;font-weight: bold">
+            @Html.Nl2Br(userContextCurrent.IsSuperuser ? Model.ToString() : Model.Message)
+        </div>
+    </div>
+</div>

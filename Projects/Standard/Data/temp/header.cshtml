@@ -1,0 +1,88 @@
+@Html.Partial("~/user_windows.cshtml")
+ 
+        <!--(main_wrapper)-->
+        <div class="main_wrapper">
+            <!--(main_header)-->
+            <div class="main_header">
+                <!--(main_top_block)-->
+                <div class="main_top_block">
+                    <div class="top_block cover">
+                        <div class="main_links_top_block clearfix">
+                            <ul class="clearfix">
+                                <li class="mainCompareLink"><a href="#" data-url="/realty/compare" class="nofollow" rel="nofollow" title=""><img src="/template/images/ico_comparison.png" alt="" /><span>Сравнение</span></a></li>
+                                <li><a href="#" data-url="/customer/tag/%D0%98%D0%B7%D0%B1%D1%80%D0%B0%D0%BD%D0%BD%D0%BE%D0%B5" class="nofollow" title=""><img src="/template/images/ico_favorites.png" alt="" /><span>Избранное</span></a></li>
+                                <li><a href="#" data-url="/reg" class="nofollow"><img src="/template/images/ico_key.png" alt="" /><span>Вход / Регистрация</span></a></li>
+                            </ul>
+                            <div class="links_top_block">
+                                <div>
+                                    <a href="#question" class="question_link">
+                                        <img src="/template/images/ico_questions_link.png" alt="" />
+                                        <span>Задать вопрос</span>
+                                    </a>
+                                </div>
+                                <div>
+                                    <a href="#question" class="question_link">
+                                        <img src="/template/images/ico_select_link.png" alt="" />
+                                        <span>Заявка на подбор</span>
+                                    </a>
+                                </div>
+                                <div>
+                                    <a href="#question" id="question_link">
+                                        <img src="/template/images/ico_ad_link.png" alt="" />
+                                        <span>Подать объявление</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--The End (main_top_block)-->
+                <!--(header)-->
+                <div class="header cover clearfix">
+                    <div class="content_header">
+                        <a href="/" class="header_logo"><img src="/template/images/logo_header.png" alt="" /></a>
+                        <div class="main_header_contacts">
+                            <div class="header_contacts">
+                                <div class="label_contacts_header">
+                                    <span>Контакты:</span>
+                                </div>
+                                <div class="main_street_header">
+                                    <div>
+                                        <p>@Config.Get("address", "")</p>
+                                        <span>
+                                            @Config.Get("workhours", ""), <a href="#" data-url="/feedback/map" class="popup-page">на карте</a>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="main_phone_header">
+                                    <div>
+                                        <p>
+                                            @if (!string.IsNullOrEmpty(Config.Get("phone_1_2", ""))) {
+                                                <a href="tel:+7 @Config.Get("phone_1_1", "")@Config.Get("phone_1_2", "")" class="tel">8 @Config.Get("phone_1_1", "") @Config.Get("phone_1_2", "")</a>
+                                            }
+                                            @if (!string.IsNullOrEmpty(Config.Get("phone_2_2", ""))) {
+                                                <a href="tel:+7 @Config.Get("phone_2_1", "")@Config.Get("phone_2_2", "")" class="tel">, 8 @Config.Get("phone_2_1", "") @Config.Get("phone_2_2", "")</a>
+                                            }
+                                        </p>
+                                        <span>
+                                            <a href="#call" id="call_link">заказать звонок</a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--The End (header)-->
+                <!--(main_menu)-->
+                <div class="main_menu">
+                    <div class="menu cover">
+                        <a href="#" id="pull">Меню</a>
+                        <ul id="main_menu">
+                            @Html.EditableMenu(1)
+                        </ul>
+                    </div>
+                </div>
+                <!--The End (main_menu)-->
+            </div>
+            <!--The End (main_header)-->

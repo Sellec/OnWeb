@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Weavers xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="FodyWeavers.xsd">
+  <Costura CreateTemporaryAssemblies="true">
+    <IncludeAssemblies>
+      Madaa.Lib.Win.Services
+      Mime-Detective
+      PhoneNumbers
+      Ude.NetStandard
+    </IncludeAssemblies>
+    <Unmanaged32Assemblies>
+      ManagedInjector-x86
+    </Unmanaged32Assemblies>
+    <Unmanaged64Assemblies>
+      ManagedInjector-x64
+    </Unmanaged64Assemblies>
+  </Costura>
+  <ModuleInit />
+</Weavers>

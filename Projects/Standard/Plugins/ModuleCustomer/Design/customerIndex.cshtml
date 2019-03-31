@@ -1,0 +1,57 @@
+@model DB.User
+@{ 
+    Layout = "baseCustomer.cshtml";
+    Title = "Личный кабинет | Общая информация";
+}
+
+@section breadcrumbs {
+    <!-- (breadcrumbs) -->
+    <div class="breadcrumbs inner-breadcrumbs">
+        <div class="breadcrumbs__cover cover">
+            <div class="breadcrumbs__links">
+                <a href="/" class="breadcrumbs__link">Главная</a>
+                <span class="breadcrumbs__arrow"></span>
+                <p class="breadcrumbs__last">Личный кабинет</p>
+            </div>
+        </div>
+        <!-- End (breadcrumbs) -->
+}
+
+@section topbar
+{
+    <a href="/customer" title="">Личный кабинет</a>
+}
+
+<h1>Данные аккаунта</h1>
+<div class="row">
+    <label for="email" class="column col3of16">Эл. почта: </label>
+    <div class="column col10of16"><span>@Model.email</span></div>
+</div>
+<div class="break"></div>
+
+<div class="form_half">
+    <label class="column col3of16">Ваше имя: </label>
+    <div class="column col10of16"><span>@Model.name</span></div>
+</div>
+<div class="break"></div>
+
+<div class="form_half_r">
+    <label class="column col3of16">Телефон для связи: </label>
+    <div class="column col10of16"><span>@Model.phone</span></div>
+</div>
+<div class="break"></div>
+
+<div>
+    <label class="column col3of16">Комментарий: </label>
+    <div class="column col10of16"><span>@Model.Comment</span></div>
+</div>
+<div class="break"></div>
+@foreach (var field in Model.Fields)
+{
+    <div>
+        <label class="column col3of16">@field.Value.GetDisplayName(): </label>
+        <div class="column col10of16"><span>@field.Value.GetDisplayValue(field.Value, ModuleExtensions.CustomFields.Field.OutputType.Html) </span></div>
+    </div>
+    <div class="break"></div>
+
+}

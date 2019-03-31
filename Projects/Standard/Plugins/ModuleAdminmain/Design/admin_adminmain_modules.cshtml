@@ -1,0 +1,86 @@
+@using Plugins.ModuleAdminmain.Model
+@model Modules
+
+<script type='text/javascript'>
+    var registered = @Model.Registered.jsobject();
+
+    $(document).ready(function(){
+        $("#block").hide();
+
+        changeTitle('Управление модулями  ');
+
+        $('#table_results_reged').tablefill(registered, function(tr_elem, data){
+            $(tr_elem).addClass('TrElem').children().each(function(ichild){
+                if ( ichild == 0 ) $(this)[0].innerHTML = data.@nameof(Plugins.ModuleAdminmain.Model.Module.Id);
+                else if ( ichild == 1 ) $(this)[0].innerHTML = data.@nameof(Plugins.ModuleAdminmain.Model.Module.Caption);
+                else if ( ichild == 2 ) $(this)[0].innerHTML = data.@nameof(Plugins.ModuleAdminmain.Model.Module.Type);
+                else if ( ichild == 3 ) $(this)[0].innerHTML = data.@nameof(Plugins.ModuleAdminmain.Model.Module.UrlName);
+            });
+
+            $("a", tr_elem).each(function(){
+                $(this).attr('href', $(this).attr('href') + data.@nameof(Plugins.ModuleAdminmain.Model.Module.UrlName));
+            });
+            $("a.link_ext", tr_elem).attr('href', '/admin/mnadmin/' + data.@nameof(Plugins.ModuleAdminmain.Model.Module.UrlName) + '/config');
+        }, null, function(){
+            $('a.link_delete', this).click(function(e){
+                e.preventDefault();
+
+                var data = $(this).closest('tr').data('BoundedItem');
+                if (confirm("Вы действительно хотите очистить настройки модуля '" + data.@nameof(Plugins.ModuleAdminmain.Model.Module.UrlName)+ "'?"))
+                {
+                    $.requestJSON($(this).attr('href'), null, function(result, message){
+                        if (message.length > 0) alert(message);
+                    });
+                }
+            });
+
+            $("span#countRegistered").text($("tr.TrElem", this).length);
+        });
+    });
+</script>
+<h2>Модули</h2>
+<div id='mcontainer' style='display:none'>
+    <span id='m_id'></span>: <span id='m_name'></span>
+</div>
+
+<table width='100%'>
+    <tr>
+        <td style='vertical-align:top;width:670px;min-width:670px;'>
+            <h4>Зарегистрированных модулей: <span id="countRegistered">0</span></h4>
+            <table id='table_results_reged' class='tablesorter' width="100%">
+                <thead>
+                    <tr>
+                        <th style="width:15px">№</th>
+                        <th style="width:150px">Название</th>
+                        <th>Имя типа модуля</th>
+                        <th style="width:200px">URL-доступное имя модуля</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tr id='not_founded' style='display:none;'>
+                    <td class="center" colspan='10'>
+                        Ничего не найдено.
+                    </td>
+                </tr>
+                <tr id='obraz' style='display:none;'>
+                    <td class="center"></td>
+                    <td class="left"></td>
+                    <td class="left"></td>
+                    <td class="left"></td>
+                    <td>
+                        <a href='/admin/mnadmin/@Module.UrlName/modedit/' class='link_ext' target="_blank">Редактировать</a><br />
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td style='width:50px;'></td>
+        <td style='width:100%;vertical-align:top;align:left;padding-top:21px;' id="containerForLoading">
+
+            <h4> </h4>
+            <div id='moduleData'></div>
+
+        </td>
+    </tr>
+</table>
+

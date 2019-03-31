@@ -1,0 +1,65 @@
+@model Materials.DB.News
+
+<script type='text/javascript'>
+    $(document).ready(function () {
+        $("#block").hide();
+
+        @if (Model.id > 0) { <text>changeTitle('Редактирование новости: @Model.name');</text> }
+            else { <text>changeTitle('Добавление новости');</text> }
+        $(".i_adminmenu ul").show();
+
+        $('.editor-box').each(function(){
+            var elem = $(this).attr('id'),
+                editor = CKEDITOR.instances[elem];
+            
+            if (editor) editor.destroy(true);
+            editor = CKEDITOR.replace( elem, { removePlugins: 'save' } );
+        });
+
+        //CKFinder.setupCKEditor( ckeditor, '/ckfinder/' );
+
+        $("#form_ae")
+            .submit(function(){
+                $("#loading_img").fadeIn()
+                if (CKEDITOR.instances)
+                    $.each(CKEDITOR.instances, function (i) {
+                        CKEDITOR.instances[i].updateElement()
+                    })
+            })
+            .requestJSON({
+                after: function(result, message, data)
+                {
+                    $("#loading_img").fadeOut()
+                    if (message.length > 0) alert(message);
+                    if (result == JsonResult.OK)
+                    {
+                        if (data != @Model.id) document.location.reload(true);
+                    }
+                }
+            })
+    });
+
+</script>
+<h4>@if (Model.id > 0) {<text>Редактирование новости: @Model.name</text>}
+else
+{<text>Добавление новости</text>}</h4>
+<table id="items_results" width="600">
+    <tr></tr>
+    <tr>
+        <td width='400'>
+            <form action='/admin/madmin/@Module.Name/NewsSave' method='post' id='form_ae'>
+                <input type="hidden" name="id" value="@Model.id" />
+                Заголовок новости:&nbsp;<input type='text' name='name' size='40' maxlength='200' value='@Model.name'><br><br>
+
+                Краткий текст новости (для списка новостей):<br>
+                <textarea name='short_text' id='short_text' rows='5' style="width:100%">@Model.short_text</textarea><br><br />
+
+                Основной текст новости:<br>
+                <textarea name='text' id='text' rows='15' class='editor-box' cols='60'>@Model.text</textarea><br>
+
+                <input type='submit' value='Сохранить'> <img src="/data/img/loading.gif" alt="" id="loading_img">
+
+            </form>
+        </td>
+    </tr>
+</table>

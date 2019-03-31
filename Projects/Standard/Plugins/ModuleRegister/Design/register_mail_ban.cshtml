@@ -1,0 +1,10 @@
+Уважаемый пользователь!<br />
+Ваш аккаунт '@ViewBag.login' заблокирован.<br /><br />
+
+@if (!string.IsNullOrEmpty(ViewBag.comment)) { <text>Вероятная причина:<br /><strong>@ViewBag.comment</strong><br /><br /> </text> }
+
+Если вы хотите узнать о подробных причинах этого решения,<br />
+свяжитесь с админстратором сайта.<br /><br />
+
+Спасибо за внимание!<br />
+Почтовый робот сайта @Url.ContentFullPath("")
