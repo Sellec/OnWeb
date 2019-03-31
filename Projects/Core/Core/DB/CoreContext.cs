@@ -1,20 +1,11 @@
 namespace OnWeb.Core.DB
 {
     using OnUtils.Data;
-    using OnUtils.Data.EntityFramework;
     using OnUtils.Data.UnitOfWork;
 
 #pragma warning disable CS1591 // todo внести комментарии.
     public class CoreContext : UnitOfWorkBase
     {
-        protected override void OnModelCreating(IModelAccessor modelAccessor)
-        {
-            modelAccessor.UseEntityFrameworkCore(modelBuilder =>
-            {
-                modelBuilder.Entity<ItemParent>().HasKey(x => new { x.IdItem, x.IdItemType, x.IdLevel, x.IdModule, x.IdParentItem });
-            });
-        }
-
         internal IRepository<captcha> captcha { get; }
 
         internal IRepository<config_extensions> config_extensions { get; }

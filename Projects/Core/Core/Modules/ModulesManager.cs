@@ -9,7 +9,6 @@ using OnUtils.Application.Modules;
 using OnUtils.Application.Users;
 using OnUtils.Data;
 using OnUtils.Data.UnitOfWork;
-using OnUtils.Data.EntityFramework;
 using OnUtils.Utils;
 using OnUtils.Architecture.AppCore;
 using OnUtils.Architecture.AppCore.DI;

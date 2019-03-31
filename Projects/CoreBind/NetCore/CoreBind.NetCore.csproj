@@ -1,25 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup Label="Globals">
     <SccProjectName>SAK</SccProjectName>
     <SccProvider>SAK</SccProvider>
     <SccAuxPath>SAK</SccAuxPath>
     <SccLocalPath>SAK</SccLocalPath>
   </PropertyGroup>
-
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <!--<TargetFramework>netstandard2.0</TargetFramework>-->
+    <!--<TargetFramework>netcoreapp2.0</TargetFramework>-->
     <RootNamespace>OnWeb</RootNamespace>
     <AssemblyName>OnWeb.CoreBind</AssemblyName>
-    <PackageId>TraceStudio.Web.CoreBind</PackageId>
+    <PackageId>OnWeb.CoreBind</PackageId>
     <Version>0.1.1</Version>
     <Authors>Sellec</Authors>
     <Company>TraceStudio</Company>
-    <Product>TraceStudio.Web</Product>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Product>OnWeb</Product>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Description>Ядро веб-движка для работы с ASP.NET Core.</Description>
     <Copyright>Copyright © Петров Дмитрий 2016 (Sellec)</Copyright>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

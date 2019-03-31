@@ -29,7 +29,7 @@ namespace OnWeb
 
             services.AddSingleton<CoreBind.ApplicationCore>(s =>
             {
-                var instance = new CoreBind.ApplicationCore(Environment.CurrentDirectory, "Data Source=localhost;Initial Catalog=fabrikae_fabrikanew;Integrated Security=True;");
+                var instance = new CoreBind.ApplicationCore(Environment.CurrentDirectory, "Data Source=localhost;Initial Catalog=Test;Integrated Security=True;");
                 return instance;
             });
 
