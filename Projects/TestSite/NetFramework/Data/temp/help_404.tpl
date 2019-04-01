@@ -6,7 +6,7 @@
       <h1>Страница не найдена!</h1>
       <p>Запрошенный вами адрес содержит ошибку &mdash; пожалуйста, проверьте его и попробуйте еще раз.<br />
       Если ошибка повторяется, не поленитесь пожаловаться нам с помощью этой формы:</p>
-      <form action='/@Module.Name/form_s' method='post' id='help_frm'>
+      <form action='/@Module.UrlName/form_s' method='post' id='help_frm'>
        <input type='hidden' name="c_code" id='captch_c_code'>
        <div><label>ФИО:</label><br />
        <input type='text' size='25' name="person" id='form_person' /></div>

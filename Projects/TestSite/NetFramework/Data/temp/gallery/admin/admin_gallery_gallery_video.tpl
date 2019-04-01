@@ -57,14 +57,14 @@ $(document).ready(function() {
  </tr>
  <tr id='obraz' style='display:none;'>
   <td class="center">
-   <a href='/admin/mnadmin/@Module.Name/video_view/' class='video_view'></a>
+   <a href='/admin/mnadmin/@Module.UrlName/video_view/' class='video_view'></a>
   </td>
   <td></td>
   <td><img src="" alt="" width=75%></td>
   <td>
    <a href='' class="video_delete">удалить</a><br>
-   <a href='/admin/mnadmin/@Module.Name/video_edit/' class='video_edit'>редактировать</a><br>
-   <a href='/admin/mnadmin/@Module.Name/video_view/' class='video_view'>просмотр</a>
+   <a href='/admin/mnadmin/@Module.UrlName/video_edit/' class='video_edit'>редактировать</a><br>
+   <a href='/admin/mnadmin/@Module.UrlName/video_view/' class='video_view'>просмотр</a>
   </td>
  </tr>  
 </table>

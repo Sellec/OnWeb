@@ -23,7 +23,7 @@ $(document).ready(function() {
         changeYear: true,
         onSelect: function(dateText, inst) { 
             try { 
-            var ddr = "/admin/madmin/@Module.Name/events_date/"+inst.selectedDay+'.'+(parseInt(inst.selectedMonth)+1)+'.'+inst.selectedYear;
+            var ddr = "/admin/madmin/@Module.UrlName/events_date/"+inst.selectedDay+'.'+(parseInt(inst.selectedMonth)+1)+'.'+inst.selectedYear;
             aj = new ajaxRequest();
             aj.load(ddr,'day_events');
             } catch(err) {alert(err);}

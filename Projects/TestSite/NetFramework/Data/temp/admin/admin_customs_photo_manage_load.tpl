@@ -12,7 +12,7 @@ function _customs_photo_manage_loadconnect(id,type)
         $('span#customs_photo_manage_load_iid').text(mAddedID);
         
         var settings = {
-            upload_url: "/admin/madmin/@Module.Name/photo_manage_loadsave/"+id+"/"+type, 
+            upload_url: "/admin/madmin/@Module.UrlName/photo_manage_loadsave/"+id+"/"+type, 
             
             file_post_name : 'customs_photo_upload',
             
@@ -58,7 +58,7 @@ function _customs_photo_manage_loadconnect(id,type)
 
         $('#photo_upload_form_submit').click(function(){
             try { 
-                swf_photo_uploader.swfUploader.addPostParam('load_module','@Module.Name');
+                swf_photo_uploader.swfUploader.addPostParam('load_module','@Module.UrlName');
                 if ( $('#load_visualeditor').is(":checked") ) swf_photo_uploader.swfUploader.addPostParam('load_visualeditor',1);
                 if ( $('#load_resize').is(":checked") ) swf_photo_uploader.swfUploader.addPostParam('load_resize',$('#load_resize_select option:selected').val());
                 //if ( $('#auto_resize').val() != "" ) swf_photo_uploader.swfUploader.addPostParam('auto_resize',$('#auto_resize').val());

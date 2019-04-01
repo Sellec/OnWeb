@@ -18,7 +18,7 @@ $(function(){
 
       <div class="subpath"><a href="/" title="Главная страница">Главная</a></div>
       <h1>Поиск по сайту</h1>
-      <form action='/@Module.Name/search' method='post' id="search_page">
+      <form action='/@Module.UrlName/search' method='post' id="search_page">
       <div><label>Что ищем:</label><br /><input type='text' name='search'></div>
       <div><label>Выберите раздел для поиска:</label><br />
       <select name='searchengine[]' id="search_list" multiple size=5>

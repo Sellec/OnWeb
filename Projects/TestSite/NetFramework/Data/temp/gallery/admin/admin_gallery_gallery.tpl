@@ -56,7 +56,7 @@ $(document).ready(function() {
   <td class="center"></td>
   <td><a href='' class='photo_view' target="_blank"><img src="" alt=""></a></td>
   <td>
-   <a href='/admin/madmin/@Module.Name/photo_edit/' class='photo_edit'>редактировать</a><br>
+   <a href='/admin/madmin/@Module.UrlName/photo_edit/' class='photo_edit'>редактировать</a><br>
    <a href='' class="photo_delete">удалить</a><br>
   </td>
  </tr>  

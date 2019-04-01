@@ -212,7 +212,7 @@ $(document).ready(function() {
 <table id="items_results">
  <tr>
   <td>
-   <form action='/admin/madmin/@Module.Name/pages_place_save' method='post' id='form_ae'>
+   <form action='/admin/madmin/@Module.UrlName/pages_place_save' method='post' id='form_ae'>
    <select id='pages_place' name='pages_place[]' size=10 multiple>
    
    <{foreach from=$data_cats item=ad key=id}>

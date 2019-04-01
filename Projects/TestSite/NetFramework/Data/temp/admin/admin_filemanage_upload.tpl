@@ -21,7 +21,7 @@ function uploaded_file(origin_file,saved_file,path)
 <div id='upload_result'></div>
 
 <h2>Загрузка файлов</h2>
-<form action='/admin/mnadmin/@Module.Name/upload2' method='post' id='form_upload' enctype='multipart/form-data'>
+<form action='/admin/mnadmin/@Module.UrlName/upload2' method='post' id='form_upload' enctype='multipart/form-data'>
 Выберите папку, в которую следует загрузить файл:<br>
 <select name='directory'>
 <{foreach from=$dirs item=v key=k}>

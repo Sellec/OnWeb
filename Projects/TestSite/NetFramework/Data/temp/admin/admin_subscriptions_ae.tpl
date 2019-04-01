@@ -17,9 +17,9 @@ $(document).ready(function(){
 </script>
 
 <{if $data.id == -1}>
-<form action='/admin/madmin/@Module.Name/add_save' method='post' id='form_ae'>
+<form action='/admin/madmin/@Module.UrlName/add_save' method='post' id='form_ae'>
 <{else}>
-<form action='/admin/madmin/@Module.Name/edit_save/<{$data.id}>' method='post' id='form_ae'>
+<form action='/admin/madmin/@Module.UrlName/edit_save/<{$data.id}>' method='post' id='form_ae'>
 <{/if}>
 
 <{if $data.name == ""}><h2>Добавление подписки</h2><{else}><h2>Редактирование подписки</h2><{/if}>

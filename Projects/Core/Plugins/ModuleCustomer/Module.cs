@@ -10,7 +10,7 @@ namespace OnWeb.Plugins.ModuleCustomer
     /// <summary>
     /// Модуль для управления пользователями и личным кабинетом.
     /// </summary>
-    [ModuleCore("Личный кабинет")]
+    [ModuleCore("Личный кабинет", DefaultUrlName = "Customer")]
     public abstract class Module : ModuleCore<Module>
     {
         public const string PERM_MANAGEUSERS = "manage_users";

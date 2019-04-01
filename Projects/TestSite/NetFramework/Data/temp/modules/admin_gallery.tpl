@@ -9,7 +9,7 @@ $(document).ready(function(){
     aj.load_form('config_gall_form',configsavemodule,'config');
 });
 </script>
-<form action='/admin/madmin/@Module.Name/modconfigsave/<{$mod}>' method='post' id='config_gall_form'>
+<form action='/admin/madmin/@Module.UrlName/modconfigsave/<{$mod}>' method='post' id='config_gall_form'>
 <br><hr><br>
 <table width='100%'>
  <tr>

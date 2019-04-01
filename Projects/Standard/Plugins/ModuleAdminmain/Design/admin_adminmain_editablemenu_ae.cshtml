@@ -1,4 +1,4 @@
-@model Adminmain.Model.EditableMenu
+@model ModuleAdminmain.Model.EditableMenu
 
 <script type='text/javascript'>
     $(document).ready(function () {
@@ -22,7 +22,7 @@
 
         $("select[name=ModuleName]").click(function () {
             $("select#module_urls option").remove();
-            $.requestJSON("/admin/madmin/@Module.Name/editablemenu_getmenu/" + $(this).val(), null, function (result, message, data) {
+            $.requestJSON("/admin/madmin/@Module.UrlName/editablemenu_getmenu/" + $(this).val(), null, function (result, message, data) {
                 if (message.length > 0) alert(message);
                 if (result == JsonResult.OK)
                 {
@@ -49,9 +49,9 @@
         $("input#buttonDelete").click(function () {
             var link = $(this);
             if (confirm("Вы действительно хотите удалить это меню?")) {
-                $.requestJSON("/admin/madmin/@Module.Name/editablemenu_delete/@Model.Menu.id", null, function (result, message) {
+                $.requestJSON("/admin/madmin/@Module.UrlName/editablemenu_delete/@Model.Menu.id", null, function (result, message) {
                     if (message.length > 0) alert(message);
-                    if (result == JsonResult.OK) window.location = "/admin/mnadmin/@Module.Name/editablemenu?@Model.Menu.id";
+                    if (result == JsonResult.OK) window.location = "/admin/mnadmin/@Module.UrlName/editablemenu?@Model.Menu.id";
                 });
             }
         });
@@ -64,7 +64,7 @@
     <tr></tr>
     <tr>
         <td width='400'>
-            <form action='/admin/madmin/@Module.Name/editablemenu_edit_save' method='post' id='form_ae'>
+            <form action='/admin/madmin/@Module.UrlName/editablemenu_edit_save' method='post' id='form_ae'>
                 <input type="hidden" name="id" value="@Model.Menu.id" />
                 Название меню:&nbsp;<input type='text' name='name' size='40' maxlength='200' value='@Model.Menu.name'><br><br>
 
@@ -78,10 +78,10 @@
         </td>
         <td width='400'>
             Выберите модуль и нажмите "Получить меню":<br>
-            <form action='/admin/madmin/@Module.Name/editablemenu_getmenu' method='post' id='form_ae2'>
+            <form action='/admin/madmin/@Module.UrlName/editablemenu_getmenu' method='post' id='form_ae2'>
                 <select name='ModuleName' size='10' style="width:270px; ">
                     @foreach (var module in Model.Modules)
-                    { <option value='@Module.Name'>@module.getCaption()</option> }
+                    { <option value='@Module.UrlName'>@module.Caption</option> }
                 </select>
                 <input type='submit' value='Получить меню' id='getmenu'>
             </form>

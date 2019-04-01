@@ -78,9 +78,9 @@ function update_urls()
  <tr>
   <td width='400'>
    <{if $data.zone_id == -1}>
-   <form action='/admin/madmin/@Module.Name/zones_add_save' method='post' id='form_ae'>
+   <form action='/admin/madmin/@Module.UrlName/zones_add_save' method='post' id='form_ae'>
    <{else}>
-   <form action='/admin/madmin/@Module.Name/zones_edit_save/<{$data.zone_id}>' method='post' id='form_ae'>
+   <form action='/admin/madmin/@Module.UrlName/zones_edit_save/<{$data.zone_id}>' method='post' id='form_ae'>
    <{/if}>
    Название:&nbsp;<input type='text' name='zone_name' size='40' maxlength='200' value='<{$data.zone_name}>'><br>
    Адрес:&nbsp;<input type='text' name='zone_addrname' size='40' maxlength='200' value='<{$data.zone_addrname}>'><br>
@@ -108,7 +108,7 @@ function update_urls()
   </td>
   <td width='400' id='step2'>
    Выделите один модуль и нажмите "Получить данные", чтобы отметить определенные данные для этой тематической зоны:<br>
-   <form action='/admin/madmin/@Module.Name/zones_getmoduledata' method='post' id='form_ae2'>
+   <form action='/admin/madmin/@Module.UrlName/zones_getmoduledata' method='post' id='form_ae2'>
    <input type='hidden' name='zone_id' value='<{$data.zone_id}>'>
    <select id='module' name='module' size='10' style="width:270px; ">
     <{foreach from=$data_mods item=ad key=id}>
@@ -121,7 +121,7 @@ function update_urls()
   </td>
   <td width='400' id='step3'>
    Выделите необходимые пункты в меню и нажмите кнопку "Отметить для зоны":<br>
-   <form action='/admin/madmin/@Module.Name/zones_getmoduledata_save' method='post' id='form_ae3'>
+   <form action='/admin/madmin/@Module.UrlName/zones_getmoduledata_save' method='post' id='form_ae3'>
    <input type='hidden' name='zone_id' value='<{$data.zone_id}>'>
    <input type='hidden' name='module' value=''>
    <select name='module_datas[]' id='module_urls' multiple size='10' style="width:270px;">

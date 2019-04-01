@@ -9,11 +9,11 @@ function calendar_apply_event_changeaddr(id)
 {
     if ( typeof(caeUploader) != 'undefined' )
     {
-        mCaeUploaderAddr = "/admin/madmin/@Module.Name/calendar_apply_event2/"+id+"/<{$data_header}>";
+        mCaeUploaderAddr = "/admin/madmin/@Module.UrlName/calendar_apply_event2/"+id+"/<{$data_header}>";
     }
 }
 
-var mCaeUploaderAddr = "/admin/madmin/@Module.Name/calendar_apply_event2/<{$data_id}>/<{$data_header}>";
+var mCaeUploaderAddr = "/admin/madmin/@Module.UrlName/calendar_apply_event2/<{$data_id}>/<{$data_header}>";
 $(document).ready(function(){
     try{
         var mDays = [];

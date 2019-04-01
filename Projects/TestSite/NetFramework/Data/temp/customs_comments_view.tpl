@@ -27,13 +27,13 @@ $(function(){
  <{foreach from=$comments item=ad key=id}>
   <li>
    &raquo; <{if $ad.comm_user_id != 0 & ($ad.user_id != NULL)}>
-   <{*<a href="/@Module.Name/finduser/<{$ad.user_login}>" title="<{$ad.user_login}>"><{$ad.user_login}></a> <span class="date"><{$ad.comm_time|strftime:"%d-%m-%Y %H:%M:%S"}></span>*}>
+   <{*<a href="/@Module.UrlName/finduser/<{$ad.user_login}>" title="<{$ad.user_login}>"><{$ad.user_login}></a> <span class="date"><{$ad.comm_time|strftime:"%d-%m-%Y %H:%M:%S"}></span>*}>
    <strong><{$ad.user_login}></strong> <span class="date"><{$ad.comm_time|strftime:"%d-%m-%Y %H:%M:%S"}></span>
    <{else}>
     <{if isset($ad.comm_user_email) && $ad.comm_user_email !=""}><a href="mailto:<{$ad.comm_user_email}>" title=""><{$ad.comm_user_name}></a><{else}><b><{$ad.comm_user_name}></b><{/if}> <span class="date"><{$ad.comm_time|strftime:"%d-%m-%Y %H:%M:%S"}></span>
    <{/if}>
    <{if $ad.comm_user_id == $UserManager->getID() || $isAdmin}>
-   <a class='comment_delete' href="/@Module.Name/comment_delete/<{$ad.comm_id}><{if isset($photo_view)}>&gall=1<{/if}>" title="Удалить">Удалить</a>
+   <a class='comment_delete' href="/@Module.UrlName/comment_delete/<{$ad.comm_id}><{if isset($photo_view)}>&gall=1<{/if}>" title="Удалить">Удалить</a>
    <{/if}>
    <p class="pages"><{$ad.comm_text|nl2br}></p>
   </li>  
@@ -46,7 +46,7 @@ $(function(){
 </ul>
 <{/if}>
 <h3>Оставить отзыв:<a name="write_own" title=""></a></h3>
-<form action='/@Module.Name/comment_add/<{$data.id}><{if isset($photo_view)}>&gall=1<{/if}>' method='post' id="comment_form">
+<form action='/@Module.UrlName/comment_add/<{$data.id}><{if isset($photo_view)}>&gall=1<{/if}>' method='post' id="comment_form">
  <div class="form"><label for="text">Текст <span class="req">*</span>:</label><br />
  <textarea name='comm_text' rows="5" cols="68"></textarea></div>
  <{if !$IsAuthorized}>

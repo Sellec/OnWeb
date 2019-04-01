@@ -8,7 +8,7 @@
 
    <{getCustom type=getBannerData id=2 assign=vip_banner}>
    <{foreach from=$vip_banner item=ad key=id}>
-    <a <{if $ad.type==1}>href="<{$ad.url}>" target="_blank"<{else}>href="/@Module.Name/item/<{$ad.id}>"<{/if}> title=""><img src="/<{$ad.banner_image}>" alt=""></a>
+    <a <{if $ad.type==1}>href="<{$ad.url}>" target="_blank"<{else}>href="/@Module.UrlName/item/<{$ad.id}>"<{/if}> title=""><img src="/<{$ad.banner_image}>" alt=""></a>
    <{/foreach}>
 
     </div>
@@ -18,7 +18,7 @@
 
    <{getCustom type=getBannerData id=3 assign=hot_banner count=10}>
    <{foreach from=$hot_banner item=ad key=id}>
-    <a <{if $ad.type==1}>href="<{$ad.url}>" target="_blank"<{else}>href="/@Module.Name/item/<{$ad.id}>"<{/if}> title=""><{$ad.name}></a>
+    <a <{if $ad.type==1}>href="<{$ad.url}>" target="_blank"<{else}>href="/@Module.UrlName/item/<{$ad.id}>"<{/if}> title=""><{$ad.name}></a>
    <{/foreach}>
 
    </div>
@@ -27,7 +27,7 @@
    
    <{getCustom type=getBannerData id=1 assign=rekl_banner count=7}>
    <{foreach from=$rekl_banner item=ad key=id}>
-    <a <{if $ad.type==1}>href="<{$ad.url}>" target="_blank"<{else}>href="/@Module.Name/item/<{$ad.id}>"<{/if}> title=""><img src="/<{$ad.banner_image}>" alt=""></a>
+    <a <{if $ad.type==1}>href="<{$ad.url}>" target="_blank"<{else}>href="/@Module.UrlName/item/<{$ad.id}>"<{/if}> title=""><img src="/<{$ad.banner_image}>" alt=""></a>
    <{/foreach}>
 
    </div>

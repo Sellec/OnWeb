@@ -8,7 +8,7 @@ $(document).ready(function(){
 });
 </script>
 
-<form action='/admin/mnadmin/@Module.Name/items' method='post' id='form_ae'>
+<form action='/admin/mnadmin/@Module.UrlName/items' method='post' id='form_ae'>
 <h2>Просмотр баннеров</h2>
 
 Выберите категорию:<br>

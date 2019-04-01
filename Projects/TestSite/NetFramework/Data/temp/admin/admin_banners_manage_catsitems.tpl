@@ -9,7 +9,7 @@ function cats_delete(tr_node)
         if ( confirm('Вы действительно хотите удалить категорию №'+data[1]+' - "'+mCatsArray[data[1]]['name']+'"?') )
         {
             var aj = new ajaxRequest();
-            aj.load("/admin/madmin/@Module.Name/cats_delete/"+String(data[1]),'cats_result');
+            aj.load("/admin/madmin/@Module.UrlName/cats_delete/"+String(data[1]),'cats_result');
         }
     } catch(err) { alert(err); }
 }
@@ -44,7 +44,7 @@ function item_delete(tr_node)
         if ( confirm('Вы действительно хотите удалить баннер №'+data[1]+' - "'+mItemsArray[data[1]]['name']+'"?') )
         {
             var aj = new ajaxRequest();
-            aj.load("/admin/madmin/@Module.Name/item_delete/"+String(data[1]),'items_result');
+            aj.load("/admin/madmin/@Module.UrlName/item_delete/"+String(data[1]),'items_result');
         }
     } catch(err) { alert(err); }
 }

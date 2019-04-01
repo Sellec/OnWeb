@@ -76,11 +76,11 @@ $(document).ready(function() {
  </tr>
  <tr id='obraz' style='display:none;'>
   <td class="center">
-   <a href='/admin/mnadmin/@Module.Name/cats/' class='cat_view'></a>
+   <a href='/admin/mnadmin/@Module.UrlName/cats/' class='cat_view'></a>
   </td>
-  <td><a href='/admin/mnadmin/@Module.Name/cats/' class='cat_view'></a></td>
+  <td><a href='/admin/mnadmin/@Module.UrlName/cats/' class='cat_view'></a></td>
   <td>
-   <a href='/admin/mnadmin/@Module.Name/cats_edit/' class='cat_edit'>редактировать</a><br>
+   <a href='/admin/mnadmin/@Module.UrlName/cats_edit/' class='cat_edit'>редактировать</a><br>
    <a href='' class="cat_delete">удалить</a><br>
   </td>
  </tr>  
@@ -99,12 +99,12 @@ $(document).ready(function() {
  </tr>
  <tr id='obraz' style='display:none;'>
   <td class="center">
-   <a href='/admin/mnadmin/@Module.Name/articles_view/' class='articles_view' target='_blank'></a>
+   <a href='/admin/mnadmin/@Module.UrlName/articles_view/' class='articles_view' target='_blank'></a>
   </td>
   <td></td>
   <td>
-   <a href='/admin/mnadmin/@Module.Name/articles_view/' class='articles_view' target='_blank'>просмотр</a>
-   <a href='/admin/mnadmin/@Module.Name/articles_edit/' class='articles_edit'>редактировать</a><br>
+   <a href='/admin/mnadmin/@Module.UrlName/articles_view/' class='articles_view' target='_blank'>просмотр</a>
+   <a href='/admin/mnadmin/@Module.UrlName/articles_edit/' class='articles_edit'>редактировать</a><br>
    <a href='' class="articles_delete">удалить</a><br>
   </td>
  </tr>  

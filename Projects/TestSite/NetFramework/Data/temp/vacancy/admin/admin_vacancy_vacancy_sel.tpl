@@ -26,7 +26,7 @@ $(document).ready(function(){
 });
 </script>
 
-<form action='/admin/mnadmin/@Module.Name/vacancy' method='post' id='form_ae'>
+<form action='/admin/mnadmin/@Module.UrlName/vacancy' method='post' id='form_ae'>
 <h2>Просмотр вакансии</h2>
 
 Выберите категорию вакансии:<br>
@@ -43,7 +43,7 @@ $(document).ready(function(){
 
 <h2>Настройки раздела:</h2>
 <p><strong>Текст на главной странице вакансий:</strong></p>
-<form action='/admin/madmin/@Module.Name/@Module.Name_index_save' method='post' id='form_save'>
+<form action='/admin/madmin/@Module.UrlName/@Module.UrlName_index_save' method='post' id='form_save'>
 <textarea name='body' rows='10' cols='10' id="text_block"><{$data.index}></textarea></p>
 
 <p><strong>Текст под списком вакансий:</strong></p>

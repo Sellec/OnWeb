@@ -3,7 +3,7 @@ function customs_ids(id)
 {
     $('a#photos_manage').click(function(){
         aj = new ajaxRequest();
-        aj.load('/admin/madmin/@Module.Name/photo_manage/id='+id+'id_type=1','photos_manage_div');
+        aj.load('/admin/madmin/@Module.UrlName/photo_manage/id='+id+'id_type=1','photos_manage_div');
         return false;
     });    
 }
@@ -113,7 +113,7 @@ $(document).ready(function(){
         if (str != '' && $("input[name='pages_urlname']").val() == ''){
             $.ajax({
                 type    : "POST",
-                url     : "/admin/madmin/@Module.Name/@Module.Name_add_urlname",
+                url     : "/admin/madmin/@Module.UrlName/@Module.UrlName_add_urlname",
                 data    : { name : str }
             }).done(function(res){
                 $("input[name='pages_urlname']").val(res);
@@ -129,9 +129,9 @@ $(document).ready(function(){
 <a href='' id='photos_manage'>Управление фотографиями</a><div id='photos_manage_div'></div>
 
 <{if $data.id == -1}>
-<form action='/admin/madmin/@Module.Name/pages_add_save' method='post' id='form_ae'>
+<form action='/admin/madmin/@Module.UrlName/pages_add_save' method='post' id='form_ae'>
 <{else}>
-<form action='/admin/madmin/@Module.Name/pages_edit_save/<{$data.id}>' method='post' id='form_ae'>
+<form action='/admin/madmin/@Module.UrlName/pages_edit_save/<{$data.id}>' method='post' id='form_ae'>
 <{/if}>
 <{if $data.name == ""}><h2>Добавление страницы</h2><{else}><h2>Редактирование страницы</h2><{/if}>
   <div id="pages_div">

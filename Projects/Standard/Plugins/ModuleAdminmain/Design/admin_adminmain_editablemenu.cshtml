@@ -1,4 +1,4 @@
-@model List<DB.menus>
+@model List<Core.DB.menus>
 
 <script type='text/javascript'>
     $(document).ready(function () {
@@ -48,8 +48,8 @@
                         <td>@menu.id</td>
                         <td>@menu.name</td>
                         <td>
-                            <a href="/admin/mnadmin/@Module.Name/editablemenu_edit/@menu.id" class="link_ext">Редактировать</a><br />
-                            <a href="/admin/madmin/@Module.Name/editablemenu_delete/@menu.id" class="link_delete">Удалить</a>
+                            <a href="/admin/mnadmin/@Module.UrlName/editablemenu_edit/@menu.id" class="link_ext">Редактировать</a><br />
+                            <a href="/admin/madmin/@Module.UrlName/editablemenu_delete/@menu.id" class="link_delete">Удалить</a>
                         </td>
                     </tr>
                 }

@@ -161,7 +161,7 @@
                                     </a>
                                 }
                             </div>
-                            @if (AppCore.GetModulesManager().GetModule<Plugins.ModuleAdmin.Module>()?.CheckPermission(Application.Modules.Constants.PermissionManage) == Application.Modules.CheckPermissionResult.Allowed)
+                            @if (AppCore.GetModulesManager().GetModule<Plugins.ModuleAdmin.Module>()?.CheckPermission(OnUtils.Application.Modules.Constants.PermissionManage) == OnUtils.Application.Modules.CheckPermissionResult.Allowed)
                             {
                                 <div class="info-top-list__item list-admin">
                                     <a href="/admin" class="top-user" target="_blank">

@@ -20,7 +20,7 @@ function customs_ids(id)
     f_customExtensionsActivate(id);
     $('a#photos_manage').click(function(){
         aj = new ajaxRequest();
-        aj.load('/admin/madmin/@Module.Name/photo_manage/'+id+'/1','photos_manage_div');
+        aj.load('/admin/madmin/@Module.UrlName/photo_manage/'+id+'/1','photos_manage_div');
         return false;
     });
 }
@@ -82,9 +82,9 @@ $(document).ready(function(){
 </script>
 <input type="hidden" value="110,80" id="auto_resize" />
 <{if $data.id == -1}>
-<form action='/admin/madmin/@Module.Name/articles_add_save' method='post' id='form_ae'>
+<form action='/admin/madmin/@Module.UrlName/articles_add_save' method='post' id='form_ae'>
 <{else}>
-<form action='/admin/madmin/@Module.Name/articles_edit_save/<{$data.id}>' method='post' id='form_ae'>
+<form action='/admin/madmin/@Module.UrlName/articles_edit_save/<{$data.id}>' method='post' id='form_ae'>
 <{/if}>
 <{if $data.name == ""}><h2>Добавление статьи</h2><{else}><h2>Редактирование статьи</h2><{/if}>
 

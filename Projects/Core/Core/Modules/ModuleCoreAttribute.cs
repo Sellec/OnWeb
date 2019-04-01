@@ -27,5 +27,16 @@ namespace OnWeb.Core.Modules
         {
             get;
         }
+
+        /// <summary>
+        /// Url-доступное имя (см. <see cref="ModuleCore.UrlName"/>) по-умолчанию, присваиваемое модулю, если в настройках (см. <see cref="Configuration.ModuleConfiguration{TModule}.UrlName"/>) не задано значение.
+        /// </summary>
+        /// <seealso cref="ModuleCore.UrlName"/>
+        /// <seealso cref="Configuration.ModuleConfiguration{TModule}.UrlName"/>
+        public string DefaultUrlName
+        {
+            get;
+            set;
+        }
     }
 }

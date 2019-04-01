@@ -64,6 +64,8 @@ namespace OnWeb.Core.Configuration
         /// <summary>
         /// Возвращает или задает url-доступное имя модуля.
         /// </summary>
+        /// <seealso cref="Modules.ModuleCoreAttribute.DefaultUrlName"/>
+        /// <seealso cref="Modules.ModuleCore.UrlName"/>
         public string UrlName
         {
             get => Get<string>("UrlName");

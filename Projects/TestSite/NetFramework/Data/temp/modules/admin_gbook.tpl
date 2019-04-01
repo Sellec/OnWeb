@@ -9,7 +9,7 @@ $(document).ready(function(){
     aj.load_form('config_news_form',configsavemodule,'config');
 });
 </script>
-<form action='/admin/madmin/@Module.Name/modconfigsave/<{$mod}>' method='post' id='config_news_form'>
+<form action='/admin/madmin/@Module.UrlName/modconfigsave/<{$mod}>' method='post' id='config_news_form'>
 <br><hr><br>
 <table width='100%'>
  <tr>

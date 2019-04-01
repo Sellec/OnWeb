@@ -16,7 +16,7 @@ function photo_delete(tr_node)
         if ( confirm('Вы действительно хотите удалить фотографию '+mPhotosArray[data[1]]['main_file']+'"?') )
         {
             var aj = new ajaxRequest();
-            aj.load("/admin/madmin/@Module.Name/articles_photo_delete/<{$data.id}>/"+mPhotosArray[data[1]]['main_file'], 'photo_result');
+            aj.load("/admin/madmin/@Module.UrlName/articles_photo_delete/<{$data.id}>/"+mPhotosArray[data[1]]['main_file'], 'photo_result');
         }
     } catch(err) { alert(err); }
 }
@@ -108,12 +108,12 @@ $(document).ready(function(){
  </tr>  
  <tr>
   <td class="center" colspan='10'>
-   <form action='/admin/madmin/@Module.Name/articles_photo_new/<{$data.id}>' method='post' id='form_add_photo'>
+   <form action='/admin/madmin/@Module.UrlName/articles_photo_new/<{$data.id}>' method='post' id='form_add_photo'>
     Выберите изображение, нажав кнопку "Обзор", затем нажмите "Загрузить".
     <input type="file" name='photo[]' class="radio" value=''>&nbsp;<input type='submit' value='Загрузить' style="padding:0;"><br>
     <div id='add_photo_result'></div>
    </form>
-   <p style="float:left"><a href="/admin/madmin/@Module.Name/articles_photo/<{$data.id}>" title="">Обновить список фотографий</a></p>
+   <p style="float:left"><a href="/admin/madmin/@Module.UrlName/articles_photo/<{$data.id}>" title="">Обновить список фотографий</a></p>
   </td>
  </tr>
 </table>

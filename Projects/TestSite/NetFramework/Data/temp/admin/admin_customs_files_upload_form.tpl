@@ -15,14 +15,14 @@ function customs_files_upload_form_changeaddr(id)
 {
     if ( typeof(swfu) != 'undefined' )
     {
-        swfu.setUploadURL("/admin/madmin/@Module.Name/files_upload_form2/"+id)
+        swfu.setUploadURL("/admin/madmin/@Module.UrlName/files_upload_form2/"+id)
     }
 }
 
 $(document).ready(function(){
     try{
     var settings = {
-        upload_url: "/admin/madmin/@Module.Name/files_upload_form2/<{$data_id}>", 
+        upload_url: "/admin/madmin/@Module.UrlName/files_upload_form2/<{$data_id}>", 
 
         post_params: 
         {

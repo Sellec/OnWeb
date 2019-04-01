@@ -38,7 +38,7 @@ $(document).ready(function() {
         
         $('a#mode_edit').click(function(){
             var val = $('select#subscription_id').val();
-            $(this).attr('href','/admin/mnadmin/@Module.Name/edit/'+val);
+            $(this).attr('href','/admin/mnadmin/@Module.UrlName/edit/'+val);
         });
 
         $('a#mode_delete').click(function(){
@@ -47,20 +47,20 @@ $(document).ready(function() {
             if ( confirm('Вы действительно хотите удалить данные для подписки "'+$('select#subscription_id option[value='+val+']').text()+'"') )
             {
                 aj = new ajaxRequest();
-                aj.load('/admin/madmin/@Module.Name/delete/'+val,'del_res');
+                aj.load('/admin/madmin/@Module.UrlName/delete/'+val,'del_res');
             }
             return false;
         });
 
         $('a#mode_add').click(function(){
             aj = new ajaxRequest();
-            aj.load('/admin/madmin/@Module.Name/add','subscription_result');
+            aj.load('/admin/madmin/@Module.UrlName/add','subscription_result');
             return false;
         });
 
         $('a#mode_vss').click(function(){
             $("#del_res").text('');
-            $.requestJSON('/admin/madmin/@Module.Name/subscribers_list/'+$('select#subscription_id').val(), null, function(result, message, data){
+            $.requestJSON('/admin/madmin/@Module.UrlName/subscribers_list/'+$('select#subscription_id').val(), null, function(result, message, data){
                 if (result == JsonResult.OK) 
                 {
                     $('select#subscriber_id option').remove();
@@ -77,7 +77,7 @@ $(document).ready(function() {
             if ( confirm('Вы действительно хотите удалить подписчика "'+$('select#subscriber_id option[value='+val+']').text()+'" в подписке "'+$('select#subscription_id option:selected').text()+'"?') )
             {
                 aj = new ajaxRequest();
-                aj.load('/admin/madmin/@Module.Name/subscribers_delete/'+val,'subscription_result');
+                aj.load('/admin/madmin/@Module.UrlName/subscribers_delete/'+val,'subscription_result');
                 var div_res = $("#subscription_result");
                 div_res.fadeIn("slow");
                 setTimeout(function(){div_res.fadeOut("slow")}, 2500);

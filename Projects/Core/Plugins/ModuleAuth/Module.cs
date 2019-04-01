@@ -10,7 +10,7 @@ namespace OnWeb.Plugins.ModuleAuth
     /// <summary>
     /// Модуль авторизации.
     /// </summary>
-    [ModuleCore("Авторизация")]
+    [ModuleCore("Авторизация", DefaultUrlName = "Auth")]
     public class Module : ModuleCore<Module>, IUnitOfWorkAccessor<CoreContext>
     {
         /// <summary>

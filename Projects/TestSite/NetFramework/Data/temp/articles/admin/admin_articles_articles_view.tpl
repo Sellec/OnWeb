@@ -17,5 +17,5 @@ $(document).ready(function() {
 
 </script>
 
-<h2><a href='/admin/madmin/@Module.Name/cats/<{$data.category}>' class='this_view'><{$data.articles_category_name}></a> &raquo; <{$data.name}></h2>
+<h2><a href='/admin/madmin/@Module.UrlName/cats/<{$data.category}>' class='this_view'><{$data.articles_category_name}></a> &raquo; <{$data.name}></h2>
 <p><{$data.text}></p>

@@ -16,7 +16,7 @@ $(document).ready(function(){
      
       <h1><a name="mail"></a>Обратная связь</h1>
       <p><{getCustom type=config option=help_info}></p>
-      <form action='/@Module.Name/form_s' method='post' id='ask_q'>
+      <form action='/@Module.UrlName/form_s' method='post' id='ask_q'>
        <input type='hidden' name="c_code" id='captch_c_code'>
        <div><label>ФИО:</label><br />
        <input type='text' class='text' size='25' name="person" id='form_person' /></div>

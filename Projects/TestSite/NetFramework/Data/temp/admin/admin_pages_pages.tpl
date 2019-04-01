@@ -37,7 +37,7 @@ $(document).ready(function() {
             var str_par = $(this).parent().find("input[name='page_parent']").val();
             $.ajax({
                 type    : "POST",
-                url     : "/admin&a=madmin&mod=@Module.Name&moda=@Module.Name_change_pos",
+                url     : "/admin&a=madmin&mod=@Module.UrlName&moda=@Module.UrlName_change_pos",
                 data    : { id : id, order : str_ord, parent : str_par }
             }).done(function(res){
                 alert(res)
@@ -54,7 +54,7 @@ function get_page_sort(){
             var str_par = $(this).find("input[name='page_parent']").val();
             $.ajax({
                 type    : "POST",
-                url     : "/admin&a=madmin&mod=@Module.Name&moda=@Module.Name_change_pos",
+                url     : "/admin&a=madmin&mod=@Module.UrlName&moda=@Module.UrlName_change_pos",
                 data    : { id : id, order : str_ord, parent : str_par }
             }).done(function(msg){
                 $("#action_result").html(msg);
@@ -79,10 +79,10 @@ function get_page_sort(){
  <{foreach from=$data_pages item=ad key=id}>
  <div class='page_block' id='page_<{$ad.id}>'>
   <div class='page_info'><div class="pi_num">№<{$ad.id}></div>
-   <div class="pi_info"><a href='/admin/mnadmin/@Module.Name/pages_view/<{$ad.id}>' class='pv_<{$ad.id}>' target='_blank'><{$ad.name|re_quote}></a><br>
+   <div class="pi_info"><a href='/admin/mnadmin/@Module.UrlName/pages_view/<{$ad.id}>' class='pv_<{$ad.id}>' target='_blank'><{$ad.name|re_quote}></a><br>
    <input type="text" value="<{$ad.parent}>" name="page_parent" size="2" class="page_pos" /> <input type="text" value="<{$ad.order}>" name="page_order" size="2" class="page_pos" /> <span style="color:#969696;"><{$ad.urlname}></span></div>
    <div class="pi_links">
-    <a href='/admin/mnadmin/@Module.Name/pages_edit/<{$ad.id}>' class='pages_edit'>редактировать</a><br />
+    <a href='/admin/mnadmin/@Module.UrlName/pages_edit/<{$ad.id}>' class='pages_edit'>редактировать</a><br />
     <a href='' class="pages_delete" rel="<{$ad.id}>">удалить</a>
    </div>
   </div>

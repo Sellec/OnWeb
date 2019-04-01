@@ -10,7 +10,7 @@ $(document).ready(function(){
         var aj = new ajaxRequest();
         aj.setPOST('module_id',$(this).attr('name'));
         aj.setPOST('status',$(this).attr('value'));
-        aj.load('/admin/madmin/@Module.Name/engines_edit_save','div_result');        
+        aj.load('/admin/madmin/@Module.UrlName/engines_edit_save','div_result');        
     } catch(err) {alert(err);}
     });
     

@@ -1,4 +1,4 @@
-@model List<Modules.ModuleCore>
+@model List<Core.Modules.ModuleCore>
 
 <script type='text/javascript'>
 $(document).ready(function() {
@@ -34,11 +34,11 @@ $(document).ready(function() {
     <tr>
         <td>
             Выберите модули, которые следует включить в RSS:<br>
-            <form action='/admin/madmin/@Module.Name/rss_save' method='post' id='form_ae'>
+            <form action='/admin/madmin/@Module.UrlName/rss_save' method='post' id='form_ae'>
                 <select name='modules_list[]' size='10' style="width:270px;" multiple="true" id="modules_list">
                     @foreach (var module in Model)
                     {
-    <option value='@Module.Name'>@module.getCaption()</option> }
+    <option value='@Module.UrlName'>@module.getCaption()</option> }
                 </select>
                 <input type='submit' id='conf_submit' value='Сохранить'> <img src="/data/img/loading.gif" alt="" id="loading_img">
             </form>

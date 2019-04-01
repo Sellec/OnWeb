@@ -22,7 +22,7 @@ function mapShowPlaces(tag_id,status)
         {
             $('img#img_loading_'+tag_id).show();
             var aj = new ajaxRequest();
-            aj.load('/@Module.Name/loadtagdata/'+tag_id, 'customsMapsDivError');
+            aj.load('/@Module.UrlName/loadtagdata/'+tag_id, 'customsMapsDivError');
         }
     } else {
         if ( status == true ) v_customsMapsObject.addOverlay(_LoadedPlaces[tag_id]);

@@ -5,7 +5,7 @@
 $(document).ready(function(){
     $('a.unsubscribe').click(function(){
         var link = $(this);
-        $.requestJSON("/@Module.Name/subscribesUnsubscribe/"+$(this).prop('rel'), null, function(result, message)
+        $.requestJSON("/@Module.UrlName/subscribesUnsubscribe/"+$(this).prop('rel'), null, function(result, message)
         {
             if (result == JsonResult.OK) 
             {
@@ -21,7 +21,7 @@ $(document).ready(function(){
     $('a.subscribe').click(function(){
         var link = $(this);
         
-        $.requestJSON("/@Module.Name/subscribesSubscribe/"+$(this).prop('rel'), null, function(result, message)
+        $.requestJSON("/@Module.UrlName/subscribesSubscribe/"+$(this).prop('rel'), null, function(result, message)
         {
             if (result == JsonResult.OK) 
             {

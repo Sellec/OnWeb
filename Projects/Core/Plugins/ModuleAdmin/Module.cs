@@ -9,7 +9,7 @@ namespace OnWeb.Plugins.ModuleAdmin
     /// <summary>
     /// Модуль доступа в панель управления.
     /// </summary>
-    [ModuleCore("Панель управления")]
+    [ModuleCore("Панель управления", DefaultUrlName = "Admin")]
     public class Module : ModuleCore<Module>
     {
         /// <summary>

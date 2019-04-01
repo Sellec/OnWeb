@@ -76,13 +76,13 @@ $(document).ready(function() {
  </tr>
  <tr id='obraz' style='display:none;'>
   <td class="center">
-   <a href='/admin/mnadmin/@Module.Name/cats/' class='cat_view'></a>
+   <a href='/admin/mnadmin/@Module.UrlName/cats/' class='cat_view'></a>
   </td>
   <td></td>
   <td>
    <a href='' class="cat_delete">удалить</a><br class="cat_delete">
-   <a href='/admin/mnadmin/@Module.Name/cats_edit/' class='cat_edit'>редактировать</a><br>
-   <a href='/admin/mnadmin/@Module.Name/cats/' class='cat_view'>просмотр</a>
+   <a href='/admin/mnadmin/@Module.UrlName/cats_edit/' class='cat_edit'>редактировать</a><br>
+   <a href='/admin/mnadmin/@Module.UrlName/cats/' class='cat_view'>просмотр</a>
   </td>
  </tr>  
 </table>
@@ -100,13 +100,13 @@ $(document).ready(function() {
  </tr>
  <tr id='obraz' style='display:none;'>
   <td class="center">
-   <a href='/admin/mnadmin/@Module.Name/news_view/' class='news_view' target='_blank'></a>
+   <a href='/admin/mnadmin/@Module.UrlName/news_view/' class='news_view' target='_blank'></a>
   </td>
   <td></td>
   <td>
    <a href='' class="news_delete">удалить</a><br>
-   <a href='/admin/mnadmin/@Module.Name/news_edit/' class='news_edit'>редактировать</a><br>
-   <a href='/admin/mnadmin/@Module.Name/news_view/' class='news_view' target='_blank'>просмотр</a>
+   <a href='/admin/mnadmin/@Module.UrlName/news_edit/' class='news_edit'>редактировать</a><br>
+   <a href='/admin/mnadmin/@Module.UrlName/news_view/' class='news_view' target='_blank'>просмотр</a>
   </td>
  </tr>  
 </table>

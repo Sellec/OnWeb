@@ -8,7 +8,7 @@ $(document).ready(function() {
             if ( confirm('Вы действительно хотите удалить фотографию "'+fname+'"?') )
             {
                 var aj = new ajaxRequest();
-                aj.load("/admin/madmin/@Module.Name/item_photo_delete/<{$data.id}>&name="+fname,'photo_result');
+                aj.load("/admin/madmin/@Module.UrlName/item_photo_delete/<{$data.id}>&name="+fname,'photo_result');
             }
         } catch(err) { alert(err); }
     }
@@ -59,13 +59,13 @@ $(document).ready(function() {
   <td class="center"></td>
   <td><a href='' class='photo_view' target="_blank"><img src="" alt=""></a></td>
   <td>
-   <!--<a href='/admin/mnadmin/@Module.Name/photo_edit/' class='photo_edit'>редактировать</a><br>-->
+   <!--<a href='/admin/mnadmin/@Module.UrlName/photo_edit/' class='photo_edit'>редактировать</a><br>-->
    <a href='' class="photo_delete">удалить</a><br>
   </td>
  </tr>  
 </table>
 
-<form action="/admin/madmin/@Module.Name/item_photo_order" id="order_save" method="POST" style="display:none;">
+<form action="/admin/madmin/@Module.UrlName/item_photo_order" id="order_save" method="POST" style="display:none;">
     <input type="hidden" value="<{$data.id}>" name="id" />
     <input type="hidden" value="" name="unun" />
     <input type="submit" value="&nbsp;Сохранить обновленный порядок&nbsp;" />

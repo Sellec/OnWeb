@@ -17,7 +17,7 @@ $(document).ready(function(){
 });
 </script>
 <div style="margin-top:20px;">
-<form action='/@Module.Name/datas_save' method='post' id='datachangeform'>
+<form action='/@Module.UrlName/datas_save' method='post' id='datachangeform'>
     
              <h2>Данные аккаунта</h2>
              <div>

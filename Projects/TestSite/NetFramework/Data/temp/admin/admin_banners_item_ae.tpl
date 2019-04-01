@@ -5,8 +5,8 @@ function item_add_photoform(res,id)
     try {
         mAddedID = id;
         $('span#item_name_id').text(mAddedID);
-        $('a.update_link').attr('href',"/admin/mnadmin/@Module.Name/item_photo/"+mAddedID);
-        $('form#form_add_photo').attr('action',"/admin/madmin/@Module.Name/item_photo_new/"+mAddedID);
+        $('a.update_link').attr('href',"/admin/mnadmin/@Module.UrlName/item_photo/"+mAddedID);
+        $('form#form_add_photo').attr('action',"/admin/madmin/@Module.UrlName/item_photo_new/"+mAddedID);
         $('div#added_item_photo').show();
     } catch(err) {alert(err);}
 }
@@ -34,7 +34,7 @@ $(document).ready(function(){
     $('select#changed_category').change(function(){
         aj = new ajaxRequest();
         aj.setPOST('cat',$('select#changed_category').val());
-        aj.load('/admin/madmin/@Module.Name/item_edit/<{$data.id}>','cmain');        
+        aj.load('/admin/madmin/@Module.UrlName/item_edit/<{$data.id}>','cmain');        
     });
 
 <{/if}>
@@ -86,9 +86,9 @@ $(document).ready(function(){
 });
 </script>
 <{if $data.id == -1}>
-<form action='/admin/madmin/@Module.Name/item_add_save' method='post' id='form_ae'>
+<form action='/admin/madmin/@Module.UrlName/item_add_save' method='post' id='form_ae'>
 <{else}>
-<form action='/admin/madmin/@Module.Name/item_edit_save/<{$data.id}>' method='post' id='form_ae'>
+<form action='/admin/madmin/@Module.UrlName/item_edit_save/<{$data.id}>' method='post' id='form_ae'>
 <{/if}>
 <{if $data.name == ""}><h2>Добавление баннера</h2><{else}><h2>Редактирование баннера</h2><{/if}>
 <a href="" class="all_turn_on">Включить все опции</a> <a href="" class="all_turn_off">Выключить все опции</a>

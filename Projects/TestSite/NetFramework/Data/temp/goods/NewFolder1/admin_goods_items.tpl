@@ -13,7 +13,7 @@ function update_items()
                 aj.userOnLoad = function(){endAnim($("#action_result"))};
                 
                 $("#admin_botgr,#action_result").fadeOut();
-                aj.load('/admin/madmin/@Module.Name/item_edit_save/'+id,'action_result');
+                aj.load('/admin/madmin/@Module.UrlName/item_edit_save/'+id,'action_result');
                 $("#loading_img").fadeIn();
 
             } catch(err) { alert(err); }
@@ -25,7 +25,7 @@ function update_items()
                 aj = new ajaxRequest();
                 var id = $(this).parent().parent().find('input[name=item_id]').val();
                 
-                aj.load('/admin/madmin/@Module.Name/item_copy/'+id,'items_result');
+                aj.load('/admin/madmin/@Module.UrlName/item_copy/'+id,'items_result');
             } catch(err) { alert(err); }
             return false;
         });
@@ -109,7 +109,7 @@ $(document).ready(function() {
             //$("#order_save").submit();
             $.ajax({
                 type: 'POST',
-                url: '/admin/madmin/@Module.Name/item_update_order',
+                url: '/admin/madmin/@Module.UrlName/item_update_order',
                 data: {order:unun},
                 cache: false,
                 dataType: 'json',
@@ -159,7 +159,7 @@ $(document).ready(function() {
  <{foreach from=$data_items item=ad key=id}>
   <tr id='tr_res_<{$ad.id}>'>
    <td class="center">
-    <a href='/@Module.Name/cat/<{$ad.category}>#<{$ad.id}>' class='item_view' target='_blank'><{$ad.id}></a>
+    <a href='/@Module.UrlName/cat/<{$ad.category}>#<{$ad.id}>' class='item_view' target='_blank'><{$ad.id}></a>
     <input type='hidden' name='item_id' value='<{$ad.id}>'>
    </td>
    <td class="center" style="position:relative;"><img class="p_photo" alt="" src="<{if isset($ad.photo.item_icon)}>/<{$ad.photo.item_icon}><{else}>/data/img/no.png<{/if}>"></td>
@@ -168,8 +168,8 @@ $(document).ready(function() {
    <td><span class='type'><{$ad.pack}></span></td>
    <td>
     <a href='' class='name_edit'>Сохранить изменения</a> <br class='name_edit'><br class='name_edit'>
-    <a href='/admin/mnadmin/@Module.Name/item_edit/<{$ad.id}>' class='item_edit'>редактировать</a><br>
-    <a href='/@Module.Name/cat/<{$ad.category}>#<{$ad.id}>' class='item_view' target='_blank'>просмотр</a><br>
+    <a href='/admin/mnadmin/@Module.UrlName/item_edit/<{$ad.id}>' class='item_edit'>редактировать</a><br>
+    <a href='/@Module.UrlName/cat/<{$ad.category}>#<{$ad.id}>' class='item_view' target='_blank'>просмотр</a><br>
     <a href='' class="item_delete" rel="<{$ad.id}>">удалить</a><br>
    </td>
    <td class="holder"></td>

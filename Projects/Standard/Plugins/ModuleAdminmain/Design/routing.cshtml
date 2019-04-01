@@ -1,4 +1,4 @@
-@model Adminmain.Model.Routing
+@model ModuleAdminmain.Model.Routing
 
 <script type='text/javascript'>
     $(document).ready(function ()
@@ -11,7 +11,7 @@
             $("input.manageRoutes").click(function ()
             {
                 $("#loading_img").fadeIn();
-                $("#manageRoutesContainer").requestLoad("@Url.Action(nameof(Adminmain.ModuleController.RoutingModule))" + $(this).data('id'), null, function (result, message)
+                $("#manageRoutesContainer").requestLoad("@Url.Action(nameof(ModuleAdminmain.ModuleController.RoutingModule))" + $(this).data('id'), null, function (result, message)
                 {
                     if (message.length > 0) alert(message);
                     $("#loading_img").fadeOut();

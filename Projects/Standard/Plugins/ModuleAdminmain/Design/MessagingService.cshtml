@@ -1,4 +1,4 @@
-@model Adminmain.Model.Modules
+@model ModuleAdminmain.Model.Modules
 
 <script type='text/javascript'>
     try
@@ -77,7 +77,7 @@
         });
 
         $("input#ReloadModules").click(function(){
-            $.requestJSON("/admin/madmin/@Module.Name/ModulesReload/", null, function(result, message, data){
+            $.requestJSON("/admin/madmin/@Module.UrlName/ModulesReload/", null, function(result, message, data){
                 if (result == JsonResult.OK)
                 {
                     for (var i in data) message += "\r\n - " + data[i];
@@ -120,9 +120,9 @@
                     <td class="center"></td>
                     <td class="center"></td>
                     <td>
-                        <a href='/admin/mnadmin/@Module.Name/modedit/' class='link_ext' target="_blank">Редактировать</a><br />
-                        <a href='/admin/madmin/@Module.Name/moddelete/' class='link_delete'>Удалить</a>
-                        <a href='/admin/madmin/@Module.Name/ModuleReload/' class='link_reload'>Перезагрузить</a><br />
+                        <a href='/admin/mnadmin/@Module.UrlName/modedit/' class='link_ext' target="_blank">Редактировать</a><br />
+                        <a href='/admin/madmin/@Module.UrlName/moddelete/' class='link_delete'>Удалить</a>
+                        <a href='/admin/madmin/@Module.UrlName/ModuleReload/' class='link_reload'>Перезагрузить</a><br />
                     </td>
                 </tr>
             </table>
@@ -150,7 +150,7 @@
                     <td class="center"></td>
                     <td class="center"></td>
                     <td>
-                        <a href='/admin/mnadmin/@Module.Name/modedit/' class='link_ext'>Редактировать</a>&nbsp;//&nbsp;
+                        <a href='/admin/mnadmin/@Module.UrlName/modedit/' class='link_ext'>Редактировать</a>&nbsp;//&nbsp;
                     </td>
                 </tr>
             </table>

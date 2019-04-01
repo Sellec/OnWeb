@@ -1,11 +1,11 @@
-@model Adminmain.Design.Model.JournalDetails
+@model ModuleAdminmain.Design.Model.JournalDetails
 @{ var formID = DateTime.Now.Ticks.ToString(); }
 
 <script type="text/javascript">
 $(function () {
     $("input#ClearJournal").click(function () {
         $(this).attr("disabled", true);
-        $.requestJSON("@(Url.CreateRoute<Adminmain.ModuleController>(x=>x.JournalClear(Model.JournalName.IdJournal)))", null, function (result, message) {
+        $.requestJSON("@(Url.CreateRoute<ModuleAdminmain.ModuleController>(x=>x.JournalClear(Model.JournalName.IdJournal)))", null, function (result, message) {
             $(this).removeAttr("disabled");
             if (message.length > 0) alert(message);
             if (result == JsonResult.OK) {
@@ -35,7 +35,7 @@ $(function () {
     @foreach (var pair in Model.JournalData)
     {
         <tr>
-            <td class="left" style="background-color: @(pair.EventType == Journaling.EventType.CriticalError ? "#f44141 !important" : (pair.EventType == Journaling.EventType.Error ? "#f48341 !important" : (pair.EventType == Journaling.EventType.Warning ? "#f4c741 !important" : "")))">
+            <td class="left" style="background-color: @(pair.EventType == Core.Journaling.EventType.CriticalError ? "#f44141 !important" : (pair.EventType == Core.Journaling.EventType.Error ? "#f48341 !important" : (pair.EventType == Core.Journaling.EventType.Warning ? "#f4c741 !important" : "")))">
                 <b>@Html.DisplayEnum(pair.EventType)</b>
             </td>
             <td class="left">@pair.DateEvent.ToString("dd.MM.yyyy HH:mm:ss")</td>

@@ -96,7 +96,7 @@ try {
                     $('#customsMapsDivButton_saveselectedplace').attr('disabled','true');
                 } else {
                     var aj = new ajaxRequest();
-                    aj.load('/admin/madmin/@Module.Name/map_manage_save/<{$data_id}>/'+$('select[name=tags] option:selected').val()+'/'+v_customsMapsData['c_x']+'/'+v_customsMapsData['c_y'],'customsMapsDivError');
+                    aj.load('/admin/madmin/@Module.UrlName/map_manage_save/<{$data_id}>/'+$('select[name=tags] option:selected').val()+'/'+v_customsMapsData['c_x']+'/'+v_customsMapsData['c_y'],'customsMapsDivError');
                     $('#customsMapsDivError').show();
                 }
             }

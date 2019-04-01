@@ -22,9 +22,9 @@ $(document).ready(function(){
 <script type='text/javascript' src='/data/js/ajaxupload.3.5.js'></script>
 
 <{if $data.id == -1}>
-<form action='/admin/madmin/@Module.Name/item_add' method='post' id='form_ae'>
+<form action='/admin/madmin/@Module.UrlName/item_add' method='post' id='form_ae'>
 <{else}>
-<form action='/admin/madmin/@Module.Name/item_edit/<{$data.id}>' method='post' id='form_ae'>
+<form action='/admin/madmin/@Module.UrlName/item_edit/<{$data.id}>' method='post' id='form_ae'>
 <{/if}>
 <{if $data.name == ""}><h2>Добавление товара</h2><{else}><h2>Редактирование товара</h2><{/if}>
 

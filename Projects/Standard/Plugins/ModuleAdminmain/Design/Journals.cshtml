@@ -1,4 +1,4 @@
-@model List<Adminmain.Design.Model.JournalsList>
+@model List<ModuleAdminmain.Design.Model.JournalsList>
 
 <script type='text/javascript'>
     $(document).ready(function(){
@@ -8,7 +8,7 @@
 
         $("input.ShowJournal").click(function ()
         {
-            $("#containerForLoading").html("<img src='/data/img/loading.gif'>").requestLoad("/admin/madmin/@Module.Name/JournalDetails/" + $(this).data("id"), null, function (result, message)
+            $("#containerForLoading").html("<img src='/data/img/loading.gif'>").requestLoad("/admin/madmin/@Module.UrlName/JournalDetails/" + $(this).data("id"), null, function (result, message)
             {
                 if (message.length > 0) alert(message);
             });
@@ -45,7 +45,7 @@
                         <tr>
                             <td class="left">@journal.JournalName.Name</td>
                             <td class="left">@journal.EventsCount</td>
-                            <td class="left" style="background-color: @(journal.EventLastType == Journaling.EventType.CriticalError ? "#f44141 !important" : (journal.EventLastType == Journaling.EventType.Error ? "#f48341 !important" : (journal.EventLastType == Journaling.EventType.Warning ? "#f4c741 !important" : "")))">
+                            <td class="left" style="background-color: @(journal.EventLastType == Core.Journaling.EventType.CriticalError ? "#f44141 !important" : (journal.EventLastType == Core.Journaling.EventType.Error ? "#f48341 !important" : (journal.EventLastType == Core.Journaling.EventType.Warning ? "#f4c741 !important" : "")))">
                                 @(journal.EventLastDate.HasValue ? journal.EventLastDate.Value.ToString("dd.MM.yyyy HH:mm:ss") : "")
                             </td>
                             <td>

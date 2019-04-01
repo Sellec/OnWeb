@@ -13,7 +13,7 @@ $(document).ready(function(){
         if ( data == null ) { return false;}
 
         aj = new ajaxRequest();
-        aj.load('/admin/madmin/@Module.Name/files_list_delete/'+data[1],'customs_files_list_delete_result');
+        aj.load('/admin/madmin/@Module.UrlName/files_list_delete/'+data[1],'customs_files_list_delete_result');
         } catch(err) {alert(err);}
         return false;
     });

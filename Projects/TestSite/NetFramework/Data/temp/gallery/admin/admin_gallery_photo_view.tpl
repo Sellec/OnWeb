@@ -17,7 +17,7 @@ $(document).ready(function() {
 
 </script>
 
-<h2><a href='/admin/madmin/@Module.Name/galls_view/<{$data.gallery}>' class='this_view'><{$data.gallery_name}></a></h2>
+<h2><a href='/admin/madmin/@Module.UrlName/galls_view/<{$data.gallery}>' class='this_view'><{$data.gallery_name}></a></h2>
 <p><{$data.text}></p>
 
 <div id="photo_div" style="padding:0;padding-bottom:50px;">

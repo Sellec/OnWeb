@@ -9,7 +9,7 @@ function cats_delete(tr_node)
         if ( confirm('Вы действительно хотите удалить категорию №'+data[1]+' - "'+mCatsArray[data[1]]['name']+'"?') )
         {
             var aj = new ajaxRequest();
-            aj.load("/admin/madmin/@Module.Name/cats_delete/"+String(data[1]),'cats_result');
+            aj.load("/admin/madmin/@Module.UrlName/cats_delete/"+String(data[1]),'cats_result');
         }
     } catch(err) { alert(err); }
 }
@@ -41,7 +41,7 @@ function pages_delete(id,pname)
         if ( confirm('Вы действительно хотите удалить наименование №'+id+' - "'+pname+'"?') )
         {
             var aj = new ajaxRequest();
-            aj.load("/admin/madmin/@Module.Name/pages_delete/"+String(id),'pages_result');
+            aj.load("/admin/madmin/@Module.UrlName/pages_delete/"+String(id),'pages_result');
         }
     } catch(err) { alert(err); }
 }

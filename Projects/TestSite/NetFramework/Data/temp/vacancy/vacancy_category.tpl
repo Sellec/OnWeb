@@ -2,7 +2,7 @@
 <{block 'title'}><{$data.name}><{/block}>
 
 <{block 'body'}>
-     <div class="subpath"><a href="/" title="Главная страница">Главная</a> &rarr; <a href="/@Module.Name" title="Вакансии">Вакансии</a> &rarr; <{$data.name}></div>
+     <div class="subpath"><a href="/" title="Главная страница">Главная</a> &rarr; <a href="/@Module.UrlName" title="Вакансии">Вакансии</a> &rarr; <{$data.name}></div>
      <h1><{$data.name}></h1>
       <{if isset($data_vacancy) && $data_vacancy|@count > 0}>
       <Br /><ul id="vacancy_more">
@@ -24,10 +24,10 @@
        <{if isset($pages) && $pages.pages>1}>
         <ul id="pages">
          <li class="index"><span>Страница:</span></li>
-         <{if $pages.curpage > 1 && $pages.curpage <= $pages.pages}><li><a href="/@Module.Name/<{$data.urlname}>/page-<{$pages.curpage-1}>" title="">&lt; Назад</a></li><{/if}>
-         <{if $pages.curpage > 6}><li><a href="/@Module.Name/<{$data.urlname}>" title="">1</a></li><li>...</li><{/if}>
+         <{if $pages.curpage > 1 && $pages.curpage <= $pages.pages}><li><a href="/@Module.UrlName/<{$data.urlname}>/page-<{$pages.curpage-1}>" title="">&lt; Назад</a></li><{/if}>
+         <{if $pages.curpage > 6}><li><a href="/@Module.UrlName/<{$data.urlname}>" title="">1</a></li><li>...</li><{/if}>
          <{foreach from=$pages.stpg item=ad key=id}>
-         <li><a href="/@Module.Name/vacancy/<{$data.urlname}>/page-<{$id}>" title=""><{$id}></a></li>
+         <li><a href="/@Module.UrlName/vacancy/<{$data.urlname}>/page-<{$id}>" title=""><{$id}></a></li>
          <{/foreach}>
          <li <{if !isset($smarty.get.show)}>class="active"<{/if}>><{if isset($smarty.get.show) && $smarty.get.show == "all"}><a href="/vacancy/<{$data.urlname}>/page-<{$i}>" title=""><{$pages.curpage}></a><{else}><{$pages.curpage}><{/if}></li>
          <{foreach from=$pages.fnpg item=ad key=id}>

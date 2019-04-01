@@ -16,7 +16,7 @@ function customs_ids(id)
 {
     $('a#photos_manage').click(function(){
         aj = new ajaxRequest();
-        aj.load('/admin/madmin/@Module.Name/photo_manage/'+id+'/1','photos_manage_div');
+        aj.load('/admin/madmin/@Module.UrlName/photo_manage/'+id+'/1','photos_manage_div');
         return false;
     });
 }
@@ -118,9 +118,9 @@ $(document).ready(function(){
 </script>
 
 <{if $data.id == -1}>
-<form action='/admin/madmin/@Module.Name/news_add_save' method='post' id='form_ae'>
+<form action='/admin/madmin/@Module.UrlName/news_add_save' method='post' id='form_ae'>
 <{else}>
-<form action='/admin/madmin/@Module.Name/news_edit_save/<{$data.id}>' method='post' id='form_ae'>
+<form action='/admin/madmin/@Module.UrlName/news_edit_save/<{$data.id}>' method='post' id='form_ae'>
 <{/if}>
 <{if $data.name == ""}><h2>Добавление новости</h2><{else}><h2>Редактирование новости</h2><{/if}>
 

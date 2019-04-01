@@ -44,7 +44,7 @@ function update_items()
                     var id = $(this).parent().parent().find('input[name=item_id]').val();
                     
                     aj.setPOST('item_name',$(this).parent().parent().find('input.name_edit').val());
-                    aj.load('/admin/madmin/@Module.Name/item_edit_save/'+id,'items_result');
+                    aj.load('/admin/madmin/@Module.UrlName/item_edit_save/'+id,'items_result');
                     var div_res = $("#items_result");
                     div_res.fadeIn("slow");
                     setTimeout(function(){div_res.fadeOut("slow")}, 2500);
@@ -153,7 +153,7 @@ $(document).ready(function() {
  </tr>
  <tr id='obraz' style='display:none;'>
   <td class="center">
-   <a href='/admin/mnadmin/@Module.Name/item/' class='item_view' target='_blank'></a>
+   <a href='/admin/mnadmin/@Module.UrlName/item/' class='item_view' target='_blank'></a>
    <input type='hidden' name='item_id' value=''>
   </td>
   <td class="center"><img class="p_photo" alt=""></td>
@@ -161,9 +161,9 @@ $(document).ready(function() {
   <td>
    <a href='' class='name_edit'>Сохранить изменения</a><br class='name_edit'><br class='name_edit'>
    <a href='' class="item_delete">удалить</a><br>
-   <a href='/admin/mnadmin/@Module.Name/item_edit/' class='item_edit'>редактировать</a><br>
-   <a href='/admin/mnadmin/@Module.Name/item/' class='item_view' target='_blank'>просмотр</a><br>
-   <a href='/admin/mnadmin/@Module.Name/item_photo/' class='item_photo' target='_blank'>фотография</a><br>
+   <a href='/admin/mnadmin/@Module.UrlName/item_edit/' class='item_edit'>редактировать</a><br>
+   <a href='/admin/mnadmin/@Module.UrlName/item/' class='item_view' target='_blank'>просмотр</a><br>
+   <a href='/admin/mnadmin/@Module.UrlName/item_photo/' class='item_photo' target='_blank'>фотография</a><br>
   </td>
  </tr>  
 </table>

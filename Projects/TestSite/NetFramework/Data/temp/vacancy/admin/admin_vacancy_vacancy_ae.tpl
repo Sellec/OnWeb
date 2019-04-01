@@ -67,9 +67,9 @@ $(document).ready(function(){
 </script>
 
 <{if $data.id == -1}>
-<form action='/admin/madmin/@Module.Name/vacancy_add_save' method='post' id='form_ae'>
+<form action='/admin/madmin/@Module.UrlName/vacancy_add_save' method='post' id='form_ae'>
 <{else}>
-<form action='/admin/madmin/@Module.Name/vacancy_edit_save/<{$data.id}>' method='post' id='form_ae'>
+<form action='/admin/madmin/@Module.UrlName/vacancy_edit_save/<{$data.id}>' method='post' id='form_ae'>
 <{/if}>
 <{if $data.name == ""}><h2>Добавление записи</h2><{else}><h2>Редактирование записи</h2><{/if}>
 

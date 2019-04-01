@@ -13,7 +13,7 @@ $(document).ready(function(){
 <{include file="admin/admin_gallery_manage_catsgals.tpl"}>
 
 
-<form action='/admin/madmin/@Module.Name/video_add_list_save' method='post' id='form_ae'>
+<form action='/admin/madmin/@Module.UrlName/video_add_list_save' method='post' id='form_ae'>
 <h2>Добавление видеофайлов</h2>
 <table width='900' id='table_results'>    
  <tr>

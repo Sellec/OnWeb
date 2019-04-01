@@ -19,7 +19,7 @@ $(function(){
     });
 });
 </script>
-<div style="margin-top:50px;"><form action='/@Module.Name/pchange2' method='post' id='pchangeform'>
+<div style="margin-top:50px;"><form action='/@Module.UrlName/pchange2' method='post' id='pchangeform'>
   <div><label for="password_old">Старый пароль: <span>*</span></label><input type='password' name='password_old' /></div>
   <div><label for="password_new">Новый пароль:<span>*</span></label><input type='password' name='password_new' /></div>
   <div><label for="password_new2">Еще раз:<span>*</span></label><input type='password' name='password_new2' /></div>

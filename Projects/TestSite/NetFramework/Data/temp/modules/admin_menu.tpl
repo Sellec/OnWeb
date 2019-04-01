@@ -20,7 +20,7 @@ $("script", self).each(function(){
 
 </script>
 <br><hr><br>
-<form action='/admin/madmin/@Module.Name/modconfigsave/<{$mod}>' method='post' id='config_menu_form'>
+<form action='/admin/madmin/@Module.UrlName/modconfigsave/<{$mod}>' method='post' id='config_menu_form'>
 <table width='100%'>
  <tr style="display:none">
   <td>

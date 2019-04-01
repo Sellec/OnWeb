@@ -28,7 +28,7 @@ $(document).ready(function(){
     $('select#changed_category').change(function(){
         aj = new ajaxRequest();
         aj.setPOST('cat',$('select#changed_category').val());
-        aj.load('/admin/madmin/@Module.Name/item_edit/<{$data.id}>','cmain');        
+        aj.load('/admin/madmin/@Module.UrlName/item_edit/<{$data.id}>','cmain');        
     });
 <{/if}>
 
@@ -151,10 +151,10 @@ window.onbeforeunload = function (evt){
 
 <input type="hidden" name="changed" id="changed" value="0" />
 <{if $data.id == -1}>
-<form action='/admin/madmin/@Module.Name/item_add_save' method='post' id='form_ae'>
+<form action='/admin/madmin/@Module.UrlName/item_add_save' method='post' id='form_ae'>
 <{else}>
 <a href='' id='back'>&larr; Назад к категории</a><br>
-<form action='/admin/madmin/@Module.Name/item_edit_save/<{$data.id}>' method='post' id='form_ae'>
+<form action='/admin/madmin/@Module.UrlName/item_edit_save/<{$data.id}>' method='post' id='form_ae'>
 <{/if}>
 <{if $data.name == ""}><h2>Добавление товара</h2><{else}><h2>Редактирование товара</h2><{/if}>
 <table width='900' id="items_results" class="admtable">    
@@ -199,7 +199,7 @@ window.onbeforeunload = function (evt){
     <div id="img_icon_stat"></div>
 
     <br /><img src='/<{if $data.photo.item_icon|strlen>0}><{$data.photo.item_icon}><{else}>data/img/design/off.jpg<{/if}>' alt='' id='item_icon' /><br />
-    <a href="/admin/madmin/@Module.Name/del_photo" rel="<{if $data.photo.item_icon|strlen>0}><{$data.photo.item_icon}><{/if}>" class="del_photo del_sm" title=""<{if $data.photo.item_icon|strlen==0}> style="display:none;"<{/if}>>Удалить файл</a>
+    <a href="/admin/madmin/@Module.UrlName/del_photo" rel="<{if $data.photo.item_icon|strlen>0}><{$data.photo.item_icon}><{/if}>" class="del_photo del_sm" title=""<{if $data.photo.item_icon|strlen==0}> style="display:none;"<{/if}>>Удалить файл</a>
   </td>
   <td>Фотография в &laquo;книжке&raquo; продукта:</td>
   <td>
@@ -208,7 +208,7 @@ window.onbeforeunload = function (evt){
     <div id="img_bimage_stat"></div>
 
     <br /><img src='/<{if $data.photo.item_bimage|strlen>0}><{$data.photo.item_bimage}><{else}>data/img/design/off.jpg<{/if}>' alt='' id='item_bimage' />
-    <a href="/admin/madmin/@Module.Name/del_photo" rel="<{if $data.photo.item_bimage|strlen>0}><{$data.photo.item_bimage}><{/if}>" class="del_photo del_bi" title=""<{if $data.photo.item_bimage|strlen==0}> style="display:none;"<{/if}>>Удалить файл</a>
+    <a href="/admin/madmin/@Module.UrlName/del_photo" rel="<{if $data.photo.item_bimage|strlen>0}><{$data.photo.item_bimage}><{/if}>" class="del_photo del_bi" title=""<{if $data.photo.item_bimage|strlen==0}> style="display:none;"<{/if}>>Удалить файл</a>
   </td>
  </tr>
  <tr>
@@ -219,7 +219,7 @@ window.onbeforeunload = function (evt){
     <div id="img_photo_stat"></div>
 
     <br /><img src='/<{if $data.photo.item_photo|strlen>0}><{$data.photo.item_photo}><{else}>data/img/design/off.jpg<{/if}>' alt='' id='item_photo' /><br />
-    <a href="/admin/madmin/@Module.Name/del_photo" rel="<{if $data.photo.item_photo|strlen>0}><{$data.photo.item_photo}><{/if}>" class="del_photo del_ph" title=""<{if $data.photo.item_photo|strlen==0}> style="display:none;"<{/if}>>Удалить файл</a>
+    <a href="/admin/madmin/@Module.UrlName/del_photo" rel="<{if $data.photo.item_photo|strlen>0}><{$data.photo.item_photo}><{/if}>" class="del_photo del_ph" title=""<{if $data.photo.item_photo|strlen==0}> style="display:none;"<{/if}>>Удалить файл</a>
   </td>
  <tr>
   <td colspan="2">

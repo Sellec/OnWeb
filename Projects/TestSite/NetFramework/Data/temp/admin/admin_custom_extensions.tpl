@@ -12,7 +12,7 @@ function f_customExtensionsActivate(id)
 
 $(document).ready(function(){
     var aj = new ajaxRequest();
-    aj.load('/admin/madmin/@Module.Name/extensionsGetData','admextens_content');
+    aj.load('/admin/madmin/@Module.UrlName/extensionsGetData','admextens_content');
 });
 </script>
 <div id='admextens_content'></div>

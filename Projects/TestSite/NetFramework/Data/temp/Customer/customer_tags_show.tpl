@@ -6,7 +6,7 @@ $(document).ready(function(){
     $('a.tag_delete').click(function(){
         var link = $(this);
         if (confirm("Удалить объект?"))
-            $.requestJSON("/@Module.Name/tag_delete/"+$(this).prop('rel'), null, function(result, message)
+            $.requestJSON("/@Module.UrlName/tag_delete/"+$(this).prop('rel'), null, function(result, message)
             {
                 if (result == JsonResult.OK) link.parent().remove();
                 else if (message.length > 0) alert(message);

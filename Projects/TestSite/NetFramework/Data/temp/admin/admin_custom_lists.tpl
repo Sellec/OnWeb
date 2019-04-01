@@ -44,7 +44,7 @@ function updateLists()
                 if (confirm("Вы уверены, что хотите удалить список '" + data['ListName'] + "'?"))
                 {
                     showResult('', 'lists_result');
-                    $.requestJSON("/admin/madmin/@Module.Name/custom_lists_delete/"+data['IdList'], null, function(result, message)
+                    $.requestJSON("/admin/madmin/@Module.UrlName/custom_lists_delete/"+data['IdList'], null, function(result, message)
                     {
                         if (result == JsonResult.OK) 
                         {
@@ -79,7 +79,7 @@ function updateLists()
                         'ValueBool3'    :   $('input[name=ValueBool3]').val(),
                     };
                     
-                    $.requestJSON("/admin/madmin/@Module.Name/custom_lists_edit/" + data['IdList'], _data, function(result, message, data)
+                    $.requestJSON("/admin/madmin/@Module.UrlName/custom_lists_edit/" + data['IdList'], _data, function(result, message, data)
                     {
                         if (message != undefined && message.length > 0) showResult(message, 'lists_edit_result');
                     });
@@ -91,7 +91,7 @@ function updateLists()
         $(tr_elem).find('a.edit_data').click(function(){
             try{
                 showResult('', 'lists_data_result');
-                $.requestJSON("/admin/madmin/@Module.Name/custom_list_data_edit/"+data['IdList'], null, function(result, message, responseData){
+                $.requestJSON("/admin/madmin/@Module.UrlName/custom_list_data_edit/"+data['IdList'], null, function(result, message, responseData){
                     if (message.length > 0) showResult(message, 'lists_data_result');
                     if (result == JsonResult.OK) updateListData(data['IdList'], responseData['data'], responseData['scheme']);
                 });
@@ -157,7 +157,7 @@ function updateListData(id, data, scheme)
         $(tr_elem).find('.delete').click(function(){
             try{
                 showResult('', 'lists_data_result');
-                $.requestJSON("/admin/madmin/@Module.Name/custom_list_data_delete/"+data['IdData'], function(result, message)
+                $.requestJSON("/admin/madmin/@Module.UrlName/custom_list_data_delete/"+data['IdData'], function(result, message)
                 {
                     if (result == JsonResult.OK) 
                     {
@@ -186,7 +186,7 @@ function updateListData(id, data, scheme)
                     'ValueBool3' : $(this).parent().parent().find('input.cld_ValueBool3').attr('checked')?1:0,
                 };
                 
-                $.requestJSON("/admin/madmin/@Module.Name/custom_list_data_editsave/" + data['IdData'], _data, function(success, message)
+                $.requestJSON("/admin/madmin/@Module.UrlName/custom_list_data_editsave/" + data['IdData'], _data, function(success, message)
                 {
                     showResult(message, 'lists_data_result');
                 });
@@ -229,7 +229,7 @@ $(document).ready(function() {
                         'ValueBool3'    :   $('input[name=ValueBool3]').val(),
                     };
                     
-                    $.requestJSON("/admin/madmin/@Module.Name/custom_lists_add", data, function(result, message, id)
+                    $.requestJSON("/admin/madmin/@Module.UrlName/custom_lists_add", data, function(result, message, id)
                     {
                         if (result == JsonResult.OK) 
                         {
@@ -260,7 +260,7 @@ $(document).ready(function() {
                     'ValueBool3' : $(this).parent().parent().find('input.cld_ValueBool3').attr('checked')?1:0,
                 };
                 
-                $.requestJSON("/admin/madmin/@Module.Name/custom_list_data_add/" + ListDataID, data, function(result, message, id)
+                $.requestJSON("/admin/madmin/@Module.UrlName/custom_list_data_add/" + ListDataID, data, function(result, message, id)
                 {
                     if (result == JsonResult.OK)
                     {

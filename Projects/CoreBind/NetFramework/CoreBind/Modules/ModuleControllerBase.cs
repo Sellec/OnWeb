@@ -22,27 +22,6 @@ namespace OnWeb.CoreBind.Modules
     using OnWeb.Core;
     using Journaling = Core.Journaling;
 
-    class ReflectedActionDescriptor2 : ReflectedActionDescriptor
-    {
-        public ReflectedActionDescriptor2(MethodInfo methodInfo, string actionName, ControllerDescriptor controllerDescriptor) :
-            base(methodInfo, actionName, controllerDescriptor)
-        {
-
-        }
-
-        public IDictionary<string, TupleE<bool, object>> args;
-
-        public override object Execute(ControllerContext controllerContext, IDictionary<string, object> parameters)
-        {
-            if (args != null)
-                foreach (var pair in args)
-                    if (parameters.ContainsKey(pair.Key) && pair.Value.Item1)
-                        parameters[pair.Key] = pair.Value.Item2;
-
-            return base.Execute(controllerContext, parameters);
-        }
-    }
-
     /// <summary>
     /// Базовый класс контроллера. Не должен использоваться для создания контроллеров напрямую, только через наследование от <see cref="ModuleControllerBase"/>
     /// </summary>

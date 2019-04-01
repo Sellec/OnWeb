@@ -6,7 +6,7 @@
 
         $("input.ShowJournal").click(function ()
         {
-            $("#containerForLoading").html("<img src='/data/img/loading.gif'>").requestLoad("/admin/madmin/@Module.Name/MonitorJournal/" + $(this).data("guid"), null, function (result, message)
+            $("#containerForLoading").html("<img src='/data/img/loading.gif'>").requestLoad("/admin/madmin/@Module.UrlName/MonitorJournal/" + $(this).data("guid"), null, function (result, message)
             {
                 if (message.length > 0) alert(message);
             });
@@ -18,7 +18,7 @@
 <table width='100%'>
     <tr>
         <td style='vertical-align:top;width:970px;min-width:970px;'>
-            @{ var services = ServiceMonitor.Monitor.GetServicesList(); }
+            @{ var services = AppCore.Get<Core.ServiceMonitor.Monitor>().GetServicesList(); }
             <h4>Зарегистрированных сервисов: <span id="countRegistered">@services.Count</span></h4>
             <table class='tablesorter' width="100%">
                 <thead>

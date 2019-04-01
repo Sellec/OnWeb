@@ -71,18 +71,13 @@ namespace OnWeb.Core.Modules
 
                 module._moduleId = config.IdModule;
                 module._moduleCaption = moduleCoreAttribute.Caption;
+                module._moduleUrlName = moduleCoreAttribute.DefaultUrlName;
 
                 var configurationManipulator = new ModuleConfigurationManipulator<TModuleType>(module, CreateValuesProviderForModule(module));
                 configurationManipulator.Start(AppCore);
                 module._configurationManipulator = configurationManipulator;
 
                 var cfg = configurationManipulator.GetUsable<ModuleConfiguration<TModuleType>>();
-                if (string.IsNullOrEmpty(cfg.UrlName))
-                {
-                    var cfgEditable = configurationManipulator.GetEditable<ModuleConfiguration<TModuleType>>();
-                    cfgEditable.UrlName = DateTime.Now.Ticks.ToString();
-                    configurationManipulator.ApplyConfiguration(cfgEditable);
-                }
 
                 module._moduleUrlName = cfg.UrlName;
                 module.InitModule(controllerTypes);

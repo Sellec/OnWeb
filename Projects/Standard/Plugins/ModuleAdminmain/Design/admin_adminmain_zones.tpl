@@ -9,7 +9,7 @@ $(document).ready(function(){
 });
 </script>
 
-<form action='/admin/mnadmin/@Module.Name/zones_edit' method='post' id='form_ae'>
+<form action='/admin/mnadmin/@Module.UrlName/zones_edit' method='post' id='form_ae'>
 <h2>Просмотр списка зон</h2>
 
 Выберите:<br>

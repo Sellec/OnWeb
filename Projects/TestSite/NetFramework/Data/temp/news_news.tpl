@@ -2,7 +2,7 @@
 <{block 'title'}><{$data.name}><{/block}>
 
 <{block 'body'}>
-    <div class="subpath"><a href="/" title="Главная страница">Главная</a> &rarr; <{if $data.category > 1}><a href="/@Module.Name" title="Новости">Новости</a> &rarr; <{/if}><a href='/@Module.Name/cat/<{$data.category}>' title="<{$data.news_category_name|re_quote}>"><{$data.news_category_name}></a> &rarr; <{$data.name}></div>
+    <div class="subpath"><a href="/" title="Главная страница">Главная</a> &rarr; <{if $data.category > 1}><a href="/@Module.UrlName" title="Новости">Новости</a> &rarr; <{/if}><a href='/@Module.UrlName/cat/<{$data.category}>' title="<{$data.news_category_name|re_quote}>"><{$data.news_category_name}></a> &rarr; <{$data.name}></div>
     <h1><{$data.name}></h1>
     <div class="pages">
      <{if isset($data.photo[0])}>

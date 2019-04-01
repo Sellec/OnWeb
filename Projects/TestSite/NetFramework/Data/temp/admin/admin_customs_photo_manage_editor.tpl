@@ -79,7 +79,7 @@ function editor_function(mode,preview)
     
     $('img#preview_image').imgAreaSelect({hide:true}); 
     $('img#main_image').imgAreaSelect({hide:true}); 
-    if ( need_load == 1 ) aj.load('/admin/madmin/@Module.Name/photo_manage_photo_edit/<{$data.photo_id}>','customs_photo_manage_result');
+    if ( need_load == 1 ) aj.load('/admin/madmin/@Module.UrlName/photo_manage_photo_edit/<{$data.photo_id}>','customs_photo_manage_result');
 }
 
 var mCustomsPhotoCurrentMode;

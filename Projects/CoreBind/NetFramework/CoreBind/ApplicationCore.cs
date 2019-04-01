@@ -20,6 +20,7 @@ namespace OnWeb.CoreBind
         /// </summary>
         public ApplicationCore(string physicalApplicationPath, string connectionString) : base(physicalApplicationPath, connectionString)
         {
+            OnUtils.Tasks.TasksManager.SetDefaultService(new OnUtils.Tasks.MomentalThreading.TasksService());
         }
 
         /// <summary>

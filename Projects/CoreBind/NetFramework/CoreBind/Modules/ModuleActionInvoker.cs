@@ -79,20 +79,20 @@ namespace OnWeb.CoreBind.Modules
                                             .GetMethod("ExtensionWrapper_" + parametersTypes.Length, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                                             .MakeGenericMethod(parametersTypes);
 
-                            var parametersValues = mm.GetParameters().ToDictionary(x => x.Name, x => new TupleE<bool,object>(x.HasDefaultValue, x.HasDefaultValue ? x.DefaultValue : null));
-                            parametersValues["_extension"] = new System.TupleE<bool, object>(true, extension);
-                            parametersValues["_extensionMethod"] = new TupleE<bool, object>(true, method);
+                            var parametersValues = mm.GetParameters().ToDictionary(x => x.Name, x => new CustomReflectedActionParameter() { HasDefaultValue = x.HasDefaultValue, Value = x.HasDefaultValue ? x.DefaultValue : null });
+                            parametersValues["_extension"] = new CustomReflectedActionParameter() { HasDefaultValue = true, Value = extension };
+                            parametersValues["_extensionMethod"] = new CustomReflectedActionParameter() { HasDefaultValue = true, Value = method };
 
                             for (int i = 0; i < parametersValuesSource.Length; i++)
                                 if (parametersValuesSource[i] != null)
                                 {
                                     var type = parametersTypes[i];
-                                    parametersValues[parametersValues.ElementAt(i + 2).Key].Item2 = Convert.ChangeType(parametersValuesSource[i], type);
-                                    parametersValues[parametersValues.ElementAt(i + 2).Key].Item1 = true;
+                                    parametersValues[parametersValues.ElementAt(i + 2).Key].Value = Convert.ChangeType(parametersValuesSource[i], type);
+                                    parametersValues[parametersValues.ElementAt(i + 2).Key].HasDefaultValue = true;
                                 }
 
                             extension.Controller = controllerContext.Controller as ModuleControllerBase;
-                            action = new ReflectedActionDescriptor2(mm, actionName, controllerDescriptor)
+                            action = new CustomReflectedActionDescriptor(mm, actionName, controllerDescriptor)
                             {
                                 args = parametersValues
                             };
@@ -182,20 +182,20 @@ namespace OnWeb.CoreBind.Modules
                                             .GetMethod("ExtensionWrapper_" + parametersTypes.Length, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                                             .MakeGenericMethod(parametersTypes);
 
-                            var parametersValues = mm.GetParameters().ToDictionary(x => x.Name, x => new TupleE<bool, object>(x.HasDefaultValue, x.HasDefaultValue ? x.DefaultValue : null));
-                            parametersValues["_extension"] = new System.TupleE<bool, object>(true, extension);
-                            parametersValues["_extensionMethod"] = new TupleE<bool, object>(true, method);
+                            var parametersValues = mm.GetParameters().ToDictionary(x => x.Name, x => new CustomReflectedActionParameter() { HasDefaultValue = x.HasDefaultValue, Value = x.HasDefaultValue ? x.DefaultValue : null });
+                            parametersValues["_extension"] = new CustomReflectedActionParameter() { HasDefaultValue = true, Value = extension };
+                            parametersValues["_extensionMethod"] = new CustomReflectedActionParameter() { HasDefaultValue = true, Value = method };
 
                             for (int i = 0; i < parametersValuesSource.Length; i++)
                                 if (parametersValuesSource[i] != null)
                                 {
                                     var type = parametersTypes[i];
-                                    parametersValues[parametersValues.ElementAt(i + 2).Key].Item2 = Convert.ChangeType(parametersValuesSource[i], type);
-                                    parametersValues[parametersValues.ElementAt(i + 2).Key].Item1 = true;
+                                    parametersValues[parametersValues.ElementAt(i + 2).Key].Value = Convert.ChangeType(parametersValuesSource[i], type);
+                                    parametersValues[parametersValues.ElementAt(i + 2).Key].HasDefaultValue = true;
                                 }
 
                             extension.Controller = controllerContext.Controller as ModuleControllerBase;
-                            action = new ReflectedActionDescriptor2(mm, actionName, controllerDescriptor)
+                            action = new CustomReflectedActionDescriptor(mm, actionName, controllerDescriptor)
                             {
                                 args = parametersValues
                             };

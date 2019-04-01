@@ -21,7 +21,7 @@ $("script", self).each(function(){
 </script>
 
 <br /><br />
-<form action='/admin/madmin/@Module.Name/modconfigsave/<{$mod}>' method='post' id='config_goods_form'>
+<form action='/admin/madmin/@Module.UrlName/modconfigsave/<{$mod}>' method='post' id='config_goods_form'>
 <table width='100%' id='modules_table'>
  <tr>
   <td style="width:250px;">

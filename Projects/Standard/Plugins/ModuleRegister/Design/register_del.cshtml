@@ -11,7 +11,7 @@
 @if (UserManager.Instance.isAuthorized)
 {
     <p>Вы хотите удалить аккаунт?</p>
-    <form action='/@Module.Name/del2' method='post'>
+    <form action='/@Module.UrlName/del2' method='post'>
         Подтвердите свой пароль: <input type='password' name='pass' id='pass'><br>
         Код проверки: <input type='text' name='c_num' class='reg_num' size='20' /><br>
         <input type='submit' name='confirm_b' id="confirm_b" value='&nbsp;Удалить аккаунт&nbsp;' />

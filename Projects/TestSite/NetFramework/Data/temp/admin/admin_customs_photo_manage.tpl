@@ -12,7 +12,7 @@ var mItemID = -1;
 function customs_photo_manage_loadeditor(photo_id)
 {
     var aj = new ajaxRequest();
-    aj.load("/admin/madmin/@Module.Name/photo_manage_editor/"+photo_id,'customs_photo_manage_for_editor');
+    aj.load("/admin/madmin/@Module.UrlName/photo_manage_editor/"+photo_id,'customs_photo_manage_for_editor');
 
 }              
 

@@ -61,9 +61,9 @@ $(document).ready(function(){
 });
 </script>
 <{if $data.id == -1}>
-<form action='/admin/madmin/@Module.Name/cats_add_save' method='post' id='form_ae'>
+<form action='/admin/madmin/@Module.UrlName/cats_add_save' method='post' id='form_ae'>
 <{else}>
-<form action='/admin/madmin/@Module.Name/cats_edit_save/<{$data.id}>' method='post' id='form_ae'>
+<form action='/admin/madmin/@Module.UrlName/cats_edit_save/<{$data.id}>' method='post' id='form_ae'>
 <{/if}>
 <{if $data.name == ""}><h2>Добавление категории</h2><{else}><h2>Редактирование категории</h2><{/if}>
 <table width='900' id='table_results' class="admtable">    

@@ -10,6 +10,8 @@ namespace OnWeb.Plugins.Communication
     {
         void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
         {
+            bindingsCollection.SetSingleton<ModuleCommunication>();
+
             bindingsCollection.SetSingleton<IService, SMS.Service>();
             bindingsCollection.SetSingleton<Telegram.IService, Telegram.Service>();
 

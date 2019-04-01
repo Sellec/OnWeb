@@ -9,7 +9,7 @@ function cats_delete(tr_node)
         if ( confirm('Вы действительно хотите удалить категорию №'+data[1]+' - "'+mCatsArray[data[1]]['name']+'"?') )
         {
             var aj = new ajaxRequest();
-            aj.load("/admin/madmin/@Module.Name/cats_delete/"+String(data[1]),'cats_result');
+            aj.load("/admin/madmin/@Module.UrlName/cats_delete/"+String(data[1]),'cats_result');
         }
     } catch(err) { alert(err); }
 }
@@ -44,7 +44,7 @@ function galls_delete(tr_node)
         if ( confirm('Вы действительно хотите удалить галерею №'+data[1]+' - "'+mGalleryArray[data[1]]['name']+'"?') )
         {
             var aj = new ajaxRequest();
-            aj.load("/admin/madmin/@Module.Name/galls_delete/"+String(data[1]),'gals_result');
+            aj.load("/admin/madmin/@Module.UrlName/galls_delete/"+String(data[1]),'gals_result');
         }
     } catch(err) { alert(err); }
 }
@@ -79,7 +79,7 @@ function photo_delete(tr_node)
         if ( confirm('Вы действительно хотите удалить фотографию №'+data[1]+' - "'+mPhotoArray[data[1]]['name']+'"?') )
         {
             var aj = new ajaxRequest();
-            aj.load("/admin/madmin/@Module.Name/photo_delete/"+String(data[1]),'photo_result');
+            aj.load("/admin/madmin/@Module.UrlName/photo_delete/"+String(data[1]),'photo_result');
         }
     } catch(err) { alert(err); }
 }
@@ -112,7 +112,7 @@ function photo_canload(id)
         $("#dis > *").fadeIn();
         $("#b_add").fadeOut();
         aj = new ajaxRequest();
-        aj.load_file('upload1','photo[]','/admin/madmin/@Module.Name/photo_photo_new/'+id,'progress1');
+        aj.load_file('upload1','photo[]','/admin/madmin/@Module.UrlName/photo_photo_new/'+id,'progress1');
     }
     } catch(err) { alert(err); }
 }
@@ -127,7 +127,7 @@ function video_delete(tr_node)
         if ( confirm('Вы действительно хотите удалить видео №'+data[1]+' - "'+mVideoArray[data[1]]['name']+'"?') )
         {
             var aj = new ajaxRequest();
-            aj.load("/admin/madmin/@Module.Name/video_delete/"+String(data[1]),'photo_result');
+            aj.load("/admin/madmin/@Module.UrlName/video_delete/"+String(data[1]),'photo_result');
         }
     } catch(err) { alert(err); }
 }
@@ -160,7 +160,7 @@ function video_canload(id)
         $("#dis > *").fadeIn();
         $("#b_add").fadeOut();
         aj = new ajaxRequest();
-        aj.load_file('upload1','video[]','/admin/madmin/@Module.Name/video_video_new/'+id,'progress1');
+        aj.load_file('upload1','video[]','/admin/madmin/@Module.UrlName/video_video_new/'+id,'progress1');
     }
     } catch(err) { alert(err); }
 }

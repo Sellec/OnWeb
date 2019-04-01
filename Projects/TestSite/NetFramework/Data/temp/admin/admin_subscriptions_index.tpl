@@ -60,7 +60,7 @@ function itemActions(data, action)
         }
         else if (action == 'save')
         {
-            $.requestJSON('/admin/madmin/@Module.Name/subscriptionSave', $('form#itemForm').serializeArray(), function(result, message, data2){
+            $.requestJSON('/admin/madmin/@Module.UrlName/subscriptionSave', $('form#itemForm').serializeArray(), function(result, message, data2){
                 if (result == JsonResult.OK)
                 {
                     $("td.itemTable").hide();
@@ -75,7 +75,7 @@ function itemActions(data, action)
         {
             if (confirm('Вы действительно хотите удалить "' + data.name + '"?'))
             {
-                $.requestJSON('/admin/madmin/@Module.Name/subscriptionDelete/' + data.id, null, function(result, message){
+                $.requestJSON('/admin/madmin/@Module.UrlName/subscriptionDelete/' + data.id, null, function(result, message){
                     if (result == JsonResult.OK) 
                     {
                         var obj = Object.prototype.toString.call(data[i]) === "[object Array]" ? new Array() : {};
@@ -91,7 +91,7 @@ function itemActions(data, action)
         }
         else if (action == 'save2')
         {
-            $.requestJSON('/admin/madmin/@Module.Name/subscriptionSave2/' + data.id, $('form#itemForm2').serializeArray(), function(result, message, data2){
+            $.requestJSON('/admin/madmin/@Module.UrlName/subscriptionSave2/' + data.id, $('form#itemForm2').serializeArray(), function(result, message, data2){
                 if (result == JsonResult.OK)
                 {
                     $("td.itemTable").hide();

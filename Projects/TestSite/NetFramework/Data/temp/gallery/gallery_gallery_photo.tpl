@@ -2,7 +2,7 @@
 <{block 'title'}><{$data.name}><{/block}>
 
 <{block 'body'}>
-    <div class="subpath"><a href="/" title="">Главная</a> &rarr; <a href="/@Module.Name" title="">Фотогалерея</a> &rarr; <a href="/@Module.Name/cat/<{$data.sub_id}>" title=""><{$data.catname}></a></div>
+    <div class="subpath"><a href="/" title="">Главная</a> &rarr; <a href="/@Module.UrlName" title="">Фотогалерея</a> &rarr; <a href="/@Module.UrlName/cat/<{$data.sub_id}>" title=""><{$data.catname}></a></div>
     <h1><{$data.name}></h1>
     <{if isset($data.description) && $data.description|strlen>0}><div class="pages"><p><{$data.description}></p></div><{/if}>
     <{if $data_photo|@count <= 0}>Галерея пуста.<{else}>

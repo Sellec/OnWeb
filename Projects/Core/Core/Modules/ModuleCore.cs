@@ -111,9 +111,15 @@ namespace OnWeb.Core.Modules
         }
 
         /// <summary>
-        /// Возвращает url-доступное название модуля (для модуля goods, имеющего alias shop, вернет shop). Не может быть пустым.
+        /// Возвращает url-доступное название модуля. Не может быть пустым.
+        /// Порядок определения значения свойства следующий:
+        /// 1) Если задано - <see cref="ModuleCoreAttribute.DefaultUrlName"/>;
+        /// 2) Если задано - <see cref="Configuration.ModuleConfiguration{TModule}.UrlName"/>;
+        /// 3) Если предыдущие пункты не вернули значения - используется результат выполнения <see cref="StringExtension.GenerateGuid(string)"/> на основе полного имени (<see cref="Type.FullName"/>) query-типа модуля.
         /// </summary>
-        public string UrlName
+        /// <seealso cref="ModuleCoreAttribute.DefaultUrlName"/>
+        /// <seealso cref="Configuration.ModuleConfiguration{TModule}.UrlName"/>
+        public virtual string UrlName
         {
             get => _moduleUrlName;
         }
@@ -400,6 +406,24 @@ namespace OnWeb.Core.Modules
 
             InitModuleCustom();
             //RegisterAction("extensionsGetData");
+        }
+
+        /// <summary>
+        /// Возвращает url-доступное название модуля. Не может быть пустым.
+        /// Порядок определения значения свойства следующий:
+        /// 1) Если задано - <see cref="ModuleCoreAttribute.DefaultUrlName"/>;
+        /// 2) Если задано - <see cref="Configuration.ModuleConfiguration{TModule}.UrlName"/>;
+        /// 3) Если предыдущие пункты не вернули значения - используется результат выполнения <see cref="StringExtension.GenerateGuid(string)"/> на основе полного имени (<see cref="Type.FullName"/>) query-типа модуля.
+        /// </summary>
+        /// <seealso cref="ModuleCoreAttribute.DefaultUrlName"/>
+        /// <seealso cref="Configuration.ModuleConfiguration{TModule}.UrlName"/>
+        public override string UrlName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_moduleUrlName)) _moduleUrlName = typeof(TSelfReference).FullName.GenerateGuid().ToString();
+                return _moduleUrlName;
+            }
         }
     }
 }

@@ -82,9 +82,9 @@ $(document).ready(function() {
  </tr>
  <tr id='obraz' style='display:none;'>
   <td class="center"></td>
-  <td><a href='/admin/mnadmin/@Module.Name/news_view/' class='news_view' target='_blank'></a></td>
+  <td><a href='/admin/mnadmin/@Module.UrlName/news_view/' class='news_view' target='_blank'></a></td>
   <td>
-   <a href='/admin/mnadmin/@Module.Name/news_edit/' class='news_edit'>редактировать</a><br>
+   <a href='/admin/mnadmin/@Module.UrlName/news_edit/' class='news_edit'>редактировать</a><br>
    <a href='' class="news_delete">удалить</a><br>
   </td>
  </tr>  

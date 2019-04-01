@@ -16,7 +16,7 @@ $(document).ready(function(){
     })
     var ii = 0;
     var settings = {
-        upload_url: "/admin/madmin/@Module.Name/upload_gall", 
+        upload_url: "/admin/madmin/@Module.UrlName/upload_gall", 
 
         post_params: 
         {
@@ -72,7 +72,7 @@ $(document).ready(function(){
 <div>
  <span id="spanButtonPlaceHolder"></span>
 </div><br />
-<form action='/admin/madmin/@Module.Name/photo_add_list_save' method='post' id='form_ae'>
+<form action='/admin/madmin/@Module.UrlName/photo_add_list_save' method='post' id='form_ae'>
 <h2>Добавление фотографий</h2>
 <select name='photo_gall'>
  <{foreach from=$galls_data item=ad key=id}>

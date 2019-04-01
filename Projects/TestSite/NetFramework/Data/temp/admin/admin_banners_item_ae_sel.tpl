@@ -25,9 +25,9 @@ $(document).ready(function(){
 </script>
 
 <{if $data.id == -1}>
-<form action='/admin/mnadmin/@Module.Name/item_add' method='post' id='form_ae'>
+<form action='/admin/mnadmin/@Module.UrlName/item_add' method='post' id='form_ae'>
 <{else}>
-<form action='/admin/mnadmin/@Module.Name/item_edit/<{$data.id}>' method='post' id='form_ae'>
+<form action='/admin/mnadmin/@Module.UrlName/item_edit/<{$data.id}>' method='post' id='form_ae'>
 <{/if}>
 <{if $data.name == ""}><h2>Добавление баннера</h2><{else}><h2>Редактирование баннера</h2><{/if}>
 

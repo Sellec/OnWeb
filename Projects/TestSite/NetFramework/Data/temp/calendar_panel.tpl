@@ -16,7 +16,7 @@ $(document).ready(function(){
         changeMonth: true,
         changeYear: true,
         onSelect: function(dateText, inst) {
-            window.open('/@Module.Name/date/'+inst.selectedDay+'.'+(parseInt(inst.selectedMonth)+1)+'.'+inst.selectedYear,'window');
+            window.open('/@Module.UrlName/date/'+inst.selectedDay+'.'+(parseInt(inst.selectedMonth)+1)+'.'+inst.selectedYear,'window');
             return false;
         },
         firstDay: 1 , // первый день понедельник

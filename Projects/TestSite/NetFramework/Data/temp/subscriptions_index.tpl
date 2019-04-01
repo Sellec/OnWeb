@@ -36,7 +36,7 @@ $(function() {
    <p>Выберите рассылки, на которые вы собираетесь подписаться, и введите свой email-адрес и код проверки с картинки.</p>
    <p><strong>Доступные рассылки:</strong></p>
    <p color='red'><{$result}></p>
-   <form action='/@Module.Name/subscribe' method='post' id="subscribe_form">
+   <form action='/@Module.UrlName/subscribe' method='post' id="subscribe_form">
     <table>
      <tr>
       <td>
