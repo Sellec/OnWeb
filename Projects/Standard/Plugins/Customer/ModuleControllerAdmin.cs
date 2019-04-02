@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OnUtils.Application.Modules;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Transactions;
@@ -6,19 +7,31 @@ using System.Web.Mvc;
 
 namespace OnWeb.Plugins.Customer
 {
-    using Types;
+    using Core.Configuration;
+    using Core.DB;
+    using Core.Items;
+    using Core.Modules;
+    using Core.Users;
+    using Core.Exceptions;
+    using CoreBind.Modules;
+    using Core.Modules;
+    using Core.Routing;
+    using CoreBind.Modules;
+    using CoreBind.Routing;
+    using Core.DB;
+    using Core.Journaling;
 
-    public class ModuleControllerAdmin : AdminForModules.ModuleAdminController<Module>
+    public class ModuleControllerAdmin : ModuleControllerAdmin<Module>
     {
         [ModuleAction("users", Module.PERM_MANAGEUSERS)]
-        public virtual ActionResult Users(TraceWeb.DB.UserState? state = null)
+        public virtual ActionResult Users(UserState? state = null)
         {
             var users = state.HasValue ?
                             DB.Users.Where(x => x.State == state.Value).OrderBy(x => x.name).ToList() :
                             DB.Users.OrderBy(x => x.name).ToList();
 
 
-            this.assign("IsSuperuser", UserManager.Instance.isSuperuser);
+            this.assign("IsSuperuser", AppCore.GetUserContextManager().GetCurrentUserContext().IsSuperuser);
             return this.display("admin/admin_customer_users.cshtml", users);
         }
 
@@ -27,7 +40,7 @@ namespace OnWeb.Plugins.Customer
         {
             var users = DB.Users.Where(x => x.State == 0).OrderBy(x => x.name).ToList();
 
-            this.assign("IsSuperuser", UserManager.Instance.isSuperuser);
+            this.assign("IsSuperuser", AppCore.GetUserContextManager().GetCurrentUserContext().IsSuperuser);
             return this.display("admin/admin_customer_users.cshtml", users);
         }
 
@@ -40,7 +53,7 @@ namespace OnWeb.Plugins.Customer
         [ModuleAction("users_edit", Module.PERM_MANAGEUSERS)]
         public virtual ActionResult UserEdit(int IdUser = 0)
         {
-            var data = IdUser != 0 ? DB.Users.Where(x => x.id == IdUser).FirstOrDefault() : new TraceWeb.DB.User();
+            var data = IdUser != 0 ? DB.Users.Where(x => x.id == IdUser).FirstOrDefault() : new User();
             if (data == null) throw new KeyNotFoundException("Неправильно указан пользователь!");
             var history = SystemHistoryManager.getListAll(this.Module, $"User_{IdUser}");
 
@@ -75,14 +88,14 @@ namespace OnWeb.Plugins.Customer
                 {
                     int id = 0;
 
-                    TraceWeb.DB.User data = null;
-                    TraceWeb.DB.UserState oldState = 0;
+                    User data = null;
+                    UserState oldState = 0;
 
                     if (IdUser > 0)
                     {
                         data = DB.Users.Where(u => u.id == IdUser).FirstOrDefault();
                         if (data == null) ModelState.AddModelError("IdUser", "Неправильно указан пользователь!");
-                        else if (data.Superuser != 0 && UserManager.Instance.isSuperuser) ModelState.AddModelError("IdUser", "У вас нет прав на редактирование суперпользователей - это могут делать только другие суперпользователи!");
+                        else if (data.Superuser != 0 && AppCore.GetUserContextManager().GetCurrentUserContext().IsSuperuser) ModelState.AddModelError("IdUser", "У вас нет прав на редактирование суперпользователей - это могут делать только другие суперпользователи!");
                         else
                         {
                             oldState = data.State;
@@ -91,7 +104,7 @@ namespace OnWeb.Plugins.Customer
                     }
                     else
                     {
-                        data = new TraceWeb.DB.User()
+                        data = new User()
                         {
                             salt = "",
                             DateReg = DateTime.Now.Timestamp(),
@@ -102,12 +115,14 @@ namespace OnWeb.Plugins.Customer
                     var errors = new List<string>();
 
                     if (ModelState.ContainsKeyCorrect("User.email")) data.email = model.User.email?.ToLower();
-                    if (ModelState.ContainsKeyCorrect("User.phone")) data.phone = UserManager.preparePhone(model.User.phone);
+                    if (ModelState.ContainsKeyCorrect("User.phone")) data.phone = UsersExtensions.preparePhone(model.User.phone);
 
                     if (ModelState.ContainsKeyCorrect("User.name")) data.name = model.User.name;
                     if (Request.Form.HasKey("login") && !string.IsNullOrEmpty(Request.Form["login"]))
                     {
-                        if (!Request.Form["login"].isOneStringTextOnly() || DataManager.check(Request.Form["login"])) errors.Add("Некорректный ввод поля login!");
+                        if (!Request.Form["login"].isOneStringTextOnly()
+                            // todo переработать этот участок в нормальную модель || DataManager.check(Request.Form["login"])
+                            ) errors.Add("Некорректный ввод поля login!");
                         else data.name = Request.Form["login"];
                     }
 
@@ -116,7 +131,7 @@ namespace OnWeb.Plugins.Customer
 
                     if (ModelState.ContainsKeyCorrect("User.Superuser"))
                     {
-                        if (!UserManager.Instance.isSuperuser) errors.Add("Недостаточно прав для установки или снятия признака суперпользователя!");
+                        if (!AppCore.GetUserContextManager().GetCurrentUserContext().IsSuperuser) errors.Add("Недостаточно прав для установки или снятия признака суперпользователя!");
                         data.Superuser = (byte)(model.User.Superuser == 0 ? 0 : 1);
                     }
 
@@ -124,11 +139,11 @@ namespace OnWeb.Plugins.Customer
                     {
                         switch (model.User.State)
                         {
-                            case TraceWeb.DB.UserState.Active:
-                            case TraceWeb.DB.UserState.RegisterNeedConfirmation:
-                            case TraceWeb.DB.UserState.RegisterWaitForModerate:
-                            case TraceWeb.DB.UserState.RegisterDecline:
-                            case TraceWeb.DB.UserState.Disabled:
+                            case UserState.Active:
+                            case UserState.RegisterNeedConfirmation:
+                            case UserState.RegisterWaitForModerate:
+                            case UserState.RegisterDecline:
+                            case UserState.Disabled:
                                 data.State = model.User.State;
                                 break;
 
@@ -141,16 +156,18 @@ namespace OnWeb.Plugins.Customer
                     if (ModelState.ContainsKeyCorrect("User.password"))
                     {
                         if (data.id > 0 && Request.Form.HasKey("changepass") && Request.Form["changepass"] == "2")
-                            data.password = UserManager.hashPassword(model.User.password);
+                            data.password = UsersExtensions.hashPassword(model.User.password);
                         else if (data.id == 0)
-                            data.password = UserManager.hashPassword(model.User.password);
+                            data.password = UsersExtensions.hashPassword(model.User.password);
                     }
 
                     if (ModelState.ContainsKeyCorrect("User.Comment")) data.Comment = model.User.Comment;
                     if (ModelState.ContainsKeyCorrect("User.CommentAdmin")) data.CommentAdmin = model.User.CommentAdmin;
                     if (Request.Form.HasKey("adminComment") && !string.IsNullOrEmpty(Request.Form["adminComment"]))
                     {
-                        if (!Request.Form["adminComment"].isOneStringTextOnly() || DataManager.check(Request.Form["adminComment"])) errors.Add("Некорректный ввод комментария администратора!");
+                        if (!Request.Form["adminComment"].isOneStringTextOnly()
+                            // todo переработать этот участок в нормальную модель || DataManager.check(Request.Form["adminComment"])
+                            ) errors.Add("Некорректный ввод комментария администратора!");
                         else data.CommentAdmin = Request.Form["adminComment"];
                     }
 
@@ -160,13 +177,13 @@ namespace OnWeb.Plugins.Customer
                     {
                         data.Fields.CopyValuesFrom(model.User.Fields);
                         data.DateChangeBase = DateTime.Now;
-                        data.IdUserChange = UserManager.Instance.getID();
+                        data.IdUserChange = AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser();
 
-                        using (var trans = new System.Transactions.TransactionScope())
+                        using (var trans = new TransactionScope())
                         {
                             if (data.id == 0) DB.Users.Add(data);
 
-                            if (DB.SaveChanges<TraceWeb.DB.User>() > 0)
+                            if (DB.SaveChanges<User>() > 0)
                             {
                                 result.Message = "Сохранение данных прошло успешно!";
                                 result.Success = true;
@@ -195,15 +212,15 @@ namespace OnWeb.Plugins.Customer
                                     {
                                         var rolesMustHave = new List<int>(model.UserRoles ?? new List<int>());
                                         DB.RoleUser.Where(x => x.IdUser == data.id).Delete();
-                                        rolesMustHave.ForEach(x => DB.RoleUser.Add(new TraceWeb.DB.RoleUser()
+                                        rolesMustHave.ForEach(x => DB.RoleUser.Add(new RoleUser()
                                         {
                                             IdRole = x,
                                             IdUser = data.id,
-                                            IdUserChange = UserManager.Instance.getID(),
+                                            IdUserChange = AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser(),
                                             DateChange = DateTime.Now.Timestamp()
                                         }));
 
-                                        if (rolesMustHave.Count > 0 && DB.SaveChanges<TraceWeb.DB.RoleUser>() == 0)
+                                        if (rolesMustHave.Count > 0 && DB.SaveChanges<RoleUser>() == 0)
                                             throw new InvalidOperationException("Не удалось задать список ролей для пользователя.");
                                     }
 
@@ -211,12 +228,12 @@ namespace OnWeb.Plugins.Customer
                                     /*
                                      * todo рассылка на мыло и по телефону
                                      * */
-                                    if (oldState == TraceWeb.DB.UserState.RegisterWaitForModerate && data.State == UserState.Active)
+                                    if (oldState == UserState.RegisterWaitForModerate && data.State == UserState.Active)
                                     {
                                         this.assign("login", Request.Form["email"]);
                                         this.assign("message", "Ваша заявка была одобрена администратором, вы можете зайти на сайт, используя логин и пароль, указанные при регистрации!");
 
-                                        Messaging.Manager.Email.sendMailFromSite(
+                                        AppCore.Get<Core.Messaging.Email.IService>().SendMailFromSite(
                                             data.ToString(),
                                             data.email,
                                             "Успешная регистрация на сайте",
@@ -225,7 +242,7 @@ namespace OnWeb.Plugins.Customer
 
                                         SystemHistoryManager.register(Module, "Пользователь №" + data.id + " '" + data.ToString() + "'", "Заявка одобрена", $"User_{data.id}");
                                     }
-                                    if (oldState == TraceWeb.DB.UserState.RegisterWaitForModerate && data.State == TraceWeb.DB.UserState.RegisterDecline)
+                                    if (oldState == UserState.RegisterWaitForModerate && data.State == UserState.RegisterDecline)
                                     {
                                         var message = ".";
 
@@ -239,7 +256,7 @@ namespace OnWeb.Plugins.Customer
                                         this.assign("login", data.email);
                                         this.assign("message", "Ваша заявка была отклонена администратором" + message);
 
-                                        Messaging.Manager.Email.sendMailFromSite(//Отправка письма поставщику с сообщением об отклонении заявки
+                                        AppCore.Get<Core.Messaging.Email.IService>().SendMailFromSite(
                                             data.ToString(),
                                             data.email,
                                             "Регистрация на сайте отклонена",
@@ -248,7 +265,7 @@ namespace OnWeb.Plugins.Customer
 
                                         SystemHistoryManager.register(Module, $"Пользователь №{data.id} '" + data.ToString() + "'", "Заявка отклонена администратором" + message, $"User_{data.id}");//Запись в журнал истории
                                     }
-                                    if (oldState != data.State && data.State == TraceWeb.DB.UserState.Disabled)
+                                    if (oldState != data.State && data.State == UserState.Disabled)
                                     {
                                         var message = ".";
 
@@ -266,7 +283,7 @@ namespace OnWeb.Plugins.Customer
 
                                         this.assign("login", data.email);
                                         this.assign("message", "Ваш аккаунт заблокирован администратором" + message);
-                                        Messaging.Manager.Email.sendMailFromSite(//Отправка письма поставщику с сообщением об отключении аккаунта
+                                        AppCore.Get<Core.Messaging.Email.IService>().SendMailFromSite(
                                             data.ToString(),
                                             data.email,
                                             "Аккаунт заблокирован",
@@ -299,7 +316,7 @@ namespace OnWeb.Plugins.Customer
             try
             {
                 if (IdUser == 0) result.Message = "Не указан пользователь!";
-                else if (IdUser == UserManager.Instance.getID()) result.Message = "Нельзя удалять себя самого!";
+                else if (IdUser == AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser()) result.Message = "Нельзя удалять себя самого!";
                 else
                 {
                     var data = DB.Users.Where(x => x.id == IdUser).FirstOrDefault();
@@ -332,7 +349,7 @@ namespace OnWeb.Plugins.Customer
         {
             var result = "";
             if (IdUser < 0) result = "Не указан пользователь!";
-            else if (!UserManager.Instance.isSuperuser) result = "Нельзя делать это без прав суперпользователя!";
+            else if (!AppCore.GetUserContextManager().GetCurrentUserContext().IsSuperuser) result = "Нельзя делать это без прав суперпользователя!";
             else
             {
                 var data = DB.Users.Where(u => u.id == IdUser).FirstOrDefault();
@@ -366,22 +383,22 @@ namespace OnWeb.Plugins.Customer
                                               });
 
             var mperms = new List<SelectListItem>();
-            foreach (var module in ModulesManager.getModules().OrderBy(x => x.Caption))
+            foreach (var module in AppCore.GetModulesManager().GetModules().OrderBy(x => x.Caption))
             {
                 var gr = new SelectListGroup() { Name = module.Caption };
-                if (!(module is Modules.Admin.Module))
+                if (!(module is Admin.Module))
                     mperms.Add(new SelectListItem()
                     {
                         Group = gr,
-                        Value = string.Format("{0};{1}", module.ID,  Modules.ModuleCore.ACCESSADMIN),
+                        Value = string.Format("{0};{1}", module.ID, ModulesConstants.PermissionManage),
                         Text = "Администрирование: Управление модулем"
                     });
 
-                mperms.AddRange(module.getPermissions().OrderBy(x => x.Value).Select(x => new SelectListItem()
+                mperms.AddRange(module.GetPermissions().OrderBy(x => x.Caption).Select(x => new SelectListItem()
                 {
                     Group = gr,
                     Value = string.Format("{0};{1}", module.ID, x.Key),
-                    Text = x.Value.Caption
+                    Text = x.Caption
                 }));
             }
             model.ModulesPermissions = mperms;
@@ -398,7 +415,7 @@ namespace OnWeb.Plugins.Customer
             {
                 if (model == null) throw new Exception("Из формы не были отправлены данные.");
 
-                TraceWeb.DB.Role data = null;
+                Role data = null;
                 if (model.IdRole > 0)
                 {
                     data = DB.Role.Where(x => x.IdRole == model.IdRole).FirstOrDefault();
@@ -406,9 +423,9 @@ namespace OnWeb.Plugins.Customer
                 }
                 else
                 {
-                    data = new TraceWeb.DB.Role()
+                    data = new Role()
                     {
-                        IdUserCreate = UserManager.Instance.getID(),
+                        IdUserCreate = AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser(),
                         DateCreate = DateTime.Now.Timestamp()
                     };
                 }
@@ -428,7 +445,7 @@ namespace OnWeb.Plugins.Customer
                 if (ModelState.IsValid)
                 {
                     data.NameRole = model.NameRole;
-                    data.IdUserChange = UserManager.Instance.getID();
+                    data.IdUserChange = AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser();
                     data.DateChange = DateTime.Now.Timestamp();
 
                     if (data.IdRole == 0) DB.Role.Add(data);
@@ -453,12 +470,12 @@ namespace OnWeb.Plugins.Customer
                                             int moduleID = 0;
                                             if (int.TryParse(d[0], out moduleID))
                                             {
-                                                DB.RolePermission.Add(new TraceWeb.DB.RolePermission()
+                                                DB.RolePermission.Add(new RolePermission()
                                                 {
                                                     IdModule = moduleID,
                                                     IdRole = data.IdRole,
                                                     Permission = d[1],
-                                                    IdUserChange = UserManager.Instance.getID(),
+                                                    IdUserChange = AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser(),
                                                     DateChange = DateTime.Now.Timestamp()
                                                 });
 
@@ -467,7 +484,7 @@ namespace OnWeb.Plugins.Customer
                                     }
                                 });
 
-                                if (DB.SaveChanges<TraceWeb.DB.RolePermission>() == 0)
+                                if (DB.SaveChanges<RolePermission>() == 0)
                                     throw new Exception($"Возникли ошибки при сохранении разрешений для роли '{data.NameRole}'");
                             }
 
@@ -528,18 +545,21 @@ namespace OnWeb.Plugins.Customer
         public virtual ActionResult RolesDelegate()
         {
             var model = new Model.AdminRolesDelegate();
-            model.Roles = DB.Role.OrderBy(x => x.NameRole).ToList();
+            using (var db = new CoreContext())
+            {
+                model.Roles = db.Role.OrderBy(x => x.NameRole).ToList();
 
-            var q = (from u in DB.Users
-                     join r in DB.RoleUser on u.id equals r.IdUser into r_j
-                     from r in r_j.DefaultIfEmpty()
-                     group new { u, r } by u.id into gr
-                     select new { User = gr.FirstOrDefault().u, Roles = gr.Where(x => x.r != null).Select(x => x.r.IdRole).ToList() }).ToList();
+                var q = (from u in DB.Users
+                         join r in DB.RoleUser on u.id equals r.IdUser into r_j
+                         from r in r_j.DefaultIfEmpty()
+                         group new { u, r } by u.id into gr
+                         select new { User = gr.FirstOrDefault().u, Roles = gr.Where(x => x.r != null).Select(x => x.r.IdRole).ToList() }).ToList();
 
-            model.Users = q.Select(x => x.User).OrderBy(x => x.ToString()).ToList();
-            model.RolesUser = q.ToDictionary(x => x.User.id, x => x.Roles);
+                model.Users = q.Select(x => x.User).OrderBy(x => x.ToString()).ToList();
+                model.RolesUser = q.ToDictionary(x => x.User.id, x => x.Roles);
 
-            return this.display("admin/admin_customer_rolesDelegate.cshtml", model);
+            }
+            return display("admin/admin_customer_rolesDelegate.cshtml", model);
         }
 
         [ModuleAction("rolesDelegateSave", Module.PERM_MANAGEROLES)]
@@ -556,11 +576,11 @@ namespace OnWeb.Plugins.Customer
                     if (model != null)
                         foreach (var user in model)
                         {
-                            foreach (var role in user.Value) DB.RoleUser.Add(new TraceWeb.DB.RoleUser()
+                            foreach (var role in user.Value) DB.RoleUser.Add(new RoleUser()
                             {
                                 IdRole = role,
                                 IdUser = user.Key,
-                                IdUserChange = UserManager.Instance.getID(),
+                                IdUserChange = AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser(),
                                 DateChange = DateTime.Now.Timestamp()
                             });
                         }

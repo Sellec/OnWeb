@@ -1,23 +1,25 @@
-﻿using System;
+﻿using OnUtils.Application.Modules;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web.Mvc;
 
 namespace OnWeb.Plugins.Auth
 {
-    using Core.Configuration;
     using Core.DB;
-    using Core.Items;
-    using Core.Modules;
+    using Core.Exceptions;
+    using Core.Journaling;
+    using Core.Users;
     using CoreBind.Modules;
 
-    public class ModuleAuthController : ModuleController<ModuleAuth>
+    public class ModuleAuthController : ModuleControllerUser<ModuleAuth>
     {
         public ActionResult Index()
         {
             if (Module.IsNeededAnyUserToRegister()) return Redirect<Register.ModuleRegisterController>(x => x.Register());
 
-            this.assign("authorized", UserManager.Instance.isAuthorized);
+            this.assign("authorized", !AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest);
             this.assign("result", "");
 
             return display("login.cshtml", new Design.Model.Login());
@@ -28,9 +30,7 @@ namespace OnWeb.Plugins.Auth
         {
             if (Module.IsNeededAnyUserToRegister()) return Redirect<Register.ModuleRegisterController>(x => x.Register());
 
-            var redirect = UserManager.Instance.AuthorizationRedirectUrl;
-
-            this.assign("authorized", UserManager.Instance.isAuthorized);
+            this.assign("authorized", !AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest);
 
             return display("unauthorizedAccess.cshtml");
         }
@@ -42,46 +42,46 @@ namespace OnWeb.Plugins.Auth
 
             try
             {
-                if (UserManager.Instance.isAuthorized) throw new Exceptions.BehaviourException("Вы уже авторизованы!");
+                if (!AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest) throw new BehaviourException("Вы уже авторизованы!");
 
-                if (string.IsNullOrEmpty(model.login)) throw new Exceptions.BehaviourException("Некорректно введен логин!");
-                if (string.IsNullOrEmpty(model.pass)) throw new Exceptions.BehaviourException("Некорректно введен пароль!");
+                if (string.IsNullOrEmpty(model.login)) throw new BehaviourException("Некорректно введен логин!");
+                if (string.IsNullOrEmpty(model.pass)) throw new BehaviourException("Некорректно введен пароль!");
 
                 var phone = PhoneBuilder.ParseString(model.login);
-                if (!model.login.isEmail() && !phone.IsCorrect) throw new Exceptions.BehaviourException("Неправильно введен логин.");
+                if (!model.login.isEmail() && !phone.IsCorrect) throw new BehaviourException("Неправильно введен логин.");
 
-                if (!IsReCaptchaValid) throw new Exceptions.BehaviourException(CaptchManager.getError());
+                if (!IsReCaptchaValid) throw new BehaviourException(CaptchManager.getError());
 
-                var result = UserManager.Instance.login(0, model.login, model.pass);
+                var result = AppCore.GetUserContextManager().login(0, model.login, model.pass);
 
-                if (result == UserManager.eAuthResult.Success)
+                if (result == eAuthResult.Success)
                 {
                     //message = "Авторизация прошла успешно!";
                 }
-                else throw new Exceptions.BehaviourException(UserManager.Instance.getError());
+                else throw new BehaviourException(AppCore.GetUserContextManager().GetCurrentUserContext().getError());
             }
-            catch(Exceptions.BehaviourException ex)
+            catch(BehaviourException ex)
             {
-                Module.RegisterEvent(Journaling.EventType.Warning, "Ошибка авторизации", ex.Message, ex.InnerException);
+                Module.RegisterEvent(EventType.Warning, "Ошибка авторизации", ex.Message, ex.InnerException);
                 message = ex.Message;
             }
             catch (Exception ex)
             {
-                Module.RegisterEvent(Journaling.EventType.Warning, "Ошибка авторизации - непредвиденная", ex.Message, ex.InnerException);
+                Module.RegisterEvent(EventType.Warning, "Ошибка авторизации - непредвиденная", ex.Message, ex.InnerException);
                 message = "Неожиданная ошибка во время авторизации. Попробуйте еще раз или обратитесь в техническую поддержку.";
             }
 
             if (!ModelState.IsValid || !string.IsNullOrEmpty(message)) this.RegisterEventInvalidModel("Форма авторизации", ignoreParamsKeys: new List<string>() { nameof(model.pass) });
 
-            if (UserManager.Instance.isAuthorized)
+            if (!AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest)
             {
                 if (!string.IsNullOrEmpty(model?.urlFrom) && Url.IsLocalUrl(model.urlFrom)) return new RedirectResult(model.urlFrom, false);
 
-                var redirect = UserManager.Instance.AuthorizationRedirectUrl;
-                if (!string.IsNullOrEmpty(redirect)) return new RedirectResult(redirect, false);
+                var redirect = Module.GetRememberedUserContextRequestedAddressWhenRedirectedToAuthorization();
+                if (redirect != null) return new RedirectResult(redirect.ToString(), false);
             }
 
-            this.assign("authorized", UserManager.Instance.isAuthorized);
+            this.assign("authorized", !AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest);
 
             return this.display("login.cshtml", new Design.Model.Login() { Result = message });
         }
@@ -94,31 +94,31 @@ namespace OnWeb.Plugins.Auth
 
             try
             {
-                if (UserManager.Instance.isAuthorized) throw new Exceptions.BehaviourException("Вы уже авторизованы!");
+                if (!AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest) throw new BehaviourException("Вы уже авторизованы!");
 
-                if (string.IsNullOrEmpty(model.login)) throw new Exceptions.BehaviourException("Некорректно введен логин!");
-                if (string.IsNullOrEmpty(model.pass)) throw new Exceptions.BehaviourException("Некорректно введен пароль!");
+                if (string.IsNullOrEmpty(model.login)) throw new BehaviourException("Некорректно введен логин!");
+                if (string.IsNullOrEmpty(model.pass)) throw new BehaviourException("Некорректно введен пароль!");
 
                 var phone = PhoneBuilder.ParseString(model.login);
-                if (!model.login.isEmail() && !phone.IsCorrect) throw new Exceptions.BehaviourException("Неправильно введен логин.");
+                if (!model.login.isEmail() && !phone.IsCorrect) throw new BehaviourException("Неправильно введен логин.");
 
-                var result = UserManager.Instance.login(0, model.login, model.pass);
+                var result = AppCore.GetUserContextManager().GetCurrentUserContext().login(0, model.login, model.pass);
 
-                if (result == UserManager.eAuthResult.Success)
+                if (result == eAuthResult.Success)
                 {
                     message = "Авторизация прошла успешно!";
                     success = true;
                 }
-                else throw new Exceptions.BehaviourException(UserManager.Instance.getError());
+                else throw new BehaviourException(AppCore.GetUserContextManager().GetCurrentUserContext().getError());
             }
-            catch (Exceptions.BehaviourException ex)
+            catch (BehaviourException ex)
             {
-                Module.RegisterEvent(Journaling.EventType.Warning, "Ошибка авторизации", ex.Message, ex.InnerException);
+                Module.RegisterEvent(EventType.Warning, "Ошибка авторизации", ex.Message, ex.InnerException);
                 message = ex.Message;
             }
             catch (Exception ex)
             {
-                Module.RegisterEvent(Journaling.EventType.Warning, "Ошибка авторизации - непредвиденная", ex.Message, ex.InnerException);
+                Module.RegisterEvent(EventType.Warning, "Ошибка авторизации - непредвиденная", ex.Message, ex.InnerException);
                 message = "Неожиданная ошибка во время авторизации. Попробуйте еще раз или обратитесь в техническую поддержку.";
             }
 
@@ -126,16 +126,14 @@ namespace OnWeb.Plugins.Auth
 
             return this.ReturnJson(success, message, new
             {
-                authorized = UserManager.Instance.isAuthorized,
-                admin = this.Module.isAdmin()
+                authorized = !AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest,
+                admin = this.Module.CheckPermission(ModulesConstants.PermissionManage)
             });
         }
 
         public ActionResult logout()
         {
-            UserManager.Instance.logout();
-            UserManager.Instance.loginFromSession();
-
+            AppCore.GetUserContextManager().DestroyUserContext(AppCore.GetUserContextManager().GetCurrentUserContext());
             return Redirect("/");
         }
 
@@ -146,7 +144,7 @@ namespace OnWeb.Plugins.Auth
 
             try
             {
-                UserManager.Instance.logout();
+                AppCore.GetUserContextManager().DestroyUserContext(AppCore.GetUserContextManager().GetCurrentUserContext());
                 success = true;
                 message = "Выход прошел успешно.";
             }
@@ -156,7 +154,7 @@ namespace OnWeb.Plugins.Auth
                 message = ex.Message;
             }
 
-            return this.ReturnJson(success, message, UserManager.AuthorizationRedirect);
+            return this.ReturnJson(success, message, Module.GetRememberedUserContextRequestedAddressWhenRedirectedToAuthorization());
         }
 
         [ModuleAction("restore")]
@@ -164,7 +162,7 @@ namespace OnWeb.Plugins.Auth
         {
             if (Module.IsNeededAnyUserToRegister()) return Redirect<Register.ModuleRegisterController>(x => x.Register());
 
-            if (UserManager.Instance.isAuthorized) return RedirectToAction(nameof(Login));
+            if (!AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest) return RedirectToAction(nameof(Login));
             return display("PasswordRestore.cshtml", new Model.PasswordRestore());
         }
 
@@ -174,7 +172,7 @@ namespace OnWeb.Plugins.Auth
             var answer = JsonAnswer<string>();
             try
             {
-                if (!IsReCaptchaValid) throw new Exceptions.BehaviourException("Докажите, что вы не робот!");
+                if (!IsReCaptchaValid) throw new BehaviourException("Докажите, что вы не робот!");
 
                 if (ModelState.IsValid)
                 {
@@ -187,11 +185,11 @@ namespace OnWeb.Plugins.Auth
                 {
                     if (!isPhone)
                     {
-                        if (!ApplicationCore.Instance.Config.userAuthorizeAllowed.In(UserManager.eUserAuthorizeAllowed.EmailAndPhone, UserManager.eUserAuthorizeAllowed.OnlyEmail)) ModelState.AddModelError(nameof(model.email), "К сожалению, в данный момент авторизация через адрес электронной почты отключена, восстановление пароля таким способом невозможно.");
+                        if (!AppCore.Config.userAuthorizeAllowed.In(eUserAuthorizeAllowed.EmailAndPhone, eUserAuthorizeAllowed.OnlyEmail)) ModelState.AddModelError(nameof(model.email), "К сожалению, в данный момент авторизация через адрес электронной почты отключена, восстановление пароля таким способом невозможно.");
                     }
                     else if (isPhone)
                     {
-                        if (!ApplicationCore.Instance.Config.userAuthorizeAllowed.In(UserManager.eUserAuthorizeAllowed.EmailAndPhone, UserManager.eUserAuthorizeAllowed.OnlyPhone)) ModelState.AddModelError(nameof(model.phone), "К сожалению, в данный момент авторизация через номер телефона отключена, восстановление пароля таким образом невозможно.");
+                        if (!AppCore.Config.userAuthorizeAllowed.In(eUserAuthorizeAllowed.EmailAndPhone, eUserAuthorizeAllowed.OnlyPhone)) ModelState.AddModelError(nameof(model.phone), "К сожалению, в данный момент авторизация через номер телефона отключена, восстановление пароля таким образом невозможно.");
                     }
                 }
 
@@ -206,9 +204,9 @@ namespace OnWeb.Plugins.Auth
                     if (user == null)
                     {
                         if (!isPhone)
-                            throw new Exceptions.BehaviourException("Указанный Email-адрес не найден на сайте!");
+                            throw new BehaviourException("Указанный Email-адрес не найден на сайте!");
                         else
-                            throw new Exceptions.BehaviourException("Указанный номер телефона не найден на сайте!");
+                            throw new BehaviourException("Указанный номер телефона не найден на сайте!");
                     }
                     else
                     {
@@ -218,24 +216,24 @@ namespace OnWeb.Plugins.Auth
                         {
                             if (!isPhone)
                             {
-                                var code = DateTime.Now.Microtime().Md5();
-                                DB.PasswordRemember.Add(new DB.PasswordRemember() { user_id = user.id, code = code });
+                                var code = DateTime.Now.Microtime().MD5();
+                                DB.PasswordRemember.Add(new PasswordRemember() { user_id = user.id, code = code });
 
-                                var send = Messaging.Manager.Email.sendMailFromSite(
+                                var send = AppCore.Get<Core.Messaging.Email.IService>().SendMailFromSite(
                                     user.Caption,
                                     user.email,
                                     "Восстановление пароля на сайте",
                                     this.displayToVar("PasswordRestoreNotificationEmail.cshtml", new Design.Model.PasswordRestoreSend() { User = user, Code = code, CodeType = codeType })
                                 );
-                                if (!send) throw new Exceptions.BehaviourException("Ошибка во время отправки письма на указанный Email-адрес", new Exception(Messaging.Manager.Email.getError(), Messaging.Manager.Email.getErrorException()));
+                                if (!send) throw new BehaviourException("Ошибка во время отправки письма на указанный Email-адрес", new Exception(AppCore.Get<Core.Messaging.Email.IService>().getError(), AppCore.Get<Core.Messaging.Email.IService>().getErrorException()));
                             }
                             else
                             {
                                 var code = OnUtils.Utils.StringsHelper.GenerateRandomString("0123456789", 4);
-                                DB.PasswordRemember.Add(new DB.PasswordRemember() { user_id = user.id, code = code });
+                                DB.PasswordRemember.Add(new PasswordRemember() { user_id = user.id, code = code });
 
-                                var send = Messaging.Manager.SMS.sendMessage(user.phone, "Код восстановления пароля: " + code);
-                                if (!send) throw new Exceptions.BehaviourException("Ошибка во время отправки сообщения с кодом на указанный номер телефона", new Exception(Messaging.Manager.SMS.getError(), Messaging.Manager.SMS.getErrorException()));
+                                var send = AppCore.Get<Core.Messaging.SMS.IService>().SendMessage(user.phone, "Код восстановления пароля: " + code);
+                                if (!send) throw new BehaviourException("Ошибка во время отправки сообщения с кодом на указанный номер телефона", new Exception(AppCore.Get<Core.Messaging.SMS.IService>().getError(), AppCore.Get<Core.Messaging.SMS.IService>().getErrorException()));
                             }
 
                             DB.SaveChanges();
@@ -250,14 +248,14 @@ namespace OnWeb.Plugins.Auth
                     }
                 }
             }
-            catch (Exceptions.BehaviourException ex)
+            catch (BehaviourException ex)
             {
-                Module.RegisterEvent(Journaling.EventType.Info, "Ошибка восстановления пароля", ex.Message, ex.InnerException);
+                Module.RegisterEvent(EventType.Info, "Ошибка восстановления пароля", ex.Message, ex.InnerException);
                 answer.FromFail(ex.Message);
             }
             catch (Exception ex)
             {
-                Module.RegisterEvent(Journaling.EventType.Error, "Ошибка восстановления пароля", "Необработанная ошибка", ex);
+                Module.RegisterEvent(EventType.Error, "Ошибка восстановления пароля", "Необработанная ошибка", ex);
                 answer.FromFail("Возникла ошибка во время восстановления пароля");
             }
 
@@ -280,7 +278,7 @@ namespace OnWeb.Plugins.Auth
             var answer = JsonAnswer<string>();
             try
             {
-                if (!IsReCaptchaValid) throw new Exceptions.BehaviourException("Докажите, что вы не робот!");
+                if (!IsReCaptchaValid) throw new BehaviourException("Докажите, что вы не робот!");
 
                 if (ModelState.IsValid)
                 {
@@ -306,7 +304,7 @@ namespace OnWeb.Plugins.Auth
                         {
                             DB.PasswordRemember.Delete(res.Password);
 
-                            res.User.password = UserManager.hashPassword(model.Password);
+                            res.User.password = UsersExtensions.hashPassword(model.Password);
                             res.User.salt = salt;
 
                             DB.SaveChanges();
@@ -318,14 +316,14 @@ namespace OnWeb.Plugins.Auth
                     }
                 }
             }
-            catch (Exceptions.BehaviourException ex)
+            catch (BehaviourException ex)
             {
-                Module.RegisterEvent(Journaling.EventType.Info, "Ошибка восстановления пароля при сохранении", ex.Message, ex.InnerException);
+                Module.RegisterEvent(EventType.Info, "Ошибка восстановления пароля при сохранении", ex.Message, ex.InnerException);
                 answer.FromFail(ex.Message);
             }
             catch (Exception ex)
             {
-                Module.RegisterEvent(Journaling.EventType.Error, "Ошибка восстановления пароля при сохранении", "Необработанная ошибка", ex);
+                Module.RegisterEvent(EventType.Error, "Ошибка восстановления пароля при сохранении", "Необработанная ошибка", ex);
                 answer.FromFail("Возникла ошибка во время сохранения пароля");
             }
 

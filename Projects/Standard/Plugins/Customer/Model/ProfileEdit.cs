@@ -3,14 +3,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OnWeb.Plugins.Customer.Model
 {
-    [Items.ItemTypeAlias(typeof(TraceWeb.DB.User))]
-    public class ProfileEdit : Items.ItemBase<Module>
+    using Core.DB;
+    using Core.Items;
+
+    [ItemTypeAlias(typeof(User))]
+    public class ProfileEdit : ItemBase<Module>
     {
         public ProfileEdit()
         {
         }
 
-        public ProfileEdit(TraceWeb.DB.User source)
+        public ProfileEdit(User source)
         {
             this.ID = source.id;
             this.email = source.email;

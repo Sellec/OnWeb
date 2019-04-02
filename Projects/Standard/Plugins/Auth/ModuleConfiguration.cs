@@ -5,7 +5,7 @@ using System.Web;
 
 namespace OnWeb.Plugins.Auth
 {
-    public class ModuleConfiguration : Core.Configuration.ModuleConfiguration
+    public class ModuleConfiguration : Core.Configuration.ModuleConfiguration<ModuleAuth>
     {
         public int EventLoginSuccess { get; set; }
 

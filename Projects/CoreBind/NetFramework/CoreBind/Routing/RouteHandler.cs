@@ -74,8 +74,6 @@ namespace OnWeb.CoreBind.Routing
 
         public bool Match(HttpContextBase httpContext, Route route, string parameterName, RouteValueDictionary values, RouteDirection routeDirection)
         {
-            if (httpContext.RoutingIsRouted()) return false;
-
             if (routeDirection == RouteDirection.IncomingRequest)
             {
                 if (GetMatchedRoute(values) != null) return true;

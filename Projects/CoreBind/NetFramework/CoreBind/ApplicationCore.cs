@@ -63,8 +63,8 @@ namespace OnWeb.CoreBind
             /*
              * 
              * */
-            //BackgroundServicesFactory.Instance.Providers.First().SetTask(typeof(FileManager).FullName + "_" + nameof(FileManager.ClearExpired) + "_minutely1", Cron.MinuteInterval(1), () => FileManager.ClearExpired());
-            // todo BackgroundServicesFactory.Instance.Providers.First().SetTask(typeof(Core.Storage.IFileManager).FullName + "_" + nameof(Core.Storage.IFileManager.UpdateFileCount) + "_minutely5", Cron.MinuteInterval(5), () => FileManager.UpdateFileCount());
+            //TasksManager.SetTask(typeof(FileManager).FullName + "_" + nameof(FileManager.ClearExpired) + "_minutely1", Cron.MinuteInterval(1), () => FileManager.ClearExpired());
+            // todo TasksManager.SetTask(typeof(Core.Storage.IFileManager).FullName + "_" + nameof(Core.Storage.IFileManager.UpdateFileCount) + "_minutely5", Cron.MinuteInterval(5), () => FileManager.UpdateFileCount());
 
             var d = HttpContext.Current;
 

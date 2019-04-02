@@ -35,7 +35,7 @@ namespace OnWeb.Plugins.FileManager
                 Directory.CreateDirectory(Path.GetDirectoryName(filePath));
 
                 hpf.SaveAs(filePath);
-                var file = TraceWeb.FileManager.Register(module, hpf.FileName, filePathRelative, UserManager.Instance.getID(), uniqueKey, DateTime.Now.AddDays(1));
+                var file = TraceWeb.FileManager.Register(module, hpf.FileName, filePathRelative, AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser(), uniqueKey, DateTime.Now.AddDays(1));
                 if (file == null) throw new Exception(TraceWeb.FileManager.getError());
 
                 result.Data = file.IdFile;

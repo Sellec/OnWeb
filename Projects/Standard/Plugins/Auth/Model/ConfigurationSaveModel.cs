@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace OnWeb.Plugins.Auth.Model
+﻿namespace OnWeb.Plugins.Auth.Model
 {
-    public class ConfigurationSaveModel : AdminForModules.Configuration.SaveModel
+    using CoreBind.Modules.Configuration;
+
+    public class ConfigurationSaveModel : SaveModel
     {
         public int? EventLoginSuccess { get; set; }
 

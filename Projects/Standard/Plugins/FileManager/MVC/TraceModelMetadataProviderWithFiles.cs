@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-
-using OnUtils;
 
 namespace OnWeb.Plugins.FileManager.MVC
 {
-    class TraceModelMetadataProviderWithFiles : Providers.TraceModelMetadataProvider
+    using CoreBind.Providers;
+
+    class TraceModelMetadataProviderWithFiles : TraceModelMetadataProvider
     {
         protected override ModelMetadata CreateMetadata(IEnumerable<Attribute> attributes, Type containerType, Func<object> modelAccessor, Type modelType, string propertyName)
         {

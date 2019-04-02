@@ -14,7 +14,7 @@ namespace OnWeb.Plugins.Register
     using CoreBind.Types;
 
     [ModuleCore("Регистрация", DefaultUrlName = "Register")]
-    public class Module : ModuleCore<Module>
+    public class ModuleRegister : ModuleCore<ModuleRegister>
     {
         protected ModelStateDictionary ValidateModel(object model)
         {
@@ -181,9 +181,9 @@ namespace OnWeb.Plugins.Register
                                     //    this.assign("id", id);
                                     //    this.assign("login", data.email"]);
                                     //    this.assign("comment", data.comment"]);
-                                    //    Messaging.Manager.Email.sendMailToAdmin("Новая заявка на регистрацию", this.displayToVar("register_mail_admin.cshtml"));
-                                    //    Messaging.Manager.Email.sendMailSubscription(1, "Новая заявка на регистрацию", this.displayToVar("register_mail_admin.cshtml"));
-                                    //    Messaging.Manager.Email.sendMailFromSite(data.email"], data.email"], "Регистрация на сайте", this.displayToVar("register_mail2.cshtml"));
+                                    //    AppCore.Get<Core.Messaging.Email.IService>().sendMailToAdmin("Новая заявка на регистрацию", this.displayToVar("register_mail_admin.cshtml"));
+                                    //    AppCore.Get<Core.Messaging.Email.IService>().sendMailSubscription(1, "Новая заявка на регистрацию", this.displayToVar("register_mail_admin.cshtml"));
+                                    //    AppCore.Get<Core.Messaging.Email.IService>().sendMailFromSite(data.email"], data.email"], "Регистрация на сайте", this.displayToVar("register_mail2.cshtml"));
                                     //}
 
                                     //success = "<br>";

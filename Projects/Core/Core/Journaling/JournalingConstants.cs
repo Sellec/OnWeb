@@ -7,7 +7,7 @@ namespace OnWeb.Core.Journaling
     /// <summary>
     /// Константы менеджера журналов.
     /// </summary>
-    public static class Constants
+    public static class JournalingConstants
     {
         /// <summary>
         /// Тип системного журнала.

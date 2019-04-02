@@ -21,16 +21,5 @@ static class HttpContextRoutingExtensions
     {
         return (string)context.Items[EXTENSIONPREFIX + "URL"];
     }
-
-    public static bool RoutingIsTranslated(this HttpContext context)
-    {
-        return (bool)context.Items[EXTENSIONPREFIX + "IsTranslated"];
-    }
-
-    public static bool RoutingIsRouted(this HttpContextBase context)
-    {
-        return (bool)context.Items[EXTENSIONPREFIX + "IsTranslated"];
-    }
-
 }
 

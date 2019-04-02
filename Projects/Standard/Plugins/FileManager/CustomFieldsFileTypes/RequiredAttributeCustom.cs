@@ -22,7 +22,7 @@ namespace OnWeb.Plugins.FileManager.CustomFieldsFileTypes
         {
            if (value == null) return false;
             if (value is IEnumerable<int> && (value as IEnumerable<int>).Where(x => x > 0).Count() == 0) return false;
-            if (value is IEnumerable<TraceWeb.DB.File> && (value as IEnumerable<TraceWeb.DB.File>).Where(x => x != null && x.IdFile > 0).Count() == 0) return false;
+            if (value is IEnumerable<File> && (value as IEnumerable<File>).Where(x => x != null && x.IdFile > 0).Count() == 0) return false;
 
             return base.IsValid(value);
         }

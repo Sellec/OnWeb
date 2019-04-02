@@ -3,12 +3,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OnWeb.Plugins.Customer.Model
 {
-    public class AdminRoleEdit : TraceWeb.DB.Role
+    using Core.DB;
+
+    public class AdminRoleEdit : Role
     {
         public AdminRoleEdit()
         { }
 
-        public AdminRoleEdit(TraceWeb.DB.Role role)
+        public AdminRoleEdit(Role role)
         {
             this.IdRole = role.IdRole;
             this.NameRole = role.NameRole;

@@ -3,7 +3,22 @@ using System.Web.Mvc;
 
 namespace OnWeb.Plugins.Auth
 {
-    public class ModuleAuthControllerAdmin : AdminForModules.ModuleAdminController<ModuleAuth, Configuration.CoreContext, Model.ConfigurationSaveModel>
+    using Core.Configuration;
+    using Core.DB;
+    using Core.Items;
+    using Core.Modules;
+    using Core.Users;
+    using Core.Exceptions;
+    using CoreBind.Modules;
+    using Core.Types;
+    using Core.Modules;
+    using Core.Routing;
+    using CoreBind.Modules;
+    using CoreBind.Routing;
+    using Core.DB;
+    using Core.Journaling;
+
+    public class ModuleAuthControllerAdmin : ModuleControllerAdmin<ModuleAuth, CoreContext, Model.ConfigurationSaveModel>
     {
         public override ActionResult Configuration()
         {
@@ -16,14 +31,14 @@ namespace OnWeb.Plugins.Auth
 
         protected override void ConfigurationSaveCustom(Model.ConfigurationSaveModel model)
         {
-            if (model.RoleGuest.HasValue) ApplicationCore.Instance.Config["RoleGuest"] = model.RoleGuest;
-            if (model.RoleUser.HasValue) ApplicationCore.Instance.Config["RoleUser"] = model.RoleUser; ;
-            if (model.EventLoginSuccess.HasValue) ApplicationCore.Instance.Config["eventLoginSuccess"] = model.EventLoginSuccess;
-            if (model.EventLoginError.HasValue) ApplicationCore.Instance.Config["eventLoginError"] = model.EventLoginError;
-            if (model.EventLoginUpdate.HasValue) ApplicationCore.Instance.Config["eventLoginUpdate"] = model.EventLoginUpdate;
-            if (model.EventLogout.HasValue) ApplicationCore.Instance.Config["eventLogout"] = model.EventLogout;
+            if (model.RoleGuest.HasValue) AppCore.Config["RoleGuest"] = model.RoleGuest;
+            if (model.RoleUser.HasValue) AppCore.Config["RoleUser"] = model.RoleUser; ;
+            if (model.EventLoginSuccess.HasValue) AppCore.Config["eventLoginSuccess"] = model.EventLoginSuccess;
+            if (model.EventLoginError.HasValue) AppCore.Config["eventLoginError"] = model.EventLoginError;
+            if (model.EventLoginUpdate.HasValue) AppCore.Config["eventLoginUpdate"] = model.EventLoginUpdate;
+            if (model.EventLogout.HasValue) AppCore.Config["eventLogout"] = model.EventLogout;
 
-            ApplicationCore.Instance.ConfigurationSave();
+            AppCore.ConfigurationSave();
         }
     }
 }

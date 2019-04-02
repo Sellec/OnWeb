@@ -1,15 +1,17 @@
-﻿using System;
+﻿using OnUtils.Data;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Web.Mvc;
-using OnUtils.Data;
 
 namespace OnWeb.Plugins.FileManager.CustomFieldsFileTypes
 {
-    using TraceWeb.ModuleExtensions.CustomFields.Data;
-    using TraceWeb.ModuleExtensions.CustomFields.Field;
+    using Core.ModuleExtensions.CustomFields.Data;
+    using Core.ModuleExtensions.CustomFields.Field;
+    using CoreBind.Razor;
+    using DB;
 
     public class FileFieldType : FieldType
     {
@@ -22,11 +24,11 @@ namespace OnWeb.Plugins.FileManager.CustomFieldsFileTypes
         }
 
         [ThreadStatic]
-        private static UnitOfWork<TraceWeb.DB.File> DB;
+        private static UnitOfWork<File> DB;
 
-        private static UnitOfWork<TraceWeb.DB.File> GetDB()
+        private static UnitOfWork<File> GetDB()
         {
-            if (DB == null) DB = new UnitOfWork<TraceWeb.DB.File>();
+            if (DB == null) DB = new UnitOfWork<File>();
             return DB;
         }
 
@@ -42,11 +44,11 @@ namespace OnWeb.Plugins.FileManager.CustomFieldsFileTypes
             foreach (var value in values)
             {
                 if (value is int) valuesPrepared.Add((int)value);
-                else if (value is TraceWeb.DB.File) valuesPrepared.Add((value as TraceWeb.DB.File).IdFile);
+                else if (value is File) valuesPrepared.Add((value as File).IdFile);
                 else valuesInvalid.Add(value?.ToString()?.Truncate(0, 10, "..."));
             }
 
-            var filesFound = DataAccessProvider.Get<TraceWeb.DB.File>().Where(x => valuesPrepared.Contains(x.IdFile)).Select(x => x.IdFile).ToList();
+            var filesFound = DataAccessManager.Get<File>().Where(x => valuesPrepared.Contains(x.IdFile)).Select(x => x.IdFile).ToList();
             if (field.IsValueRequired && filesFound.Count == 0) return CreateResultForEmptyValue(field);
 
             var filesUnknown = valuesPrepared.Where(x => !filesFound.Contains(x)).ToList();
@@ -76,12 +78,12 @@ namespace OnWeb.Plugins.FileManager.CustomFieldsFileTypes
                 if (field.IsMultipleValues)
                 {
                     var requiredAttribute = typeof(RequiredAttributeForMultipleValue).GetConstructor(Type.EmptyTypes);
-                    return new CustomAttributeBuilder(requiredAttribute, new object[] { }).SingleAsEnumerable();
+                    return new CustomAttributeBuilder(requiredAttribute, new object[] { }).ToEnumerable();
                 }
                 else
                 {
                     var requiredAttribute = typeof(RequiredAttributeForSingleValue).GetConstructor(Type.EmptyTypes);
-                    return new CustomAttributeBuilder(requiredAttribute, new object[] { }).SingleAsEnumerable();
+                    return new CustomAttributeBuilder(requiredAttribute, new object[] { }).ToEnumerable();
                 }
             }
             return null;
@@ -120,7 +122,7 @@ namespace OnWeb.Plugins.FileManager.CustomFieldsFileTypes
             if (html.ViewDataContainer is IModuleProvider)
             {
                 var module = (html.ViewDataContainer as IModuleProvider).Module;
-                if (module != null) uploadOptions["formData"] = new { moduleName = module.Name };
+                if (module != null) uploadOptions["formData"] = new { moduleName = module.UrlName };
             }
             uploadOptions["multiple"] = field.IsMultipleValues;
 

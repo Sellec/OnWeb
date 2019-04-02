@@ -27,7 +27,7 @@ namespace OnWeb.Core
 
         public void Init()
         {
-            BackgroundServicesFactory.Instance.Providers.First().SetTask(typeof(StandbyMonitor).FullName + "_" + nameof(StandbyMonitor.BackgroundTask) + "_minutely5", Cron.MinuteInterval(5), () => StandbyMonitor.BackgroundTaskStatic());
+            TasksManager.SetTask(typeof(StandbyMonitor).FullName + "_" + nameof(StandbyMonitor.BackgroundTask) + "_minutely5", Cron.MinuteInterval(5), () => StandbyMonitor.BackgroundTaskStatic());
             this.RegisterServiceState(ServiceStatus.RunningIdeal, "Сервис запущен.");
         }
 

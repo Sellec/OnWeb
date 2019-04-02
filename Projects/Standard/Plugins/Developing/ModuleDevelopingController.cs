@@ -103,7 +103,7 @@ namespace OnWeb.Plugins.Developing
                     else
                     {
                         db.DataContext.ExecuteQuery("UPDATE users SET password='" + UsersExtensions.hashPassword(password) + "' WHERE id='" + IdUser.Value + "'");
-                        //user.password = UserManager.hashPassword(password);
+                        //user.password = UsersExtensions.hashPassword(password);
                         //db.SaveChanges();
 
                         str += $"Пароль пользователя {IdUser} ({user.Caption}, {user.email}, {user.phone}) обновлен на '{password}'.\r\n<br>";

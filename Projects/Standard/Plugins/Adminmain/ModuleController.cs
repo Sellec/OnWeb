@@ -39,7 +39,7 @@ namespace OnWeb.Plugins.Adminmain
             //                       {
             //                           Value = p.id.ToString(),
             //                           Text = p.name,
-            //                           Selected = ApplicationCore.Instance.Config.index_page == p.id
+            //                           Selected = AppCore.Config.index_page == p.id
             //                       }).ToList();
 
             model.PagesList.Insert(0, new SelectListItem()
@@ -188,7 +188,7 @@ namespace OnWeb.Plugins.Adminmain
         //        var config = DB.ConfigModules.Where(x => x.m_filename == moduleBaseName).FirstOrDefault();
         //        if (config == null)
         //        {
-        //            config = new TraceWeb.DB.config_modules() { m_filename = moduleBaseName };
+        //            config = new config_modules() { m_filename = moduleBaseName };
         //            DB.ConfigModules.Add(config);
         //        }
 
@@ -290,7 +290,7 @@ namespace OnWeb.Plugins.Adminmain
         //[ModuleAction("editablemenu_edit", Module.PERM_EDITABLEMENU)]
         //public ActionResult EditableMenuEdit(int IdMenu = 0)
         //{
-        //    var menu = IdMenu == 0 ? new TraceWeb.DB.menus() : DB.EditableMenu.Where(x => x.id == IdMenu).FirstOrDefault();
+        //    var menu = IdMenu == 0 ? new menus() : DB.EditableMenu.Where(x => x.id == IdMenu).FirstOrDefault();
         //    if (menu == null) throw new Exception(string.Format("Меню с id={0} не найдено.", IdMenu));
 
         //    return this.display("admin_adminmain_editablemenu_ae.cshtml", new Model.EditableMenu()
@@ -335,7 +335,7 @@ namespace OnWeb.Plugins.Adminmain
         //}
 
         //[ModuleAction("editablemenu_edit_save", Module.PERM_EDITABLEMENU)]
-        //public JsonResult EditableMenuSave(TraceWeb.DB.menus menu)
+        //public JsonResult EditableMenuSave(menus menu)
         //{
         //    var success = false;
         //    var result = "";
@@ -495,23 +495,23 @@ namespace OnWeb.Plugins.Adminmain
         //        switch (Request.Form["makeAddressMode"].ToString())
         //        {
         //            case "1":
-        //                ApplicationCore.Instance.Config["makeAddressMode"] = 1;
+        //                AppCore.Config["makeAddressMode"] = 1;
         //                break;
 
         //            case "0":
         //            default:
-        //                ApplicationCore.Instance.Config["makeAddressMode"] = 0;
+        //                AppCore.Config["makeAddressMode"] = 0;
 
         //                break;
         //        }
 
-        //        if (Request.Form.HasKey("kladrInCloudToken")) ApplicationCore.Instance.Config["kladrInCloudToken"] = Request.Form["kladrInCloudToken"];
-        //        if (Request.Form.HasKey("kladrInCloudKey")) ApplicationCore.Instance.Config["kladrInCloudKey"] = Request.Form["kladrInCloudKey"];
-        //        if (Request.Form.HasKey("mapsYandexKey")) ApplicationCore.Instance.Config["mapsYandexKey"] = Request.Form["mapsYandexKey"];
-        //        if (Request.Form.HasKey("dadataSecretKey")) ApplicationCore.Instance.Config["dadataSecretKey"] = Request.Form["dadataSecretKey"];
-        //        if (Request.Form.HasKey("dadataApiKey")) ApplicationCore.Instance.Config["dadataApiKey"] = Request.Form["dadataApiKey"];
+        //        if (Request.Form.HasKey("kladrInCloudToken")) AppCore.Config["kladrInCloudToken"] = Request.Form["kladrInCloudToken"];
+        //        if (Request.Form.HasKey("kladrInCloudKey")) AppCore.Config["kladrInCloudKey"] = Request.Form["kladrInCloudKey"];
+        //        if (Request.Form.HasKey("mapsYandexKey")) AppCore.Config["mapsYandexKey"] = Request.Form["mapsYandexKey"];
+        //        if (Request.Form.HasKey("dadataSecretKey")) AppCore.Config["dadataSecretKey"] = Request.Form["dadataSecretKey"];
+        //        if (Request.Form.HasKey("dadataApiKey")) AppCore.Config["dadataApiKey"] = Request.Form["dadataApiKey"];
 
-        //        ApplicationCore.Instance.ConfigurationSave();
+        //        AppCore.ConfigurationSave();
         //    }
 
         //    return this.display("admin_adminmain_addresses.tpl");
@@ -587,7 +587,7 @@ namespace OnWeb.Plugins.Adminmain
         //[MenuAction("Рассылки и уведомления", "messaging", Module.PERM_MANAGE_MESSAGING)]
         //public virtual ActionResult Messaging()
         //{
-        //    //Web.Messaging.Manager.Email.sendMailFromSite("test", "sellec88@mail.ru", "test", "test!!!!!!!!");
+        //    //Web.AppCore.Get<Core.Messaging.Email.IService>().sendMailFromSite("test", "sellec88@mail.ru", "test", "test!!!!!!!!");
 
         //    return this.display("Messaging.cshtml");
         //}

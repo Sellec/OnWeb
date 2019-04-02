@@ -34,10 +34,39 @@ namespace OnWeb
         /// <param name="eventType">См. <see cref="Journal.EventType"/>.</param>
         /// <param name="eventInfo">См. <see cref="Journal.EventInfo"/>.</param>
         /// <param name="eventInfoDetailed">См. <see cref="Journal.EventInfoDetailed"/>.</param>
+        /// <returns>Возвращает объект с результатом выполнения операции. Если во время добавления события в журнал возникла ошибка, она будет отражена в сообщении <see cref="ExecutionResult.Message"/>.</returns>
+        public static ExecutionResult RegisterEvent<TApplicationComponent>(this TApplicationComponent component, EventType eventType, string eventInfo, string eventInfoDetailed = null)
+            where TApplicationComponent : class, IComponentSingleton<ApplicationCore>
+        {
+            return component.GetAppCore().Get<IManager>().RegisterEvent<TApplicationComponent>(eventType, eventInfo, eventInfoDetailed, null, null);
+        }
+
+        /// <summary>
+        /// Регистрирует новое событие в журнале на основе типа <typeparamref name="TApplicationComponent"/>.
+        /// </summary>
+        /// <param name="component">Компонент приложения (см. <see cref="IComponentSingleton{TAppCore}"/>) для которого регистрируется событие.</param>
+        /// <param name="eventType">См. <see cref="Journal.EventType"/>.</param>
+        /// <param name="eventInfo">См. <see cref="Journal.EventInfo"/>.</param>
+        /// <param name="eventInfoDetailed">См. <see cref="Journal.EventInfoDetailed"/>.</param>
+        /// <param name="exception">См. <see cref="Journal.ExceptionDetailed"/>.</param>
+        /// <returns>Возвращает объект с результатом выполнения операции. Если во время добавления события в журнал возникла ошибка, она будет отражена в сообщении <see cref="ExecutionResult.Message"/>.</returns>
+        public static ExecutionResult RegisterEvent<TApplicationComponent>(this TApplicationComponent component, EventType eventType, string eventInfo, string eventInfoDetailed = null, Exception exception = null)
+            where TApplicationComponent : class, IComponentSingleton<ApplicationCore>
+        {
+            return component.GetAppCore().Get<IManager>().RegisterEvent<TApplicationComponent>(eventType, eventInfo, eventInfoDetailed, null, exception);
+        }
+
+        /// <summary>
+        /// Регистрирует новое событие в журнале на основе типа <typeparamref name="TApplicationComponent"/>.
+        /// </summary>
+        /// <param name="component">Компонент приложения (см. <see cref="IComponentSingleton{TAppCore}"/>) для которого регистрируется событие.</param>
+        /// <param name="eventType">См. <see cref="Journal.EventType"/>.</param>
+        /// <param name="eventInfo">См. <see cref="Journal.EventInfo"/>.</param>
+        /// <param name="eventInfoDetailed">См. <see cref="Journal.EventInfoDetailed"/>.</param>
         /// <param name="eventTime">См. <see cref="Journal.DateEvent"/>. Если передано значение null, то событие записывается на момент вызова метода.</param>
         /// <param name="exception">См. <see cref="Journal.ExceptionDetailed"/>.</param>
         /// <returns>Возвращает объект с результатом выполнения операции. Если во время добавления события в журнал возникла ошибка, она будет отражена в сообщении <see cref="ExecutionResult.Message"/>.</returns>
-        public static ExecutionResult RegisterEvent<TApplicationComponent>(this TApplicationComponent component, EventType eventType, string eventInfo, string eventInfoDetailed = null, DateTime? eventTime = null, Exception exception = null) 
+        public static ExecutionResult RegisterEvent<TApplicationComponent>(this TApplicationComponent component, EventType eventType, string eventInfo, string eventInfoDetailed = null, DateTime? eventTime = null, Exception exception = null)
             where TApplicationComponent : class, IComponentSingleton<ApplicationCore>
         {
             return component.GetAppCore().Get<IManager>().RegisterEvent<TApplicationComponent>(eventType, eventInfo, eventInfoDetailed, eventTime, exception);

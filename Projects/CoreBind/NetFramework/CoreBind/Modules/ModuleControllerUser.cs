@@ -80,13 +80,13 @@ namespace OnWeb.CoreBind.Modules
             //////////////this.assignRef("Main", ApplicationCore.Instance);
             //////////////this.assignRef("UserManager", UserManager.Instance);
 
-            //////////////this.assign("IsAuthorized", UserManager.Instance.isAuthorized);
-            //////////////this.assign("IsDeveloper", UserManager.Instance.getID() == 19 || UserManager.Instance.getID() == 20);
+            //////////////this.assign("IsAuthorized", !AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest);
+            //////////////this.assign("IsDeveloper", AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser() == 19 || AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser() == 20);
             //////////////this.assign("IsAdminPanel", ModulesManager.getModuleByNameBase("Admin").checkPermission(ModuleCore.ACCESSADMIN));
-            //////////////this.assign("IsSuperuser", UserManager.Instance.isSuperuser);
+            //////////////this.assign("IsSuperuser", AppCore.GetUserContextManager().GetCurrentUserContext().IsSuperuser);
             //////////////this.assign("IsAdmin", this.Module.checkPermission(ModuleCore.ACCESSADMIN));
 
-            //////////////this.assign("User", UserManager.Instance.getData());
+            //////////////this.assign("User", AppCore.GetUserContextManager().GetCurrentUserContext().getData());
 
             //////////////var themeActive = ThemeManager.getActive(false);
             //////////////this.assignRef("ThemeFolder", themeActive != null ? themeActive.FolderName : "");

@@ -7,6 +7,6 @@ namespace OnWeb.Plugins.Customer.Model
     {
         public DateTime DateStart;
         public DateTime DateEnd;
-        public IList<TraceWeb.DB.SystemHistoryRecord> Records;
+        public IList<SystemHistoryRecord> Records;
     }
 }

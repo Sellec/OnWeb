@@ -4,6 +4,8 @@ using System.Web.Mvc;
 
 namespace OnWeb.Plugins.Customer.Model
 {
+    using Core.DB;
+
     public class AdminUserEdit
     {
         public AdminUserEdit()
@@ -12,9 +14,9 @@ namespace OnWeb.Plugins.Customer.Model
         }
 
         [ScaffoldColumn(false)]
-        public IList<TraceWeb.DB.SystemHistoryRecord> history;
+        public IList<SystemHistoryRecord> history;
 
-        public TraceWeb.DB.User User { get; set; }
+        public User User { get; set; }
 
         [Display(Name = "Роли пользователя")]
         public IEnumerable<int> UserRoles { get; set; }

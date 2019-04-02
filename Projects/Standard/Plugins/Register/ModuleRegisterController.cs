@@ -1,19 +1,16 @@
-﻿using System;
+﻿using OnUtils.Data;
+using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web.Mvc;
-using System.ComponentModel.DataAnnotations;
 
 namespace OnWeb.Plugins.Register
 {
-    using Utils.Data;
-    using Core.Configuration;
     using Core.DB;
-    using Core.Items;
-    using Core.Modules;
-    using CoreBind.Modules;
     using Core.Types;
+    using CoreBind.Modules;
 
-    public class ModuleRegisterController : ModuleController<ModuleRegister>
+    public class ModuleRegisterController : ModuleControllerUser<ModuleRegister>
     {
         [ModuleAction("index")]
         public ActionResult Index()
@@ -102,7 +99,7 @@ namespace OnWeb.Plugins.Register
 
                     preparedData.Superuser = 0;
 
-                    var isSuperuserNeeded = AppCore.Get<IModulesManager>().GetModule<Auth.ModuleAuth>()?.IsSuperuserNeeded() ?? false;
+                    var isSuperuserNeeded = AppCore.GetModulesManager().GetModule<Auth.ModuleAuth>()?.IsSuperuserNeeded() ?? false;
                     if (isSuperuserNeeded)
                     {
                         preparedData.Superuser = 1;

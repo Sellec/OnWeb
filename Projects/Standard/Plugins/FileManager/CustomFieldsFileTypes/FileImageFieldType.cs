@@ -1,14 +1,13 @@
-﻿using System;
+﻿using OnUtils.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
-using OnUtils.Data;
-
 namespace OnWeb.Plugins.FileManager.CustomFieldsFileTypes
 {
-    using TraceWeb.ModuleExtensions.CustomFields.Data;
-    using TraceWeb.ModuleExtensions.CustomFields.Field;
+    using Core.ModuleExtensions.CustomFields.Data;
+    using Core.ModuleExtensions.CustomFields.Field;
 
     public class FileImageFieldType : FileFieldType
     {
@@ -28,7 +27,7 @@ namespace OnWeb.Plugins.FileManager.CustomFieldsFileTypes
                 else valuesInvalid.Add(value?.ToString()?.Truncate(0, 10, "..."));
             }
 
-            var filesFound = DataAccessProvider.Get<DB.File>().Where(x => valuesPrepared.Contains(x.IdFile)).ToList();
+            var filesFound = DataAccessManager.Get<DB.File>().Where(x => valuesPrepared.Contains(x.IdFile)).ToList();
             if (field.IsValueRequired && filesFound.Count == 0) return CreateResultForEmptyValue(field);
 
             var filesFoundIds = filesFound.Select(x => x.IdFile).ToList();

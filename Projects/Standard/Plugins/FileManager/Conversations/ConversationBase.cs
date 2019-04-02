@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace OnWeb.Plugins.FileManager.Conversations
 {
+    using Core.Items;
+
     /// <summary>
     /// Представляет базовые возможности для преобразований файлов на уровне файлового менеджера.
     /// </summary>
-    public abstract class ConversationBase : Items.ItemBase<Module>
+    public abstract class ConversationBase : ItemBase<Module>
     {
         /// <summary>
         /// Уникальный ключ преобразования, генерируется динамически при создании экземпляра преобразования.

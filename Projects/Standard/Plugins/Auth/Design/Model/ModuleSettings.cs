@@ -2,10 +2,12 @@
 
 namespace OnWeb.Plugins.Auth.Design.Model
 {
+    using Core.DB;
+
     public class ModuleSettings
     {
-        public List<DB.Role> Roles;
+        public List<Role> Roles;
 
-        public List<DB.UserLogHistoryEventType> EventTypes;
+        public List<UserLogHistoryEventType> EventTypes;
     }
 }

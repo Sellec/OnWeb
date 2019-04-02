@@ -27,7 +27,7 @@ namespace OnWeb.Core
             var number = rand.Next(10000, 99999);
             using (var db = CreateContextScope())
             {
-                db.Item.captcha.Add(new TraceWeb.DB.captcha()
+                db.Item.captcha.Add(new captcha()
                 {
                     code = code,
                     number = number,
@@ -191,7 +191,7 @@ namespace OnWeb.Core
             return new MvcHtmlString(string.Format(@"
                 <script src ='https://www.google.com/recaptcha/api.js' async defer></script>
                 <div class='g-recaptcha' data-sitekey='{0}' {1}></div>
-            ", ApplicationCore.Instance.Config.Get("reCaptchaSiteKey", ""), string.Join(" ", tags)));
+            ", AppCore.Config.Get("reCaptchaSiteKey", ""), string.Join(" ", tags)));
         }
 
     }

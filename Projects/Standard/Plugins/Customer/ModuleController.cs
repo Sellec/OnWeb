@@ -1,14 +1,19 @@
-﻿using System;
+﻿using OnUtils.Application.Modules;
+using OnUtils.Data;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web.Mvc;
 
-using OnUtils.Data;
-
 namespace OnWeb.Plugins.Customer
 {
-    public class ModuleController : ModuleController<Module>
+    using Core.DB;
+    using CoreBind.Modules;
+    using FileManager;
+
+    public class ModuleController : ModuleControllerUser<Module>
     {
         protected override void onDisplayModule(object model)
         {
@@ -17,7 +22,7 @@ namespace OnWeb.Plugins.Customer
             var externalParts = new Hashtable();
             //externalParts["/".this.getName()."/external/energy/counters"] = "Счетчики";
 
-            this.assign("data", UserManager.Instance.getData());
+            this.assign("data", AppCore.GetUserContextManager().GetCurrentUserContext().GetData());
 
             this.assign("customer_tags", tags);
             this.assign("externalParts", externalParts);
@@ -28,34 +33,34 @@ namespace OnWeb.Plugins.Customer
         /*
          * Главная инфо профиля
          * */
-        [ModuleAction(null, ModuleCore.ACCESSUSER)]
+        [ModuleAction(null, ModulesConstants.PermissionAccessUserString)]
         public ActionResult Index(string part = null)
         {
-            var data = UserManager.Instance.getData();
+            var data = AppCore.GetUserContextManager().GetCurrentUserContext().GetData();
             return this.display("customerIndex.cshtml", data);
         }
 
         /*
          * Показывает окно редактирования личных данных.
          * */
-        [ModuleAction("datas", ModuleCore.ACCESSUSER)]
+        [ModuleAction("datas", ModulesConstants.PermissionAccessUserString)]
         public ActionResult profile()
         {
             return Index();
 
-            var data = UserManager.Instance.getData();
+            var data = AppCore.GetUserContextManager().GetCurrentUserContext().GetData();
             return this.display("customerProfile.cshtml", data);
         }
 
         /*
          * Показывает окно редактирования личных данных на сокращенной форме, для подгрузки через Ajax.
          * */
-        [ModuleAction("editLoad", ModuleCore.ACCESSUSER)]
+        [ModuleAction("editLoad", ModulesConstants.PermissionAccessUserString)]
         public ActionResult ProfileEditAjax(int? IdUser = null)
         {
-            if (!IdUser.HasValue) IdUser = UserManager.Instance.ID;
+            if (!IdUser.HasValue) IdUser = AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser();
 
-            using (var db = new UnitOfWork<TraceWeb.DB.User>())
+            using (var db = new UnitOfWork<User>())
             {
                 var data = db.Repo1.Where(x => x.id == IdUser.Value).FirstOrDefault();
                 if (data == null) throw new Exception("Указанный пользователь не найден.");
@@ -73,18 +78,18 @@ namespace OnWeb.Plugins.Customer
         /*
          * Сохранение личных данных.
          * */
-        [ModuleAction("datas_save", ModuleCore.ACCESSUSER)]
+        [ModuleAction("datas_save", ModulesConstants.PermissionAccessUserString)]
         public ActionResult profileSave([Bind(Prefix = nameof(Design.Model.Profile.Edit))] Model.ProfileEdit model)
         {
-            var answer = JsonAnswer<TraceWeb.DB.User>();
+            var answer = JsonAnswer<User>();
             var prefix = nameof(Design.Model.Profile.Edit) + ".";
 
             try
             {
-                //if (!this.IsReCaptchaValid && !UserManager.Instance.isSuperuser) ModelState.AddModelError("ReCaptcha", "Вы точно не робот?");
+                //if (!this.IsReCaptchaValid && !AppCore.GetUserContextManager().GetCurrentUserContext().IsSuperuser) ModelState.AddModelError("ReCaptcha", "Вы точно не робот?");
                 if (model == null) throw new Exception("Нет переданных данных.");
 
-                using (var db = new UnitOfWork<TraceWeb.DB.User>())
+                using (var db = new UnitOfWork<User>())
                 using (var trans = db.CreateScope())
                 {
                     var data = db.Repo1.Where(x => x.id == model.ID).FirstOrDefault();
@@ -134,7 +139,7 @@ namespace OnWeb.Plugins.Customer
                         if (ModelState.Keys.Contains(prefix + nameof(model.name))) data.name = model.name;
                         if (ModelState.Keys.Contains(prefix + nameof(model.IdPhoto)))
                         {
-                            if (model.IdPhoto.HasValue) TraceWeb.FileManager.UpdateExpiration(model.IdPhoto.Value, null);
+                            if (model.IdPhoto.HasValue) AppCore.Get<FileManager>().UpdateExpiration(model.IdPhoto.Value, null);
                             data.IdPhoto = model.IdPhoto;
                         }
                         if (ModelState.Keys.Contains(prefix + nameof(model.Comment))) data.Comment = model.Comment;
@@ -144,7 +149,7 @@ namespace OnWeb.Plugins.Customer
 
                         db.SaveChanges();
 
-                        UserManager.Instance.UpdateDataAndPermissions();
+                        AppCore.GetUserContextManager().GetCurrentUserContext().UpdateDataAndPermissions();
 
                         trans.Commit();
 
@@ -166,16 +171,16 @@ namespace OnWeb.Plugins.Customer
         /*
          * Форма смены пароля
          * */
-        [ModuleAction("pchange", ModuleCore.ACCESSUSER)]
+        [ModuleAction("pchange", ModulesConstants.PermissionAccessUserString)]
         public ActionResult passwordChange()
         {
-            return this.display("customerPassword.cshtml", UserManager.Instance.getData());
+            return this.display("customerPassword.cshtml", AppCore.GetUserContextManager().GetCurrentUserContext().GetData());
         }
 
         /*
          * Смена пароля
          * */
-        [ModuleAction("pchange2", ModuleCore.ACCESSUSER)]
+        [ModuleAction("pchange2", ModulesConstants.PermissionAccessUserString)]
         public ActionResult passwordChange2(Model.UserPasschange model)
         {
             var success = false;
@@ -183,26 +188,26 @@ namespace OnWeb.Plugins.Customer
 
             try
             {
-                if (!this.IsReCaptchaValid && !UserManager.Instance.isSuperuser) result.Add("Вы точно не робот?");
+                if (!this.IsReCaptchaValid && !AppCore.GetUserContextManager().GetCurrentUserContext().IsSuperuser) result.Add("Вы точно не робот?");
                 else
                 {
                     if (!ModelState.IsValid)
                         result.AddRange(ModelState.Values.Where(y => y.Errors.Count > 0).
                                         SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList());
 
-                    var data_ = UserManager.Instance.getData();
+                    var data_ = AppCore.GetUserContextManager().GetCurrentUserContext().GetData();
 
                     if (result.Count == 0)
                     {
                         if (!ModelState.Keys.Contains("passwordOld")) result.Add("Не указан текущий пароль.");
-                        else if (UserManager.hashPassword(model.passwordOld) != data_.password) result.Add("Неправильный пароль.");
+                        else if (UsersExtensions.hashPassword(model.passwordOld) != data_.password) result.Add("Неправильный пароль.");
 
                         if (!ModelState.Keys.Contains("passwordNew")) result.Add("Не указан новый пароль.");
                     }
 
                     if (result.Count == 0)
                     {
-                        data_.password = UserManager.hashPassword(model.passwordNew);
+                        data_.password = UsersExtensions.hashPassword(model.passwordNew);
                         success = true;
                     }
 

@@ -86,6 +86,8 @@ namespace OnWeb.Core.Modules
                 LoadModuleCallModuleStart(module);
                 _modules.Add(new Tuple<Type, ModuleBase<ApplicationCore>>(typeof(TModuleType), module));
 
+                Debug.WriteLineNoLog($"LoadModuleCustom -> {module.UrlName}");
+
                 this.RegisterEvent(
                      Journaling.EventType.Error,
                     $"Загрузка модуля '{moduleType.FullName}'",
@@ -101,6 +103,8 @@ namespace OnWeb.Core.Modules
 
         internal ModuleCore GetModuleInternal(string urlName)
         {
+            Debug.WriteLineNoLog($"GetModuleInternal -> {urlName}");
+
             lock (_syncRoot)
             {
                 var module = (from p in _modules.Select(x => x.Item2).OfType<ModuleCore>() where p._moduleUrlName == urlName select p).FirstOrDefault();

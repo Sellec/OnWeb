@@ -294,7 +294,7 @@ namespace OnWeb.Core.Modules
         #region Ошибки 
         private int GetJournalForErrors()
         {
-            var result = AppCore.Get<Journaling.IManager>().RegisterJournal(Journaling.Constants.IdSystemJournalType, "Журнал событий модуля '" + this.Caption + "'", "ModuleErrors_" + ID);
+            var result = AppCore.Get<Journaling.IManager>().RegisterJournal(Journaling.JournalingConstants.IdSystemJournalType, "Журнал событий модуля '" + this.Caption + "'", "ModuleErrors_" + ID);
             if (!result.IsSuccess) Debug.WriteLine("Ошибка получения журнала событий модуля '{0}': {1}", this.Caption, result.Message);
             return result.Result?.IdJournal ?? -1;
         }
@@ -322,8 +322,8 @@ namespace OnWeb.Core.Modules
 
             //if (UserManager.Instance != null)
             //{
-            //    if (!UserManager.Instance.isAuthorized) msg += $"Пользователь: Гость\r\n";
-            //    else msg += $"Пользователь: {UserManager.Instance.getData().ToString()} (id: {UserManager.Instance.ID})\r\n";
+            //    if (!!AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest) msg += $"Пользователь: Гость\r\n";
+            //    else msg += $"Пользователь: {AppCore.GetUserContextManager().GetCurrentUserContext().getData().ToString()} (id: {AppCore.GetUserContextManager().GetCurrentUserContext().ID})\r\n";
             //}
 
             //if (Request != null)

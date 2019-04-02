@@ -1,7 +1,7 @@
 @model Auth.Design.Model.Login
 @{ 
     Layout = "baseAuth.cshtml";
-    Title = UserManager.Instance.isAuthorized ? "Управление профилем" : "Войти в систему";
+    Title = !AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest ? "Управление профилем" : "Войти в систему";
 }
 
 @section breadcrumbs {
@@ -20,7 +20,7 @@
 
 <div class="login-block">
     <div class="cover">
-        @if (UserManager.Instance.isAuthorized != true)
+        @if (!AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest != true)
         {
             @RenderPartial("LoginFormInner.cshtml")
         }

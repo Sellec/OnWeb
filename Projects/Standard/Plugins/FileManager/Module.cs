@@ -8,37 +8,62 @@ using OnUtils.Tasks;
 
 namespace OnWeb.Plugins.FileManager
 {
-    [ModuleCore("FileManager", "Управление файлами")]
-    public class Module : ModuleCore2<UnitOfWork<DB.File>>
-    {
-        internal override void InitModuleImmediately(List<ModuleCoreCandidate> candidatesTypes)
-        {
-            base.InitModuleImmediately(candidatesTypes);
-            this.AutoRegister("fm");
+    using Core.Configuration;
+    using Core.DB;
+    using Core.Items;
+    using Core.Modules;
+    using CoreBind.Modules;
+    using Core.Types;
+    using Core.Modules;
+    using Core.Routing;
+    using CoreBind.Modules;
+    using CoreBind.Routing;
+    using Core.DB;
+    using Core.Configuration;
+    using Core.DB;
+    using Core.Items;
+    using Core.Modules;
+    using CoreBind.Modules;
+    using Core.Types;
+    using Core.Modules;
+    using Core.Routing;
+    using CoreBind.Modules;
+    using CoreBind.Routing;
+    using Core.DB;
+    using Core.Journaling;
 
-            /**
+    [ModuleCore("Управление файлами")]
+    public class Module : ModuleCore<Module>, IUnitOfWorkAccessor<UnitOfWork<DB.File>>
+    {
+        private static Module _thisModule = null;
+
+        protected override void InitModuleCustom()
+        {
+            _thisModule = this;
+
+            /*
              * Обслуживание индексов запускаем один раз при старте и раз в несколько часов
              * */
-            BackgroundServicesFactory.Instance.Providers.First().SetTask(typeof(Module).FullName + "_" + nameof(MaintenanceIndexes), DateTime.Now.AddSeconds(30), () => MaintenanceIndexesStatic());
-            BackgroundServicesFactory.Instance.Providers.First().SetTask(typeof(Module).FullName + "_" + nameof(MaintenanceIndexes) + "_hourly6", Cron.HourInterval(6), () => MaintenanceIndexesStatic());
+            TasksManager.SetTask(typeof(Module).FullName + "_" + nameof(MaintenanceIndexes), DateTime.Now.AddSeconds(30), () => MaintenanceIndexesStatic());
+            TasksManager.SetTask(typeof(Module).FullName + "_" + nameof(MaintenanceIndexes) + "_hourly6", Cron.HourInterval(6), () => MaintenanceIndexesStatic());
 
-            /**
+            /*
              * Прекомпиляция шаблонов при запуске.
              * */
             //if (!Debug.IsDeveloper)
-            //    Tasks.BackgroundServicesFactory.Instance.Providers.First().SetTask(typeof(Module).FullName + "_" + nameof(RazorPrecompilationStatic), DateTime.Now.AddMinutes(1), () => RazorPrecompilationStatic());
+            //    Tasks.TasksManager.SetTask(typeof(Module).FullName + "_" + nameof(RazorPrecompilationStatic), DateTime.Now.AddMinutes(1), () => RazorPrecompilationStatic());
 
 #if DEBUG
             /**
              * Регулярная сборка мусора для сборки в режиме отладки.
              * */
-            BackgroundServicesFactory.Instance.Providers.First().SetTask(typeof(Module).FullName + "_" + nameof(GCCollect) + "_minutely1", Cron.MinuteInterval(1), () => GCCollectStatic());
+            TasksManager.SetTask(typeof(Module).FullName + "_" + nameof(GCCollect) + "_minutely1", Cron.MinuteInterval(1), () => GCCollectStatic());
 #endif
 
             /**
              * Регулярная проверка новых слов в лексическом менеджере.
              * */
-            BackgroundServicesFactory.Instance.Providers.First().SetTask(typeof(Lexicon.Manager).FullName + "_" + nameof(Lexicon.Manager.PrepareNewWords) + "_minutely2", Cron.MinuteInterval(2), () => LexiconNewWordsStatic());
+            TasksManager.SetTask(typeof(Lexicon.Manager).FullName + "_" + nameof(Lexicon.Manager.PrepareNewWords) + "_minutely2", Cron.MinuteInterval(2), () => LexiconNewWordsStatic());
 
             ModelMetadataProviders.Current = new MVC.TraceModelMetadataProviderWithFiles();
         }
@@ -48,7 +73,7 @@ namespace OnWeb.Plugins.FileManager
         #region Maintenance indexes
         public static void MaintenanceIndexesStatic()
         {
-            var module = ModulesManager.getModule<Module>();
+            var module = _thisModule;
             if (module == null) throw new Exception("Модуль не найден.");
 
             module.MaintenanceIndexes();
@@ -58,14 +83,14 @@ namespace OnWeb.Plugins.FileManager
         {
             try
             {
-                using (var db = CreateContext())
+                using (var db = this.CreateUnitOfWork())
                 {
                     var result = db.DataContext.StoredProcedure<object>("Maintenance_RebuildIndexes", new { MinimumIndexFragmentstionToSearch = 5 });
                 }
             }
             catch (Exception ex)
             {
-                this.RegisterEvent(Journaling.EventType.CriticalError, $"Ошибка обслуживания индексов", null, ex);
+                this.RegisterEvent(EventType.CriticalError, $"Ошибка обслуживания индексов", null, ex);
                 Debug.WriteLine("FileManager.Module.MaintenanceIndexes: {0}", ex.Message);
             }
         }
@@ -74,14 +99,14 @@ namespace OnWeb.Plugins.FileManager
         #region Lexicon new words
         public static void LexiconNewWordsStatic()
         {
-            Lexicon.Manager.PrepareNewWords();
+            _thisModule.AppCore.Get<Lexicon.Manager>().PrepareNewWords();
         }
         #endregion
 
         #region RazorPrecompilation
         public static void RazorPrecompilationStatic()
         {
-            var module = ModulesManager.getModule<Module>();
+            var module = _thisModule;
             if (module == null) throw new Exception("Модуль не найден.");
 
             module.RazorPrecompilation();
@@ -91,11 +116,12 @@ namespace OnWeb.Plugins.FileManager
         {
             try
             {
-                ApplicationCore.Instance.ResourceManager.GeneratePrecompiled();
+                throw new NotImplementedException();
+                // todo ApplicationCore.Instance.ResourceManager.GeneratePrecompiled();
             }
             catch (Exception ex)
             {
-                this.RegisterEvent(Journaling.EventType.CriticalError, $"Ошибка прекомпиляции шаблонов", null, ex);
+                this.RegisterEvent(EventType.CriticalError, $"Ошибка прекомпиляции шаблонов", null, ex);
                 Debug.WriteLine("FileManager.Module.RazorPrecompilation: {0}", ex.Message);
             }
         }
@@ -105,7 +131,7 @@ namespace OnWeb.Plugins.FileManager
         #region GC collect for debug
         public static void GCCollectStatic()
         {
-            var module = ModulesManager.getModule<Module>();
+            var module = _thisModule;
             if (module == null) throw new Exception("Модуль не найден.");
 
             module.GCCollect();

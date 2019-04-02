@@ -92,25 +92,7 @@ namespace OnWeb.CoreBind.Providers
 
                     if (isAjax) HttpContext.Current.Items["isAjax"] = true;
                 }
-
-                //todo
-                //if (controllerType)
-                //{
-                //    var moduleAdmin = ModulesManager.getModuleByNameBase("Admin");
-                //    if (moduleAdmin != null)
-                //    {
-                //        if (!moduleAdmin.checkPermission(Modules.ModuleCore.ACCESSADMIN))
-                //        {
-                //            Debug.WriteLine("ErrorCodeException 403");
-
-                //            var user = UserManager.Instance;
-                //            isErrorAdmin = false;
-                //            throw new Exceptions.ErrorCodeException(403, "Отсутствует доступ в панель управления.");
-                //        }
-                //        else isErrorAdmin = true;
-                //    }
-                //}
-
+                
                 var controller = CreateController(controllerType, module, requestContext.RouteData.Values);
                 HttpContext.Current.Items["RequestContextController"] = controller;
                 return controller;

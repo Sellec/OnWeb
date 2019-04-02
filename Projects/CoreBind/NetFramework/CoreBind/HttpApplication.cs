@@ -140,6 +140,8 @@ namespace OnWeb.CoreBind.Razor
             if (!_applicationCore.IsServerUrlHasBeenSet  && isFirstRequest.HasValue && isFirstRequest.Value)
                 _applicationCore.ServerUrl = new UriBuilder(Request.Url.Scheme, Request.Url.Host, Request.Url.Port).Uri;
 
+            _applicationCore.GetUserContextManager().SetCurrentUserContext(_applicationCore.GetUserContextManager().CreateGuestUserContext());
+
             _requestSpecificDisposables = new Queue<IDisposable>();
 
             try

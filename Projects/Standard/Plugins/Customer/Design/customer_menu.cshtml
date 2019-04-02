@@ -2,7 +2,7 @@
 {
     foreach (var tag in ViewBag.customer_tags) { <a href="/customer/tag/@tag"><i class="fa fa-tags"></i> @tag</a> }
 }*@
-@if (UserManager.Instance.isAuthorized)
+@if (!AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest)
 {
     <a href='/customer'><i class="fa fa-info-circle"></i> Общая информация</a></li>
     <a href='/customer/datas' class='propanel'><i class="fa fa-user"></i> Данные профиля</a>
