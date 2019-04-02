@@ -432,7 +432,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
                     result.Success = true;
                 }
             }
-            catch (TraceCore.Data.Validation.EntityValidationException ex) { result.Message = ex.CreateComplexMessage(); }
+            catch (OnUtils.Data.Validation.EntityValidationException ex) { result.Message = ex.CreateComplexMessage(); }
             catch (Exception ex) { result.Message = ex.Message; }
 
             return this.ReturnJson(result);

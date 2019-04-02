@@ -231,7 +231,7 @@ namespace OnWeb.Plugins.Auth
                             }
                             else
                             {
-                                var code = TraceCore.Utils.StringsHelper.GenerateRandomString("0123456789", 4);
+                                var code = OnUtils.Utils.StringsHelper.GenerateRandomString("0123456789", 4);
                                 DB.PasswordRemember.Add(new DB.PasswordRemember() { user_id = user.id, code = code });
 
                                 var send = Messaging.Manager.SMS.sendMessage(user.phone, "Код восстановления пароля: " + code);

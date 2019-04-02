@@ -5,19 +5,25 @@ using System.Linq;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Web.Mvc;
+using SevenZip;
 
-using TraceCore.Data;
+using OnUtils.Data;
 
-namespace OnWeb.Plugins.Developing
+namespace OnWeb.Plugins.ModuleDeveloping
 {
-    public class Controller : ModuleController<Module>
+    using Core.Modules;
+    using CoreBind.Modules;
+    using CoreBind.Routing;
+    using Core.DB;
+
+    public class ModuleDevelopingController : ModuleControllerUser<ModuleDeveloping>
     {
         public FileResult BackupDB()
         {
             try
             {
-                var connectionString = ConnectionStringFactory.Instance.Providers.First().GetConnectionString();
-                var connection = new System.Data.SqlClient.SqlConnectionStringBuilder(connectionString);
+                var connectionString = DataAccessManager.GetConnectionStringResolver()?.ResolveConnectionStringForDataContext(null);
+                var connection = new SqlConnectionStringBuilder(connectionString);
 
                 var rootDirectory = System.Web.Hosting.HostingEnvironment.MapPath("/");
                 var filePathRelative = $"bin/Backup/{connection.InitialCatalog}.bak";
@@ -64,12 +70,12 @@ namespace OnWeb.Plugins.Developing
 
                 if (System.IO.File.Exists(filePath))
                 {
-                    SevenZip.SevenZipExtractor.SetLibraryPath(@"C:\Program Files\7-Zip\7z.dll");
-                    var coder = new SevenZip.SevenZipCompressor();
-                    coder.ArchiveFormat = SevenZip.OutArchiveFormat.SevenZip;
-                    coder.CompressionLevel = SevenZip.CompressionLevel.Fast;
-                    coder.CompressionMethod = SevenZip.CompressionMethod.Lzma2;
-                    coder.CompressionMode = SevenZip.CompressionMode.Create;
+                    SevenZipExtractor.SetLibraryPath(@"C:\Program Files\7-Zip\7z.dll");
+                    var coder = new SevenZipCompressor();
+                    coder.ArchiveFormat = OutArchiveFormat.SevenZip;
+                    coder.CompressionLevel = CompressionLevel.Fast;
+                    coder.CompressionMethod = CompressionMethod.Lzma2;
+                    coder.CompressionMode = CompressionMode.Create;
                     coder.CompressFiles(filePath + ".7z", filePath);
 
                     filePath = filePath + ".7z";
@@ -87,16 +93,16 @@ namespace OnWeb.Plugins.Developing
 
         public ActionResult PasswordHash(string password, int? IdUser)
         {
-            var str = $"Пароль '{password}' в хешированном виде выглядит как '{UserManager.hashPassword(password)}'.\r\n\r\n<br><br>";
+            var str = $"Пароль '{password}' в хешированном виде выглядит как '{UsersExtensions.hashPassword(password)}'.\r\n\r\n<br><br>";
             if (IdUser.HasValue)
             {
-                using (var db = new UnitOfWork<DB.User>())
+                using (var db = new UnitOfWork<User>())
                 {
                     var user = db.Repo1.Where(x => x.id == IdUser.Value).FirstOrDefault();
                     if (user == null) str += $"Пользователь {IdUser} не был найден. Пароль не был обновлен.\r\n<br>";
                     else
                     {
-                        db.DataContext.ExecuteQuery("UPDATE users SET password='" + UserManager.hashPassword(password) + "' WHERE id='" + IdUser.Value + "'");
+                        db.DataContext.ExecuteQuery("UPDATE users SET password='" + UsersExtensions.hashPassword(password) + "' WHERE id='" + IdUser.Value + "'");
                         //user.password = UserManager.hashPassword(password);
                         //db.SaveChanges();
 
@@ -109,8 +115,8 @@ namespace OnWeb.Plugins.Developing
 
         public ActionResult TestAddress(string address)
         {
-            var addr = AddressManager.Instance.searchAddressByOneString(address);
-            return Content(addr?.KodAddress);
+            var result = AppCore.Get<Core.Addresses.IManager>().SearchAddress(address);
+            return Content(result.Result?.KodAddress);
         }
 
         public ActionResult TestGeo(string address)
@@ -118,8 +124,8 @@ namespace OnWeb.Plugins.Developing
             System.Net.IPAddress ip = null;
             if (System.Net.IPAddress.TryParse(address, out ip))
             {
-                var addr = AddressManager.Instance.GetAddressByIP(ip);
-                return Content(addr?.KodAddress);
+                var result = AppCore.Get<Core.Addresses.IManager>().GetAddressByIP(ip);
+                return Content(result.Result?.KodAddress);
             }
             else return Content("not");
         }

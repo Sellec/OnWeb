@@ -130,7 +130,7 @@ public static class HtmlHelpers
 
     //public static IEnumerable<SelectListItem> EnumFriendlyNames<TEnum>(this HtmlHelper html, TEnum valueExample = default(TEnum)) where TEnum : struct, IConvertible
     //{
-    //    var collection = TraceCore.Utils.TypeHelper.EnumFriendlyNames<TEnum>();
+    //    var collection = OnUtils.Utils.TypeHelper.EnumFriendlyNames<TEnum>();
 
     //    var result = collection.Select(x => new SelectListItem()
     //    {

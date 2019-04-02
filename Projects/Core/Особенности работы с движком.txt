@@ -6,8 +6,8 @@
  1. Порядок сборки проектов.
 	Все проекты подключаются в конечный проект (наподобие SiteEKGF).
 	Он должен включать (минимально): 
-		TraceCore
-		TraceCore.Standard
+		OnUtils
+		OnUtils.Standard
 		OnWeb
 		OnWeb.Design
 		OnWeb.Design.Additionals

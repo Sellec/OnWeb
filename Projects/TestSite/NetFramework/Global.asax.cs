@@ -55,7 +55,7 @@ namespace OnWeb.Site
             void methodTest();
         }
 
-        //public class mapper : TraceCore.Architecture.InterfaceMapper.MapperBase
+        //public class mapper : OnUtils.Architecture.InterfaceMapper.MapperBase
         //{
         //    protected override object OnPrepareMethodCall(MethodInfo method, object[] arguments)
         //    {
@@ -79,7 +79,7 @@ namespace OnWeb.Site
         {
             //base.OnBeforeApplicationStart();
 
-            //var ins = TraceCore.Architecture.InterfaceMapper.Mapper.CreateObjectFromInterface<mapper, testinterface>();
+            //var ins = OnUtils.Architecture.InterfaceMapper.Mapper.CreateObjectFromInterface<mapper, testinterface>();
             //try
             //{
             //    //ins.methodTest();

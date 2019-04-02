@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Web.Mvc;
-using TraceCore.Data;
+using OnUtils.Data;
 
 namespace OnWeb.Plugins.FileManager.CustomFieldsFileTypes
 {
@@ -98,7 +98,7 @@ namespace OnWeb.Plugins.FileManager.CustomFieldsFileTypes
             var optionsFromAttributes = htmlAttributes?.GetValueOrDefault("uploadOptions");
             if (optionsFromAttributes != null)
             {
-                var typeDictionary = TraceCore.Types.TypeHelpers.ExtractGenericInterface(optionsFromAttributes.GetType(), typeof(IDictionary<,>));
+                var typeDictionary = OnUtils.Types.TypeHelpers.ExtractGenericInterface(optionsFromAttributes.GetType(), typeof(IDictionary<,>));
                 if (typeDictionary != null)
                 {
                     var dictSimple = (optionsFromAttributes as System.Collections.IDictionary);

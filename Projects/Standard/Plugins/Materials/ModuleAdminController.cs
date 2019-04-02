@@ -6,11 +6,14 @@ using System.Web.Mvc;
 namespace OnWeb.Plugins.Materials
 {
     using AdminForModules.Menu;
+    using Core.Modules;
+    using CoreBind.Modules;
+    using CoreBind.Routing;
 
     /// <summary>
     /// Представляет контроллер для панели управления.
     /// </summary>
-    public class ModuleAdminController : AdminForModules.ModuleAdminController<ModuleMaterials, DB.DataLayerContext>
+    public class ModuleAdminController : ModuleControllerAdmin<ModuleMaterials, DB.DataLayerContext>
     {
         [MenuAction("Новости")]
         public ActionResult News()

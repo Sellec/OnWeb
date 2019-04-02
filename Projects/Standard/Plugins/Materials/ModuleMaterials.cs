@@ -1,22 +1,16 @@
-﻿using System;
+﻿using OnUtils.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace OnWeb.Plugins.Materials
 {
-    using Utils.Data;
-    using Utils.Data.Validation;
-    using Core;
-    using Core.Configuration;
-    using Core.DB;
     using Core.Items;
     using Core.Modules;
-    using CoreBind.Modules;
     using Core.Types;
-    using CoreBind.Types;
-    using CoreBind.Routing;
 
-    public class ModuleMaterials : ModuleCore, IModule, IUnitOfWorkAccessor<DB.DataLayerContext>
+    [ModuleCore("Контент")]
+    public class ModuleMaterials : ModuleCore<ModuleMaterials>, IUnitOfWorkAccessor<DB.DataLayerContext>
     {
         public override IReadOnlyDictionary<ItemBase, Uri> GenerateLinks(IEnumerable<ItemBase> items)
         {

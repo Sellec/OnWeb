@@ -9,7 +9,7 @@
     var type = ViewData.ModelMetadata.ModelType;
     var propertyName = string.IsNullOrEmpty(ViewData.TemplateInfo.HtmlFieldPrefix) ? $"TmpFileUpload_{new Random().Next(100000, 999999)}" : ViewData.TemplateInfo.HtmlFieldPrefix;
 
-    var interfaceType = TraceCore.Types.TypeHelpers.ExtractGenericInterface(type, typeof(IEnumerable<>));
+    var interfaceType = OnUtils.Types.TypeHelpers.ExtractGenericInterface(type, typeof(IEnumerable<>));
     if (type.IsArray)
     {
         type = type.GetElementType();
@@ -45,7 +45,7 @@
     var optionsFromAttributes = htmlAttributes?.GetValueOrDefault("uploadOptions");
     if (optionsFromAttributes != null)
     {
-        var typeDictionary = TraceCore.Types.TypeHelpers.ExtractGenericInterface(optionsFromAttributes.GetType(), typeof(IDictionary<,>));
+        var typeDictionary = OnUtils.Types.TypeHelpers.ExtractGenericInterface(optionsFromAttributes.GetType(), typeof(IDictionary<,>));
         if (typeDictionary != null)
         {
             var dictSimple = (optionsFromAttributes as System.Collections.IDictionary);

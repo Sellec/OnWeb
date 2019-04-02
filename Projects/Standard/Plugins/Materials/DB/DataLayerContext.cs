@@ -1,7 +1,7 @@
-﻿namespace OnWeb.Plugins.Materials.DB
-{
-    using Utils.Data;
+﻿using OnUtils.Data;
 
+namespace OnWeb.Plugins.Materials.DB
+{
     public partial class DataLayerContext : UnitOfWorkBase
     {
         public virtual IRepository<Page> Pages { get; set; }

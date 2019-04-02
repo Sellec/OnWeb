@@ -130,6 +130,18 @@
     <Compile Include="Design\Additionals\Plugins\Model\EditableMenu.cs" />
     <Compile Include="Plugins\AdminForModules\Menu\IAdminMenuProvider.cs" />
     <Compile Include="Plugins\AdminForModules\Menu\MenuAction.cs" />
+    <Compile Include="Plugins\ModuleDefault\ModuleDefault.cs" />
+    <Compile Include="Plugins\ModuleDefault\ModuleDefaultController.cs" />
+    <Compile Include="Plugins\ModuleDeveloping\ModuleDevelopingController.cs" />
+    <Compile Include="Plugins\ModuleDeveloping\ModuleDeveloping.cs" />
+    <Compile Include="Plugins\Materials\DB\DataLayerContext.cs" />
+    <Compile Include="Plugins\Materials\DB\News.cs" />
+    <Compile Include="Plugins\Materials\DB\Page.cs" />
+    <Compile Include="Plugins\Materials\DB\PageCategory.cs" />
+    <Compile Include="Plugins\Materials\ModuleAdminController.cs" />
+    <Compile Include="Plugins\Materials\ModuleController.cs" />
+    <Compile Include="Plugins\Materials\ModuleMaterials.cs" />
+    <Compile Include="Plugins\Materials\Startup.cs" />
     <Compile Include="Plugins\ModuleCustomer\ModuleStandard.cs" />
     <Compile Include="Plugins\ModuleCustomer\NetSpecific\NetFramework\CustomerModelValidator.cs" />
     <Compile Include="Plugins\ModuleCustomer\Startup.cs" />
@@ -157,6 +169,11 @@
     <Compile Include="Plugins\ModuleRegister\Model\PreparedForRegister.cs" />
     <Compile Include="Plugins\ModuleRegister\Model\Register.cs" />
     <Compile Include="Plugins\ModuleRegister\Module.cs" />
+    <Compile Include="Plugins\Support\Model\PreparedForRegister.cs" />
+    <Compile Include="Plugins\Support\Module.cs" />
+    <Compile Include="Plugins\Support\ModuleController.cs" />
+    <Compile Include="Plugins\Support\Tickets\Reasons\ReasonBase.cs" />
+    <Compile Include="Plugins\Support\Tickets\Ticket.cs" />
     <Compile Include="Plugins\Universal\PaginationHelper.cs" />
     <Compile Include="Plugins\Universal\Pagination\InfoCount.cs" />
     <Compile Include="Plugins\Universal\Pagination\ListViewOptions.cs" />
@@ -1931,6 +1948,13 @@
     <Content Include="Plugins\ModuleRegister\Design\register_mail_decline_admin.cshtml" />
     <Content Include="Plugins\ModuleRegister\Design\register_result.cshtml" />
     <Content Include="Plugins\ModuleRegister\Design\register_success.cshtml" />
+    <Content Include="Plugins\Design\EditorTemplates\FileUpload.cshtml" />
+    <Content Include="Plugins\Materials\Design\Admin\NewsEdit.cshtml" />
+    <Content Include="Plugins\Materials\Design\Admin\NewsList.cshtml" />
+    <Content Include="Plugins\Materials\Design\baseMaterial.cshtml" />
+    <Content Include="Plugins\Materials\Design\News.cshtml" />
+    <Content Include="Plugins\Materials\Design\NewsList.cshtml" />
+    <Content Include="Plugins\Support\Design\TicketNewInner.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
