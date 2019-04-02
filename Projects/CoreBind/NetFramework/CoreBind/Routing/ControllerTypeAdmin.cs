@@ -28,9 +28,9 @@ namespace OnWeb.CoreBind.Routing
         /// <summary>
         /// См. <see cref="ControllerType.IsThisRequestIsThisControllerType(HttpContext, string)"/>.
         /// </summary>
-        public override bool IsThisRequestIsThisControllerType(HttpContext context, string relativeURL)
+        public override bool IsThisRequestIsThisControllerType(HttpRequestBase request, string relativeURL)
         {
-            return relativeURL.StartsWith("/admin/mnadmin") || relativeURL.StartsWith("/admin/madmin");
+            return request.RequestContext.RouteData.DataTokens.TryGetValue("area", out object value) && value is string && value.ToString() == AreaConstants.AdminPanel;
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace OnWeb.CoreBind.Routing
         public override bool CheckPermissions(ModuleCore module, RouteValueDictionary routeValues)
         {
             //Проверка доступа к саму панель управления. Нет прав на модуле "Admin".
-            var moduleAdmin = AppCore.Get<ModulesManager<Core.ApplicationCore>>().GetModule<Plugins.ModuleAdmin.Module>();
+            var moduleAdmin = AppCore.Get<ModulesManager<Core.ApplicationCore>>().GetModule<Plugins.Admin.Module>();
             if (moduleAdmin != null)
             {
                 if (moduleAdmin.CheckPermission(Constants.PermissionManage) != CheckPermissionResult.Allowed)

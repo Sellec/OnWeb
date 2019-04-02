@@ -1,4 +1,5 @@
 @model Materials.DB.News
+@{ var moduleAdmin = AppCore.Get<Plugins.Admin.Module>(); }
 
 <script type='text/javascript'>
     $(document).ready(function () {
@@ -11,7 +12,7 @@
         $('.editor-box').each(function(){
             var elem = $(this).attr('id'),
                 editor = CKEDITOR.instances[elem];
-            
+
             if (editor) editor.destroy(true);
             editor = CKEDITOR.replace( elem, { removePlugins: 'save' } );
         });
@@ -40,14 +41,17 @@
     });
 
 </script>
-<h4>@if (Model.id > 0) {<text>Редактирование новости: @Model.name</text>}
+<h4>
+    @if (Model.id > 0)
+    {<text>Редактирование новости: @Model.name</text>}
 else
-{<text>Добавление новости</text>}</h4>
+{<text>Добавление новости</text>}
+</h4>
 <table id="items_results" width="600">
     <tr></tr>
     <tr>
         <td width='400'>
-            <form action='/admin/madmin/@Module.Name/NewsSave' method='post' id='form_ae'>
+            <form action='/@moduleAdmin.UrlName/madmin/@Module.UrlName/NewsSave' method='post' id='form_ae'>
                 <input type="hidden" name="id" value="@Model.id" />
                 Заголовок новости:&nbsp;<input type='text' name='name' size='40' maxlength='200' value='@Model.name'><br><br>
 

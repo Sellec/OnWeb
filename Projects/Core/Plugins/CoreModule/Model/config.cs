@@ -1,4 +1,4 @@
-namespace OnWeb.Plugins.ModuleCore.Model
+namespace OnWeb.Plugins.CoreModule.Model
 {
     using System;
     using System.Collections.Generic;

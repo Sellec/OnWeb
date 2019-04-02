@@ -14,8 +14,8 @@ namespace OnWeb.CoreBind.Routing
             public RoutesDefaults(ApplicationCore core)
             {
                 var moduleID = core.Config.IdModuleDefault;
-                var module = core.GetModulesManager().GetModule(moduleID);
-                Controller = module?.UrlName ?? "Index";
+                var module = core.GetModulesManager().GetModule(moduleID) ?? core.GetModulesManager().GetModule<Plugins.Default.ModuleDefault>();
+                Controller = module?.UrlName;
             }
 
             public string Controller

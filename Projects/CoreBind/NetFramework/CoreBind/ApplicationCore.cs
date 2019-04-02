@@ -98,6 +98,28 @@ namespace OnWeb.CoreBind
 
             var routingHandler = new Routing.RouteHandler(this);
 
+            // Маршруты админки идут перед универсальными.
+            var moduleAdmin = Get<Plugins.Admin.Module>();
+
+            routes.Add("AdminRoute1", new Routing.RouteWithDefaults(
+                this,
+                moduleAdmin.UrlName + "/mnadmin/{controller}/{action}/{*url}",
+                false,
+                null,
+                new RouteValueDictionary(new { area = Routing.AreaConstants.AdminPanel }),
+                new MvcRouteHandler()
+            ));
+
+            routes.Add("AdminRoute2", new Routing.RouteWithDefaults(
+                this,
+                moduleAdmin.UrlName + "/madmin/{controller}/{action}/{*url}",
+                false,
+                null,
+                new RouteValueDictionary(new { area = Routing.AreaConstants.AdminPanel }),
+                new MvcRouteHandler()
+            ));
+
+            // Универсальные маршруты.
             routes.Add("RoutingTable", new Routing.RouteWithDefaults(
                 this,
                 "{*url}",
@@ -122,24 +144,6 @@ namespace OnWeb.CoreBind
                 true,
                 new RouteValueDictionary(new { language = languageChecker, controller = languageChecker, action = languageChecker }),
                 new RouteValueDictionary(new { area = Routing.AreaConstants.User }),
-                new MvcRouteHandler()
-            ));
-
-            routes.Add("AdminRoute1", new Routing.RouteWithDefaults(
-                this,
-                "admin/mnadmin/{controller}/{action}/{*url}",
-                false,
-                null,
-                new RouteValueDictionary(new { area = Routing.AreaConstants.AdminPanel }),
-                new MvcRouteHandler()
-            ));
-
-            routes.Add("AdminRoute2", new Routing.RouteWithDefaults(
-                this,
-                "admin/madmin/{controller}/{action}/{*url}",
-                false,
-                null,
-                new RouteValueDictionary(new { area = Routing.AreaConstants.AdminPanel }),
                 new MvcRouteHandler()
             ));
 

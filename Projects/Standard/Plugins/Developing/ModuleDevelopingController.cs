@@ -9,7 +9,7 @@ using SevenZip;
 
 using OnUtils.Data;
 
-namespace OnWeb.Plugins.ModuleDeveloping
+namespace OnWeb.Plugins.Developing
 {
     using Core.Modules;
     using CoreBind.Modules;

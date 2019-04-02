@@ -1,6 +1,6 @@
 ﻿using OnUtils.Architecture.AppCore.DI;
 
-namespace OnWeb.Plugins.ModuleCore
+namespace OnWeb.Plugins.CoreModule
 {
     class BindingConstraint : IBindingConstraintHandler
     {

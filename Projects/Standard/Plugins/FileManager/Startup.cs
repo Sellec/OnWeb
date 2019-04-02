@@ -1,6 +1,6 @@
 ﻿using OnWeb.Core;
 
-namespace OnWeb.Plugins.ModuleFileManager
+namespace OnWeb.Plugins.FileManager
 {
     using OnUtils.Architecture.AppCore;
     using OnUtils.Architecture.AppCore.DI;

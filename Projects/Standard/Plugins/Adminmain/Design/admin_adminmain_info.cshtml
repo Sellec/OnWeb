@@ -1,4 +1,5 @@
-@model Plugins.ModuleAdminmain.Model.AdminMainModelInfoPage
+@model Plugins.Adminmain.Model.AdminMainModelInfoPage
+@{ var moduleAdmin = AppCore.Get<Plugins.Admin.Module>(); }
 
 <script type="text/javascript" src='/data/js/ajax.js'></script>
 <script type='text/javascript'>
@@ -28,9 +29,9 @@
 
         $("#footer_info,#index_left,#index_right,#why_us").wysiwyg();
 
-        CKEDITOR.replace('site_reginfo', { filebrowserUploadUrl: '/admin/madmin/fm/upload2/userfs', removePlugins: 'save' });
-        CKEDITOR.replace('site_loginfo', { filebrowserUploadUrl: '/admin/madmin/fm/upload2/userfs', removePlugins: 'save' });
-        CKEDITOR.replace('help_info', { filebrowserUploadUrl: '/admin/madmin/fm/upload2/userfs', removePlugins: 'save' });
+        CKEDITOR.replace('site_reginfo', { filebrowserUploadUrl: '/@moduleAdmin.UrlName/madmin/fm/upload2/userfs', removePlugins: 'save' });
+        CKEDITOR.replace('site_loginfo', { filebrowserUploadUrl: '/@moduleAdmin.UrlName/madmin/fm/upload2/userfs', removePlugins: 'save' });
+        CKEDITOR.replace('help_info', { filebrowserUploadUrl: '/@moduleAdmin.UrlName/madmin/fm/upload2/userfs', removePlugins: 'save' });
         $('#save_func').click(function ()
         {
             CKEDITOR.instances.site_reginfo.updateElement();
@@ -44,13 +45,17 @@
     });
 </script>
 <style>
-form#form_info div {border: 0px solid; margin-bottom: 5px;padding:5px 0px 10px 0px;}
+    form#form_info div {
+        border: 0px solid;
+        margin-bottom: 5px;
+        padding: 5px 0px 10px 0px;
+    }
 </style>
 
 <table width='100%'>
     <tr>
         <td>
-            <form action='/admin/madmin/@Module.UrlName/info_save' method='post' id='form_info'>
+            <form action='/@moduleAdmin.UrlName/madmin/@Module.UrlName/info_save' method='post' id='form_info'>
                 <h2>Общие параметры:</h2>
 
                 <div>

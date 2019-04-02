@@ -1,3 +1,5 @@
+@{ var moduleAdmin = AppCore.Get<Plugins.Admin.Module>(); }
+
 <script type='text/javascript'>
     $(document).ready(function ()
     {
@@ -14,7 +16,7 @@
     });
 </script>
 <h2>Адреса (КЛАДР)</h2>
-<form action='/admin/mnadmin/@Module.UrlName/addresses' method='post'>
+<form action='/@moduleAdmin.UrlName/mnadmin/@Module.UrlName/addresses' method='post'>
     <input type='hidden' name='changeSettings' value='0'>
     <table class='admtable autosize'>
         <tr>

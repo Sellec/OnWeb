@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace OnWeb.Plugins.ModuleAdminmain.Model
+namespace OnWeb.Plugins.Adminmain.Model
 {
     public class Module
     {

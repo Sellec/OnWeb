@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace OnWeb.Plugins.ModuleDefault
+namespace OnWeb.Plugins.Default
 {
     using CoreBind.Modules;
 

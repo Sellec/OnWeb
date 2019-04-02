@@ -6,14 +6,14 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace OnWeb.Plugins.ModuleRegister
+namespace OnWeb.Plugins.Register
 {
     using Core.DB;
     using Core.Modules;
     using Core.Types;
     using CoreBind.Types;
 
-    [ModuleCore("Регистрация")]
+    [ModuleCore("Регистрация", DefaultUrlName = "Register")]
     public class Module : ModuleCore<Module>
     {
         protected ModelStateDictionary ValidateModel(object model)

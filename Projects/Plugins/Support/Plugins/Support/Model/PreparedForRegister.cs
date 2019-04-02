@@ -4,8 +4,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OnWeb.Plugins.Support.Model
 {
-    [Items.ItemTypeAlias(typeof(DB.User))]
-    public class PreparedForRegister : Items.ItemBase<Customer.Module>
+    using Core.DB;
+    using Core.Items;
+
+    [ItemTypeAlias(typeof(User))]
+    public class PreparedForRegister : ItemBase<Customer.Module>
     {
         /// <summary>
         /// См. <see cref="id"/>.
@@ -62,7 +65,7 @@ namespace OnWeb.Plugins.Support.Model
         /// Если состояние не задано, то устанавливается согласно настройкам сайта.
         /// </summary>
         [Display(Name = "Состояние учетной записи"), Required]
-        public TraceWeb.DB.UserState? State { get; set; }
+        public UserState? State { get; set; }
 
         [StringLength(100)]
         public string IP_reg { get; set; }

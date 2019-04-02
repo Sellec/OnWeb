@@ -1,7 +1,7 @@
 ﻿using OnUtils.Application.Modules;
 using System.Web.Mvc;
 
-namespace OnWeb.Plugins.ModuleAdmin
+namespace OnWeb.Plugins.Admin
 {
     using CoreBind.Modules;
 

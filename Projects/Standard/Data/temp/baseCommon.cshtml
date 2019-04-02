@@ -1,4 +1,5 @@
-﻿@{
+﻿@using OnUtils.Application.Modules
+@{
     var g = this;
 
     if (string.IsNullOrEmpty(Title))
@@ -161,10 +162,11 @@
                                     </a>
                                 }
                             </div>
-                            @if (AppCore.GetModulesManager().GetModule<Plugins.ModuleAdmin.Module>()?.CheckPermission(OnUtils.Application.Modules.Constants.PermissionManage) == OnUtils.Application.Modules.CheckPermissionResult.Allowed)
+                            @{ var moduleAdmin = AppCore.GetModulesManager().GetModule<Plugins.Admin.Module>(); }
+                            @if (moduleAdmin != null && moduleAdmin.CheckPermission(Constants.PermissionManage) == CheckPermissionResult.Allowed)
                             {
                                 <div class="info-top-list__item list-admin">
-                                    <a href="/admin" class="top-user" target="_blank">
+                                    <a href="/@moduleAdmin.UrlName" class="top-user" target="_blank">
                                         <div class="top-user__content">
                                             <div class="top-user__name">Управление сайтом</div>
                                         </div>

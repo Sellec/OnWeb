@@ -22,7 +22,7 @@ namespace OnWeb.CoreBind.Routing
         {
         }
 
-        public override bool IsThisRequestIsThisControllerType(HttpContext context, string relativeURL)
+        public override bool IsThisRequestIsThisControllerType(HttpRequestBase request, string relativeURL)
         {
             return true;
         }

@@ -32,6 +32,7 @@ namespace OnWeb.Plugins
             {
                 if ((module as Core.Modules.ModuleCore).ControllerAdmin() != null)
                 {
+                    var moduleAdmin = module.AppCore.Get<Admin.Module>();
                     var methods = module.ControllerAdmin().GetMethods();
                     foreach (var method in methods)
                     {
@@ -42,7 +43,7 @@ namespace OnWeb.Plugins
                             values.Add("controller", module.UrlName);
                             values.Add("action", string.IsNullOrEmpty(attr.Alias) ? method.Name : attr.Alias);
 
-                            var link = new NestedLinkSimple(attr.Caption, new Uri(string.Format("/admin/mnadmin/{0}/{1}", module.UrlName, string.IsNullOrEmpty(attr.Alias) ? method.Name : attr.Alias), UriKind.Relative));
+                            var link = new NestedLinkSimple(attr.Caption, new Uri($"/{moduleAdmin.UrlName}/mnadmin/{module.UrlName}/{(string.IsNullOrEmpty(attr.Alias) ? method.Name : attr.Alias)}", UriKind.Relative));
                             list.Add(link);
                         }
                     }

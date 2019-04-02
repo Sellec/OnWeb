@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 
-namespace OnWeb.Plugins.ModuleCustomer
+namespace OnWeb.Plugins.Customer
 {
     using AdminForModules.Menu;
     using Core.DB;
@@ -11,7 +11,6 @@ namespace OnWeb.Plugins.ModuleCustomer
     /// <summary>
     /// См. <see cref="Module"/>.
     /// </summary>
-    [ModuleCore("Личный кабинет")]
     class ModuleStandard : Module, IMenuProvider
     {
         NestedLinkCollection IMenuProvider.GetAdminMenuItemsBase()

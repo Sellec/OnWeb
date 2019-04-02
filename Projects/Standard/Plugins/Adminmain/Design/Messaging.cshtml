@@ -1,3 +1,5 @@
+@{ var moduleAdmin = AppCore.Get<Plugins.Admin.Module>(); }
+
 <script type='text/javascript'>
     $(document).ready(function(){
         $("#block").hide();
@@ -6,7 +8,7 @@
 
         $("input.ShowJournal").click(function ()
         {
-            $("#containerForLoading").html("<img src='/data/img/loading.gif'>").requestLoad("/admin/madmin/@Module.UrlName/MonitorJournal/" + $(this).data("guid"), null, function (result, message)
+            $("#containerForLoading").html("<img src='/data/img/loading.gif'>").requestLoad("/@moduleAdmin.UrlName/madmin/@Module.UrlName/MonitorJournal/" + $(this).data("guid"), null, function (result, message)
             {
                 if (message.length > 0) alert(message);
             });

@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OnWeb.Plugins.Support.Tickets
 {
-    public class Ticket : Items.ItemBase<Module>
+    using Core.Items;
+
+    public class Ticket : ItemBase<Module>
     {
         /// <summary>
-        /// См. <see cref="id"/>.
         /// </summary>
         public override int ID
         {

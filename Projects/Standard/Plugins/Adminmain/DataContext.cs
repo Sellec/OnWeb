@@ -1,6 +1,6 @@
 ﻿using OnUtils.Data;
 
-namespace OnWeb.Plugins.ModuleAdminmain
+namespace OnWeb.Plugins.Adminmain
 {
     using Core.DB;
 

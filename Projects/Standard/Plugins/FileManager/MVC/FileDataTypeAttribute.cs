@@ -2,7 +2,7 @@
 using System.Linq;
 
 using OnUtils.Data;
-using OnWeb.Plugins.ModuleFileManager.DB;
+using OnWeb.Plugins.FileManager.DB;
 
 namespace System.ComponentModel.DataAnnotations
 {

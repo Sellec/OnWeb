@@ -1,5 +1,6 @@
-@using Plugins.ModuleAdminmain.Model
+@using Plugins.Adminmain.Model
 @model Modules
+@{ var moduleAdmin = AppCore.Get<Plugins.Admin.Module>(); }
 
 <script type='text/javascript'>
     var registered = @Model.Registered.jsobject();
@@ -11,22 +12,22 @@
 
         $('#table_results_reged').tablefill(registered, function(tr_elem, data){
             $(tr_elem).addClass('TrElem').children().each(function(ichild){
-                if ( ichild == 0 ) $(this)[0].innerHTML = data.@nameof(Plugins.ModuleAdminmain.Model.Module.Id);
-                else if ( ichild == 1 ) $(this)[0].innerHTML = data.@nameof(Plugins.ModuleAdminmain.Model.Module.Caption);
-                else if ( ichild == 2 ) $(this)[0].innerHTML = data.@nameof(Plugins.ModuleAdminmain.Model.Module.Type);
-                else if ( ichild == 3 ) $(this)[0].innerHTML = data.@nameof(Plugins.ModuleAdminmain.Model.Module.UrlName);
+                if ( ichild == 0 ) $(this)[0].innerHTML = data.@nameof(Plugins.Adminmain.Model.Module.Id);
+                else if ( ichild == 1 ) $(this)[0].innerHTML = data.@nameof(Plugins.Adminmain.Model.Module.Caption);
+                else if ( ichild == 2 ) $(this)[0].innerHTML = data.@nameof(Plugins.Adminmain.Model.Module.Type);
+                else if ( ichild == 3 ) $(this)[0].innerHTML = data.@nameof(Plugins.Adminmain.Model.Module.UrlName);
             });
 
             $("a", tr_elem).each(function(){
-                $(this).attr('href', $(this).attr('href') + data.@nameof(Plugins.ModuleAdminmain.Model.Module.UrlName));
+                $(this).attr('href', $(this).attr('href') + data.@nameof(Plugins.Adminmain.Model.Module.UrlName));
             });
-            $("a.link_ext", tr_elem).attr('href', '/admin/mnadmin/' + data.@nameof(Plugins.ModuleAdminmain.Model.Module.UrlName) + '/config');
+            $("a.link_ext", tr_elem).attr('href', '/@moduleAdmin.UrlName/mnadmin/' + data.@nameof(Plugins.Adminmain.Model.Module.UrlName) + '/config');
         }, null, function(){
             $('a.link_delete', this).click(function(e){
                 e.preventDefault();
 
                 var data = $(this).closest('tr').data('BoundedItem');
-                if (confirm("Вы действительно хотите очистить настройки модуля '" + data.@nameof(Plugins.ModuleAdminmain.Model.Module.UrlName)+ "'?"))
+                if (confirm("Вы действительно хотите очистить настройки модуля '" + data.@nameof(Plugins.Adminmain.Model.Module.UrlName)+ "'?"))
                 {
                     $.requestJSON($(this).attr('href'), null, function(result, message){
                         if (message.length > 0) alert(message);
@@ -69,7 +70,7 @@
                     <td class="left"></td>
                     <td class="left"></td>
                     <td>
-                        <a href='/admin/mnadmin/@Module.UrlName/modedit/' class='link_ext' target="_blank">Редактировать</a><br />
+                        <a href='/@moduleAdmin.UrlName/mnadmin/@Module.UrlName/modedit/' class='link_ext' target="_blank">Редактировать</a><br />
                     </td>
                 </tr>
             </table>

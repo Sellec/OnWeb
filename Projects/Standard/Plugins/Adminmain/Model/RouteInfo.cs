@@ -1,4 +1,4 @@
-﻿namespace OnWeb.Plugins.ModuleAdminmain.Model
+﻿namespace OnWeb.Plugins.Adminmain.Model
 {
     public class RouteInfo
     {

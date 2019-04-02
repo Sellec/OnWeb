@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace OnWeb.Plugins.ModuleCustomer
+namespace OnWeb.Plugins.Customer
 {
     using Core.DB;
     using Core.Items;

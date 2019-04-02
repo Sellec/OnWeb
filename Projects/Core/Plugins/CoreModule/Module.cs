@@ -2,7 +2,7 @@
 using OnUtils.Data;
 using System;
 
-namespace OnWeb.Plugins.ModuleCore
+namespace OnWeb.Plugins.CoreModule
 {
     /// <summary>
     /// Интерфейс ядра системы для управления основными функциями.

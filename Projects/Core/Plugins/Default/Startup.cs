@@ -1,15 +1,15 @@
-﻿using OnWeb.Core;
+﻿using OnUtils.Architecture.AppCore;
+using OnUtils.Architecture.AppCore.DI;
 
-namespace OnWeb.Plugins.Auth
+namespace OnWeb.Plugins.Default
 {
-    using OnUtils.Architecture.AppCore;
-    using OnUtils.Architecture.AppCore.DI;
+    using Core;
 
     class Startup : IConfigureBindings<ApplicationCore>
     {
         void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
         {
-            bindingsCollection.SetSingleton<Module>();
+            bindingsCollection.SetSingleton<ModuleDefault>();
         }
     }
 }

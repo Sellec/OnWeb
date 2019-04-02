@@ -64,7 +64,7 @@ namespace OnWeb.CoreBind.Modules
                 //UserManager.AuthorizationRedirect = filterContext.RequestContext.RouteData.Values;
                 // todo UserManager.Instance.AuthorizationRedirectUrl = filterContext.RequestContext.HttpContext.Request.Url.PathAndQuery;
 
-                var moduleAuth = appCore?.Get<Plugins.ModuleAuth.Module>();
+                var moduleAuth = appCore?.Get<Plugins.Auth.Module>();
 
                 filterContext.Result = new RedirectToRouteResult(
                     new System.Web.Routing.RouteValueDictionary {

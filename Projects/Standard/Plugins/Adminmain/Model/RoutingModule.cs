@@ -2,7 +2,7 @@
 
 using System.Web.Mvc;
 
-namespace OnWeb.Plugins.ModuleAdminmain.Model
+namespace OnWeb.Plugins.Adminmain.Model
 {
     using Core.Modules;
 

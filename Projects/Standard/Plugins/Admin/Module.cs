@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OnWeb.Plugins.ModuleAdmin
+namespace OnWeb.Plugins.Admin
 {
     using Core.Items;
     using Core.Modules;

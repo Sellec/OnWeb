@@ -1,4 +1,5 @@
-@model List<ModuleAdminmain.Design.Model.JournalsList>
+@model List<Adminmain.Design.Model.JournalsList>
+@{ var moduleAdmin = AppCore.Get<Plugins.Admin.Module>(); }
 
 <script type='text/javascript'>
     $(document).ready(function(){
@@ -8,7 +9,7 @@
 
         $("input.ShowJournal").click(function ()
         {
-            $("#containerForLoading").html("<img src='/data/img/loading.gif'>").requestLoad("/admin/madmin/@Module.UrlName/JournalDetails/" + $(this).data("id"), null, function (result, message)
+            $("#containerForLoading").html("<img src='/data/img/loading.gif'>").requestLoad("/@moduleAdmin.UrlName/madmin/@Module.UrlName/JournalDetails/" + $(this).data("id"), null, function (result, message)
             {
                 if (message.length > 0) alert(message);
             });
@@ -32,11 +33,11 @@
                 </thead>
                 @if (Model.Count == 0)
                 {
-                <tr id='not_founded' style='display:none;'>
-                    <td class="center" colspan='10'>
-                        Ничего не найдено.
-                    </td>
-                </tr>
+                    <tr id='not_founded' style='display:none;'>
+                        <td class="center" colspan='10'>
+                            Ничего не найдено.
+                        </td>
+                    </tr>
                 }
                 else
                 {
@@ -55,11 +56,10 @@
                     }
                 }
             </table>
-             
+
         </td>
         <td style='width:50px;'></td>
-        <td style='width:100%;vertical-align:top;align:left;' id="containerForLoading">
-        </td>
+        <td style='width:100%;vertical-align:top;align:left;' id="containerForLoading"></td>
     </tr>
 </table>
 

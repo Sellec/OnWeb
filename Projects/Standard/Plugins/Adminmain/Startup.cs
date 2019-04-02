@@ -1,6 +1,6 @@
 ﻿using OnWeb.Core;
 
-namespace OnWeb.Plugins.ModuleAdminmain
+namespace OnWeb.Plugins.Adminmain
 {
     using Core.Modules;
     using OnUtils.Architecture.AppCore;

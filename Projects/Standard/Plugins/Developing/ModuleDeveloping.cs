@@ -1,4 +1,4 @@
-﻿namespace OnWeb.Plugins.ModuleDeveloping
+﻿namespace OnWeb.Plugins.Developing
 {
     using Core.Modules;
 

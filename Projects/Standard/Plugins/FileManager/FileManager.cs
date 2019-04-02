@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace OnWeb.Plugins.ModuleFileManager
+namespace OnWeb.Plugins.FileManager
 {
     using Core;
     using DictionaryFiles = Dictionary<int, DB.File>;

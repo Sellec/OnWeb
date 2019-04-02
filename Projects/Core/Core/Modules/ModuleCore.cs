@@ -246,7 +246,7 @@ namespace OnWeb.Core.Modules
 
         /// <summary>
         /// Возвращает ссылку для переданного объекта.
-        /// Вызывается в случае, когда для объекта не был найден адрес в системе маршрутизации по ключу <see cref="Routing.Constants.MAINKEY"/>.
+        /// Вызывается в случае, когда для объекта не был найден адрес в системе маршрутизации по ключу <see cref="Routing.RoutingConstants.MAINKEY"/>.
         /// </summary>
         /// <returns></returns>
         public virtual Uri GenerateLink(Items.ItemBase item)
@@ -256,7 +256,7 @@ namespace OnWeb.Core.Modules
 
         /// <summary>
         /// Возвращает ссылку для переданного объекта.
-        /// Вызывается для объектов, для которых не был найден адрес в системе маршрутизации по ключу <see cref="Routing.Constants.MAINKEY"/>.
+        /// Вызывается для объектов, для которых не был найден адрес в системе маршрутизации по ключу <see cref="Routing.RoutingConstants.MAINKEY"/>.
         /// </summary>
         /// <returns></returns>
         public virtual IReadOnlyDictionary<Items.ItemBase, Uri> GenerateLinks(IEnumerable<Items.ItemBase> items)

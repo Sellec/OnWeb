@@ -29,7 +29,7 @@ namespace OnWeb.Core.DB
     [System.Diagnostics.DebuggerDisplay("User: id={ID}")]
     public partial class User : Items.ItemBase
     {
-        public User() : base(DeprecatedSingletonInstances.ModulesManager.GetModule<Plugins.ModuleCustomer.Module>())
+        public User() : base(DeprecatedSingletonInstances.ModulesManager.GetModule<Plugins.Customer.Module>())
         {
 
         }

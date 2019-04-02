@@ -1,4 +1,5 @@
 @model List<Core.DB.menus>
+@{ var moduleAdmin = AppCore.Get<Plugins.Admin.Module>(); }
 
 <script type='text/javascript'>
     $(document).ready(function () {
@@ -31,7 +32,7 @@
     });
 </script>
 
-    <table>
+<table>
     <tr>
         <td width="600" style="vertical-align:top;">
             <h2>Просмотр списка редактируемых меню</h2>
@@ -48,8 +49,8 @@
                         <td>@menu.id</td>
                         <td>@menu.name</td>
                         <td>
-                            <a href="/admin/mnadmin/@Module.UrlName/editablemenu_edit/@menu.id" class="link_ext">Редактировать</a><br />
-                            <a href="/admin/madmin/@Module.UrlName/editablemenu_delete/@menu.id" class="link_delete">Удалить</a>
+                            <a href="/@moduleAdmin.UrlName/mnadmin/@Module.UrlName/editablemenu_edit/@menu.id" class="link_ext">Редактировать</a><br />
+                            <a href="/@moduleAdmin.UrlName/madmin/@Module.UrlName/editablemenu_delete/@menu.id" class="link_delete">Удалить</a>
                         </td>
                     </tr>
                 }

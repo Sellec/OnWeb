@@ -30,7 +30,7 @@ namespace OnWeb.Core.Routing
         public List<ActionArgument> Arguments { get; set; } = null;
 
         /// <summary>
-        /// Уникальный ключ адреса, по которому для сущности можно получить определенный адрес. Адреса по-умолчанию (основной адрес сущности) обозначаются ключом <see cref="Constants.MAINKEY"/>.
+        /// Уникальный ключ адреса, по которому для сущности можно получить определенный адрес. Адреса по-умолчанию (основной адрес сущности) обозначаются ключом <see cref="RoutingConstants.MAINKEY"/>.
         /// </summary>
         public string UniqueKey { get; set; } = null;
 

@@ -6,7 +6,7 @@ namespace OnWeb.Core.Routing
 {
     /// <summary>
     /// </summary>
-    public static class Constants
+    public static class RoutingConstants
     {
         /// <summary>
         /// Уникальный ключ для основного адреса сущности.

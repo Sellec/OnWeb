@@ -33,7 +33,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OnWeb</RootNamespace>
     <AssemblyName>OnWeb.Standard</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -72,6 +72,15 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.Mvc">
       <Version>5.2.7</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.Mvc.ru">
+      <Version>5.2.4</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.Razor.ru">
+      <Version>3.2.4</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.WebPages.ru">
+      <Version>3.2.4</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
       <Version>2.0.1</Version>
@@ -130,10 +139,10 @@
     <Compile Include="Design\Additionals\Plugins\Model\EditableMenu.cs" />
     <Compile Include="Plugins\AdminForModules\Menu\IAdminMenuProvider.cs" />
     <Compile Include="Plugins\AdminForModules\Menu\MenuAction.cs" />
-    <Compile Include="Plugins\ModuleDefault\ModuleDefault.cs" />
-    <Compile Include="Plugins\ModuleDefault\ModuleDefaultController.cs" />
-    <Compile Include="Plugins\ModuleDeveloping\ModuleDevelopingController.cs" />
-    <Compile Include="Plugins\ModuleDeveloping\ModuleDeveloping.cs" />
+    <Compile Include="Plugins\Default\ModuleDefaultController.cs" />
+    <Compile Include="Plugins\Default\Startup.cs" />
+    <Compile Include="Plugins\Developing\ModuleDevelopingController.cs" />
+    <Compile Include="Plugins\Developing\ModuleDeveloping.cs" />
     <Compile Include="Plugins\Materials\DB\DataLayerContext.cs" />
     <Compile Include="Plugins\Materials\DB\News.cs" />
     <Compile Include="Plugins\Materials\DB\Page.cs" />
@@ -142,38 +151,33 @@
     <Compile Include="Plugins\Materials\ModuleController.cs" />
     <Compile Include="Plugins\Materials\ModuleMaterials.cs" />
     <Compile Include="Plugins\Materials\Startup.cs" />
-    <Compile Include="Plugins\ModuleCustomer\ModuleStandard.cs" />
-    <Compile Include="Plugins\ModuleCustomer\NetSpecific\NetFramework\CustomerModelValidator.cs" />
-    <Compile Include="Plugins\ModuleCustomer\Startup.cs" />
-    <Compile Include="Plugins\ModuleFileManager\DB\File.cs" />
-    <Compile Include="Plugins\ModuleFileManager\FileManager.cs" />
-    <Compile Include="Plugins\ModuleFileManager\MVC\FileDataTypeAttribute.cs" />
-    <Compile Include="Plugins\ModuleFileManager\MVC\FileType.cs" />
-    <Compile Include="Plugins\ModuleAdminmain\DataContext.cs" />
-    <Compile Include="Plugins\ModuleAdminmain\Design\Model\JournalDetails.cs" />
-    <Compile Include="Plugins\ModuleAdminmain\Design\Model\JournalsList.cs" />
-    <Compile Include="Plugins\ModuleAdminmain\Model\AdminMainModelInfoPage.cs" />
-    <Compile Include="Plugins\ModuleAdminmain\Model\EditableMenu.cs" />
-    <Compile Include="Plugins\ModuleAdminmain\Model\Modules.cs" />
-    <Compile Include="Plugins\ModuleAdminmain\Model\RouteInfo.cs" />
-    <Compile Include="Plugins\ModuleAdminmain\Model\Routing.cs" />
-    <Compile Include="Plugins\ModuleAdminmain\Model\RoutingModule.cs" />
-    <Compile Include="Plugins\ModuleAdminmain\Module.cs" />
-    <Compile Include="Plugins\ModuleAdminmain\ModuleController.cs" />
-    <Compile Include="Plugins\ModuleAdminmain\Startup.cs" />
-    <Compile Include="Plugins\ModuleAdmin\Extensions.cs" />
-    <Compile Include="Plugins\ModuleAdmin\Module.cs" />
-    <Compile Include="Plugins\ModuleAdmin\ModuleController.cs" />
-    <Compile Include="Plugins\ModuleAdmin\Startup.cs" />
-    <Compile Include="Plugins\ModuleFileManager\Startup.cs" />
-    <Compile Include="Plugins\ModuleRegister\Model\PreparedForRegister.cs" />
-    <Compile Include="Plugins\ModuleRegister\Model\Register.cs" />
-    <Compile Include="Plugins\ModuleRegister\Module.cs" />
-    <Compile Include="Plugins\Support\Model\PreparedForRegister.cs" />
-    <Compile Include="Plugins\Support\Module.cs" />
-    <Compile Include="Plugins\Support\ModuleController.cs" />
-    <Compile Include="Plugins\Support\Tickets\Reasons\ReasonBase.cs" />
-    <Compile Include="Plugins\Support\Tickets\Ticket.cs" />
+    <Compile Include="Plugins\Customer\ModuleStandard.cs" />
+    <Compile Include="Plugins\Customer\NetSpecific\NetFramework\CustomerModelValidator.cs" />
+    <Compile Include="Plugins\Customer\Startup.cs" />
+    <Compile Include="Plugins\FileManager\DB\File.cs" />
+    <Compile Include="Plugins\FileManager\FileManager.cs" />
+    <Compile Include="Plugins\FileManager\MVC\FileDataTypeAttribute.cs" />
+    <Compile Include="Plugins\FileManager\MVC\FileType.cs" />
+    <Compile Include="Plugins\Adminmain\DataContext.cs" />
+    <Compile Include="Plugins\Adminmain\Design\Model\JournalDetails.cs" />
+    <Compile Include="Plugins\Adminmain\Design\Model\JournalsList.cs" />
+    <Compile Include="Plugins\Adminmain\Model\AdminMainModelInfoPage.cs" />
+    <Compile Include="Plugins\Adminmain\Model\EditableMenu.cs" />
+    <Compile Include="Plugins\Adminmain\Model\Modules.cs" />
+    <Compile Include="Plugins\Adminmain\Model\RouteInfo.cs" />
+    <Compile Include="Plugins\Adminmain\Model\Routing.cs" />
+    <Compile Include="Plugins\Adminmain\Model\RoutingModule.cs" />
+    <Compile Include="Plugins\Adminmain\Module.cs" />
+    <Compile Include="Plugins\Adminmain\ModuleController.cs" />
+    <Compile Include="Plugins\Adminmain\Startup.cs" />
+    <Compile Include="Plugins\Admin\Extensions.cs" />
+    <Compile Include="Plugins\Admin\Module.cs" />
+    <Compile Include="Plugins\Admin\ModuleController.cs" />
+    <Compile Include="Plugins\Admin\Startup.cs" />
+    <Compile Include="Plugins\FileManager\Startup.cs" />
+    <Compile Include="Plugins\Register\Model\PreparedForRegister.cs" />
+    <Compile Include="Plugins\Register\Model\Register.cs" />
+    <Compile Include="Plugins\Register\Module.cs" />
     <Compile Include="Plugins\Universal\PaginationHelper.cs" />
     <Compile Include="Plugins\Universal\Pagination\InfoCount.cs" />
     <Compile Include="Plugins\Universal\Pagination\ListViewOptions.cs" />
@@ -182,7 +186,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Plugins\ModuleAuth\" />
+    <Folder Include="Plugins\Auth\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\css\Auth\modules.auth.css">
@@ -1902,59 +1906,59 @@
     <Content Include="Data\img\flick\images\ui-icons_ff0084_256x240.png" />
     <Content Include="Data\img\flick\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Data\img\flick\jquery-ui-1.8.custom.css" />
-    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_comments_view.tpl" />
-    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_editablemenu_moduleurls.tpl" />
-    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_languages.tpl" />
-    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_rss_templ.tpl" />
-    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_zones.tpl" />
-    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_zones_ae.tpl" />
-    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_zones_moduleurls.tpl" />
+    <Content Include="Plugins\Adminmain\Design\admin_adminmain_comments_view.tpl" />
+    <Content Include="Plugins\Adminmain\Design\admin_adminmain_editablemenu_moduleurls.tpl" />
+    <Content Include="Plugins\Adminmain\Design\admin_adminmain_languages.tpl" />
+    <Content Include="Plugins\Adminmain\Design\admin_adminmain_rss_templ.tpl" />
+    <Content Include="Plugins\Adminmain\Design\admin_adminmain_zones.tpl" />
+    <Content Include="Plugins\Adminmain\Design\admin_adminmain_zones_ae.tpl" />
+    <Content Include="Plugins\Adminmain\Design\admin_adminmain_zones_moduleurls.tpl" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Plugins\AdminForModules\Design\baseModuleEdit.cshtml" />
     <Content Include="Plugins\AdminForModules\Design\ModuleEdit.cshtml" />
-    <Content Include="Plugins\ModuleAdmin\Design\admin.cshtml" />
-    <Content Include="Plugins\ModuleAdmin\Design\baseAdmin.cshtml" />
-    <Content Include="Plugins\ModuleAdmin\Design\error404NotFound.cshtml" />
-    <Content Include="Plugins\ModuleAdmin\Design\errorHandled.cshtml" />
-    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_addresses.cshtml" />
-    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_editablemenu.cshtml" />
-    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_editablemenu_ae.cshtml" />
-    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_info.cshtml" />
-    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_modules.cshtml" />
-    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_modules_extensions.cshtml" />
-    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_rss.cshtml" />
-    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_sitemap.cshtml" />
-    <Content Include="Plugins\ModuleAdminmain\Design\admin_adminmain_sitemap_templ.cshtml" />
-    <Content Include="Plugins\ModuleAdminmain\Design\JournalDetails.cshtml" />
-    <Content Include="Plugins\ModuleAdminmain\Design\Journals.cshtml" />
-    <Content Include="Plugins\ModuleAdminmain\Design\Messaging.cshtml" />
-    <Content Include="Plugins\ModuleAdminmain\Design\MessagingService.cshtml" />
-    <Content Include="Plugins\ModuleAdminmain\Design\Monitor.cshtml" />
-    <Content Include="Plugins\ModuleAdminmain\Design\MonitorJournal.cshtml" />
-    <Content Include="Plugins\ModuleAdminmain\Design\routing.cshtml" />
-    <Content Include="Plugins\ModuleAdminmain\Design\routing_module.cshtml" />
+    <Content Include="Plugins\Admin\Design\admin.cshtml" />
+    <Content Include="Plugins\Admin\Design\baseAdmin.cshtml" />
+    <Content Include="Plugins\Admin\Design\error404NotFound.cshtml" />
+    <Content Include="Plugins\Admin\Design\errorHandled.cshtml" />
+    <Content Include="Plugins\Adminmain\Design\admin_adminmain_addresses.cshtml" />
+    <Content Include="Plugins\Adminmain\Design\admin_adminmain_editablemenu.cshtml" />
+    <Content Include="Plugins\Adminmain\Design\admin_adminmain_editablemenu_ae.cshtml" />
+    <Content Include="Plugins\Adminmain\Design\admin_adminmain_info.cshtml" />
+    <Content Include="Plugins\Adminmain\Design\admin_adminmain_modules.cshtml" />
+    <Content Include="Plugins\Adminmain\Design\admin_adminmain_modules_extensions.cshtml" />
+    <Content Include="Plugins\Adminmain\Design\admin_adminmain_rss.cshtml" />
+    <Content Include="Plugins\Adminmain\Design\admin_adminmain_sitemap.cshtml" />
+    <Content Include="Plugins\Adminmain\Design\admin_adminmain_sitemap_templ.cshtml" />
+    <Content Include="Plugins\Adminmain\Design\JournalDetails.cshtml" />
+    <Content Include="Plugins\Adminmain\Design\Journals.cshtml" />
+    <Content Include="Plugins\Adminmain\Design\Messaging.cshtml" />
+    <Content Include="Plugins\Adminmain\Design\MessagingService.cshtml" />
+    <Content Include="Plugins\Adminmain\Design\Monitor.cshtml" />
+    <Content Include="Plugins\Adminmain\Design\MonitorJournal.cshtml" />
+    <Content Include="Plugins\Adminmain\Design\routing.cshtml" />
+    <Content Include="Plugins\Adminmain\Design\routing_module.cshtml" />
     <Content Include="Plugins\Universal\Design\PaginationBlock.cshtml" />
-    <Content Include="Plugins\ModuleRegister\Design\register.cshtml" />
-    <Content Include="Plugins\ModuleRegister\Design\registerInner.cshtml" />
-    <Content Include="Plugins\ModuleRegister\Design\RegisterNotificationEmail.cshtml" />
-    <Content Include="Plugins\ModuleRegister\Design\register_del.cshtml" />
-    <Content Include="Plugins\ModuleRegister\Design\register_mail1.cshtml" />
-    <Content Include="Plugins\ModuleRegister\Design\register_mail2.cshtml" />
-    <Content Include="Plugins\ModuleRegister\Design\register_mail_admin.cshtml" />
-    <Content Include="Plugins\ModuleRegister\Design\register_mail_ban.cshtml" />
-    <Content Include="Plugins\ModuleRegister\Design\register_mail_decline.cshtml" />
-    <Content Include="Plugins\ModuleRegister\Design\register_mail_decline_admin.cshtml" />
-    <Content Include="Plugins\ModuleRegister\Design\register_result.cshtml" />
-    <Content Include="Plugins\ModuleRegister\Design\register_success.cshtml" />
+    <Content Include="Plugins\Register\Design\register.cshtml" />
+    <Content Include="Plugins\Register\Design\registerInner.cshtml" />
+    <Content Include="Plugins\Register\Design\RegisterNotificationEmail.cshtml" />
+    <Content Include="Plugins\Register\Design\register_del.cshtml" />
+    <Content Include="Plugins\Register\Design\register_mail1.cshtml" />
+    <Content Include="Plugins\Register\Design\register_mail2.cshtml" />
+    <Content Include="Plugins\Register\Design\register_mail_admin.cshtml" />
+    <Content Include="Plugins\Register\Design\register_mail_ban.cshtml" />
+    <Content Include="Plugins\Register\Design\register_mail_decline.cshtml" />
+    <Content Include="Plugins\Register\Design\register_mail_decline_admin.cshtml" />
+    <Content Include="Plugins\Register\Design\register_result.cshtml" />
+    <Content Include="Plugins\Register\Design\register_success.cshtml" />
     <Content Include="Plugins\Design\EditorTemplates\FileUpload.cshtml" />
     <Content Include="Plugins\Materials\Design\Admin\NewsEdit.cshtml" />
     <Content Include="Plugins\Materials\Design\Admin\NewsList.cshtml" />
     <Content Include="Plugins\Materials\Design\baseMaterial.cshtml" />
     <Content Include="Plugins\Materials\Design\News.cshtml" />
     <Content Include="Plugins\Materials\Design\NewsList.cshtml" />
-    <Content Include="Plugins\Support\Design\TicketNewInner.cshtml" />
+    <Content Include="Plugins\Default\Design\Index.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

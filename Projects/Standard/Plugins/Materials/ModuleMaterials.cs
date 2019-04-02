@@ -9,7 +9,7 @@ namespace OnWeb.Plugins.Materials
     using Core.Modules;
     using Core.Types;
 
-    [ModuleCore("Контент")]
+    [ModuleCore("Контент", DefaultUrlName = "Content")]
     public class ModuleMaterials : ModuleCore<ModuleMaterials>, IUnitOfWorkAccessor<DB.DataLayerContext>
     {
         public override IReadOnlyDictionary<ItemBase, Uri> GenerateLinks(IEnumerable<ItemBase> items)

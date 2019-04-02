@@ -1,4 +1,4 @@
-﻿namespace OnWeb.Plugins.ModuleDefault
+﻿namespace OnWeb.Plugins.Default
 {
     using Core.Modules;
 

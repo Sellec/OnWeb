@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-namespace OnWeb.Plugins.ModuleAuth
+namespace OnWeb.Plugins.Auth
 {
     using Core.DB;
     using Core.Modules;

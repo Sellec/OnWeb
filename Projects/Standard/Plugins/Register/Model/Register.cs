@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace OnWeb.Plugins.ModuleRegister.Model
+namespace OnWeb.Plugins.Register.Model
 {
     using Core.DB;
     using Core.Items;
 
     [ItemTypeAlias(typeof(User))]
-    public class Register : ItemBase<ModuleCustomer.Module>
+    public class Register : ItemBase<Customer.Module>
     {
         /// <summary>
         /// </summary>

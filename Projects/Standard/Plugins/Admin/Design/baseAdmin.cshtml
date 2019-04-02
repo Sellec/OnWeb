@@ -208,7 +208,7 @@
             <div class="wrapper h40"></div>
             <ul>
                 @{
-                    var moduleAdmin = AppCore.GetModulesManager().GetModule<Plugins.ModuleAdmin.Module>();
+                    var moduleAdmin = AppCore.GetModulesManager().GetModule<Plugins.Admin.Module>();
                     var menu = moduleAdmin.GetAdminMenuList();
                 }
                 @if (menu != null)
@@ -218,7 +218,7 @@
                         <li class='i_@module.Key.UrlName'>
                             <span class="lmain">
                                 <a href="" title="" class="lmain2">@module.Key.Caption</a>
-                                <a href='/admin/mnadmin/@module.Key.UrlName/config/' style='float:right;margin-right:5px;'><img src='/data/img/admin/gear_wheel.png'></a>
+                                <a href='/@moduleAdmin.UrlName/mnadmin/@module.Key.UrlName/config/' style='float:right;margin-right:5px;'><img src='/data/img/admin/gear_wheel.png'></a>
                             </span>
                             @submodule(module.Value)
                         </li>

@@ -1,6 +1,6 @@
 ﻿using OnWeb.Core;
 
-namespace OnWeb.Plugins.ModuleCustomer
+namespace OnWeb.Plugins.Customer
 {
     using OnUtils.Architecture.AppCore;
     using OnUtils.Architecture.AppCore.DI;
