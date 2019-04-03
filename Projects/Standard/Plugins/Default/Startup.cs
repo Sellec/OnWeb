@@ -3,10 +3,9 @@ using OnUtils.Architecture.AppCore.DI;
 
 namespace OnWeb.Plugins.Default
 {
-    using Core;
     using Core.Modules;
 
-    class Startup : IConfigureBindings<ApplicationCore>
+    class Startup : IConfigureBindings
     {
         void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
         {

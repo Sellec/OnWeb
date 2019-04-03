@@ -1,12 +1,9 @@
 ﻿using OnUtils.Architecture.AppCore;
+using OnUtils.Architecture.AppCore.DI;
 
 namespace OnWeb.Plugins.Communication
 {
-    using OnUtils.Architecture.AppCore.DI;
-    using OnWeb.Core;
-    using Core.Messaging.SMS;
-
-    class Startup : IConfigureBindings<Core.ApplicationCore>
+    class Startup : IConfigureBindings
     {
         void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
         {

@@ -1,11 +1,9 @@
-﻿using OnWeb.Core;
+﻿using OnUtils.Architecture.AppCore;
+using OnUtils.Architecture.AppCore.DI;
 
 namespace OnWeb.Plugins.Customer
 {
-    using OnUtils.Architecture.AppCore;
-    using OnUtils.Architecture.AppCore.DI;
-
-    class Startup : IConfigureBindings<ApplicationCore>
+    class Startup : IConfigureBindings
     {
         void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
         {
