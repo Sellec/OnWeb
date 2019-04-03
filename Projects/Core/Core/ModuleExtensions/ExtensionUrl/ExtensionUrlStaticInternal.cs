@@ -23,7 +23,7 @@ namespace OnWeb.Core.ModuleExtensions.ExtensionUrl
                         if (gr_.Key != null)
                         {
                             var keys = itemsModule.Keys.ToList();
-                            var result = DeprecatedSingletonInstances.UrlManager.GetUrl(gr_.Key, keys.Select(x => x.ID), IdItemType, Routing.Constants.MAINKEY);
+                            var result = DeprecatedSingletonInstances.UrlManager.GetUrl(gr_.Key, keys.Select(x => x.ID), IdItemType, Routing.RoutingConstants.MAINKEY);
                             if (!result.IsSuccess)
                             {
                                 Debug.WriteLine("ItemBase.GetForQuery({0}): {1}", IdItemType, result.Message);

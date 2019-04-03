@@ -1,0 +1,154 @@
+@model Plugins.Adminmain.Model.AdminMainModelInfoPage
+@{ var moduleAdmin = AppCore.Get<Plugins.Admin.Module>(); }
+
+<script type="text/javascript" src='/data/js/ajax.js'></script>
+<script type='text/javascript'>
+
+    $(document).ready(function ()
+    {
+        $("#block").hide();
+
+        $("form#form_info").requestJSON({
+            before: function ()
+            {
+                $("#item_result").hide();
+                $("#loading_img").show()
+            },
+            after: function (result, message)
+            {
+                $("#item_result").html(nl2br(message)).show();
+                $("#loading_img").hide()
+            }
+        });
+
+        changeTitle('Информация');
+        $(".i_adminmenu ul").show();
+
+        $("#loading_img, #info_save").hide();
+        getResultAnim($("#form_info"), $("#info_save"));
+
+        $("#footer_info,#index_left,#index_right,#why_us").wysiwyg();
+
+        CKEDITOR.replace('site_reginfo', { filebrowserUploadUrl: '/@moduleAdmin.UrlName/madmin/fm/upload2/userfs', removePlugins: 'save' });
+        CKEDITOR.replace('site_loginfo', { filebrowserUploadUrl: '/@moduleAdmin.UrlName/madmin/fm/upload2/userfs', removePlugins: 'save' });
+        CKEDITOR.replace('help_info', { filebrowserUploadUrl: '/@moduleAdmin.UrlName/madmin/fm/upload2/userfs', removePlugins: 'save' });
+        $('#save_func').click(function ()
+        {
+            CKEDITOR.instances.site_reginfo.updateElement();
+            CKEDITOR.instances.site_loginfo.updateElement();
+            CKEDITOR.instances.help_info.updateElement();
+        });
+
+        $("select[name=register_mode]").val('@Config.register_mode');
+        $("select[name=index_page]").val('@Config.index_page');
+        $("select[name=userAuthorizeAllowed]").val('@Config.userAuthorizeAllowed');
+    });
+</script>
+<style>
+    form#form_info div {
+        border: 0px solid;
+        margin-bottom: 5px;
+        padding: 5px 0px 10px 0px;
+    }
+</style>
+
+<table width='100%'>
+    <tr>
+        <td>
+            <form action='/@moduleAdmin.UrlName/madmin/@Module.UrlName/info_save' method='post' id='form_info'>
+                <h2>Общие параметры:</h2>
+
+                <div>
+                    @Html.LabelFor(x => x.Configuration.SiteFullName):<br />
+                    @Html.EditorFor(x => x.Configuration.SiteFullName, new { htmlAttributes = new { size = 50 } })<br />
+                    @Html.ValidationMessageFor(x => x.Configuration.SiteFullName)
+                </div>
+
+                <div>
+                    @Html.LabelFor(x => x.Configuration.SiteShortName):<br />
+                    @Html.EditorFor(x => x.Configuration.SiteShortName, new { htmlAttributes = new { size = 50 } })<br />
+                    @Html.ValidationMessageFor(x => x.Configuration.SiteShortName)
+                </div>
+
+                <div>
+                    @Html.LabelFor(x => x.Configuration.IdModuleDefault):<br>
+                    @Html.DropDownListFor(x => x.Configuration.IdModuleDefault, Model.ModulesList)<br />
+                    @Html.ValidationMessageFor(x => x.Configuration.IdModuleDefault)
+                </div>
+
+                <div>
+                    @Html.LabelFor(x => x.Configuration.index_page):<br>
+                    @Html.DropDownListFor(x => x.Configuration.index_page, Model.PagesList)<br />
+                    @Html.ValidationMessageFor(x => x.Configuration.index_page)
+                </div>
+
+                <div>
+                    @Html.LabelFor(x => x.Configuration.helpform_email):<br />
+                    @Html.EditorFor(x => x.Configuration.helpform_email, new { htmlAttributes = new { size = 50 } })<br />
+                    @Html.ValidationMessageFor(x => x.Configuration.helpform_email)
+                </div>
+
+                <div>
+                    @Html.LabelFor(x => x.Configuration.register_mode):<br>
+                    @Html.EnumDropDownListFor(x => x.Configuration.register_mode)<br />
+                    @Html.ValidationMessageFor(x => x.Configuration.register_mode)
+                </div>
+
+                <div>
+                    @Html.LabelFor(x => x.Configuration.userAuthorizeAllowed):<br>
+                    @Html.EnumDropDownListFor(x => x.Configuration.userAuthorizeAllowed)<br />
+                    @Html.ValidationMessageFor(x => x.Configuration.userAuthorizeAllowed)
+                </div>
+
+                <div>
+                    @Html.LabelFor(x => x.Configuration.site_reginfo):<br />
+                    @Html.TextAreaFor(x => x.Configuration.site_reginfo, new { id = "site_reginfo", rows = 5, cols = 60 })<br />
+                    @Html.ValidationMessageFor(x => x.Configuration.site_reginfo)
+                </div>
+
+                <div>
+                    @Html.LabelFor(x => x.Configuration.site_loginfo):<br />
+                    @Html.TextAreaFor(x => x.Configuration.site_loginfo, new { id = "site_loginfo", rows = 5, cols = 60 })<br />
+                    @Html.ValidationMessageFor(x => x.Configuration.site_loginfo)
+                </div>
+
+                <hr /><br />
+
+                <div>
+                    @Html.LabelFor(x => x.Configuration.help_info):<br />
+                    @Html.TextAreaFor(x => x.Configuration.help_info, new { id = "help_info", rows = 5, cols = 60 })<br />
+                    @Html.ValidationMessageFor(x => x.Configuration.help_info)
+                </div>
+
+                <div>
+                    @Html.LabelFor(x => x.Configuration.site_descr):<br />
+                    @Html.EditorFor(x => x.Configuration.site_descr, new { htmlAttributes = new { size = 50 } })<br />
+                    @Html.ValidationMessageFor(x => x.Configuration.site_descr)
+                </div>
+
+                <div>
+                    @Html.LabelFor(x => x.Configuration.site_keys):<br />
+                    @Html.EditorFor(x => x.Configuration.site_keys, new { htmlAttributes = new { size = 50 } })<br />
+                    @Html.ValidationMessageFor(x => x.Configuration.site_keys)
+                </div>
+
+                <hr /><br />
+
+                Recaptcha ключи:<br>
+                <div>
+                    @Html.LabelFor(x => x.Configuration.reCaptchaSecretKey):<br />
+                    @Html.EditorFor(x => x.Configuration.reCaptchaSecretKey, new { htmlAttributes = new { size = 30 } })<br />
+                    @Html.ValidationMessageFor(x => x.Configuration.reCaptchaSecretKey)<br /><br />
+
+                    @Html.LabelFor(x => x.Configuration.reCaptchaSiteKey):<br />
+                    @Html.EditorFor(x => x.Configuration.reCaptchaSiteKey, new { htmlAttributes = new { size = 30 } })<br />
+                    @Html.ValidationMessageFor(x => x.Configuration.reCaptchaSiteKey)
+                </div>
+
+                <input type='submit' id='save_func' value='&nbsp;Сохранить&nbsp;'> <img src="/data/img/loading.gif" alt="" id="loading_img" style="display:none">
+            </form>
+            <div id='info_save' style="margin:5px 10px;padding:5px;"></div>
+
+        </td>
+    </tr>
+</table>

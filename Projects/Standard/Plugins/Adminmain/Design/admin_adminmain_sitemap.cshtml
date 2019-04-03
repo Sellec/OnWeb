@@ -1,0 +1,48 @@
+@model List<Core.Modules.ModuleCore>
+@{ var moduleAdmin = AppCore.Get<Plugins.Admin.Module>(); }
+
+<script type='text/javascript'>
+    $(document).ready(function () {
+        try {
+            $("#block").hide();
+            changeTitle('Генерация sitemap.xml сайта');
+            $(".i_adminmenu ul").show();
+
+            $("form#form_ae").requestJSON({
+                before: function () { $("#loading_img").show(); },
+                after: function (result, message, data) {
+                    $("#loading_img").hide();
+                    if (message.length) alert(message);
+                }
+            });
+
+            $("#conf_submit").click(function () {
+                if (!$("#modules_list option:selected").length) {
+                    $("#modules_list option").each(function () {
+                        $(this).attr("selected", true);
+                    })
+                    $("#form_ae").submit();
+                    return false;
+                }
+            })
+        } catch (err) { alert(err); }
+    });
+
+</script>
+<h2>Генерация sitemap.xml сайта</h2>
+<br>
+<table id="items_results">
+    <tr>
+        <td>
+            Выберите модули, которые следует включить в sitemap:<br>
+            <form action='/@moduleAdmin.UrlName/madmin/@Module.UrlName/sitemap_save' method='post' id='form_ae'>
+                <select name='modules_list[]' size='10' style="width:270px;" multiple="true" id="modules_list">
+                    @foreach (var module in Model)
+                    {
+                        <option value='@Module.UrlName'>@module.Caption</option>}
+                </select>
+                <input type='submit' id='conf_submit' value='Сохранить'> <img src="/data/img/loading.gif" alt="" id="loading_img">
+            </form>
+        </td>
+    </tr>
+</table>

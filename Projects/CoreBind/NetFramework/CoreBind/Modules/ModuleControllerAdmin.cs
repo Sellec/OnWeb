@@ -73,13 +73,13 @@ namespace OnWeb.CoreBind.Modules
 
 
             if (RequestAnswerType.GetAnswerType() == RequestAnswerType.Types.Visual && string.IsNullOrEmpty(masterName) && !doNotUseMasterName)
-                masterName = $"{nameof(Plugins.ModuleAdmin)}/Design/baseAdmin.cshtml";
+                masterName = $"{nameof(Plugins.Admin)}/Design/baseAdmin.cshtml";
 
             if (viewName == "errorHandled.cshtml")
-                viewName = $"{nameof(Plugins.ModuleAdmin)}/Design/errorHandled.cshtml";
+                viewName = $"{nameof(Plugins.Admin)}/Design/errorHandled.cshtml";
 
             if (viewName == "error404NotFound.cshtml")
-                viewName = $"{nameof(Plugins.ModuleAdmin)}/Design/error404NotFound.cshtml";
+                viewName = $"{nameof(Plugins.Admin)}/Design/error404NotFound.cshtml";
 
             return base.View(viewName, masterName, model);
         }

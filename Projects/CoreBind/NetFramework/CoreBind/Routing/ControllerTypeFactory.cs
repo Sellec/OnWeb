@@ -22,14 +22,14 @@ namespace OnWeb.CoreBind.Routing
         }
 
         /// <summary>
-        /// Возвращает тип контроллера, который соответствует текущему запросу <paramref name="context"/> со строкой адреса <paramref name="relativeURL"/>.
+        /// Возвращает тип контроллера, который соответствует текущему запросу <paramref name="request"/> со строкой адреса <paramref name="relativeURL"/>.
         /// </summary>
-        public static ControllerType RoutingPrepareURL(HttpContext context, string relativeURL)
+        public static ControllerType RoutingPrepareURL(HttpRequestBase request, string relativeURL)
         {
             ControllerType type = null;
             foreach (var controllerType in _controllerTypes)
             {
-                if (controllerType.IsThisRequestIsThisControllerType(context, relativeURL))
+                if (controllerType.IsThisRequestIsThisControllerType(request, relativeURL))
                 {
                     type = controllerType;
                 }

@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace OnWeb.CoreBind.Providers
 {
-    class TraceModelMetadataProvider : DataAnnotationsModelMetadataProvider
+    public class TraceModelMetadataProvider : DataAnnotationsModelMetadataProvider
     {
         //protected override ModelMetadata
         //    CreateMetadata(IEnumerable<Attribute> attributes,

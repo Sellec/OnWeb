@@ -334,7 +334,7 @@ namespace OnWeb.Core.Users
         //                    {
         //                        try
         //                        {
-        //                            var IdEvent = ApplicationCore.Instance.ConfigurationOptionGet("eventLoginUpdate", 0);
+        //                            var IdEvent = AppCore.ConfigurationOptionGet("eventLoginUpdate", 0);
         //                            if (IdEvent > 0) UserLogHistoryManager.register(this.getID(), IdEvent, TimeSpan.FromSeconds(diff).ToString(@"d\.hh\:mm\:ss"));
         //                            HttpContext.Current.Session["lastEnter"] = DateTime.Now.Timestamp();
         //                        }
@@ -363,7 +363,7 @@ namespace OnWeb.Core.Users
 
             //    HttpContext.Current.Session.Abandon();
 
-            //    var IdEvent = ApplicationCore.Instance.ConfigurationOptionGet("eventLogout", 0);
+            //    var IdEvent = AppCore.ConfigurationOptionGet("eventLogout", 0);
             //    if (IdEvent > 0) UserLogHistoryManager.register(this.getID(), IdEvent);
 
             //    this.isAuthorized = false;

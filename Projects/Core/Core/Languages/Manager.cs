@@ -103,7 +103,7 @@ namespace OnWeb.Core.Languages
 
             try
             {
-                var module = AppCore.GetModulesManager().GetModule<Plugins.ModuleCore.Module>();
+                var module = AppCore.GetModulesManager().GetModule<Plugins.CoreModule.Module>();
                 var cfg = module.GetConfigurationManipulator().GetEditable<Configuration.CoreConfiguration>();
                 cfg.IdSystemLanguage = language.IdLanguage;
 

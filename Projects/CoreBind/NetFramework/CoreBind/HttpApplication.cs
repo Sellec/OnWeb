@@ -132,9 +132,6 @@ namespace OnWeb.CoreBind.Razor
 
         internal void Application_BeginRequest(Object sender, EventArgs e)
         {
-            // if (HttpContext.Current.Request.Url.ToString().Contains("TestError500") || HttpContext.Current.Request.Url.ToString().Contains("/agencyExchange/"))
-            //   Debug.WriteLineNoLog("BEGIN tID={0}, =" + HttpContext.Current.Request.Url, Thread.CurrentThread.ManagedThreadId);
-
             var isFirstRequest = (bool?)this.Context.GetType().GetProperty("FirstRequest", BindingFlags.Instance | BindingFlags.GetProperty | BindingFlags.NonPublic)?.GetValue(this.Context);
             if (isFirstRequest.HasValue && isFirstRequest.Value == true)
             {
@@ -142,6 +139,8 @@ namespace OnWeb.CoreBind.Razor
             }
             if (!_applicationCore.IsServerUrlHasBeenSet  && isFirstRequest.HasValue && isFirstRequest.Value)
                 _applicationCore.ServerUrl = new UriBuilder(Request.Url.Scheme, Request.Url.Host, Request.Url.Port).Uri;
+
+            _applicationCore.GetUserContextManager().SetCurrentUserContext(_applicationCore.GetUserContextManager().CreateGuestUserContext());
 
             _requestSpecificDisposables = new Queue<IDisposable>();
 
@@ -185,24 +184,6 @@ namespace OnWeb.CoreBind.Razor
             }
             catch (ThreadAbortException) { throw; }
             catch { }
-
-            if (!_initialized)
-            {
-                //Debug.WriteLine("BeginRequest but ApplicationCore not started. Waiting...");
-                //lock (SyncRootStart) { }
-            }
-
-            //if 
-            //NOTE: Stopping IE from being a caching whore
-            //HttpContext.Current.Response.Cache.SetAllowResponseInBrowserHistory(false);
-            //HttpContext.Current.Response.Cache.SetCacheability(HttpCacheability.NoCache);
-            //HttpContext.Current.Response.Cache.SetNoStore();
-            //Response.Cache.SetExpires(DateTime.Now);
-            //Response.Cache.SetValidUntilExpires(true);
-
-            var request = HttpContext.Current;
-
-            HttpContext.Current.RoutingPrepareURL(HttpContext.Current.Request.Url.PathAndQuery);
 
             try
             {

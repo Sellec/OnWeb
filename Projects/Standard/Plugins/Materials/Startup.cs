@@ -1,16 +1,15 @@
-﻿using OnWeb.Core;
+﻿using OnUtils.Architecture.AppCore;
+using OnUtils.Architecture.AppCore.DI;
 
 namespace OnWeb.Plugins.Materials
 {
-    class Startup : IAssemblyStartup<ApplicationCore>
-    {
-        void IAssemblyStartup<ApplicationCore>.ConfigureBindings(ApplicationCore.BindingsCollection bindingsCollection)
-        {
-            bindingsCollection.SetSingleton<IModule, ModuleMaterials>();
-        }
+    using Core;
 
-        void IAssemblyStartup<ApplicationCore>.ExecuteAfterCoreStart(ApplicationCore core)
+    class Startup : IConfigureBindings<ApplicationCore>
+    {
+        void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
         {
+            bindingsCollection.SetSingleton<ModuleMaterials>();
         }
     }
 }

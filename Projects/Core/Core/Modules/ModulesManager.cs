@@ -64,7 +64,7 @@ namespace OnWeb.Core.Modules
                 var config = db.Module.Where(x => x.UniqueKey == moduleType.FullName).FirstOrDefault();
                 if (config == null)
                 {
-                    config = new DB.ModuleConfig() { UniqueKey = moduleType.FullName, DateChange = DateTime.Now };
+                    config = new ModuleConfig() { UniqueKey = moduleType.FullName, DateChange = DateTime.Now };
                     db.Module.Add(config);
                     db.SaveChanges();
                 }
@@ -79,12 +79,14 @@ namespace OnWeb.Core.Modules
 
                 var cfg = configurationManipulator.GetUsable<ModuleConfiguration<TModuleType>>();
 
-                module._moduleUrlName = cfg.UrlName;
+                if (!string.IsNullOrEmpty(cfg.UrlName)) module._moduleUrlName = cfg.UrlName;
                 module.InitModule(controllerTypes);
 
                 _modules.RemoveAll(x => x.Item1 == typeof(TModuleType));
                 LoadModuleCallModuleStart(module);
                 _modules.Add(new Tuple<Type, ModuleBase<ApplicationCore>>(typeof(TModuleType), module));
+
+                Debug.WriteLineNoLog($"LoadModuleCustom -> {module.UrlName}");
 
                 this.RegisterEvent(
                      Journaling.EventType.Error,
@@ -101,6 +103,8 @@ namespace OnWeb.Core.Modules
 
         internal ModuleCore GetModuleInternal(string urlName)
         {
+            Debug.WriteLineNoLog($"GetModuleInternal -> {urlName}");
+
             lock (_syncRoot)
             {
                 var module = (from p in _modules.Select(x => x.Item2).OfType<ModuleCore>() where p._moduleUrlName == urlName select p).FirstOrDefault();

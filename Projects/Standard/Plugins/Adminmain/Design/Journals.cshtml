@@ -1,0 +1,65 @@
+@model List<Adminmain.Design.Model.JournalsList>
+@{ var moduleAdmin = AppCore.Get<Plugins.Admin.Module>(); }
+
+<script type='text/javascript'>
+    $(document).ready(function(){
+        $("#block").hide();
+
+        changeTitle('Журналы системы');
+
+        $("input.ShowJournal").click(function ()
+        {
+            $("#containerForLoading").html("<img src='/data/img/loading.gif'>").requestLoad("/@moduleAdmin.UrlName/madmin/@Module.UrlName/JournalDetails/" + $(this).data("id"), null, function (result, message)
+            {
+                if (message.length > 0) alert(message);
+            });
+        })
+    });
+</script>
+<h2>Журналы системы</h2>
+
+<table width='100%'>
+    <tr>
+        <td style='vertical-align:top;width:570px;min-width:570px;'>
+            <h4>Всего журналов: <span id="countRegistered">@Model.Count</span></h4>
+            <table class='tablesorter' width="100%">
+                <thead>
+                    <tr>
+                        <th style="width:150px">Название</th>
+                        <th style="width:200px">Количество событий</th>
+                        <th style="width:120px">Дата последнего события</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                @if (Model.Count == 0)
+                {
+                    <tr id='not_founded' style='display:none;'>
+                        <td class="center" colspan='10'>
+                            Ничего не найдено.
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var journal in Model)
+                    {
+                        <tr>
+                            <td class="left">@journal.JournalName.Name</td>
+                            <td class="left">@journal.EventsCount</td>
+                            <td class="left" style="background-color: @(journal.EventLastType == Core.Journaling.EventType.CriticalError ? "#f44141 !important" : (journal.EventLastType == Core.Journaling.EventType.Error ? "#f48341 !important" : (journal.EventLastType == Core.Journaling.EventType.Warning ? "#f4c741 !important" : "")))">
+                                @(journal.EventLastDate.HasValue ? journal.EventLastDate.Value.ToString("dd.MM.yyyy HH:mm:ss") : "")
+                            </td>
+                            <td>
+                                <input type="button" class="ShowJournal" data-id="@journal.JournalName.IdJournal" value="Журнал"><br />
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+
+        </td>
+        <td style='width:50px;'></td>
+        <td style='width:100%;vertical-align:top;align:left;' id="containerForLoading"></td>
+    </tr>
+</table>
+

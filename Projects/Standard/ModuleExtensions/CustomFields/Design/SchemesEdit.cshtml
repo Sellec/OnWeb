@@ -1,4 +1,5 @@
 @model Core.ModuleExtensions.CustomFields.Model.Fields
+@{ var moduleAdmin = AppCore.Get<Plugins.Admin.Module>(); }
 
 <style type="text/css">
     .placeholder {
@@ -93,7 +94,7 @@
             if (val != null)
             {
                 val = val.split('_', 2);
-                $('div#fields_ae').html("<img src='/data/img/loading.gif'>").requestLoad("/admin/madmin/@Module.UrlName/fieldsItem/" + val[0] + "/" + val[1], null, function (result, message) {
+                $('div#fields_ae').html("<img src='/data/img/loading.gif'>").requestLoad("/@moduleAdmin.UrlName/madmin/@Module.UrlName/fieldsItem/" + val[0] + "/" + val[1], null, function (result, message) {
                     if (message.length > 0) alert(message);
                 });
             }
@@ -103,12 +104,12 @@
         $('#field_add').click(function (e) {
             e.preventDefault();
 
-            $("#fields_ae").html("<img src='/data/img/loading.gif'>").requestLoad('/admin/madmin/@Module.UrlName/fieldEdit', null, function(){});
+            $("#fields_ae").html("<img src='/data/img/loading.gif'>").requestLoad('/@moduleAdmin.UrlName/madmin/@Module.UrlName/fieldEdit', null, function(){});
         });
 
         //Редактировать поле.
         $('#field_edit').click(function () {
-            $("#fields_ae").html("<img src='/data/img/loading.gif'>").requestLoad('/admin/madmin/@Module.UrlName/fieldEdit/' + $('#fields_for_select option:selected:first').val(), null, function(){});
+            $("#fields_ae").html("<img src='/data/img/loading.gif'>").requestLoad('/@moduleAdmin.UrlName/madmin/@Module.UrlName/fieldEdit/' + $('#fields_for_select option:selected:first').val(), null, function(){});
         });
 
         //Удалить поле.
@@ -117,7 +118,7 @@
                 if (confirm('Вы действительно хотите удалить поле "' + $(this).text() + '"?')) {
                     var option = $(this);
                     showResult();
-                    $.requestJSON("/admin/madmin/@Module.UrlName/fieldDelete/" + $(this).val(), null, function (result, message) {
+                    $.requestJSON("/@moduleAdmin.UrlName/madmin/@Module.UrlName/fieldDelete/" + $(this).val(), null, function (result, message) {
                         if (result == JsonResult.OK) option.remove();
                         if (message.length > 0) showResult(message);
                     });

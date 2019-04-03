@@ -1,6 +1,7 @@
 @using Core.ModuleExtensions.CustomFields.Field
 @using Core.ModuleExtensions.CustomFields.Model
 @model FieldEdit
+@{ var moduleAdmin = AppCore.Get<Plugins.Admin.Module>(); }
 
 <script type='text/javascript'>
     function select_type(type) {
@@ -127,7 +128,7 @@
     });
 </script>
 
-<form action='/admin/madmin/@Module.UrlName/fieldSave' method='post' id='form_ae'>
+<form action='/@moduleAdmin.UrlName/madmin/@Module.UrlName/fieldSave' method='post' id='form_ae'>
     @Html.HiddenFor(x => x.IdField)
     <h2 id="EditLabel">Редактирование поля</h2>
     <table width='400' id="fields_results" class="admtable">

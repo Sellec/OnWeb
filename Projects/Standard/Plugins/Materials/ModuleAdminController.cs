@@ -8,7 +8,9 @@ namespace OnWeb.Plugins.Materials
     using AdminForModules.Menu;
     using Core.Modules;
     using CoreBind.Modules;
-    using CoreBind.Routing;
+    using Core.Routing;
+    using Core.Items;
+    using Core.Journaling;
 
     /// <summary>
     /// Представляет контроллер для панели управления.
@@ -34,8 +36,8 @@ namespace OnWeb.Plugins.Materials
 
             try
             {
-                Materials.DB.News data = null;
-                if (!IdNews.HasValue || IdNews.Value <= 0) data = new Materials.DB.News();
+                Plugins.Materials.DB.News data = null;
+                if (!IdNews.HasValue || IdNews.Value <= 0) data = new Plugins.Materials.DB.News();
                 else
                 {
                     data = DB.News.Where(x => x.id == IdNews.Value).FirstOrDefault();
@@ -43,7 +45,7 @@ namespace OnWeb.Plugins.Materials
 
                     if (data.Block)
                     {
-                        if (UserManager.Instance.isSuperuser) throw new Exception("Указанная новость удалена (сообщение для суперпользователя).");
+                        if (AppCore.GetUserContextManager().GetCurrentUserContext().IsSuperuser) throw new Exception("Указанная новость удалена (сообщение для суперпользователя).");
                         else throw new Exception("Указанная новость не найдена.");
                     }
                 }
@@ -69,10 +71,10 @@ namespace OnWeb.Plugins.Materials
                 {
                     using (var trans = DB.CreateScope())
                     {
-                        Materials.DB.News data = null;
+                        DB.News data = null;
                         if (model.id <= 0)
                         {
-                            data = new Materials.DB.News() { date = DateTime.Now, user = UserManager.Instance.ID, status = true, Block = false };
+                            data = new DB.News() { date = DateTime.Now, user = AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser(), status = true, Block = false };
                             DB.News.Add(data);
                         }
                         else
@@ -82,7 +84,7 @@ namespace OnWeb.Plugins.Materials
 
                             if (data.Block)
                             {
-                                if (UserManager.Instance.isSuperuser) throw new Exception("Указанная новость удалена (сообщение для суперпользователя).");
+                                if (AppCore.GetUserContextManager().GetCurrentUserContext().IsSuperuser) throw new Exception("Указанная новость удалена (сообщение для суперпользователя).");
                                 else throw new Exception("Указанная новость не найдена.");
                             }
                         }
@@ -95,14 +97,14 @@ namespace OnWeb.Plugins.Materials
 
                         answer.Data = data.id;
 
-                        var result = UrlManager.Register(
+                        var result = AppCore.Get<UrlManager>().Register(
                             Module,
                             data.id,
-                            Items.ItemTypeFactory.Instance.GetItemType(typeof(DB.News)).IdItemType,
+                            ItemTypeFactory.GetItemType(typeof(DB.News)).IdItemType,
                             nameof(ModuleController.ViewNews),
-                            new List<UrlManager.ActionArgument>() { new UrlManager.ActionArgument() { ArgumentName = "IdNews", ArgumentValue = data.id } },
+                            new List<ActionArgument>() { new ActionArgument() { ArgumentName = "IdNews", ArgumentValue = data.id } },
                             "news/" + UrlManager.Translate(data.name),
-                            UrlManager.MAINKEY
+                            RoutingConstants.MAINKEY
                         );
                         if (!result.IsSuccess) throw new Exception(result.Message);
 
@@ -114,7 +116,7 @@ namespace OnWeb.Plugins.Materials
             catch (Exception ex)
             {
                 answer.FromException(ex);
-                Module.RegisterEvent(Journaling.EventType.Error, "Ошибка сохранения новости", "Модель данных, переданная из формы:\r\n" + Newtonsoft.Json.JsonConvert.SerializeObject(model), ex);
+                Module.RegisterEvent(EventType.Error, "Ошибка сохранения новости", "Модель данных, переданная из формы:\r\n" + Newtonsoft.Json.JsonConvert.SerializeObject(model), null, ex);
             }
 
             return ReturnJson(answer);
@@ -134,7 +136,7 @@ namespace OnWeb.Plugins.Materials
 
                 if (data.Block)
                 {
-                    if (UserManager.Instance.isSuperuser) throw new Exception("Указанная новость удалена (сообщение для суперпользователя).");
+                    if (AppCore.GetUserContextManager().GetCurrentUserContext().IsSuperuser) throw new Exception("Указанная новость удалена (сообщение для суперпользователя).");
                     else throw new Exception("Указанная новость не найдена.");
                 }
 

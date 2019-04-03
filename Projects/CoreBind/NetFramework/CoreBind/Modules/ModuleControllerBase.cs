@@ -1,4 +1,5 @@
-﻿using OnUtils.Application.Users;
+﻿using OnUtils.Application.Modules;
+using OnUtils.Application.Users;
 using OnUtils.Architecture.AppCore;
 using System;
 using System.Collections.Concurrent;
@@ -12,14 +13,15 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Async;
+using System.Web.Mvc.Filters;
 using System.Web.Mvc.Html;
 using System.Web.Routing;
 
 namespace OnWeb.CoreBind.Modules
 {
+    using Core;
     using Core.Exceptions;
     using Core.Modules;
-    using OnWeb.Core;
     using Journaling = Core.Journaling;
 
     /// <summary>
@@ -60,7 +62,7 @@ namespace OnWeb.CoreBind.Modules
 
             }
 
-            var result = AppCore.Get<Journaling.IManager>().RegisterJournal(Journaling.Constants.IdSystemJournalType, journalName, "ModuleControllerError_" + errorCode.ToString());
+            var result = AppCore.Get<Journaling.IManager>().RegisterJournal(Journaling.JournalingConstants.IdSystemJournalType, journalName, "ModuleControllerError_" + errorCode.ToString());
             if (!result.IsSuccess) Debug.WriteLine("Ошибка получения журнала для кода {0}: {1}", errorCode, result.Message);
             return result.Result?.IdJournal ?? -1;
         }
@@ -170,23 +172,37 @@ namespace OnWeb.CoreBind.Modules
         }
 
         /// <summary>
-        /// Закрыт. Вместо этого метода следует пользоваться <see cref="OnBeforeExecution(ActionExecutingContext)"/>.
+        /// Закрыт. Для определения дополнительной логики авторизации следует воспользоваться атрибутом <see cref="AuthorizeAttribute"/>.
         /// </summary>
-        protected sealed override void OnActionExecuting(ActionExecutingContext filterContext)
+        protected sealed override void OnAuthentication(AuthenticationContext filterContext)
         {
-            if (filterContext.ActionDescriptor is ReflectedActionDescriptor)
+            var isAllowed = true;
+
+            var moduleActionAttribute = (filterContext?.ActionDescriptor as ReflectedActionDescriptor)?.MethodInfo?.GetCustomAttribute<ModuleActionAttribute>();
+            if (moduleActionAttribute != null && moduleActionAttribute.Permission != Guid.Empty)
             {
-                var attr = (filterContext.ActionDescriptor as ReflectedActionDescriptor).MethodInfo.GetCustomAttributes(typeof(ModuleActionAttribute), true);
-                if (attr == null) throw new InvalidOperationException("Поддерживается вызов только тех методов, к которым применен атрибут '" + typeof(ModuleActionAttribute).FullName + "'");
+                isAllowed = ModuleBase.CheckPermission(ModuleBase.AppCore.GetUserContextManager().GetCurrentUserContext(), moduleActionAttribute.Permission) == CheckPermissionResult.Allowed;
             }
 
-            OnBeforeExecution(filterContext);
+            if (!isAllowed)
+            {
+                //UserManager.AuthorizationRedirect = filterContext.RequestContext.RouteData.Values;
+                // todo AppCore.GetUserContextManager().GetCurrentUserContext().AuthorizationRedirectUrl = filterContext.RequestContext.HttpContext.Request.Url.PathAndQuery;
+
+                var moduleAuth = AppCore.Get<Plugins.Auth.ModuleAuth>();
+
+                filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary {
+                    {"controller", moduleAuth.UrlName },
+                    {"action", "unauthorized" }, // todo заменить unauthorized на ссылку на метод. Но как, если возвращаемый результат ActionResult известен только при привязке к asp.net mvc/core?
+                    {"area", Routing.AreaConstants.User}
+                });
+            }
         }
 
         /// <summary>
         /// Закрыт. Вместо этого метода следует пользоваться <see cref="OnAfterExecution(ActionExecutedContext)"/>.
         /// </summary>
-        protected override void OnActionExecuted(ActionExecutedContext filterContext)
+        protected sealed override void OnActionExecuted(ActionExecutedContext filterContext)
         {
             filterContext.Result = PrepareActionResultToCurrentRequestType(filterContext.Result);
             OnAfterExecution(filterContext);

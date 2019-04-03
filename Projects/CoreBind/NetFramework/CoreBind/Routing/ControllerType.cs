@@ -30,9 +30,9 @@ namespace OnWeb.CoreBind.Routing
         #endregion
 
         /// <summary>
-        /// Определяет, соответствует ли текущий запрос <paramref name="context"/> со строкой адреса <paramref name="relativeURL"/> данному типу контроллера.
+        /// Определяет, соответствует ли текущий запрос <paramref name="request"/> со строкой адреса <paramref name="relativeURL"/> данному типу контроллера.
         /// </summary>
-        public abstract bool IsThisRequestIsThisControllerType(HttpContext context, string relativeURL);
+        public abstract bool IsThisRequestIsThisControllerType(HttpRequestBase request, string relativeURL);
 
         /// <summary>
         /// Возвращает ошибку, когда тип контроллера для модуля <paramref name="module"/> для запроса со значениями <paramref name="routeValues"/> не был найден.

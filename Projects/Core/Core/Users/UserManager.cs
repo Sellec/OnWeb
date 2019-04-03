@@ -179,30 +179,5 @@ namespace OnWeb.Core.Users
         {
             get => _permissions;
         }
-
-        // todo заняться этим методом в рамках привязки к aspnet.
-        ///// <summary>
-        ///// Возвращает или задает адрес для переадресации после успешной авторизации.
-        ///// </summary>
-        //public string AuthorizationRedirectUrl
-        //{
-        //    get
-        //    {
-        //        if (HttpContext.Current.Session != null && HttpContext.Current.Session["AuthorizationRedirectUrl"] != null)
-        //        {
-        //            return HttpContext.Current.Session["AuthorizationRedirectUrl"] as string;
-        //        }
-
-        //        return null;
-        //    }
-        //    set
-        //    {
-        //        if (HttpContext.Current.Session != null)
-        //        {
-        //            HttpContext.Current.Session["AuthorizationRedirectUrl"] = value;
-        //        }
-        //    }
-        //}
-
     }
 }

@@ -57,7 +57,7 @@ namespace OnWeb.Core.Journaling
 
         ExecutionResultJournalName IManager.RegisterJournalTyped<TJournalTyped>(string name)
         {
-            return (this as IManager).RegisterJournal(Constants.IdSystemJournalType, name, Constants.TypedJournalsPrefix + typeof(TJournalTyped).FullName);
+            return (this as IManager).RegisterJournal(JournalingConstants.IdSystemJournalType, name, JournalingConstants.TypedJournalsPrefix + typeof(TJournalTyped).FullName);
         }
         #endregion
 
@@ -104,7 +104,7 @@ namespace OnWeb.Core.Journaling
         {
             return _typedJournalsList.GetOrAddWithExpiration(
                 typeof(TJournalTyped),
-                (t) => (this as IManager).GetJournal(Constants.TypedJournalsPrefix + typeof(TJournalTyped).FullName),
+                (t) => (this as IManager).GetJournal(JournalingConstants.TypedJournalsPrefix + typeof(TJournalTyped).FullName),
                 TimeSpan.FromMinutes(5));
         }
         #endregion

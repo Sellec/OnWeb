@@ -4,10 +4,12 @@ using System.Web.Mvc;
 
 namespace OnWeb.Plugins.Materials
 {
+    using CoreBind.Modules;
+
     /// <summary>
     /// Представляет контроллер для панели управления.
     /// </summary>
-    public class ModuleController : ModuleController<ModuleMaterials, DB.DataLayerContext>
+    public class ModuleController : ModuleControllerUser<ModuleMaterials, DB.DataLayerContext>
     {
         public ActionResult Index()
         {
@@ -32,7 +34,7 @@ namespace OnWeb.Plugins.Materials
 
             if (data.Block)
             {
-                if (UserManager.Instance.isSuperuser) throw new Exception("Указанная новость удалена (сообщение для суперпользователя).");
+                if (AppCore.GetUserContextManager().GetCurrentUserContext().IsSuperuser) throw new Exception("Указанная новость удалена (сообщение для суперпользователя).");
                 else throw new Exception("Указанная новость не найдена.");
             }
 

@@ -1,0 +1,89 @@
+@model List<DB.User>
+
+<script type='text/javascript'>
+mUsersData = @Model.jsobject();
+
+function update_all()
+{
+	try {
+		$('#table_results').tablefill(mUsersData, function(tr_elem, data){
+			$(tr_elem).find('td').each(function(ichild){
+				if ( ichild == 0 ) $(this).text(data.@nameof(DB.User.id));
+				else if ( ichild == 1 ) $(this).html(data.@nameof(DB.User.name) + '<br>' + data.@nameof(DB.User.email) + '<br>' + data.@nameof(DB.User.phone));
+				else if ( ichild == 2 ) $(this).text(data.@nameof(DB.User.Superuser) != 0 ? 'Суперпользователь' : 'Пользователь');
+				else if ( ichild == 3 ) $(this).text(data.@nameof(DB.User.State));
+				else if ( ichild == 5 ) $(this).text(data.@nameof(DB.User.CommentAdmin));
+			});
+			
+			$(tr_elem).find('a.user_link, a.user_delete').each(function(){
+			    $(this).attr('href', $(this).attr('href') + data.@nameof(DB.User.id))
+			});
+		}, null, function(){
+		    $("a.user_delete").click(function(){
+		        try 
+		        {  
+		            var tr = $(this).parent().parent();
+		            var data = tr.data('BoundedItem');
+		            if (data != null && confirm('Вы действительно хотите удалить пользователя "' + data.email + '"?'))
+		            {
+		                $.requestJSON($(this).attr('href'), null, function(result, message){
+		                    if (result == JsonResult.OK) 
+		                    {
+		                        tr.remove();
+
+		                        var a = new Array();
+		                        for (var i in mUsersData) if (mUsersData[i].id != data.id) a[i] = mUsersData[i];
+		                        mUsersData = a;
+		                    }
+		                    if (message.length > 0) alert(message);
+		                });
+		            }
+		        } 
+		        catch(err) { alert(err); }
+		        return false;
+		    });
+		});
+
+		//$('#table_results').tablesorter().columnFilters();
+	} catch(err) { alert(err); }
+}
+		  
+$(document).ready(function(){
+	$("#block").hide();
+
+	update_all();
+	
+	changeTitle('Пользователи');
+});
+</script>
+
+<h2>Список пользователей</h2>
+<div id='del_res'></div>
+<table id='table_results' style="width:800px;" class='tablesorter'><thead>
+ <tr>
+  <th width='20' style="padding-bottom:20px;">№</th>
+  <th class="filter"><strong>Логин:</strong></th>
+  <th width='80'><strong>Права:</strong></th>
+  <th class="filter" width='250'>Состояние</th>
+  <th width='100'>Действия</th>
+  <th class="filter" width='200'>Комментарий</th>
+ </tr>
+ </thead><tbody></tbody>
+ <tr id='obraz' style='display:none;background-color:#efefef;'>
+  <td style="text-align:center;vertical-align:middle;"></td>
+  <td style="vertical-align:middle;"></td>
+  <td style="vertical-align:middle;"></td>
+  <td style="vertical-align:middle;"></td>
+  <td style="vertical-align:middle;">
+   <a href='/admin/mnadmin/@Module.Name/users_edit/' target='_blank' class='user_link'>Редактировать</a><br>
+   <a href='/admin/mnadmin/@Module.Name/rolesDelegate/' target='_blank' class='user_link'>Права доступа</a><br>
+   <a href='/admin/madmin/@Module.Name/users_delete/' class='user_delete'>Удалить</a><br>
+   @if (AppCore.GetUserContextManager().GetCurrentUserContext().IsSuperuser == true)
+   { <a href='/admin/madmin/@Module.Name/userAs/' class='user_link'>Зайти от имени</a><br> }
+  </td>
+  <td style="vertical-align:middle;"></td>
+ </tr>
+
+</table><br>
+
+<div id='users_result'></div>

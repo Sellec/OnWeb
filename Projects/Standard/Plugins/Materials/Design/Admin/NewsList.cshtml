@@ -1,4 +1,5 @@
 @model List<Materials.DB.News>
+@{ var moduleAdmin = AppCore.Get<Plugins.Admin.Module>(); }
 
 <script type='text/javascript'>
     $(document).ready(function(){
@@ -8,7 +9,7 @@
 
         $("input.EditItem").click(function ()
         {
-            $("#containerForLoading").html("<img src='/data/img/loading.gif'>").requestLoad("/admin/madmin/@Module.Name/NewsEdit/" + $(this).data("id"), null, function (result, message)
+            $("#containerForLoading").html("<img src='/data/img/loading.gif'>").requestLoad("/@moduleAdmin.UrlName/madmin/@Module.UrlName/NewsEdit/" + $(this).data("id"), null, function (result, message)
             {
                 if (message.length > 0) alert(message);
             });
@@ -16,7 +17,7 @@
 
         $("input#AddNew").click(function ()
         {
-            $("#containerForLoading").html("<img src='/data/img/loading.gif'>").requestLoad("/admin/madmin/@Module.Name/NewsEdit/0", null, function (result, message)
+            $("#containerForLoading").html("<img src='/data/img/loading.gif'>").requestLoad("/@moduleAdmin.UrlName/madmin/@Module.UrlName/NewsEdit/0", null, function (result, message)
             {
                 if (message.length > 0) alert(message);
             });
@@ -27,7 +28,7 @@
             if (confirm("Вы точно уверены, что хотите удалить эту новость?"))
             {
                 var row = $(this).closest('tr');
-                $.requestJSON("/admin/madmin/@Module.Name/NewsDelete/" + $(this).data("id"), null, function (result, message)
+                $.requestJSON("/@moduleAdmin.UrlName/madmin/@Module.UrlName/NewsDelete/" + $(this).data("id"), null, function (result, message)
                 {
                     if (message.length > 0) alert(message);
                     if (result == JsonResult.OK) row.remove();
@@ -73,7 +74,8 @@
                         <tr>
                             <td class="left">@item.id</td>
                             <td class="left">
-                                @if (item.Block) { <span style="color:red;">!Удалено!</span>}
+                                @if (item.Block)
+                                {<span style="color:red;">!Удалено!</span>}
                                 @item.name
                             </td>
                             <td class="left">@item.date.ToString("dd.MM.yyyy HH:mm:ss")</td>

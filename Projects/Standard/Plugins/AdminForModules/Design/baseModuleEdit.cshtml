@@ -1,4 +1,7 @@
-@{ Layout = nameof(Plugins.ModuleAdmin) + "/Design/baseAdmin.cshtml"; }
+@{ 
+    Layout = nameof(Plugins.Admin) + "/Design/baseAdmin.cshtml";
+    var moduleAdmin = AppCore.Get<Plugins.Admin.Module>();
+}
 
 <script type='text/javascript'>
 $(document).ready(function(){
@@ -18,7 +21,7 @@ $(document).ready(function(){
 });
 </script>
 @RenderSection("scripts", false)
-<form id="config_form" action="/admin/madmin/@Module.UrlName/ConfigurationSave" method="post">
+<form id="config_form" action="/@moduleAdmin.UrlName/madmin/@Module.UrlName/ConfigurationSave" method="post">
     <table width='100%' id='table_results' class='admtable'>
         <tr>
             <th style="min-width:150px;" width='50%'>Параметр</th>

@@ -1,0 +1,58 @@
+@{ var moduleAdmin = AppCore.Get<Plugins.Admin.Module>(); }
+
+<script type='text/javascript'>
+    $(document).ready(function ()
+    {
+        $("#block").hide();
+
+        changeTitle('Адреса (КЛАДР)');
+
+        $("select[name=makeAddressMode]").val("@Config.Get("makeAddressMode", 0)");
+        $("th#settings").click(function ()
+        {
+            $(this).closest("table").find("tr.toHide").toggle();
+        });
+        $("tr.toHide").hide();
+    });
+</script>
+<h2>Адреса (КЛАДР)</h2>
+<form action='/@moduleAdmin.UrlName/mnadmin/@Module.UrlName/addresses' method='post'>
+    <input type='hidden' name='changeSettings' value='0'>
+    <table class='admtable autosize'>
+        <tr>
+            <th colspan='2' id="settings">Настройки</th>
+        </tr>
+        <tr class='toHide'>
+            <td>Режим проверки адресов:</td>
+            <td>
+                <select name='makeAddressMode'>
+                    <option value='0'>Всегда проверять</option>
+                    <option value='1'>Только новые адреса</option>
+                </select>
+            </td>
+        </tr>
+        <tr class='toHide'>
+            <td>Токен для системы "КЛАДР в облаке":</td>
+            <td><input type='text' size='40' name='kladrInCloudToken' value='@Config.Get("kladrInCloudToken", "")'></td>
+        </tr>
+        <tr class='toHide'>
+            <td>Ключ для системы "КЛАДР в облаке":</td>
+            <td><input type='text' size='50' name='kladrInCloudKey' value='@Config.Get("kladrInCloudKey", "")'></td>
+        </tr>
+        <tr class='toHide'>
+            <td>Ключ для системы "Яндекс.Карты":</td>
+            <td><input type='text' size='50' name='mapsYandexKey' value='@Config.Get("mapsYandexKey", "")'></td>
+        </tr>
+        <tr class='toHide'>
+            <td>ДаДата - API-ключ:</td>
+            <td><input type='text' size='50' name='dadataApiKey' value='@Config.Get("dadataApiKey", "")'></td>
+        </tr>
+        <tr class='toHide'>
+            <td>ДаДата - секретный ключ для стандартизации:</td>
+            <td><input type='text' size='50' name='dadataSecretKey' value='@Config.Get("dadataSecretKey", "")'></td>
+        </tr>
+        <tr class='toHide'>
+            <td colspan='2' align='center'><input type='submit' value='Сохранить'></td>
+        </tr>
+    </table>
+</form>
