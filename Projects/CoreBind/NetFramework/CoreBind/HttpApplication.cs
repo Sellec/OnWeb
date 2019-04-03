@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Web;
@@ -15,7 +14,7 @@ namespace OnWeb.CoreBind.Razor
         private static object SyncRootStart = new object();
         private static volatile bool _initialized = false;
         private static volatile int _instancesCount = 0;
-        private static ApplicationCore _applicationCore = null;
+        private static ApplicationCoreBind _applicationCore = null;
 
         [ThreadStatic]
         internal Queue<IDisposable> _requestSpecificDisposables;
@@ -80,7 +79,7 @@ namespace OnWeb.CoreBind.Razor
 
                     var physicalApplicationPath = Server.MapPath("~");
 
-                    _applicationCore = new ApplicationCore(physicalApplicationPath, ConnectionString);
+                    _applicationCore = new ApplicationCoreBind(physicalApplicationPath, ConnectionString);
 #pragma warning disable CS0612
                     ApplicationCoreSingleton.Instance = _applicationCore;
 #pragma warning restore CS0612

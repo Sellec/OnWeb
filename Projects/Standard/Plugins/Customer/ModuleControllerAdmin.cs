@@ -21,9 +21,9 @@ namespace OnWeb.Plugins.Customer
     using Core.DB;
     using Core.Journaling;
 
-    public class ModuleControllerAdmin : ModuleControllerAdmin<Module>
+    public class ModuleControllerAdmin : ModuleControllerAdmin<ModuleCustomer>
     {
-        [ModuleAction("users", Module.PERM_MANAGEUSERS)]
+        [ModuleAction("users", ModuleCustomer.PERM_MANAGEUSERS)]
         public virtual ActionResult Users(UserState? state = null)
         {
             var users = state.HasValue ?
@@ -35,7 +35,7 @@ namespace OnWeb.Plugins.Customer
             return this.display("admin/admin_customer_users.cshtml", users);
         }
 
-        [ModuleAction("users2", Module.PERM_MANAGEUSERS)]
+        [ModuleAction("users2", ModuleCustomer.PERM_MANAGEUSERS)]
         public virtual ActionResult Users2()
         {
             var users = DB.Users.Where(x => x.State == 0).OrderBy(x => x.name).ToList();
@@ -44,13 +44,13 @@ namespace OnWeb.Plugins.Customer
             return this.display("admin/admin_customer_users.cshtml", users);
         }
 
-        [ModuleAction("users_add", Module.PERM_MANAGEUSERS)]
+        [ModuleAction("users_add", ModuleCustomer.PERM_MANAGEUSERS)]
         public ActionResult UserAdd()
         {
             return UserEdit(0);
         }
 
-        [ModuleAction("users_edit", Module.PERM_MANAGEUSERS)]
+        [ModuleAction("users_edit", ModuleCustomer.PERM_MANAGEUSERS)]
         public virtual ActionResult UserEdit(int IdUser = 0)
         {
             var data = IdUser != 0 ? DB.Users.Where(x => x.id == IdUser).FirstOrDefault() : new User();
@@ -76,7 +76,7 @@ namespace OnWeb.Plugins.Customer
             return this.display("admin/admin_customer_users_ae.cshtml", model);
         }
 
-        [ModuleAction("usersSave", Module.PERM_MANAGEUSERS)]
+        [ModuleAction("usersSave", ModuleCustomer.PERM_MANAGEUSERS)]
         public virtual ActionResult UserSave(int IdUser = 0, Model.AdminUserEdit model = null)
         {
             var result = JsonAnswer<int>();
@@ -309,7 +309,7 @@ namespace OnWeb.Plugins.Customer
             return this.ReturnJson(result);
         }
 
-        [ModuleAction("users_delete", Module.PERM_MANAGEUSERS)]
+        [ModuleAction("users_delete", ModuleCustomer.PERM_MANAGEUSERS)]
         public virtual JsonResult UserDelete(int IdUser = 0)
         {
             var result = JsonAnswer();
@@ -344,7 +344,7 @@ namespace OnWeb.Plugins.Customer
             return ReturnJson(result);
         }
 
-        [ModuleAction("userAs", Module.PERM_MANAGEUSERS)]
+        [ModuleAction("userAs", ModuleCustomer.PERM_MANAGEUSERS)]
         public virtual ActionResult UserShowAs(int IdUser = 0)
         {
             var result = "";
@@ -362,7 +362,7 @@ namespace OnWeb.Plugins.Customer
             throw new Exception(result);
         }
 
-        [ModuleAction("rolesManage", Module.PERM_MANAGEROLES)]
+        [ModuleAction("rolesManage", ModuleCustomer.PERM_MANAGEROLES)]
         public virtual ActionResult RolesManage()
         {
             var model = new Model.AdminRolesManage();
@@ -386,7 +386,7 @@ namespace OnWeb.Plugins.Customer
             foreach (var module in AppCore.GetModulesManager().GetModules().OrderBy(x => x.Caption))
             {
                 var gr = new SelectListGroup() { Name = module.Caption };
-                if (!(module is Admin.Module))
+                if (!(module is Admin.ModuleAdmin))
                     mperms.Add(new SelectListItem()
                     {
                         Group = gr,
@@ -406,7 +406,7 @@ namespace OnWeb.Plugins.Customer
             return this.display("admin/admin_customer_rolesManage.cshtml", model);
         }
 
-        [ModuleAction("roleSave", Module.PERM_MANAGEROLES)]
+        [ModuleAction("roleSave", ModuleCustomer.PERM_MANAGEROLES)]
         public virtual ActionResult RoleSave(Model.AdminRoleEdit model = null)
         {
             var result = JsonAnswer<Model.AdminRoleEdit>();
@@ -506,7 +506,7 @@ namespace OnWeb.Plugins.Customer
             return ReturnJson(result);
         }
 
-        [ModuleAction("roleDelete", Module.PERM_MANAGEROLES)]
+        [ModuleAction("roleDelete", ModuleCustomer.PERM_MANAGEROLES)]
         public virtual ActionResult RoleDelete(int IdRole = 0)
         {
             var result = JsonAnswer();
@@ -541,7 +541,7 @@ namespace OnWeb.Plugins.Customer
             return ReturnJson(result);
         }
 
-        [ModuleAction("rolesDelegate", Module.PERM_MANAGEROLES)]
+        [ModuleAction("rolesDelegate", ModuleCustomer.PERM_MANAGEROLES)]
         public virtual ActionResult RolesDelegate()
         {
             var model = new Model.AdminRolesDelegate();
@@ -562,7 +562,7 @@ namespace OnWeb.Plugins.Customer
             return display("admin/admin_customer_rolesDelegate.cshtml", model);
         }
 
-        [ModuleAction("rolesDelegateSave", Module.PERM_MANAGEROLES)]
+        [ModuleAction("rolesDelegateSave", ModuleCustomer.PERM_MANAGEROLES)]
         public virtual ActionResult RolesDelegateSave([Bind(Prefix = "Roles")] Dictionary<int, List<int>> model = null)
         {
             var result = JsonAnswer();

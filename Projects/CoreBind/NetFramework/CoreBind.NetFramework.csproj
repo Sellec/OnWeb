@@ -67,6 +67,7 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationCoreBind.cs" />
     <Compile Include="CoreBind\Modules\Configuration\SaveModel.cs" />
     <Compile Include="CoreBind\Modules\CustomReflectedActionDescriptor.cs" />
     <Compile Include="CoreBind\Modules\ModuleControllerUser.cs" />
@@ -77,7 +78,6 @@
     <Compile Include="CoreBind\_Initialize\WebRazorHostFactoryInjector.cs" />
     <Compile Include="CoreBind\_Initialize\WebInitializer.cs" />
     <Compile Include="CoreBind\ApplicationCoreSingleton.cs" />
-    <Compile Include="CoreBind\ApplicationCore.cs" />
     <Compile Include="CoreBind\HttpApplication.cs" />
     <Compile Include="CoreBind\Razor\TraceViewPage.cs" />
     <Compile Include="CoreBind\Binders\JsonDictionaryModelBinder.cs" />

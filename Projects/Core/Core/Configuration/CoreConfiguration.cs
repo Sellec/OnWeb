@@ -8,7 +8,7 @@ namespace OnWeb.Core.Configuration
     /// Класс конфигурации. При создании экземпляра объекта через метод Create ядра <see cref="ApplicationCore"/> автоматически заполняется значениями настроек ядра.
     /// </summary>
 #pragma warning disable CS1591 // todo внести комментарии.
-    public class CoreConfiguration : ModuleConfiguration<Plugins.CoreModule.Module>
+    public class CoreConfiguration : ModuleConfiguration<Plugins.CoreModule.CoreModule>
     {
         [Display(Name = "Краткое название сайта"), Required(ErrorMessage = "Краткое название сайта не может быть пустым"), MaxLength(50)]
         public string SiteShortName

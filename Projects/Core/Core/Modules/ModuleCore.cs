@@ -386,7 +386,7 @@ namespace OnWeb.Core.Modules
         internal override void InitModule(IEnumerable<Type> controllerTypes)
         {
             RegisterPermission(PermissionSaveConfiguration, "Сохранение настроек модуля");
-            RegisterPermission(Constants.PermissionManage, "Управление модулем");
+            RegisterPermission(ModulesConstants.PermissionManage, "Управление модулем");
 
             if (controllerTypes != null)
             {

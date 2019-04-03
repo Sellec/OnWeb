@@ -1,26 +1,28 @@
 ﻿using OnUtils.Application;
 using OnUtils.Architecture.AppCore;
 using OnUtils.Architecture.AppCore.DI;
+using OnUtils.Tasks;
+using OnUtils.Tasks.MomentalThreading;
 using System;
 
-namespace OnWeb.CoreBind
+namespace OnWeb
 {
     /// <summary>
     /// Ядро веб-приложения для ASP.Net Core.
     /// </summary>
-    public sealed class ApplicationCore : Core.ApplicationCore
+    sealed class ApplicationCoreBind : ApplicationCore
     {
         /// <summary>
         /// </summary>
-        public ApplicationCore(string physicalApplicationPath, string connectionString) : base(physicalApplicationPath, connectionString)
+        public ApplicationCoreBind(string physicalApplicationPath, string connectionString) : base(physicalApplicationPath, connectionString)
         {
-            OnUtils.Tasks.TasksManager.SetDefaultService(new OnUtils.Tasks.MomentalThreading.TasksService());
+            TasksManager.SetDefaultService(new TasksService());
         }
 
         /// <summary>
         /// См. <see cref="AppCore{TAppCore}.OnBindingsRequired(IBindingsCollection{TAppCore})"/>.
         /// </summary>
-        protected override void OnBindingsRequired(IBindingsCollection<Core.ApplicationCore> bindingsCollection)
+        protected override void OnBindingsRequired(IBindingsCollection<ApplicationCore> bindingsCollection)
         {
             base.OnBindingsRequired(bindingsCollection);
 
@@ -149,7 +151,7 @@ namespace OnWeb.CoreBind
 
         #region Свойства
         /// <summary>
-        /// См. <see cref="Core.ApplicationCore.ServerUrl"/>.
+        /// См. <see cref="ApplicationCore.ServerUrl"/>.
         /// </summary>
         public override Uri ServerUrl
         {

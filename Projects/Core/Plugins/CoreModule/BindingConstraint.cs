@@ -6,7 +6,7 @@ namespace OnWeb.Plugins.CoreModule
     {
         void IBindingConstraintHandler.CheckBinding(object sender, BindingConstraintEventArgs e)
         {
-            if (e.QueryType == typeof(Core.Modules.IModuleController<Module>)) e.SetFailed("Запрещено привязывать контроллеры к модулю ядра.");
+            if (e.QueryType == typeof(Core.Modules.IModuleController<CoreModule>)) e.SetFailed("Запрещено привязывать контроллеры к модулю ядра.");
         }
     }
 }

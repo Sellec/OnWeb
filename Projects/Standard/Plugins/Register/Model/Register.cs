@@ -6,7 +6,7 @@ namespace OnWeb.Plugins.Register.Model
     using Core.Items;
 
     [ItemTypeAlias(typeof(User))]
-    public class Register : ItemBase<Customer.Module>
+    public class Register : ItemBase<Customer.ModuleCustomer>
     {
         /// <summary>
         /// </summary>

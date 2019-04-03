@@ -4,11 +4,13 @@ using System;
 
 namespace OnWeb.Plugins.CoreModule
 {
+    using Core.Modules;
+
     /// <summary>
     /// Интерфейс ядра системы для управления основными функциями.
     /// </summary>
-    [Core.Modules.ModuleCore("Ядро системы")]
-    public sealed class Module : Core.Modules.ModuleCore<Module>, ICritical
+    [ModuleCore("Ядро системы")]
+    public sealed class CoreModule : ModuleCore<CoreModule>, ICritical
     {
         internal static readonly Guid PermissionConfigurationSave = "perm_configSave".GenerateGuid();
 
@@ -25,10 +27,10 @@ namespace OnWeb.Plugins.CoreModule
                 //var oldMainConfig = db.Repo1.FirstOrDefault(r => r.name == "main");
                 //if (oldMainConfig != null)
                 //{
-                //    var moduleConfig = db.Repo1.FirstOrDefault(x => x.name == Core.Modules.ModulesManager.DBConfigPrefix + this.ID);
+                //    var moduleConfig = db.Repo1.FirstOrDefault(x => x.name == ModulesManager.DBConfigPrefix + this.ID);
                 //    if (moduleConfig == null)
                 //    {
-                //        moduleConfig = new Core.DB.config() { DateChange = DateTime.Now.Timestamp(), IdUserChange = 0, name = Core.Modules.ModulesManager.DBConfigPrefix + this.ID, serialized = "" };
+                //        moduleConfig = new Core.DB.config() { DateChange = DateTime.Now.Timestamp(), IdUserChange = 0, name = ModulesManager.DBConfigPrefix + this.ID, serialized = "" };
                 //        db.Repo1.AddOrUpdate(moduleConfig);
                 //    }
 

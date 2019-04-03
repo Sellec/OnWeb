@@ -7,7 +7,7 @@ namespace OnWeb.Plugins.Customer
     {
         void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
         {
-            bindingsCollection.SetSingleton<Module, ModuleStandard>();
+            bindingsCollection.SetSingleton<ModuleCustomer, ModuleStandard>();
         }
     }
 }

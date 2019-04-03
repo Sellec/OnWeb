@@ -8,7 +8,7 @@ namespace OnWeb.Plugins.Register.Model
     using Core.Items;
 
     [ItemTypeAlias(typeof(User))]
-    public class PreparedForRegister : ItemBase<Customer.Module>
+    public class PreparedForRegister : ItemBase<Customer.ModuleCustomer>
     {
         /// <summary>
         /// </summary>

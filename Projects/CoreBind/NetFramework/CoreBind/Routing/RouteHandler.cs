@@ -103,7 +103,7 @@ namespace OnWeb.CoreBind.Routing
                     }
                 }
 
-                var module = _core.Get<ModulesManager<Core.ApplicationCore>>().GetModule(route.IdModule);
+                var module = _core.Get<ModulesManager<ApplicationCore>>().GetModule(route.IdModule);
                 if (module != null)
                 {
                     var arguments = Newtonsoft.Json.JsonConvert.DeserializeObject<IEnumerable<Core.Routing.ActionArgument>>(route.Arguments, new Newtonsoft.Json.JsonSerializerSettings()

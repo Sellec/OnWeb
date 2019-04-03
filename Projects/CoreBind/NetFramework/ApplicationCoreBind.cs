@@ -7,18 +7,19 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace OnWeb.CoreBind
+namespace OnWeb
 {
-    using Providers;
+    using CoreBind.Providers;
+    using CoreBind.Routing;
 
     /// <summary>
     /// Ядро веб-приложения для ASP.Net MVC.
     /// </summary>
-    public sealed class ApplicationCore : Core.ApplicationCore
+    sealed class ApplicationCoreBind : ApplicationCore
     {
         /// <summary>
         /// </summary>
-        public ApplicationCore(string physicalApplicationPath, string connectionString) : base(physicalApplicationPath, connectionString)
+        public ApplicationCoreBind(string physicalApplicationPath, string connectionString) : base(physicalApplicationPath, connectionString)
         {
             OnUtils.Tasks.TasksManager.SetDefaultService(new OnUtils.Tasks.MomentalThreading.TasksService());
         }
@@ -26,7 +27,7 @@ namespace OnWeb.CoreBind
         /// <summary>
         /// См. <see cref="AppCore{TAppCore}.OnBindingsRequired(IBindingsCollection{TAppCore})"/>.
         /// </summary>
-        protected override void OnBindingsRequired(IBindingsCollection<Core.ApplicationCore> bindingsCollection)
+        protected override void OnBindingsRequired(IBindingsCollection<ApplicationCore> bindingsCollection)
         {
             base.OnBindingsRequired(bindingsCollection);
 
@@ -37,7 +38,7 @@ namespace OnWeb.CoreBind
                 ViewEngines.Engines.Insert(0, instance);
                 return instance;
             });
-            bindingsCollection.SetSingleton<Routing.Manager>();
+            bindingsCollection.SetSingleton<CoreBind.Routing.Manager>();
         }
 
         /// <summary>
@@ -92,35 +93,35 @@ namespace OnWeb.CoreBind
                 (ResourceProvider)Get<Core.Storage.ResourceProvider>() 
             ));
 
-            var languageChecker = new Routing.LanguageRouteConstraint(Get<Core.Languages.Manager>().GetLanguages()
+            var languageChecker = new LanguageRouteConstraint(Get<Core.Languages.Manager>().GetLanguages()
                                                                             .Where(x => !string.IsNullOrEmpty(x.ShortName))
                                                                             .Select(x => x.ShortName).ToArray());
 
-            var routingHandler = new Routing.RouteHandler(this);
+            var routingHandler = new RouteHandler(this);
 
             // Маршруты админки идут перед универсальными.
-            var moduleAdmin = Get<Plugins.Admin.Module>();
+            var moduleAdmin = Get<Plugins.Admin.ModuleAdmin>();
 
-            routes.Add("AdminRoute1", new Routing.RouteWithDefaults(
+            routes.Add("AdminRoute1", new RouteWithDefaults(
                 this,
                 moduleAdmin.UrlName + "/mnadmin/{controller}/{action}/{*url}",
                 false,
                 null,
-                new RouteValueDictionary(new { area = Routing.AreaConstants.AdminPanel }),
+                new RouteValueDictionary(new { area = AreaConstants.AdminPanel }),
                 new MvcRouteHandler()
             ));
 
-            routes.Add("AdminRoute2", new Routing.RouteWithDefaults(
+            routes.Add("AdminRoute2", new RouteWithDefaults(
                 this,
                 moduleAdmin.UrlName + "/madmin/{controller}/{action}/{*url}",
                 false,
                 null,
-                new RouteValueDictionary(new { area = Routing.AreaConstants.AdminPanel }),
+                new RouteValueDictionary(new { area = AreaConstants.AdminPanel }),
                 new MvcRouteHandler()
             ));
 
             // Универсальные маршруты.
-            routes.Add("RoutingTable", new Routing.RouteWithDefaults(
+            routes.Add("RoutingTable", new RouteWithDefaults(
                 this,
                 "{*url}",
                 true,
@@ -138,12 +139,12 @@ namespace OnWeb.CoreBind
             //    new MvcRouteHandler()
             //));
 
-            routes.Add("DefaultRoute", new Routing.RouteWithDefaults(
+            routes.Add("DefaultRoute", new RouteWithDefaults(
                 this,
                 "{controller}/{action}/{*url}",
                 true,
                 new RouteValueDictionary(new { language = languageChecker, controller = languageChecker, action = languageChecker }),
-                new RouteValueDictionary(new { area = Routing.AreaConstants.User }),
+                new RouteValueDictionary(new { area = AreaConstants.User }),
                 new MvcRouteHandler()
             ));
 
@@ -159,7 +160,7 @@ namespace OnWeb.CoreBind
 
         #region Свойства
         /// <summary>
-        /// См. <see cref="Core.ApplicationCore.ServerUrl"/>.
+        /// См. <see cref="ApplicationCore.ServerUrl"/>.
         /// </summary>
         public override Uri ServerUrl
         {

@@ -3,8 +3,6 @@ using System.Web.Razor.Parser;
 
 namespace OnWeb.CoreBind.Razor
 {
-    using Razor;
-
     class RazorHost : System.Web.Mvc.Razor.MvcWebPageRazorHost
     {
         public static RazorHost CreateFromAnother(System.Web.WebPages.Razor.WebPageRazorHost host)
@@ -34,7 +32,7 @@ namespace OnWeb.CoreBind.Razor
                 this.NamespaceImports.Add(typeof(OnWeb.NamespaceAnchor).Namespace);
                 this.NamespaceImports.Add(typeof(OnWeb.NamespaceAnchor).Namespace + ".Design.Additionals");
                 this.NamespaceImports.Add(typeof(OnWeb.NamespaceAnchor).Namespace + ".Design.Additionals.ClassicStructures");
-                this.NamespaceImports.Add(typeof(OnUtils.Application.Modules.Constants).Namespace);
+                this.NamespaceImports.Add(typeof(OnUtils.Application.Modules.ModulesConstants).Namespace);
 
                 this.NamespaceImports.Add("System.Web.Helpers");
                 this.NamespaceImports.Add("System.Web.Mvc");

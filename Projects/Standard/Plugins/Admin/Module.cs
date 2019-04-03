@@ -9,12 +9,12 @@ namespace OnWeb.Plugins.Admin
     using Core.Types;
 
     /// <summary>
-    /// См. <see cref="Module"/>.
+    /// См. <see cref="ModuleAdmin"/>.
     /// </summary>
-    class ModuleStandard : Module
+    class ModuleStandard : ModuleAdmin
     {
         /// <summary>
-        /// См. <see cref="Module.GetAdminMenuList"/>.
+        /// См. <see cref="ModuleAdmin.GetAdminMenuList"/>.
         /// </summary>
         public override Dictionary<ModuleCore, List<ItemBase>> GetAdminMenuList()
         {

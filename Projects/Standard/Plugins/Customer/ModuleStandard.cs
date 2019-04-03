@@ -9,9 +9,9 @@ namespace OnWeb.Plugins.Customer
     using Core.Types;
 
     /// <summary>
-    /// См. <see cref="Module"/>.
+    /// См. <see cref="ModuleCustomer"/>.
     /// </summary>
-    class ModuleStandard : Module, IMenuProvider
+    class ModuleStandard : ModuleCustomer, IMenuProvider
     {
         NestedLinkCollection IMenuProvider.GetAdminMenuItemsBase()
         {
@@ -41,7 +41,7 @@ namespace OnWeb.Plugins.Customer
         }
 
         /// <summary>
-        /// См. <see cref="Module.RegisterModelValidators"/>.
+        /// См. <see cref="ModuleCustomer.RegisterModelValidators"/>.
         /// </summary>
         protected override void RegisterModelValidators()
         {

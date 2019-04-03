@@ -13,7 +13,7 @@ namespace OnWeb.Plugins.Customer
     using CoreBind.Modules;
     using FileManager;
 
-    public class ModuleController : ModuleControllerUser<Module>
+    public class ModuleController : ModuleControllerUser<ModuleCustomer>
     {
         protected override void onDisplayModule(object model)
         {

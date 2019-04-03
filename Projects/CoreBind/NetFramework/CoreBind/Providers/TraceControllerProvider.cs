@@ -16,7 +16,7 @@ namespace OnWeb.CoreBind.Providers
     using Core.Modules;
     using Routing;
 
-    class TraceControllerProvider : CoreComponentBase<Core.ApplicationCore>, IComponentSingleton<Core.ApplicationCore>, IUnitOfWorkAccessor<Core.DB.CoreContext>, IControllerFactory
+    class TraceControllerProvider : CoreComponentBase<ApplicationCore>, IComponentSingleton<ApplicationCore>, IUnitOfWorkAccessor<Core.DB.CoreContext>, IControllerFactory
     {
         private readonly IControllerFactory _controllerFactoryOld = null;
 
@@ -74,7 +74,7 @@ namespace OnWeb.CoreBind.Providers
                 /*
                  * Ищем модуль, к которому обращаются запросом.
                  * */
-                module = AppCore.Get<ModulesManager<Core.ApplicationCore>>().GetModule(moduleName);
+                module = AppCore.Get<ModulesManager<ApplicationCore>>().GetModule(moduleName);
                 if (module == null) throw new Core.Exceptions.ErrorCodeException(HttpStatusCode.NotFound, $"Адрес '{moduleName}' не найден.");
 
                 /*

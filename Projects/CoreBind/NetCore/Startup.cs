@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewEngines;
-using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace OnWeb
 {
@@ -27,14 +21,14 @@ namespace OnWeb
 
             OnConfigureServices(services);
 
-            services.AddSingleton<CoreBind.ApplicationCore>(s =>
+            services.AddSingleton<ApplicationCoreBind>(s =>
             {
-                var instance = new CoreBind.ApplicationCore(Environment.CurrentDirectory, "Data Source=localhost;Initial Catalog=Test;Integrated Security=True;");
+                var instance = new ApplicationCoreBind(Environment.CurrentDirectory, "Data Source=localhost;Initial Catalog=Test;Integrated Security=True;");
                 return instance;
             });
 
             var sp = services.BuildServiceProvider();
-            var appCore = sp.GetService<CoreBind.ApplicationCore>();
+            var appCore = sp.GetService<ApplicationCoreBind>();
             appCore.Start();
 
             services.Configure<MvcViewOptions>(options =>

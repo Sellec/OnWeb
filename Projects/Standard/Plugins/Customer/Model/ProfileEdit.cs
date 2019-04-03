@@ -7,7 +7,7 @@ namespace OnWeb.Plugins.Customer.Model
     using Core.Items;
 
     [ItemTypeAlias(typeof(User))]
-    public class ProfileEdit : ItemBase<Module>
+    public class ProfileEdit : ItemBase<ModuleCustomer>
     {
         public ProfileEdit()
         {

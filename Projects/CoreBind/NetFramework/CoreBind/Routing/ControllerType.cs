@@ -9,7 +9,7 @@ namespace OnWeb.CoreBind.Routing
     /// <summary>
     /// Описывает тип контроллера и предоставляет способ выбрать нужный тип контроллера во время обработки входящего запроса.
     /// </summary>
-    public abstract class ControllerType : CoreComponentBase<Core.ApplicationCore>
+    public abstract class ControllerType : CoreComponentBase<ApplicationCore>
     {
         /// <summary>
         /// </summary>

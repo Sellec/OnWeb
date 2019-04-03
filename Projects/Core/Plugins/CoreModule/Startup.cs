@@ -8,7 +8,7 @@ namespace OnWeb.Plugins.CoreModule
         void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
         {
             bindingsCollection.RegisterBindingConstraintHandler(new BindingConstraint());
-            bindingsCollection.SetSingleton<Module>();
+            bindingsCollection.SetSingleton<CoreModule>();
         }
     }
 }

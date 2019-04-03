@@ -115,9 +115,9 @@ namespace OnWeb
             return (Core.Users.UserContextManager)Get<UserContextManager<ApplicationCore>>();
         }
 
-        private Plugins.CoreModule.Module GetCoreModule()
+        private Plugins.CoreModule.CoreModule GetCoreModule()
         {
-            return GetModulesManager().GetModule<Plugins.CoreModule.Module>();
+            return GetModulesManager().GetModule<Plugins.CoreModule.CoreModule>();
         }
 
         #endregion

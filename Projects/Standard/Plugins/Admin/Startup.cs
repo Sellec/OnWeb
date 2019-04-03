@@ -9,8 +9,8 @@ namespace OnWeb.Plugins.Admin
     {
         void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
         {
-            bindingsCollection.SetSingleton<Module, ModuleStandard>();
-            bindingsCollection.SetTransient<IModuleController<Module>, ModuleController>();
+            bindingsCollection.SetSingleton<ModuleAdmin, ModuleStandard>();
+            bindingsCollection.SetTransient<IModuleController<ModuleAdmin>, ModuleController>();
         }
     }
 }

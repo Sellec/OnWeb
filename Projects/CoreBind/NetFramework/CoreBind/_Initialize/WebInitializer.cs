@@ -1,20 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Madaa.Lib.Win.Services.Msdtc;
-
-using OnUtils;
+﻿using Madaa.Lib.Win.Services.Msdtc;
 using OnUtils.Application;
-using OnUtils.Application.Modules;
-using OnUtils.Application.Users;
 using OnUtils.Startup;
-using OnUtils.Data.UnitOfWork;
-using OnUtils.Data.EntityFramework;
-using OnUtils.Utils;
-using OnUtils.Architecture.AppCore;
-using OnUtils.Architecture.AppCore.DI;
+using System;
+using System.Collections.Generic;
 
 namespace OnWeb.CoreBind._Initialize
 {
@@ -50,7 +38,7 @@ namespace OnWeb.CoreBind._Initialize
                             var utilsAssembly = utilsInjectorType.Assembly;
                             var applicationAssembly = typeof(ApplicationBase<>).Assembly;
                             var mvcAssembly = typeof(System.Web.Mvc.ActionResult).Assembly;
-                            var webCoreAssembly = typeof(Core.ApplicationCore).Assembly;
+                            var webCoreAssembly = typeof(ApplicationCore).Assembly;
                             var webAssembly = webInjectorType.Assembly;
 
                             //var webAssemblyReferences = webAssembly.GetReferencedAssemblies().Select(x => System.Reflection.Assembly.Load(x.FullName)).ToList();

@@ -7,7 +7,7 @@ namespace OnWeb.Plugins.Admin
     {
         void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
         {
-            bindingsCollection.SetSingleton<Module>();
+            bindingsCollection.SetSingleton<ModuleAdmin>();
         }
     }
 }

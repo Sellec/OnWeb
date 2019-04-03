@@ -156,7 +156,7 @@ namespace OnWeb.Core.Types
 
         public static NestedLinkSimple RelativeToModule(string url, string caption, Modules.ModuleCore module)
         {
-            var moduleAdmin = module.AppCore.Get<Plugins.Admin.Module>();
+            var moduleAdmin = module.AppCore.Get<Plugins.Admin.ModuleAdmin>();
             return new NestedLinkSimple(caption, new Uri($"/{moduleAdmin.UrlName}/mnadmin/{module.UrlName}/{url}", UriKind.Relative));
         }
 

@@ -5,9 +5,9 @@ namespace OnWeb.Plugins.Admin
 {
     using CoreBind.Modules;
 
-    class ModuleController : ModuleControllerUser<Module>
+    class ModuleController : ModuleControllerUser<ModuleAdmin>
     {
-        [ModuleAction(null, Constants.PermissionManageString)]
+        [ModuleAction(null, ModulesConstants.PermissionManageString)]
         public ActionResult Index()
         {
             return display("admin.cshtml");

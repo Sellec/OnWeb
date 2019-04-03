@@ -32,7 +32,7 @@ namespace OnWeb.Plugins
             {
                 if ((module as Core.Modules.ModuleCore).ControllerAdmin() != null)
                 {
-                    var moduleAdmin = module.AppCore.Get<Admin.Module>();
+                    var moduleAdmin = module.AppCore.Get<Admin.ModuleAdmin>();
                     var methods = module.ControllerAdmin().GetMethods();
                     foreach (var method in methods)
                     {

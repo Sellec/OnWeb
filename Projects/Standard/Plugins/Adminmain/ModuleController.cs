@@ -61,7 +61,7 @@ namespace OnWeb.Plugins.Adminmain
             {
                 if (ModelState.IsValid)
                 {
-                    var cfg = AppCore.GetModulesManager().GetModule<Plugins.CoreModule.Module>().GetConfigurationManipulator().GetEditable<CoreConfiguration>();
+                    var cfg = AppCore.GetModulesManager().GetModule<Plugins.CoreModule.CoreModule>().GetConfigurationManipulator().GetEditable<CoreConfiguration>();
 
                     cfg.IdModuleDefault = model.Configuration.IdModuleDefault;
                     cfg.index_page = model.Configuration.index_page;
@@ -79,7 +79,7 @@ namespace OnWeb.Plugins.Adminmain
 
                     cfg.userAuthorizeAllowed = model.Configuration.userAuthorizeAllowed;
 
-                    switch (AppCore.GetModulesManager().GetModule<Plugins.CoreModule.Module>().GetConfigurationManipulator().ApplyConfiguration(cfg))
+                    switch (AppCore.GetModulesManager().GetModule<Plugins.CoreModule.CoreModule>().GetConfigurationManipulator().ApplyConfiguration(cfg))
                     {
                         case ApplyConfigurationResult.PermissionDenied:
                             result.Message = "Недостаточно прав для сохранения конфигурации системы.";
