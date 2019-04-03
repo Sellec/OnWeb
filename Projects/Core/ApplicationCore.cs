@@ -7,8 +7,10 @@ using OnUtils.Architecture.AppCore.DI;
 using OnUtils.Data;
 using System;
 
-namespace OnWeb.Core
+namespace OnWeb
 {
+    using Core.Configuration;
+
     /// <summary>
     /// Ядро веб-приложения.
     /// </summary>
@@ -24,7 +26,7 @@ namespace OnWeb.Core
             }
         }
 
-        private Configuration.CoreConfiguration _configurationAccessor = null;
+        private CoreConfiguration _configurationAccessor = null;
 
         /// <summary>
         /// </summary>
@@ -68,18 +70,18 @@ namespace OnWeb.Core
         /// </summary>
         protected override void OnBindingsRequired(IBindingsCollection<ApplicationCore> bindingsCollection)
         {
-            bindingsCollection.SetSingleton<Addresses.IManager, Addresses.AddressManager>();
-            bindingsCollection.SetSingleton<Items.ItemsManager>();
-            bindingsCollection.SetSingleton<Journaling.IManager, Journaling.Manager>();
-            bindingsCollection.SetSingleton<Messaging.IMessagingManager, Messaging.MessagingManager>();
-            bindingsCollection.SetSingleton<Languages.Manager>();
-            bindingsCollection.SetSingleton<ModulesManager<ApplicationCore>, Modules.ModulesManager>();
-            bindingsCollection.SetSingleton<Modules.ModulesLoadStarter>();
-            bindingsCollection.SetSingleton<Routing.UrlManager>();
-            bindingsCollection.SetSingleton<ServiceMonitor.Monitor>();
-            bindingsCollection.SetSingleton<Users.IEntitiesManager, Users.EntitiesManager>();
-            bindingsCollection.SetSingleton<UserContextManager<ApplicationCore>, Users.UserContextManager>();
-            bindingsCollection.SetSingleton<Users.IUsersManager, Users.UsersManager>();
+            bindingsCollection.SetSingleton<Core.Addresses.IManager, Core.Addresses.AddressManager>();
+            bindingsCollection.SetSingleton<Core.Items.ItemsManager>();
+            bindingsCollection.SetSingleton<Core.Journaling.IManager, Core.Journaling.Manager>();
+            bindingsCollection.SetSingleton<Core.Messaging.IMessagingManager, Core.Messaging.MessagingManager>();
+            bindingsCollection.SetSingleton<Core.Languages.Manager>();
+            bindingsCollection.SetSingleton<ModulesManager<ApplicationCore>, Core.Modules.ModulesManager>();
+            bindingsCollection.SetSingleton<Core.Modules.ModulesLoadStarter>();
+            bindingsCollection.SetSingleton<Core.Routing.UrlManager>();
+            bindingsCollection.SetSingleton<Core.ServiceMonitor.Monitor>();
+            bindingsCollection.SetSingleton<Core.Users.IEntitiesManager, Core.Users.EntitiesManager>();
+            bindingsCollection.SetSingleton<UserContextManager<ApplicationCore>, Core.Users.UserContextManager>();
+            bindingsCollection.SetSingleton<Core.Users.IUsersManager, Core.Users.UsersManager>();
         }
 
         private void OnApplicationStartBase()
@@ -108,9 +110,9 @@ namespace OnWeb.Core
         /// <summary>
         /// Возвращает менеджер контекстов пользователя для приложения.
         /// </summary>
-        public Users.UserContextManager GetUserContextManager()
+        public Core.Users.UserContextManager GetUserContextManager()
         {
-            return (Users.UserContextManager)Get<UserContextManager<ApplicationCore>>();
+            return (Core.Users.UserContextManager)Get<UserContextManager<ApplicationCore>>();
         }
 
         private Plugins.ModuleCore.Module GetCoreModule()
@@ -140,11 +142,11 @@ namespace OnWeb.Core
         /// <summary>
         /// Основные настройки сайта.
         /// </summary>
-        public Configuration.CoreConfiguration Config
+        public CoreConfiguration Config
         {
             get
             {
-                if (_configurationAccessor == null) _configurationAccessor = GetCoreModule().GetConfiguration<Configuration.CoreConfiguration>();
+                if (_configurationAccessor == null) _configurationAccessor = GetCoreModule().GetConfiguration<CoreConfiguration>();
                 return _configurationAccessor;
             }
         }
