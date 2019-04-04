@@ -62,7 +62,7 @@ namespace OnWeb.CoreBind.Modules
 
             }
 
-            var result = AppCore.Get<Journaling.IManager>().RegisterJournal(Journaling.JournalingConstants.IdSystemJournalType, journalName, "ModuleControllerError_" + errorCode.ToString());
+            var result = AppCore.Get<Journaling.IJournalingManager>().RegisterJournal(Journaling.JournalingConstants.IdSystemJournalType, journalName, "ModuleControllerError_" + errorCode.ToString());
             if (!result.IsSuccess) Debug.WriteLine("Ошибка получения журнала для кода {0}: {1}", errorCode, result.Message);
             return result.Result?.IdJournal ?? -1;
         }
@@ -580,9 +580,9 @@ namespace OnWeb.CoreBind.Modules
         /// Регистрирует событие в журнал HTTP-кодов.
         /// </summary>
         /// <param name="code">Код HTTP ошибки</param>
-        /// <param name="message">См. <see cref="Journaling.IManager.RegisterEvent(int, Journaling.EventType, string, string, DateTime?, Exception)"/>.</param>
-        /// <param name="messageDetailed">См. <see cref="Journaling.IManager.RegisterEvent(int, Journaling.EventType, string, string, DateTime?, Exception)"/>.</param>
-        /// <param name="ex">См. <see cref="Journaling.IManager.RegisterEvent(int, Journaling.EventType, string, string, DateTime?, Exception)"/>.</param>
+        /// <param name="message">См. <see cref="Journaling.IJournalingManager.RegisterEvent(int, Journaling.EventType, string, string, DateTime?, Exception)"/>.</param>
+        /// <param name="messageDetailed">См. <see cref="Journaling.IJournalingManager.RegisterEvent(int, Journaling.EventType, string, string, DateTime?, Exception)"/>.</param>
+        /// <param name="ex">См. <see cref="Journaling.IJournalingManager.RegisterEvent(int, Journaling.EventType, string, string, DateTime?, Exception)"/>.</param>
         internal protected void RegisterEventWithCode(HttpStatusCode code, string message, string messageDetailed = null, Exception ex = null)
         {
             var idJournal = _journalsForErrors.GetOrAddWithExpiration((int)code, GetJournalForErrors, TimeSpan.FromMinutes(5));
@@ -602,7 +602,7 @@ namespace OnWeb.CoreBind.Modules
             msg += messageDetailed;
 
             var errorType = (int)code == 500 ? Journaling.EventType.CriticalError : Journaling.EventType.Error;
-            AppCore.Get<Journaling.IManager>().RegisterEvent(idJournal, errorType, message, msg, null, ex);
+            AppCore.Get<Journaling.IJournalingManager>().RegisterEvent(idJournal, errorType, message, msg, null, ex);
         }
 
         /// <summary>

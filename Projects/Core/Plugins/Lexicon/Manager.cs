@@ -33,7 +33,7 @@ namespace OnWeb.Plugins.Lexicon
         #region CoreComponentBase
         protected sealed override void OnStart()
         {
-            AppCore.Get<Journaling.IManager>().RegisterJournalTyped<Manager>("Журнал лексического менеджера");
+            AppCore.Get<Journaling.IJournalingManager>().RegisterJournalTyped<Manager>("Журнал лексического менеджера");
         }
 
         protected sealed override void OnStop()

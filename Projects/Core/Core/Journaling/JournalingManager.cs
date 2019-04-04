@@ -12,7 +12,7 @@ namespace OnWeb.Core.Journaling
     using ExecutionResultJournalForItem = ExecutionResult<List<DB.Journal>>;
     using ExecutionResultJournalName = ExecutionResult<DB.JournalName>;
 
-    class Manager : CoreComponentBase<ApplicationCore>, IComponentSingleton<ApplicationCore>, IManager, IUnitOfWorkAccessor<UnitOfWork<DB.Journal, DB.JournalName>>
+    class JournalingManager : CoreComponentBase<ApplicationCore>, IComponentSingleton<ApplicationCore>, IJournalingManager, IUnitOfWorkAccessor<UnitOfWork<DB.Journal, DB.JournalName>>
     {
         //Список журналов, основанных на определенном типе объектов.
         private ConcurrentDictionary<Type, ExecutionResultJournalName> _typedJournalsList = new ConcurrentDictionary<Type, ExecutionResultJournalName>();
@@ -28,7 +28,7 @@ namespace OnWeb.Core.Journaling
         #endregion
 
         #region Регистрация журналов
-        ExecutionResultJournalName IManager.RegisterJournal(int idType, string name, string uniqueKey)
+        ExecutionResultJournalName IJournalingManager.RegisterJournal(int idType, string name, string uniqueKey)
         {
             try
             {
@@ -52,19 +52,19 @@ namespace OnWeb.Core.Journaling
             catch (ArgumentNullException) { throw; }
             catch (Exception ex)
             {
-                Debug.WriteLine($"{typeof(Manager).FullName}.{nameof(IManager.RegisterJournal)}: {ex.ToString()}");
+                Debug.WriteLine($"{typeof(JournalingManager).FullName}.{nameof(IJournalingManager.RegisterJournal)}: {ex.ToString()}");
                 return new ExecutionResultJournalName(false, $"Возникла ошибка во время регистрации журнала с именем '{name}'. Смотрите информацию в системном текстовом журнале.");
             }
         }
 
-        ExecutionResultJournalName IManager.RegisterJournalTyped<TJournalTyped>(string name)
+        ExecutionResultJournalName IJournalingManager.RegisterJournalTyped<TJournalTyped>(string name)
         {
-            return (this as IManager).RegisterJournal(JournalingConstants.IdSystemJournalType, name, JournalingConstants.TypedJournalsPrefix + typeof(TJournalTyped).FullName);
+            return (this as IJournalingManager).RegisterJournal(JournalingConstants.IdSystemJournalType, name, JournalingConstants.TypedJournalsPrefix + typeof(TJournalTyped).FullName);
         }
         #endregion
 
         #region Получить журналы
-        ExecutionResultJournalName IManager.GetJournal(string uniqueKey)
+        ExecutionResultJournalName IJournalingManager.GetJournal(string uniqueKey)
         {
             try
             {
@@ -80,12 +80,12 @@ namespace OnWeb.Core.Journaling
             catch (ArgumentNullException) { throw; }
             catch (Exception ex)
             {
-                Debug.WriteLine($"{typeof(Manager).FullName}.{nameof(IManager.GetJournal)}(string): {ex.ToString()}");
+                Debug.WriteLine($"{typeof(JournalingManager).FullName}.{nameof(IJournalingManager.GetJournal)}(string): {ex.ToString()}");
                 return new ExecutionResultJournalName(false, $"Возникла ошибка во время получения журнала с уникальным именем '{uniqueKey}'. Смотрите информацию в системном текстовом журнале.");
             }
         }
 
-        ExecutionResultJournalName IManager.GetJournal(int IdJournal)
+        ExecutionResultJournalName IJournalingManager.GetJournal(int IdJournal)
         {
             try
             {
@@ -97,20 +97,20 @@ namespace OnWeb.Core.Journaling
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"{typeof(Manager).FullName}.{nameof(IManager.GetJournal)}(int): {ex.ToString()}");
+                Debug.WriteLine($"{typeof(JournalingManager).FullName}.{nameof(IJournalingManager.GetJournal)}(int): {ex.ToString()}");
                 return new ExecutionResultJournalName(false, $"Возникла ошибка во время получения журнала с идентификатором '{IdJournal}'. Смотрите информацию в системном текстовом журнале.");
             }
         }
 
-        ExecutionResultJournalName IManager.GetJournalTyped<TJournalTyped>()
+        ExecutionResultJournalName IJournalingManager.GetJournalTyped<TJournalTyped>()
         {
             return _typedJournalsList.GetOrAddWithExpiration(
                 typeof(TJournalTyped),
-                (t) => (this as IManager).GetJournal(JournalingConstants.TypedJournalsPrefix + typeof(TJournalTyped).FullName),
+                (t) => (this as IJournalingManager).GetJournal(JournalingConstants.TypedJournalsPrefix + typeof(TJournalTyped).FullName),
                 TimeSpan.FromMinutes(5));
         }
 
-        ExecutionResultJournalForItem IManager.GetJournalForItem(ItemBase relatedItem)
+        ExecutionResultJournalForItem IJournalingManager.GetJournalForItem(ItemBase relatedItem)
         {
             if (relatedItem == null) throw new ArgumentNullException(nameof(relatedItem));
             var itemType = Items.ItemTypeFactory.GetItemType(relatedItem.GetType());
@@ -128,33 +128,33 @@ namespace OnWeb.Core.Journaling
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"{typeof(Manager).FullName}.{nameof(IManager.GetJournalForItem)}: {ex.ToString()}");
+                Debug.WriteLine($"{typeof(JournalingManager).FullName}.{nameof(IJournalingManager.GetJournalForItem)}: {ex.ToString()}");
                 return new ExecutionResultJournalForItem(false, $"Возникла ошибка во время получения событий. Смотрите информацию в системном текстовом журнале.");
             }
         }
         #endregion
 
         #region Записать в журнал
-        ExecutionResult IManager.RegisterEvent(int IdJournal, EventType eventType, string eventInfo, string eventInfoDetailed, DateTime? eventTime, Exception exception)
+        ExecutionResult IJournalingManager.RegisterEvent(int IdJournal, EventType eventType, string eventInfo, string eventInfoDetailed, DateTime? eventTime, Exception exception)
         {
             return RegisterEventInternal(IdJournal, eventType, eventInfo, eventInfoDetailed, eventTime, exception);
         }
 
-        ExecutionResult IManager.RegisterEvent<TJournalTyped>(EventType eventType, string eventInfo, string eventInfoDetailed, DateTime? eventTime, Exception exception)
+        ExecutionResult IJournalingManager.RegisterEvent<TJournalTyped>(EventType eventType, string eventInfo, string eventInfoDetailed, DateTime? eventTime, Exception exception)
         {
             try
             {
-                var journalResult = (this as IManager).GetJournalTyped<TJournalTyped>();
+                var journalResult = (this as IJournalingManager).GetJournalTyped<TJournalTyped>();
                 return !journalResult.IsSuccess ? journalResult : RegisterEventInternal(journalResult.Result.IdJournal, eventType, eventInfo, eventInfoDetailed, eventTime, exception);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"{typeof(Manager).FullName}.{nameof(IManager.RegisterEvent)}: {ex.ToString()}");
+                Debug.WriteLine($"{typeof(JournalingManager).FullName}.{nameof(IJournalingManager.RegisterEvent)}: {ex.ToString()}");
                 return new ExecutionResult(false, $"Возникла ошибка во время регистрации события в типизированный журнал '{typeof(TJournalTyped).FullName}'. Смотрите информацию в системном текстовом журнале.");
             }
         }
 
-        ExecutionResult IManager.RegisterEventForItem(int IdJournal, ItemBase relatedItem, EventType eventType, string eventInfo, string eventInfoDetailed, DateTime? eventTime, Exception exception)
+        ExecutionResult IJournalingManager.RegisterEventForItem(int IdJournal, ItemBase relatedItem, EventType eventType, string eventInfo, string eventInfoDetailed, DateTime? eventTime, Exception exception)
         {
             if (relatedItem == null) throw new ArgumentNullException(nameof(relatedItem));
             var itemType = Items.ItemTypeFactory.GetItemType(relatedItem.GetType());
@@ -163,7 +163,7 @@ namespace OnWeb.Core.Journaling
             return RegisterEventInternal(IdJournal, eventType, eventInfo, eventInfoDetailed, eventTime, exception, relatedItem.ID, itemType.IdItemType);
         }
 
-        ExecutionResult IManager.RegisterEventForItem<TJournalTyped>(ItemBase relatedItem, EventType eventType, string eventInfo, string eventInfoDetailed, DateTime? eventTime, Exception exception)
+        ExecutionResult IJournalingManager.RegisterEventForItem<TJournalTyped>(ItemBase relatedItem, EventType eventType, string eventInfo, string eventInfoDetailed, DateTime? eventTime, Exception exception)
         {
             if (relatedItem == null) throw new ArgumentNullException(nameof(relatedItem));
             var itemType = Items.ItemTypeFactory.GetItemType(relatedItem.GetType());
@@ -171,12 +171,12 @@ namespace OnWeb.Core.Journaling
 
             try
             {
-                var journalResult = (this as IManager).GetJournalTyped<TJournalTyped>();
+                var journalResult = (this as IJournalingManager).GetJournalTyped<TJournalTyped>();
                 return !journalResult.IsSuccess ? journalResult : RegisterEventInternal(journalResult.Result.IdJournal, eventType, eventInfo, eventInfoDetailed, eventTime, exception, relatedItem.ID, itemType.IdItemType);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"{typeof(Manager).FullName}.{nameof(IManager.RegisterEventForItem)}: {ex.ToString()}");
+                Debug.WriteLine($"{typeof(JournalingManager).FullName}.{nameof(IJournalingManager.RegisterEventForItem)}: {ex.ToString()}");
                 return new ExecutionResult(false, $"Возникла ошибка во время регистрации события в типизированный журнал '{typeof(TJournalTyped).FullName}'. Смотрите информацию в системном текстовом журнале.");
             }
         }
@@ -230,12 +230,12 @@ namespace OnWeb.Core.Journaling
             }
             catch (HandledException ex)
             {
-                Debug.WriteLine($"{typeof(Manager).FullName}.{nameof(IManager.RegisterEvent)}: {ex.InnerException?.ToString()}");
+                Debug.WriteLine($"{typeof(JournalingManager).FullName}.{nameof(IJournalingManager.RegisterEvent)}: {ex.InnerException?.ToString()}");
                 return new ExecutionResult(false, $"Возникла ошибка во время регистрации события в журнал №{IdJournal}. {ex.Message} Смотрите информацию в системном текстовом журнале.");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"{typeof(Manager).FullName}.{nameof(IManager.RegisterEvent)}: {ex.ToString()}");
+                Debug.WriteLine($"{typeof(JournalingManager).FullName}.{nameof(IJournalingManager.RegisterEvent)}: {ex.ToString()}");
                 return new ExecutionResult(false, $"Возникла ошибка во время регистрации события в журнал №{IdJournal}. Смотрите информацию в системном текстовом журнале.");
             }
         }

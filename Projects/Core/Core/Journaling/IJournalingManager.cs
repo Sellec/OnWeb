@@ -12,7 +12,7 @@ namespace OnWeb.Core.Journaling
     /// <summary>
     /// Представляет менеджер системных журналов. Позволяет создавать журналы, как привязанные к определенным типам, так и вручную, и регистрировать в них события.
     /// </summary>
-    public interface IManager : IComponentSingleton<ApplicationCore>
+    public interface IJournalingManager : IComponentSingleton<ApplicationCore>
     {
         #region Регистрация журналов
         /// <summary>

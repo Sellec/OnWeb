@@ -294,7 +294,7 @@ namespace OnWeb.Core.Modules
         #region Ошибки 
         private int GetJournalForErrors()
         {
-            var result = AppCore.Get<Journaling.IManager>().RegisterJournal(Journaling.JournalingConstants.IdSystemJournalType, "Журнал событий модуля '" + this.Caption + "'", "ModuleErrors_" + ID);
+            var result = AppCore.Get<Journaling.IJournalingManager>().RegisterJournal(Journaling.JournalingConstants.IdSystemJournalType, "Журнал событий модуля '" + this.Caption + "'", "ModuleErrors_" + ID);
             if (!result.IsSuccess) Debug.WriteLine("Ошибка получения журнала событий модуля '{0}': {1}", this.Caption, result.Message);
             return result.Result?.IdJournal ?? -1;
         }
@@ -302,10 +302,10 @@ namespace OnWeb.Core.Modules
         /// <summary>
         /// Регистрирует событие в журнал модуля.
         /// </summary>
-        /// <param name="eventType">См. <see cref="Journaling.IManager.RegisterEvent(int, Journaling.EventType, string, string, DateTime?, Exception)"/>.</param>
-        /// <param name="message">См. <see cref="Journaling.IManager.RegisterEvent(int, Journaling.EventType, string, string, DateTime?, Exception)"/>.</param>
-        /// <param name="messageDetailed">См. <see cref="Journaling.IManager.RegisterEvent(int, Journaling.EventType, string, string, DateTime?, Exception)"/>.</param>
-        /// <param name="ex">См. <see cref="Journaling.IManager.RegisterEvent(int, Journaling.EventType, string, string, DateTime?, Exception)"/>.</param>
+        /// <param name="eventType">См. <see cref="Journaling.IJournalingManager.RegisterEvent(int, Journaling.EventType, string, string, DateTime?, Exception)"/>.</param>
+        /// <param name="message">См. <see cref="Journaling.IJournalingManager.RegisterEvent(int, Journaling.EventType, string, string, DateTime?, Exception)"/>.</param>
+        /// <param name="messageDetailed">См. <see cref="Journaling.IJournalingManager.RegisterEvent(int, Journaling.EventType, string, string, DateTime?, Exception)"/>.</param>
+        /// <param name="ex">См. <see cref="Journaling.IJournalingManager.RegisterEvent(int, Journaling.EventType, string, string, DateTime?, Exception)"/>.</param>
         protected internal void RegisterEvent(Journaling.EventType eventType, string message, string messageDetailed = null, Exception ex = null)
         {
             var idJournal = _journalForCurrentModule.GetOrAddWithExpiration(0, c => GetJournalForErrors(), TimeSpan.FromMinutes(5));
@@ -335,7 +335,7 @@ namespace OnWeb.Core.Modules
 
             msg += messageDetailed;
 
-            AppCore.Get<Journaling.IManager>().RegisterEvent(idJournal, eventType, message, msg, null, ex);
+            AppCore.Get<Journaling.IJournalingManager>().RegisterEvent(idJournal, eventType, message, msg, null, ex);
         }
 
         #endregion

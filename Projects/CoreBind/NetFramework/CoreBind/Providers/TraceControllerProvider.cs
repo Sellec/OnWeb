@@ -99,7 +99,7 @@ namespace OnWeb.CoreBind.Providers
             }
             catch (Exception ex)
             {
-                AppCore.Get<Core.Journaling.IManager>().RegisterEvent(7, Core.Journaling.EventType.CriticalError, "123123", "12312313");
+                AppCore.Get<Core.Journaling.IJournalingManager>().RegisterEvent(7, Core.Journaling.EventType.CriticalError, "123123", "12312313");
                 try
                 {
                     if (module == null)
