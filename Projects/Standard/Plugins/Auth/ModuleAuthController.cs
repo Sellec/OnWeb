@@ -52,13 +52,12 @@ namespace OnWeb.Plugins.Auth
 
                 throw new NotImplementedException(); // todo проверить рекапчу. if (!IsReCaptchaValid) throw new BehaviourException(CaptchManager.getError());
 
-                var result = AppCore.GetUserContextManager().login(0, model.login, model.pass);
-
-                if (result == eAuthResult.Success)
+                var result = AppCore.GetUserContextManager().CreateUserContext(model.login, model.pass);
+                if (result.IsSuccess && result.AuthResult == eAuthResult.Success)
                 {
                     //message = "Авторизация прошла успешно!";
                 }
-                else throw new BehaviourException(AppCore.GetUserContextManager().GetCurrentUserContext().getError());
+                else throw new BehaviourException(result.Message);
             }
             catch(BehaviourException ex)
             {
@@ -102,14 +101,13 @@ namespace OnWeb.Plugins.Auth
                 var phone = PhoneBuilder.ParseString(model.login);
                 if (!model.login.isEmail() && !phone.IsCorrect) throw new BehaviourException("Неправильно введен логин.");
 
-                var result = AppCore.GetUserContextManager().GetCurrentUserContext().login(0, model.login, model.pass);
-
-                if (result == eAuthResult.Success)
+                var result = AppCore.GetUserContextManager().CreateUserContext(model.login, model.pass);
+                if (result.IsSuccess && result.AuthResult == eAuthResult.Success)
                 {
                     message = "Авторизация прошла успешно!";
                     success = true;
                 }
-                else throw new BehaviourException(AppCore.GetUserContextManager().GetCurrentUserContext().getError());
+                else throw new BehaviourException(result.Message);
             }
             catch (BehaviourException ex)
             {
@@ -219,21 +217,19 @@ namespace OnWeb.Plugins.Auth
                                 var code = DateTime.Now.Microtime().MD5();
                                 DB.PasswordRemember.Add(new PasswordRemember() { user_id = user.id, code = code });
 
-                                var send = AppCore.Get<Core.Messaging.Email.IService>().SendMailFromSite(
+                                AppCore.Get<Core.Messaging.Email.IService>().SendMailFromSite(
                                     user.Caption,
                                     user.email,
                                     "Восстановление пароля на сайте",
                                     this.displayToVar("PasswordRestoreNotificationEmail.cshtml", new Design.Model.PasswordRestoreSend() { User = user, Code = code, CodeType = codeType })
                                 );
-                                if (!send) throw new BehaviourException("Ошибка во время отправки письма на указанный Email-адрес", new Exception(AppCore.Get<Core.Messaging.Email.IService>().getError(), AppCore.Get<Core.Messaging.Email.IService>().getErrorException()));
                             }
                             else
                             {
                                 var code = OnUtils.Utils.StringsHelper.GenerateRandomString("0123456789", 4);
                                 DB.PasswordRemember.Add(new PasswordRemember() { user_id = user.id, code = code });
 
-                                var send = AppCore.Get<Core.Messaging.SMS.IService>().SendMessage(user.phone, "Код восстановления пароля: " + code);
-                                if (!send) throw new BehaviourException("Ошибка во время отправки сообщения с кодом на указанный номер телефона", new Exception(AppCore.Get<Core.Messaging.SMS.IService>().getError(), AppCore.Get<Core.Messaging.SMS.IService>().getErrorException()));
+                                AppCore.Get<Core.Messaging.SMS.IService>().SendMessage(user.phone, "Код восстановления пароля: " + code);
                             }
 
                             DB.SaveChanges();

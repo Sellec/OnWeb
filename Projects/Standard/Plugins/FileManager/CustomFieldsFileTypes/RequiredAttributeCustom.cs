@@ -5,6 +5,8 @@ using System.Web;
 
 namespace OnWeb.Plugins.FileManager.CustomFieldsFileTypes
 {
+    using DB;
+
     public class RequiredAttributeForSingleValue : System.ComponentModel.DataAnnotations.RequiredAttribute
     {
         public override bool IsValid(object value)

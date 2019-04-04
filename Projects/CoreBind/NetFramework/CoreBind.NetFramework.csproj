@@ -101,6 +101,7 @@
     <Compile Include="CoreBind\Razor\RazorHost.cs" />
     <Compile Include="CoreBind\Razor\RazorHostFactory.cs" />
     <Compile Include="CoreBind\Razor\WebStartup.cs" />
+    <Compile Include="Core\ModuleExtensions\CustomFields\ICustomFieldRender.cs" />
     <Compile Include="Plugins\Auth\Module2.cs" />
     <Compile Include="Plugins\Auth\Startup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

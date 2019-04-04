@@ -596,37 +596,5 @@ namespace OnWeb.Plugins.Customer
 
             return ReturnJson(result);
         }
-
-        [ModuleAction("history")]
-        public virtual ActionResult History(DateTime? datestart = null, DateTime? dateend = null)
-        {
-            var dateStart = (datestart.HasValue ? datestart.Value : DateTime.Now).Date.AddDays(-365);
-            var dateEnd = (dateend.HasValue ? dateend.Value : DateTime.Now).Date.AddDays(1);
-
-            var list = SystemHistoryManager.getList(Module, dateStart, dateEnd);
-
-            return this.display("admin/admin_customer_history.cshtml", new Model.History()
-            {
-                DateStart = dateStart,
-                DateEnd = dateEnd,
-                Records = list
-            });
-        }
-
-        [ModuleAction("historyUserLog")]
-        public virtual ActionResult HistoryUserLog(DateTime? datestart = null, DateTime? dateend = null)
-        {
-            var dateStart = (datestart.HasValue ? datestart.Value : DateTime.Now).Date.AddDays(-1);
-            var dateEnd = (dateend.HasValue ? dateend.Value : DateTime.Now).Date.AddDays(1);
-
-            var list = UserLogHistoryManager.getListAll(dateStart, dateEnd);
-
-            return this.display("admin/admin_customer_history_userlog.cshtml", new Model.HistoryUserLog()
-            {
-                DateStart = dateStart,
-                DateEnd = dateEnd,
-                Records = list
-            });
-        }
     }
 }

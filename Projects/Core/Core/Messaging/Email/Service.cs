@@ -14,12 +14,9 @@ namespace OnWeb.Core.Messaging.Email
         }
 
         #region Отправка
-        bool IService.sendMail(string name_from, string email_from, string name_to, string email_to, Encoding data_charset, Encoding send_charset, string subject, string body, List<int> files)
+        void IService.SendMail(string name_from, string email_from, string name_to, string email_to, Encoding data_charset, Encoding send_charset, string subject, string body, List<int> files)
         {
-            //todo setError(null);
-
-            //email_to = "dev@alikm.com";
-            email_from = "dombonus@yandex.ru";
+            email_from = "test@test.ru";
 
             var message = new Message()
             {
@@ -29,13 +26,13 @@ namespace OnWeb.Core.Messaging.Email
                 Body = body,
             };
 
-            return RegisterMessage(message);
+            RegisterMessage(message);
         }
 
-        bool IService.SendToAdmin(string subject, string body)
+        void IService.SendToAdmin(string subject, string body)
         {
 
-            return ((IService)this).sendMail(
+            ((IService)this).SendMail(
                 "Почтовый робот сайта",
                 GetNoReplyAddress(),
                 "admin",
@@ -46,14 +43,14 @@ namespace OnWeb.Core.Messaging.Email
             );
         }
 
-        bool IService.SendMailFromSite(string nameTo, string emailTo, string subject, string body, List<int> files)
+        void IService.SendMailFromSite(string nameTo, string emailTo, string subject, string body, List<int> files)
         {
-            return ((IService)this).sendMail("Почтовый робот сайта", GetNoReplyAddress(), nameTo, emailTo, null, null, subject, body, files);
+            ((IService)this).SendMail("Почтовый робот сайта", GetNoReplyAddress(), nameTo, emailTo, null, null, subject, body, files);
         }
 
-        bool IService.sendMailToDeveloper(string subject, string body, List<int> files)
+        void IService.SendMailToDeveloper(string subject, string body, List<int> files)
         {
-            return ((IService)this).sendMail("Почтовый робот сайта", GetNoReplyAddress(), "Developers", "dev@alikm.com", null, null, subject, body, files);
+            ((IService)this).SendMail("Почтовый робот сайта", GetNoReplyAddress(), "Developers", "test@test.com", null, null, subject, body, files);
         }
 
         /**

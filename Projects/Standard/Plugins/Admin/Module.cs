@@ -24,7 +24,7 @@ namespace OnWeb.Plugins.Admin
 
             foreach (var module in modulesList)
             {
-                if (module.CheckPermission(Constants.PermissionManage) != CheckPermissionResult.Allowed)
+                if (module.CheckPermission(ModulesConstants.PermissionManage) != CheckPermissionResult.Allowed)
                 {
                     mods_errors.Add(module, new List<ItemBase>() { new NestedLinkSimple("Недостаточно прав") });
                 }
@@ -35,7 +35,7 @@ namespace OnWeb.Plugins.Admin
 
                     if (links.Count > 0)
                     {
-                        if (module.CheckPermission(Constants.PermissionManage) == CheckPermissionResult.Allowed)
+                        if (module.CheckPermission(ModulesConstants.PermissionManage) == CheckPermissionResult.Allowed)
                         {
                             mods.Add(module, links);
                         }

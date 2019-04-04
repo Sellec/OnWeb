@@ -587,7 +587,7 @@ namespace OnWeb.Plugins.Adminmain
         //[MenuAction("Рассылки и уведомления", "messaging", Module.PERM_MANAGE_MESSAGING)]
         //public virtual ActionResult Messaging()
         //{
-        //    //Web.AppCore.Get<Core.Messaging.Email.IService>().sendMailFromSite("test", "sellec88@mail.ru", "test", "test!!!!!!!!");
+        //    //Web.AppCore.Get<Core.Messaging.Email.IService>().sendMailFromSite("test", "test@test.ru", "test", "test!!!!!!!!");
 
         //    return this.display("Messaging.cshtml");
         //}

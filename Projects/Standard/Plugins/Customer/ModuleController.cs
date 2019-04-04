@@ -149,7 +149,7 @@ namespace OnWeb.Plugins.Customer
 
                         db.SaveChanges();
 
-                        AppCore.GetUserContextManager().GetCurrentUserContext().UpdateDataAndPermissions();
+                        AppCore.GetUserContextManager().CreateUserContext(AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser());
 
                         trans.Commit();
 
@@ -188,29 +188,24 @@ namespace OnWeb.Plugins.Customer
 
             try
             {
-                if (!this.IsReCaptchaValid && !AppCore.GetUserContextManager().GetCurrentUserContext().IsSuperuser) result.Add("Вы точно не робот?");
-                else
+                if (!ModelState.IsValid)
+                    result.AddRange(ModelState.Values.Where(y => y.Errors.Count > 0).
+                                    SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList());
+
+                var data_ = AppCore.GetUserContextManager().GetCurrentUserContext().GetData();
+
+                if (result.Count == 0)
                 {
-                    if (!ModelState.IsValid)
-                        result.AddRange(ModelState.Values.Where(y => y.Errors.Count > 0).
-                                        SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList());
+                    if (!ModelState.Keys.Contains("passwordOld")) result.Add("Не указан текущий пароль.");
+                    else if (UsersExtensions.hashPassword(model.passwordOld) != data_.password) result.Add("Неправильный пароль.");
 
-                    var data_ = AppCore.GetUserContextManager().GetCurrentUserContext().GetData();
+                    if (!ModelState.Keys.Contains("passwordNew")) result.Add("Не указан новый пароль.");
+                }
 
-                    if (result.Count == 0)
-                    {
-                        if (!ModelState.Keys.Contains("passwordOld")) result.Add("Не указан текущий пароль.");
-                        else if (UsersExtensions.hashPassword(model.passwordOld) != data_.password) result.Add("Неправильный пароль.");
-
-                        if (!ModelState.Keys.Contains("passwordNew")) result.Add("Не указан новый пароль.");
-                    }
-
-                    if (result.Count == 0)
-                    {
-                        data_.password = UsersExtensions.hashPassword(model.passwordNew);
-                        success = true;
-                    }
-
+                if (result.Count == 0)
+                {
+                    data_.password = UsersExtensions.hashPassword(model.passwordNew);
+                    success = true;
                 }
             }
             catch (Exception ex)

@@ -15,13 +15,13 @@ namespace OnWeb.Core.Messaging.SMS
         /// <param name="phoneTo">Должен являться корректным номером телефона. В противном случае сгенерируется исключение <see cref="ArgumentException"/>.</param>
         /// <param name="messageText">Текст сообщения.</param>
         /// <returns>Возвращает результат постановки сообщения в очередь.</returns>
-        bool SendMessage(string phoneTo, string messageText);
+        void SendMessage(string phoneTo, string messageText);
 
         /// <summary>
         /// Отправка смс-сообщения на номер телефона администратора сайта текстом <paramref name="messageText"/>.
         /// </summary>
         /// <param name="messageText">Текст сообщения.</param>
         /// <returns>Возвращает результат постановки сообщения в очередь.</returns>
-        bool SendToAdmin(string messageText);
+        void SendToAdmin(string messageText);
     }
 }

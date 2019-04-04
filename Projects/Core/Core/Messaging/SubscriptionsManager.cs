@@ -96,7 +96,7 @@ namespace OnWeb.Core.Messaging
                     {
                         if (excludedAddresses != null && excludedAddresses.Contains(pair.Key)) continue;
 
-                        if (!AppCore.Get<IMessagingManager>().Email.SendMailFromSite(pair.Value, pair.Key, subject, body, files)) full = false;
+                        AppCore.Get<IMessagingManager>().Email.SendMailFromSite(pair.Value, pair.Key, subject, body, files);
                     }
 
                     if (!full) Debug.WriteLine("IdSubscription={0}. Исполнен частично.", IdSubscription);

@@ -157,6 +157,8 @@
     <Compile Include="Plugins\Developing\ModuleDevelopingController.cs" />
     <Compile Include="Plugins\Developing\ModuleDeveloping.cs" />
     <Compile Include="Plugins\FileManager\Conversations\ConversationBase.cs" />
+    <Compile Include="Plugins\FileManager\CustomFieldsFileTypes\FileImageFieldTypeRender.cs" />
+    <Compile Include="Plugins\FileManager\CustomFieldsFileTypes\FileFieldTypeRender.cs" />
     <Compile Include="Plugins\FileManager\CustomFieldsFileTypes\FileFieldType.cs" />
     <Compile Include="Plugins\FileManager\CustomFieldsFileTypes\FileImageFieldType.cs" />
     <Compile Include="Plugins\FileManager\CustomFieldsFileTypes\RequiredAttributeCustom.cs" />
@@ -1998,8 +2000,6 @@
     <Content Include="Plugins\Auth\Design\PasswordRestoreNotificationEmail.cshtml" />
     <Content Include="Plugins\Auth\Design\PasswordRestoreVerify.cshtml" />
     <Content Include="Plugins\Auth\Design\unauthorizedAccess.cshtml" />
-    <Content Include="Plugins\Customer\Design\admin\admin_customer_history.cshtml" />
-    <Content Include="Plugins\Customer\Design\admin\admin_customer_history_userlog.cshtml" />
     <Content Include="Plugins\Customer\Design\admin\admin_customer_modules.cshtml" />
     <Content Include="Plugins\Customer\Design\admin\admin_customer_rolesDelegate.cshtml" />
     <Content Include="Plugins\Customer\Design\admin\admin_customer_rolesManage.cshtml" />
