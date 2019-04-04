@@ -31,7 +31,7 @@ namespace OnWeb.Plugins.Register
 
             try
             {
-                if (!IsReCaptchaValid) throw new Exception(CaptchManager.getError());
+                throw new NotImplementedException(); // todo проверить рекапчу. if (!IsReCaptchaValid) throw new Exception(CaptchManager.getError());
 
                 if (ModelState.IsValid)
                 {

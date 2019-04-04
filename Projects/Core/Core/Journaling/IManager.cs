@@ -1,10 +1,13 @@
 ﻿using OnUtils;
 using OnUtils.Architecture.AppCore;
 using System;
+using System.Collections.Generic;
 
 namespace OnWeb.Core.Journaling
 {
+    using Items;
     using ExecutionResultJournalName = ExecutionResult<DB.JournalName>;
+    using ExecutionResultJournalForItem = ExecutionResult<List<DB.Journal>>;
 
     /// <summary>
     /// Представляет менеджер системных журналов. Позволяет создавать журналы, как привязанные к определенным типам, так и вручную, и регистрировать в них события.
@@ -50,6 +53,13 @@ namespace OnWeb.Core.Journaling
         /// </summary>
         /// <returns>Возвращает объект <see cref="ExecutionResultJournalName"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. В случае ошибки свойство <see cref="ExecutionResult.Message"/> содержит сообщение об ошибке.</returns>
         ExecutionResultJournalName GetJournalTyped<TJournalTyped>();
+
+        /// <summary>
+        /// Возвращает события, связанные с объектом <paramref name="relatedItem"/> во всех журналах.
+        /// </summary>
+        /// <returns>Возвращает объект <see cref="ExecutionResultJournalForItem"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. В случае ошибки свойство <see cref="ExecutionResult.Message"/> содержит сообщение об ошибке.</returns>
+        /// <exception cref="ArgumentNullException">Возникает, если <paramref name="relatedItem"/> равен null.</exception>
+        ExecutionResultJournalForItem GetJournalForItem(ItemBase relatedItem);
         #endregion
 
         #region Записать в журнал
@@ -75,6 +85,33 @@ namespace OnWeb.Core.Journaling
         /// <param name="exception">См. <see cref="DB.Journal.ExceptionDetailed"/>.</param>
         /// <returns>Возвращает объект <see cref="ExecutionResult"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. В случае ошибки свойство <see cref="ExecutionResult.Message"/> содержит сообщение об ошибке.</returns>
         ExecutionResult RegisterEvent<TJournalTyped>(EventType eventType, string eventInfo, string eventInfoDetailed = null, DateTime? eventTime = null, Exception exception = null);
+
+        /// <summary>
+        /// Регистрирует новое событие, связанное с объектом <paramref name="relatedItem"/>, в журнале <paramref name="IdJournal"/>.
+        /// </summary>
+        /// <param name="IdJournal">См. <see cref="DB.Journal.IdJournal"/>.</param>
+        /// <param name="relatedItem">См. <see cref="DB.Journal.IdJournal"/>.</param>
+        /// <param name="eventType">См. <see cref="DB.Journal.EventType"/>.</param>
+        /// <param name="eventInfo">См. <see cref="DB.Journal.EventInfo"/>.</param>
+        /// <param name="eventInfoDetailed">См. <see cref="DB.Journal.EventInfoDetailed"/>.</param>
+        /// <param name="eventTime">См. <see cref="DB.Journal.DateEvent"/>. Если передано значение null, то событие записывается на момент вызова метода.</param>
+        /// <param name="exception">См. <see cref="DB.Journal.ExceptionDetailed"/>.</param>
+        /// <returns>Возвращает объект <see cref="ExecutionResult"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. В случае ошибки свойство <see cref="ExecutionResult.Message"/> содержит сообщение об ошибке.</returns>
+        /// <exception cref="ArgumentNullException">Возникает, если <paramref name="relatedItem"/> равен null.</exception>
+        ExecutionResult RegisterEventForItem(int IdJournal, ItemBase relatedItem, EventType eventType, string eventInfo, string eventInfoDetailed = null, DateTime? eventTime = null, Exception exception = null);
+
+        /// <summary>
+        /// Регистрирует новое событие, связанное с объектом <paramref name="relatedItem"/>, в журнале на основе типа <typeparamref name="TJournalTyped"/>.
+        /// </summary>
+        /// <param name="relatedItem">См. <see cref="DB.Journal.IdJournal"/>.</param>
+        /// <param name="eventType">См. <see cref="DB.Journal.EventType"/>.</param>
+        /// <param name="eventInfo">См. <see cref="DB.Journal.EventInfo"/>.</param>
+        /// <param name="eventInfoDetailed">См. <see cref="DB.Journal.EventInfoDetailed"/>.</param>
+        /// <param name="eventTime">См. <see cref="DB.Journal.DateEvent"/>. Если передано значение null, то событие записывается на момент вызова метода.</param>
+        /// <param name="exception">См. <see cref="DB.Journal.ExceptionDetailed"/>.</param>
+        /// <returns>Возвращает объект <see cref="ExecutionResult"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. В случае ошибки свойство <see cref="ExecutionResult.Message"/> содержит сообщение об ошибке.</returns>
+        /// <exception cref="ArgumentNullException">Возникает, если <paramref name="relatedItem"/> равен null.</exception>
+        ExecutionResult RegisterEventForItem<TJournalTyped>(ItemBase relatedItem, EventType eventType, string eventInfo, string eventInfoDetailed = null, DateTime? eventTime = null, Exception exception = null);
         #endregion
 
     }

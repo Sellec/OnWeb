@@ -417,8 +417,9 @@ namespace OnWeb.Core.Users
             {
                 using (var db = this.CreateUnitOfWork())
                 {
-                    var IdRoleUser = AppCore.ConfigurationOptionGet(RoleUserName, 0);
-                    var IdRoleGuest = AppCore.ConfigurationOptionGet(RoleGuestName, 0);
+                    var authCfg = AppCore.Get<Plugins.Auth.ModuleAuth>().GetConfiguration<Plugins.Auth.ModuleConfiguration>();
+                    var IdRoleUser = authCfg.RoleUser;
+                    var IdRoleGuest = authCfg.RoleGuest;
 
                     var perms2 = (from p in db.RolePermission
                                   join ru in db.RoleUser on p.IdRole equals ru.IdRole into gj

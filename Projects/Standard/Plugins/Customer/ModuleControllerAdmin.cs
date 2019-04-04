@@ -55,7 +55,7 @@ namespace OnWeb.Plugins.Customer
         {
             var data = IdUser != 0 ? DB.Users.Where(x => x.id == IdUser).FirstOrDefault() : new User();
             if (data == null) throw new KeyNotFoundException("Неправильно указан пользователь!");
-            var history = SystemHistoryManager.getListAll(this.Module, $"User_{IdUser}");
+            var history = AppCore.get SystemHistoryManager.getListAll(this.Module, $"User_{IdUser}");
 
             var model = new Model.AdminUserEdit()
             {
@@ -188,7 +188,7 @@ namespace OnWeb.Plugins.Customer
                                 result.Message = "Сохранение данных прошло успешно!";
                                 result.Success = true;
 
-                                SystemHistoryManager.register(this.Module, $"Пользователь №{data.id} '" + data.ToString() + "'", "Редактирование данных", $"User_{data.id}");
+                                Module.RegisterEventForItem(data, EventType.Info, "Редактирование данных", $"Пользователь №{data.id} '" + data.ToString() + "'");
 
                                 //                            if (!($res = $this->mExtensions['fields"]->savePostData($IdUser)))
                                 //                    {
@@ -240,7 +240,7 @@ namespace OnWeb.Plugins.Customer
                                             this.displayToVar("Register/register_mail2.cshtml")
                                         );
 
-                                        SystemHistoryManager.register(Module, "Пользователь №" + data.id + " '" + data.ToString() + "'", "Заявка одобрена", $"User_{data.id}");
+                                        Module.RegisterEventForItem(data, EventType.Info, "Заявка одобрена", "Пользователь №" + data.id + " '" + data.ToString() + "'");
                                     }
                                     if (oldState == UserState.RegisterWaitForModerate && data.State == UserState.RegisterDecline)
                                     {
@@ -263,7 +263,7 @@ namespace OnWeb.Plugins.Customer
                                             this.displayToVar("Register/register_mail_decline.cshtml")
                                         );
 
-                                        SystemHistoryManager.register(Module, $"Пользователь №{data.id} '" + data.ToString() + "'", "Заявка отклонена администратором" + message, $"User_{data.id}");//Запись в журнал истории
+                                        Module.RegisterEventForItem(data, EventType.Info, "Заявка отклонена", "Пользователь №" + data.id + " '" + data.ToString() + "'. Заявка отклонена администратором" + message);
                                     }
                                     if (oldState != data.State && data.State == UserState.Disabled)
                                     {
@@ -290,7 +290,7 @@ namespace OnWeb.Plugins.Customer
                                             this.displayToVar("Register/register_mail_ban.cshtml")
                                         );
 
-                                        SystemHistoryManager.register(Module, $"Пользователь №{data.id} '" + data.ToString() + "'", "Аккаунт заблокирован" + message, $"User_{data.id}");//Запись в журнал истории
+                                        Module.RegisterEventForItem(data, EventType.Info, "Аккаунт заблокирован", "Пользователь №" + data.id + " '" + data.ToString() + "'. Аккаунт заблокирован" + message);
                                     }
 
                                 }
@@ -488,7 +488,7 @@ namespace OnWeb.Plugins.Customer
                                     throw new Exception($"Возникли ошибки при сохранении разрешений для роли '{data.NameRole}'");
                             }
 
-                            SystemHistoryManager.register(Module, $"Роль №{data.IdRole} '{data.NameRole}'", "Роль обновлена", $"Role_{data.IdRole}");
+                            Module.RegisterEventForItem(data, EventType.Info, "Роль обновлена", $"Роль №{data.IdRole} '{data.NameRole}'");
 
                             trans.Complete();
 
@@ -528,7 +528,7 @@ namespace OnWeb.Plugins.Customer
                             result.Message = "Удаление роли прошло успешно!";
                             result.Success = true;
 
-                            SystemHistoryManager.register(Module, $"Роль №{data.IdRole} '{data.NameRole}'", "Роль удалена", $"Role_{data.IdRole}");
+                            Module.RegisterEventForItem(data, EventType.Info, "Роль удалена", $"Роль №{data.IdRole} '{data.NameRole}'");
 
                             trans.Complete();
                         }

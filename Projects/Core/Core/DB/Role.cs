@@ -1,13 +1,12 @@
 namespace OnWeb.Core.DB
 {
-    using System;
-    using System.Collections.Generic;
+    using Items;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
 #pragma warning disable CS1591 // todo внести комментарии.
     [Table("Role")]
-    public class Role
+    public class Role : ItemBase
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -32,5 +31,19 @@ namespace OnWeb.Core.DB
 
         [StringLength(100)]
         public string UniqueKey { get; set; }
+
+        #region ItemBase
+        public override int ID
+        {
+            get => IdRole;
+            set => IdRole = value;
+        }
+
+        public override string Caption
+        {
+            get => NameRole;
+            set => NameRole = value;
+        }
+        #endregion
     }
 }

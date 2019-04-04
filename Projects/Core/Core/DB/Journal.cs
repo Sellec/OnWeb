@@ -1,7 +1,7 @@
 ﻿namespace OnWeb.Core.DB
 {
+    using Items;
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
@@ -47,5 +47,18 @@
         /// Дата фиксации события.
         /// </summary>
         public DateTime DateEvent { get; set; }
+
+        /// <summary>
+        /// Идентификатор объекта, с которым связано событие. Связанный объект возможно получить, когда задано значение <see cref="IdRelatedItem"/> и <see cref="IdRelatedItemType"/>.
+        /// </summary>
+        /// <seealso cref="ItemBase.ID"/>.
+        public int? IdRelatedItem { get; set; }
+
+        /// <summary>
+        /// Идентификатор типа объекта, с которым связано событие. Связанный объект возможно получить, когда задано значение <see cref="IdRelatedItem"/> и <see cref="IdRelatedItemType"/>.
+        /// </summary>
+        /// <see cref="ItemType.IdItemType"/>
+        public int? IdRelatedItemType { get; set; }
+
     }
 }

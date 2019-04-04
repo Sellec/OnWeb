@@ -14,7 +14,7 @@ namespace OnWeb.Plugins.Customer.Model
         }
 
         [ScaffoldColumn(false)]
-        public IList<SystemHistoryRecord> history;
+        public IList<Journal> history;
 
         public User User { get; set; }
 

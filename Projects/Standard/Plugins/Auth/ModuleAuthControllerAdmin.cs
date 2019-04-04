@@ -31,14 +31,16 @@ namespace OnWeb.Plugins.Auth
 
         protected override void ConfigurationSaveCustom(Model.ConfigurationSaveModel model)
         {
-            if (model.RoleGuest.HasValue) AppCore.Config["RoleGuest"] = model.RoleGuest;
-            if (model.RoleUser.HasValue) AppCore.Config["RoleUser"] = model.RoleUser; ;
-            if (model.EventLoginSuccess.HasValue) AppCore.Config["eventLoginSuccess"] = model.EventLoginSuccess;
-            if (model.EventLoginError.HasValue) AppCore.Config["eventLoginError"] = model.EventLoginError;
-            if (model.EventLoginUpdate.HasValue) AppCore.Config["eventLoginUpdate"] = model.EventLoginUpdate;
-            if (model.EventLogout.HasValue) AppCore.Config["eventLogout"] = model.EventLogout;
+            var cfg = Module.GetConfigurationManipulator().GetEditable<ModuleConfiguration>();
 
-            AppCore.ConfigurationSave();
+            if (model.RoleGuest.HasValue) cfg.RoleGuest = model.RoleGuest.Value;
+            if (model.RoleUser.HasValue) cfg.RoleUser = model.RoleUser.Value;
+            if (model.EventLoginSuccess.HasValue) cfg.EventLoginSuccess = model.EventLoginSuccess.Value;
+            if (model.EventLoginError.HasValue) cfg.EventLoginError = model.EventLoginError.Value;
+            if (model.EventLoginUpdate.HasValue) cfg.EventLoginUpdate = model.EventLoginUpdate.Value;
+            if (model.EventLogout.HasValue) cfg.EventLogout = model.EventLogout.Value;
+
+            Module.GetConfigurationManipulator().ApplyConfiguration(cfg);
         }
     }
 }

@@ -50,7 +50,7 @@ namespace OnWeb.Plugins.Auth
                 var phone = PhoneBuilder.ParseString(model.login);
                 if (!model.login.isEmail() && !phone.IsCorrect) throw new BehaviourException("Неправильно введен логин.");
 
-                if (!IsReCaptchaValid) throw new BehaviourException(CaptchManager.getError());
+                throw new NotImplementedException(); // todo проверить рекапчу. if (!IsReCaptchaValid) throw new BehaviourException(CaptchManager.getError());
 
                 var result = AppCore.GetUserContextManager().login(0, model.login, model.pass);
 
@@ -172,7 +172,7 @@ namespace OnWeb.Plugins.Auth
             var answer = JsonAnswer<string>();
             try
             {
-                if (!IsReCaptchaValid) throw new BehaviourException("Докажите, что вы не робот!");
+                throw new NotImplementedException(); // todo проверить рекапчу. if (!IsReCaptchaValid) throw new BehaviourException("Докажите, что вы не робот!");
 
                 if (ModelState.IsValid)
                 {
@@ -278,7 +278,7 @@ namespace OnWeb.Plugins.Auth
             var answer = JsonAnswer<string>();
             try
             {
-                if (!IsReCaptchaValid) throw new BehaviourException("Докажите, что вы не робот!");
+                throw new NotImplementedException(); // todo проверить рекапчу. if (!IsReCaptchaValid) throw new BehaviourException("Докажите, что вы не робот!");
 
                 if (ModelState.IsValid)
                 {
