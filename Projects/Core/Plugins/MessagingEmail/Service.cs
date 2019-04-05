@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OnWeb.Core.Messaging.Email
+namespace OnWeb.Plugins.MessagingEmail
 {
+    using Core.Messaging;
+
     class Service : ServiceBase<Message>, IService
     {
         public Service() : base("Email", "Email".GenerateGuid())

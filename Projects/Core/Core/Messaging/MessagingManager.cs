@@ -10,6 +10,7 @@ using System.Reflection;
 namespace OnWeb.Core.Messaging
 {
     using Connectors;
+    using Plugins.MessagingEmail;
 
     /// <summary>
     /// Предоставляет доступ к сервисам отправки/приема сообщений.
@@ -34,6 +35,11 @@ namespace OnWeb.Core.Messaging
             }
         }
 
+        class MessageFake : MessageBase
+        {
+
+        }
+
         private static MethodInfo _connectorInitCall = null;
         private static ApplicationCore _appCore = null;
         private volatile bool _incomingLock = false;
@@ -47,8 +53,8 @@ namespace OnWeb.Core.Messaging
 
         static MessagingManager()
         {
-            _connectorInitCall = typeof(IConnectorBase<>).GetMethod(nameof(IConnectorBase<Email.Message>.Init), BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(string) }, null);
-            if (_connectorInitCall == null) throw new TypeInitializationException(typeof(MessagingManager).FullName, new Exception($"Ошибка поиска метода '{nameof(IConnectorBase<Email.Message>.Init)}'"));
+            _connectorInitCall = typeof(IConnectorBase<>).GetMethod(nameof(IConnectorBase<MessageFake>.Init), BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(string) }, null);
+            if (_connectorInitCall == null) throw new TypeInitializationException(typeof(MessagingManager).FullName, new Exception($"Ошибка поиска метода '{nameof(IConnectorBase<MessageFake>.Init)}'"));
         }
 
         public MessagingManager()
@@ -141,11 +147,6 @@ namespace OnWeb.Core.Messaging
         #endregion
 
         #region IMessagingManager
-        Email.IService IMessagingManager.Email
-        {
-            get => AppCore.Get<Email.IService>();
-        }
-        
         IEnumerable<IConnectorBase<TMessage>> IMessagingManager.GetConnectorsByMessageType<TMessage>()
         {
             lock (_activeConnectorsSyncRoot)

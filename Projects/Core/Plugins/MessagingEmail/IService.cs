@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace OnWeb.Core.Messaging.Email
+namespace OnWeb.Plugins.MessagingEmail
 {
+    using Core.Messaging;
+
     /// <summary>
     /// Представляет сервис отправки электронных писем (Email).
     /// </summary>

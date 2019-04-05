@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace OnWeb.Core.Messaging.Email.Connectors
+namespace OnWeb.Plugins.MessagingEmail.Connectors
 {
     /// <summary>
     /// Хранит настройки подключения к smtp-серверу.

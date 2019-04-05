@@ -5,9 +5,11 @@ using System;
 using System.Net.Mail;
 using System.Text;
 
-namespace OnWeb.Core.Messaging.Email.Connectors
+namespace OnWeb.Plugins.MessagingEmail.Connectors
 {
-    using Messaging.Connectors;
+    using Core.Journaling;
+    using Core.Messaging;
+    using Core.Messaging.Connectors;
 
     /// <summary>
     /// Предоставляет возможность отправки электронной почты через smtp-сервер. Поддерживается только <see cref="SmtpDeliveryMethod.Network"/>.
@@ -99,7 +101,7 @@ namespace OnWeb.Core.Messaging.Email.Connectors
                 catch (SmtpException ex)
                 {
                     var canBeResend = true;
-                    service.RegisterServiceEvent(Journaling.EventType.Error, "Gmail - ошибка отправки письма", null, ex);
+                    service.RegisterServiceEvent(EventType.Error, "Gmail - ошибка отправки письма", null, ex);
                     //if (ex.Message.Contains("Message rejected: Email address is not verified"))
                     //{
                     //    var match = System.Text.RegularExpressions.Regex.Match(ex.Message, "Message rejected: Email address is not verified. The following identities failed the check in region ([^:]+): (.+)");

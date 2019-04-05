@@ -11,11 +11,6 @@ namespace OnWeb.Core.Messaging
     public interface IMessagingManager : IComponentSingleton<ApplicationCore>, IAutoStart
     {
         /// <summary>
-        /// Возвращает сервис отправки и приёма электронной почты.
-        /// </summary>
-        Email.IService Email { get; }
-
-        /// <summary>
         /// Возвращает список коннекторов, поддерживающих обмен сообщениями указанного типа <typeparamref name="TMessage"/>.
         /// </summary>
         IEnumerable<IConnectorBase<TMessage>> GetConnectorsByMessageType<TMessage>() where TMessage : MessageBase, new();

@@ -5,9 +5,11 @@ using System;
 using System.Net.Mail;
 using System.Text;
 
-namespace OnWeb.Core.Messaging.Email.Connectors
+namespace OnWeb.Plugins.MessagingEmail.Connectors
 {
-    using Messaging.Connectors;
+    using Core.Journaling;
+    using Core.Messaging;
+    using Core.Messaging.Connectors;
 
     /// <summary>
     /// Предоставляет возможность отправки электронной почты через Amazon Simple Email Service.
@@ -112,7 +114,7 @@ namespace OnWeb.Core.Messaging.Email.Connectors
                             {
                                 _cachedEvents.AddWithExpiration(key, DateTime.Now, TimeSpan.FromMinutes(5));
                                 service.RegisterServiceEvent(
-                                    Journaling.EventType.Error,
+                                    EventType.Error,
                                     "Amazon SES - ограничение на отправку писем",
                                     $"Добавьте адрес '{match.Groups[2].Value}' в раздел 'Identity Management/Email Addresses', либо снимите ограничения на отправку писем в регионе '{match.Groups[1].Value}'.");
                             }
@@ -126,12 +128,12 @@ namespace OnWeb.Core.Messaging.Email.Connectors
                         if (!_cachedEvents.ContainsKey(key))
                         {
                             _cachedEvents.AddWithExpiration(key, DateTime.Now, TimeSpan.FromMinutes(5));
-                            service.RegisterServiceEvent(Journaling.EventType.Error, "Amazon SES - ограничение на отправку писем", $"Рассылка почты для этого аккаунта Amazon SES недоступна из-за блокировки.");
+                            service.RegisterServiceEvent(EventType.Error, "Amazon SES - ограничение на отправку писем", $"Рассылка почты для этого аккаунта Amazon SES недоступна из-за блокировки.");
                         }
                     }
                     else
                     {
-                        service.RegisterServiceEvent(Journaling.EventType.Error, "Amazon SES - ошибка отправки письма", null, ex);
+                        service.RegisterServiceEvent(EventType.Error, "Amazon SES - ошибка отправки письма", null, ex);
                         canBeResend = true;
                     }
 
