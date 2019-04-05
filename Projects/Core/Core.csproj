@@ -59,11 +59,8 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.6.0" />
     <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
     <PackageReference Include="OnUtils.Application" Version="0.1.1.2" />
-    <PackageReference Include="OnUtils" Version="0.1.1.3" />
+    <PackageReference Include="OnUtils" Version="0.1.1.5" />
     <PackageReference Include="Ude.NetStandard" Version="1.1.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Utils\External\DaData\" />
   </ItemGroup>
   <Target Name="CopyDuplicate" AfterTargets="Build">
     <Exec Command="rmdir /Q /S &quot;$(TargetDir.TrimEnd('\\'))2&quot;" />

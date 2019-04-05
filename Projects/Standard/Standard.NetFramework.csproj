@@ -95,7 +95,7 @@
       <Version>0.1.1.2</Version>
     </PackageReference>
     <PackageReference Include="OnUtils">
-      <Version>0.1.1.3</Version>
+      <Version>0.1.1.5</Version>
     </PackageReference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -1956,13 +1956,13 @@
     <Content Include="Plugins\Admin\Design\error404NotFound.cshtml" />
     <Content Include="Plugins\Admin\Design\errorHandled.cshtml" />
     <Content Include="Plugins\Adminmain\Design\admin_adminmain_addresses.cshtml" />
-    <Content Include="Plugins\Adminmain\Design\admin_adminmain_editablemenu.cshtml" />
-    <Content Include="Plugins\Adminmain\Design\admin_adminmain_editablemenu_ae.cshtml" />
+    <Content Include="Plugins\Adminmain\Design\EditableMenu.cshtml" />
+    <Content Include="Plugins\Adminmain\Design\EditableMenuEdit.cshtml" />
     <Content Include="Plugins\Adminmain\Design\admin_adminmain_info.cshtml" />
     <Content Include="Plugins\Adminmain\Design\admin_adminmain_modules.cshtml" />
     <Content Include="Plugins\Adminmain\Design\admin_adminmain_modules_extensions.cshtml" />
     <Content Include="Plugins\Adminmain\Design\admin_adminmain_rss.cshtml" />
-    <Content Include="Plugins\Adminmain\Design\admin_adminmain_sitemap.cshtml" />
+    <Content Include="Plugins\Adminmain\Design\Sitemap.cshtml" />
     <Content Include="Plugins\Adminmain\Design\admin_adminmain_sitemap_templ.cshtml" />
     <Content Include="Plugins\Adminmain\Design\JournalDetails.cshtml" />
     <Content Include="Plugins\Adminmain\Design\Journals.cshtml" />

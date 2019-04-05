@@ -94,6 +94,30 @@ namespace OnWeb.Core.Items
             return GetOrAdd(caption, "CUSTOMKEY_" + typeKey, true);
         }
 
+        // todo понять, нужен ли этот метод.
+        public static object GetItemOfType(int type, int IdItem)
+        {
+            return GetItemOfType(GetItemType(type), IdItem);
+        }
+
+        // todo понять, нужен ли этот метод.
+        public static object GetItemOfType(DB.ItemType type, int IdItem)
+        {
+            throw new NotImplementedException();
+            //if (type != NotFound)
+            //    foreach (var provider in this.Providers)
+            //    {
+            //        if (provider.IsProvideType(type))
+            //        {
+            //            var item = provider.GetItemOfType(type, IdItem);
+            //            if (item != null) return item;
+            //        }
+            //    }
+
+            return null;
+        }
+
+
         private static DB.ItemType GetOrAdd(string caption, string uniqueKey, bool registerIfNoFound)
         {
             var _r = ItemTypes.Where(x => x.Value.UniqueKey == uniqueKey).Select(x => x.Value).FirstOrDefault();

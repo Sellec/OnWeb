@@ -6,7 +6,7 @@ namespace OnWeb.Core.Messaging
     /// <summary>
     /// Описывает сервис отправки/приема сообщений.
     /// </summary>
-    public interface IMessagingService : IPoolObject, ServiceMonitor.IMonitoredService, IComponentSingleton<ApplicationCore>
+    public interface IMessagingService : IPoolObject, ServiceMonitor.IMonitoredService, IComponentSingleton<ApplicationCore>, IAutoStart
     {
         /// <summary>
         /// Указывает, что сервис поддерживает прием сообщений.

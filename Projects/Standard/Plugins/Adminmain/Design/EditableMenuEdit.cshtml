@@ -1,5 +1,5 @@
 @model Adminmain.Model.EditableMenu
-@{ var moduleAdmin = AppCore.Get<Plugins.Admin.Module>(); }
+@{ var moduleAdmin = AppCore.Get<Plugins.Admin.ModuleAdmin>(); }
 
 <script type='text/javascript'>
     $(document).ready(function () {
@@ -83,7 +83,7 @@
                 <select name='ModuleName' size='10' style="width:270px; ">
                     @foreach (var module in Model.Modules)
                     {
-                        <option value='@Module.UrlName'>@module.Caption</option>}
+                        <option value='@Module.IdModule'>@module.Caption</option>}
                 </select>
                 <input type='submit' value='Получить меню' id='getmenu'>
             </form>

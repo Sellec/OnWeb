@@ -29,5 +29,10 @@ namespace OnWeb.Core.Messaging
         /// Пересоздает текущий используемый список коннекторов с учетом настроек коннекторов. Рекомендуется к использованию в случае изменения настроек коннекторов.
         /// </summary>
         void UpdateConnectorsFromSettings();
+
+        /// <summary>
+        /// Возвращает список сервисов обмена сообщениями.
+        /// </summary>
+        IEnumerable<IMessagingService> GetMessagingServices();
     }
 }

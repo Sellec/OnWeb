@@ -73,7 +73,7 @@
             </div>
 
             @{
-                var module = ModulesManager.getModule<Realty.Module>();
+                var module = AppCore.GetModulesManager().GetModule<Realty.Module>();
                 var news = module?.GetNewsList(5) ?? new List<Materials.DB.News>();
                 var iteration = 1;
 

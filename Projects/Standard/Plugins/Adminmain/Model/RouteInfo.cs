@@ -2,7 +2,7 @@
 {
     public class RouteInfo
     {
-        public Routing Route;
+        public Core.DB.Routing Route;
         public string ItemName;
     }
 }

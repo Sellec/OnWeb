@@ -113,23 +113,6 @@ namespace OnWeb.Plugins.Developing
             return Content(str);
         }
 
-        public ActionResult TestAddress(string address)
-        {
-            var result = AppCore.Get<Core.Addresses.IManager>().SearchAddress(address);
-            return Content(result.Result?.KodAddress);
-        }
-
-        public ActionResult TestGeo(string address)
-        {
-            System.Net.IPAddress ip = null;
-            if (System.Net.IPAddress.TryParse(address, out ip))
-            {
-                var result = AppCore.Get<Core.Addresses.IManager>().GetAddressByIP(ip);
-                return Content(result.Result?.KodAddress);
-            }
-            else return Content("not");
-        }
-
         public ActionResult TestError500()
         {
             Session["asdasd"] = DateTime.Now;

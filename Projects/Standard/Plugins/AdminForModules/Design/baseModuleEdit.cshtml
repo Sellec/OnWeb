@@ -1,6 +1,6 @@
 @{ 
     Layout = nameof(Plugins.Admin) + "/Design/baseAdmin.cshtml";
-    var moduleAdmin = AppCore.Get<Plugins.Admin.Module>();
+    var moduleAdmin = AppCore.Get<Plugins.Admin.ModuleAdmin>();
 }
 
 <script type='text/javascript'>
@@ -40,13 +40,12 @@ $(document).ready(function(){
             <td><b>@Module.ID</b></td>
         </tr>
         <tr class="registered">
-            <td>URL-доступное имя модуля:</td>
-            <td><input type='text' name='ModuleName' length='10' maxlength='10' value='@Module.UrlName'></td>
+            <td>Использующееся URL-доступное имя модуля:</td>
+            <td><b>@Module.UrlName</b></td>
         </tr>
         @RenderSection("ModuleConfiguration", false)
         <tr>
             <td colspan='2'>
-                <span style="color:red;">Обратите внимание - при сохранении настроек модуля сам модуль перезагружается.</span><br />
                 <input type="submit" value="Сохранить" />
                 <div id='res' style="margin:5px 10px;padding:5px;"></div>
                 <div id='config'></div>

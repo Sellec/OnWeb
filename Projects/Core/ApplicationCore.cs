@@ -70,7 +70,6 @@ namespace OnWeb
         /// </summary>
         protected override void OnBindingsRequired(IBindingsCollection<ApplicationCore> bindingsCollection)
         {
-            bindingsCollection.SetSingleton<Core.Addresses.IManager, Core.Addresses.AddressManager>();
             bindingsCollection.SetSingleton<Core.Items.ItemsManager>();
             bindingsCollection.SetSingleton<Core.Journaling.IJournalingManager, Core.Journaling.JournalingManager>();
             bindingsCollection.SetSingleton<Core.Messaging.IMessagingManager, Core.Messaging.MessagingManager>();

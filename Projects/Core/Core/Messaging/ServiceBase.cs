@@ -29,6 +29,7 @@ namespace OnWeb.Core.Messaging
         /// </summary>
         protected sealed override void OnStart()
         {
+            throw new NotImplementedException();
         }
 
         /// <summary>

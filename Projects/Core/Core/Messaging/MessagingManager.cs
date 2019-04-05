@@ -160,6 +160,11 @@ namespace OnWeb.Core.Messaging
             return _services.OfType<ICriticalMessagesReceiver>();
         }
 
+        IEnumerable<IMessagingService> IMessagingManager.GetMessagingServices()
+        {
+            return _services.ToList();
+        }
+
         void IMessagingManager.UpdateConnectorsFromSettings()
         {
             lock (_activeConnectorsSyncRoot)
