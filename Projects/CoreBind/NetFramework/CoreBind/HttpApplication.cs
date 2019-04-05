@@ -131,6 +131,9 @@ namespace OnWeb.CoreBind.Razor
 
         internal void Application_BeginRequest(Object sender, EventArgs e)
         {
+            HttpContext.Current.SetAppCore(_applicationCore);
+            _applicationCore.GetUserContextManager().SetCurrentUserContext(_applicationCore.GetUserContextManager().CreateGuestUserContext());
+
             var isFirstRequest = (bool?)this.Context.GetType().GetProperty("FirstRequest", BindingFlags.Instance | BindingFlags.GetProperty | BindingFlags.NonPublic)?.GetValue(this.Context);
             if (isFirstRequest.HasValue && isFirstRequest.Value == true)
             {
@@ -138,8 +141,6 @@ namespace OnWeb.CoreBind.Razor
             }
             if (!_applicationCore.IsServerUrlHasBeenSet  && isFirstRequest.HasValue && isFirstRequest.Value)
                 _applicationCore.ServerUrl = new UriBuilder(Request.Url.Scheme, Request.Url.Host, Request.Url.Port).Uri;
-
-            _applicationCore.GetUserContextManager().SetCurrentUserContext(_applicationCore.GetUserContextManager().CreateGuestUserContext());
 
             _requestSpecificDisposables = new Queue<IDisposable>();
 

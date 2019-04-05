@@ -14,7 +14,7 @@ namespace OnWeb.Plugins.MessagingEmail.Connectors
     /// <summary>
     /// Предоставляет возможность отправки электронной почты через Amazon Simple Email Service.
     /// </summary>
-    class AmazonSES : CoreComponentBase<ApplicationCore>, IConnectorBase<Message>, IDisposable
+    class AmazonSES : CoreComponentBase<ApplicationCore>, IConnectorBase<EmailMessage>, IDisposable
     {
         private SmtpClient _client = null;
         private System.Collections.Concurrent.ConcurrentDictionary<string, DateTime> _cachedEvents = new System.Collections.Concurrent.ConcurrentDictionary<string, DateTime>();
@@ -46,7 +46,7 @@ namespace OnWeb.Plugins.MessagingEmail.Connectors
         /// См. <see cref="IConnectorBase{TMessage}.Init(string)"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Возникает, если коннектор уже был инициализирован.</exception>
-        bool IConnectorBase<Message>.Init(string connectorSettings)
+        bool IConnectorBase<EmailMessage>.Init(string connectorSettings)
         {
             if (_client != null) throw new InvalidOperationException("Коннектор уже инициализирован.");
 
@@ -77,7 +77,7 @@ namespace OnWeb.Plugins.MessagingEmail.Connectors
             }
         }
 
-        void IConnectorBase<Message>.Send(MessageProcessed<Message> message, IMessagingService service)
+        void IConnectorBase<EmailMessage>.Send(MessageProcessed<EmailMessage> message, IMessagingService service)
         {
             try
             {
@@ -192,7 +192,7 @@ namespace OnWeb.Plugins.MessagingEmail.Connectors
             return _client;
         }
 
-        string IConnectorBase<Message>.ConnectorName
+        string IConnectorBase<EmailMessage>.ConnectorName
         {
             get => "Amazon SES";
         }

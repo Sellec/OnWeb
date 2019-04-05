@@ -8,7 +8,7 @@ namespace OnWeb.Plugins.MessagingEmail
     /// <summary>
     /// Представляет сервис отправки электронных писем (Email).
     /// </summary>
-    public interface IService : IMessagingService
+    public interface IEmailService : IMessagingService
     {
         /// <summary>
         /// Отправка письма получателю <paramref name="nameTo"/> с адресом <paramref name="emailTo"/> с темой <paramref name="subject"/>, с текстом <paramref name="body"/>.

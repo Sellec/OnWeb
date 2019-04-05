@@ -6,9 +6,9 @@ namespace OnWeb.Plugins.MessagingEmail
 {
     using Core.Messaging;
 
-    class Service : ServiceBase<Message>, IService
+    class EmailService : ServiceBase<EmailMessage>, IEmailService
     {
-        public Service() : base("Email", "Email".GenerateGuid())
+        public EmailService() : base("Email", "Email".GenerateGuid())
         {
             IsSupportsIncoming = false;
             IsSupportsOutcoming = true;
@@ -16,11 +16,11 @@ namespace OnWeb.Plugins.MessagingEmail
         }
 
         #region Отправка
-        void IService.SendMail(string name_from, string email_from, string name_to, string email_to, Encoding data_charset, Encoding send_charset, string subject, string body, List<int> files)
+        void IEmailService.SendMail(string name_from, string email_from, string name_to, string email_to, Encoding data_charset, Encoding send_charset, string subject, string body, List<int> files)
         {
             email_from = "test@test.ru";
 
-            var message = new Message()
+            var message = new EmailMessage()
             {
                 From = new Contact<string>(name_from, email_from),
                 To = new List<Contact<string>>() { new Contact<string>(name_to, email_to) },
@@ -31,10 +31,10 @@ namespace OnWeb.Plugins.MessagingEmail
             RegisterMessage(message);
         }
 
-        void IService.SendToAdmin(string subject, string body)
+        void IEmailService.SendToAdmin(string subject, string body)
         {
 
-            ((IService)this).SendMail(
+            ((IEmailService)this).SendMail(
                 "Почтовый робот сайта",
                 GetNoReplyAddress(),
                 "admin",
@@ -45,14 +45,14 @@ namespace OnWeb.Plugins.MessagingEmail
             );
         }
 
-        void IService.SendMailFromSite(string nameTo, string emailTo, string subject, string body, List<int> files)
+        void IEmailService.SendMailFromSite(string nameTo, string emailTo, string subject, string body, List<int> files)
         {
-            ((IService)this).SendMail("Почтовый робот сайта", GetNoReplyAddress(), nameTo, emailTo, null, null, subject, body, files);
+            ((IEmailService)this).SendMail("Почтовый робот сайта", GetNoReplyAddress(), nameTo, emailTo, null, null, subject, body, files);
         }
 
-        void IService.SendMailToDeveloper(string subject, string body, List<int> files)
+        void IEmailService.SendMailToDeveloper(string subject, string body, List<int> files)
         {
-            ((IService)this).SendMail("Почтовый робот сайта", GetNoReplyAddress(), "Developers", "test@test.com", null, null, subject, body, files);
+            ((IEmailService)this).SendMail("Почтовый робот сайта", GetNoReplyAddress(), "Developers", "test@test.com", null, null, subject, body, files);
         }
 
         /**

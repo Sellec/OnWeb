@@ -1,4 +1,7 @@
 ﻿using OnUtils.Utils;
+using OnWeb.Core.Modules;
+using OnWeb.CoreBind.Routing;
+using System.Linq.Expressions;
 
 namespace System.Web.Mvc
 {
@@ -78,7 +81,7 @@ namespace System.Web.Mvc
         public static string ActionUser(this UrlHelper url, string action, string controllerName, object routeValues)
         {
             var values = TypeHelper.ObjectToDictionary(routeValues);
-            TypeHelper.AddAnonymousObjectToDictionary(values, new { area = OnWeb.CoreBind.Routing.AreaConstants.User });
+            TypeHelper.AddAnonymousObjectToDictionary(values, new { area = AreaConstants.User });
 
             return url.Action(action, controllerName, values);
         }
@@ -97,19 +100,19 @@ namespace System.Web.Mvc
         public static string ActionAdmin(this UrlHelper url, string action, string controllerName, object routeValues)
         {
             var values = TypeHelper.ObjectToDictionary(routeValues);
-            TypeHelper.AddAnonymousObjectToDictionary(values, new { area = OnWeb.CoreBind.Routing.AreaConstants.AdminPanel });
+            TypeHelper.AddAnonymousObjectToDictionary(values, new { area = AreaConstants.AdminPanel });
 
             return url.Action(action, controllerName, values);
         }
 
-        ///// <summary>
-        ///// Формирует url на основе выражения <paramref name="expression"/> для контроллера <typeparamref name="TModuleController"/>. Более подробно см. описание <see cref="Routing.Manager.CreateRoute{TModuleController}(Expression{Func{TModuleController, ActionResult}})"/>.
-        ///// </summary>
-        //public static string CreateRoute<TModuleController>(this UrlHelper url,  Expression<Func<TModuleController, ActionResult>> expression) where TModuleController : ModuleController
-        //{
-        //    return Manager.Instance.CreateRoute<TModuleController>(expression);
-        //}
-
-
+        /// <summary>
+        /// Формирует url на основе выражения <paramref name="expression"/> для контроллера <typeparamref name="TModuleController"/>. Более подробно см. описание <see cref="RoutingManager.CreateRoute{TModule, TModuleController}(Expression{Func{TModuleController, ActionResult}})"/>.
+        /// </summary>
+        public static string CreateRoute<TModule, TModuleController>(this UrlHelper url, Expression<Func<TModuleController, ActionResult>> expression)
+            where TModule : ModuleCore<TModule>
+            where TModuleController : IModuleController<TModule>
+        {
+            return url.RequestContext.HttpContext.GetAppCore().Get<RoutingManager>().CreateRoute<TModule, TModuleController>(expression);
+        }
     }
 }

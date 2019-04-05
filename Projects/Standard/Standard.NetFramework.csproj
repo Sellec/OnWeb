@@ -92,10 +92,10 @@
       <Version>0.64.0</Version>
     </PackageReference>
     <PackageReference Include="OnUtils.Application">
-      <Version>0.1.1.2</Version>
+      <Version>0.1.1.3</Version>
     </PackageReference>
     <PackageReference Include="OnUtils">
-      <Version>0.1.1.5</Version>
+      <Version>0.1.1.6</Version>
     </PackageReference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -140,6 +140,7 @@
     <Compile Include="Plugins\Auth\Model\PasswordRestoreVerify.cs" />
     <Compile Include="Plugins\Auth\ModuleAuthController.cs" />
     <Compile Include="Plugins\Auth\ModuleAuthControllerAdmin.cs" />
+    <Compile Include="Plugins\Auth\Startup.cs" />
     <Compile Include="Plugins\Customer\Design\Model\Profile.cs" />
     <Compile Include="Plugins\Customer\Model\AdminRoleEdit.cs" />
     <Compile Include="Plugins\Customer\Model\AdminRolesDelegate.cs" />
@@ -150,8 +151,8 @@
     <Compile Include="Plugins\Customer\Model\ProfileEdit.cs" />
     <Compile Include="Plugins\Customer\Model\UserEditable.cs" />
     <Compile Include="Plugins\Customer\Model\UserPasschange.cs" />
-    <Compile Include="Plugins\Customer\ModuleController.cs" />
-    <Compile Include="Plugins\Customer\ModuleControllerAdmin.cs" />
+    <Compile Include="Plugins\Customer\ModuleControllerCustomer.cs" />
+    <Compile Include="Plugins\Customer\ModuleControllerAdminCustomer.cs" />
     <Compile Include="Plugins\Default\ModuleDefaultController.cs" />
     <Compile Include="Plugins\Default\Startup.cs" />
     <Compile Include="Plugins\Developing\ModuleDevelopingController.cs" />
@@ -203,11 +204,15 @@
     <Compile Include="Plugins\reCAPTCHA\ModelAttribute.cs" />
     <Compile Include="Plugins\reCAPTCHA\ModelValidator.cs" />
     <Compile Include="Plugins\reCAPTCHA\ModelValidatorProvider.cs" />
+    <Compile Include="Plugins\reCAPTCHA\ModuleReCaptcha.cs" />
+    <Compile Include="Plugins\reCAPTCHA\ModuleReCaptchaConfiguration.cs" />
+    <Compile Include="Plugins\reCAPTCHA\ReCaptcha2Answer.cs" />
     <Compile Include="Plugins\reCAPTCHA\Startup.cs" />
     <Compile Include="Plugins\Register\Model\PreparedForRegister.cs" />
     <Compile Include="Plugins\Register\Model\Register.cs" />
     <Compile Include="Plugins\Register\ModuleRegister.cs" />
     <Compile Include="Plugins\Register\ModuleRegisterController.cs" />
+    <Compile Include="Plugins\Register\Startup.cs" />
     <Compile Include="Plugins\Universal\PaginationHelper.cs" />
     <Compile Include="Plugins\Universal\Pagination\InfoCount.cs" />
     <Compile Include="Plugins\Universal\Pagination\ListViewOptions.cs" />

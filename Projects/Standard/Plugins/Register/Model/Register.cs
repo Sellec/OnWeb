@@ -5,6 +5,7 @@ namespace OnWeb.Plugins.Register.Model
     using Core.DB;
     using Core.Items;
 
+    [reCAPTCHA.Model]
     [ItemTypeAlias(typeof(User))]
     public class Register : ItemBase<Customer.ModuleCustomer>
     {

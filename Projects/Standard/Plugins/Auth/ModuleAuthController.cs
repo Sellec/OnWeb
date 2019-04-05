@@ -12,6 +12,7 @@ namespace OnWeb.Plugins.Auth
     using Core.Journaling;
     using Core.Users;
     using CoreBind.Modules;
+    using MessagingEmail;
 
     public class ModuleAuthController : ModuleControllerUser<ModuleAuth>
     {
@@ -50,14 +51,16 @@ namespace OnWeb.Plugins.Auth
                 var phone = PhoneBuilder.ParseString(model.login);
                 if (!model.login.isEmail() && !phone.IsCorrect) throw new BehaviourException("Неправильно введен логин.");
 
-                throw new NotImplementedException(); // todo проверить рекапчу. if (!IsReCaptchaValid) throw new BehaviourException(CaptchManager.getError());
-
-                var result = AppCore.GetUserContextManager().CreateUserContext(model.login, model.pass);
-                if (result.IsSuccess && result.AuthResult == eAuthResult.Success)
+                if (ModelState.IsValid)
                 {
-                    //message = "Авторизация прошла успешно!";
+                    var result = AppCore.GetUserContextManager().CreateUserContext(model.login, model.pass);
+                    if (result.IsSuccess && result.AuthResult == eAuthResult.Success)
+                    {
+                        AppCore.GetUserContextManager().SetCurrentUserContext(result.Result);
+                        //message = "Авторизация прошла успешно!";
+                    }
+                    else throw new BehaviourException(result.Message);
                 }
-                else throw new BehaviourException(result.Message);
             }
             catch(BehaviourException ex)
             {
@@ -217,7 +220,7 @@ namespace OnWeb.Plugins.Auth
                                 var code = DateTime.Now.Microtime().MD5();
                                 DB.PasswordRemember.Add(new PasswordRemember() { user_id = user.id, code = code });
 
-                                AppCore.Get<Core.Messaging.Email.IService>().SendMailFromSite(
+                                AppCore.Get<IEmailService>().SendMailFromSite(
                                     user.Caption,
                                     user.email,
                                     "Восстановление пароля на сайте",

@@ -178,7 +178,7 @@ namespace OnWeb.CoreBind.Modules
         {
             var isAllowed = true;
 
-            var moduleActionAttribute = (filterContext?.ActionDescriptor as ReflectedActionDescriptor)?.MethodInfo?.GetCustomAttribute<ModuleActionAttribute>();
+            var moduleActionAttribute = (filterContext?.ActionDescriptor as ReflectedActionDescriptor)?.MethodInfo?.GetCustomAttributes<ModuleActionAttribute>(true).FirstOrDefault();
             if (moduleActionAttribute != null && moduleActionAttribute.Permission != Guid.Empty)
             {
                 isAllowed = ModuleBase.CheckPermission(ModuleBase.AppCore.GetUserContextManager().GetCurrentUserContext(), moduleActionAttribute.Permission) == CheckPermissionResult.Allowed;
@@ -186,10 +186,8 @@ namespace OnWeb.CoreBind.Modules
 
             if (!isAllowed)
             {
-                //UserManager.AuthorizationRedirect = filterContext.RequestContext.RouteData.Values;
-                // todo AppCore.GetUserContextManager().GetCurrentUserContext().AuthorizationRedirectUrl = filterContext.RequestContext.HttpContext.Request.Url.PathAndQuery;
-
                 var moduleAuth = AppCore.Get<Plugins.Auth.ModuleAuth>();
+                moduleAuth.RememberUserContextRequestedAddressWhenRedirectedToAuthorization(filterContext.RequestContext.HttpContext.Request.Url);
 
                 filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary {
                     {"controller", moduleAuth.UrlName },
@@ -543,7 +541,7 @@ namespace OnWeb.CoreBind.Modules
 
         #region Переадресация на другие модули.
         /// <summary>
-        /// Выполняет переадресацию к методу в выражении <paramref name="expression"/> для контроллера <typeparamref name="TModuleController"/>. Более подробно см. описание <see cref="Routing.Manager.CreateRoute{TModuleController}(Expression{Func{TModuleController, ActionResult}})"/>.
+        /// Выполняет переадресацию к методу в выражении <paramref name="expression"/> для контроллера <typeparamref name="TModuleController"/>. Более подробно см. описание <see cref="Routing.RoutingManager.CreateRoute{TModuleController}(Expression{Func{TModuleController, ActionResult}})"/>.
         /// </summary>
         public RedirectResult Redirect<TModuleController>(Expression<Func<TModuleController, ActionResult>> expression) where TModuleController : ModuleControllerBase
         {
@@ -556,13 +554,6 @@ namespace OnWeb.CoreBind.Modules
         {
             get => throw new NotImplementedException();
         }
-        #endregion
-
-        #region reCaptcha 2
-        // todo protected bool IsReCaptchaValid
-        //{
-        //    get => CaptchManager.checkReCaptcha();
-        //}
         #endregion
 
         #region Расширения

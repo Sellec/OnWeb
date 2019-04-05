@@ -13,7 +13,7 @@ namespace OnWeb.Core.WebUtils
     /// </summary>
     public static class RazorRenderHelper
     {
-        class FakeController<TModule> : ModuleControllerUser<TModule> where TModule : Modules.ModuleCore
+        class FakeController<TModule> : ModuleControllerUser<TModule> where TModule : Modules.ModuleCore<TModule>
         {
         }
 
@@ -48,14 +48,16 @@ namespace OnWeb.Core.WebUtils
                     routeData.Values["controller"] = "fake";
 
                     var controller = Activator.CreateInstance(typeof(FakeController<>).MakeGenericType(module.GetType())) as ModuleControllerBase;
-                    var method = controller.GetType().GetMethod(nameof(ModuleControllerUser<Modules.ModuleCore>.InitController), BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                    var method = controller.GetType().GetMethod(nameof(ModuleControllerUser<Plugins.CoreModule.CoreModule>.InitController), BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
                     method.Invoke(controller, new object[] { module });
 
                     var controllerContext = new ControllerContext(new RequestContext(contextWrapper, routeData), controller as Controller);
 
                     var viewResult = ViewEngines.Engines.FindView(controllerContext, template, null);
                     if (viewResult.View == null) throw new ArgumentException($"Представление '{template}' не найдено.", nameof(template));
-                    var viewContext = new ViewContext(controllerContext, viewResult.View, new ViewDataDictionary(model), new TempDataDictionary(), sw);
+                    var viewData = new ViewDataDictionary(model);
+                    viewData["Module"] = module;
+                    var viewContext = new ViewContext(controllerContext, viewResult.View, viewData, new TempDataDictionary(), sw);
                     viewResult.View.Render(viewContext, sw);
                     viewResult.ViewEngine.ReleaseView(controllerContext, viewResult.View);
                     return sw.GetStringBuilder().ToString();

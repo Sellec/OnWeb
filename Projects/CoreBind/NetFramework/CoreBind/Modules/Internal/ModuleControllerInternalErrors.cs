@@ -14,7 +14,7 @@ namespace OnWeb.CoreBind.Modules.Internal
         void SetException(Exception ex);
     }
 
-    sealed class ModuleControllerInternalErrors<T> : ModuleControllerUser<T>, IModuleControllerInternalErrors where T : ModuleCore
+    sealed class ModuleControllerInternalErrors<T> : ModuleControllerUser<T>, IModuleControllerInternalErrors where T : ModuleCore<T>
     {
         private Exception _ex = null;
 

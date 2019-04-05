@@ -1,27 +1,24 @@
+@using Register
+@using Auth
 @model Register.Model.Register
 <link rel="stylesheet" type="text/css" href="/data/js/uploadify/uploadify.css">
 
 <script type='text/javascript'>
-    $(function ()
-    {
+    $(function () {
         $("#reg_form").requestJSON({
-            before: function ()
-            {
+            before: function () {
                 var res = '';
                 if ($('#pass').val() != $('#pass2').val()) res = res + ' ' + '&rarr; Пароль и подтверждение пароля должны совпадать!<br />';
-                if (res.length > 0)
-                {
+                if (res.length > 0) {
                     alert(res);
                     $("#mod_error").html(res);
                     open_modal("#mod_error");
                     return false;
-                } else
-                {
+                } else {
                     $("#loading_img").fadeIn();
                 }
             },
-            after: function (result, message, data)
-            {
+            after: function (result, message, data) {
                 $("#mod_error").html(message.replace(/\n/g, '<br />')).show();
                 open_modal("#mod_error");
                 //if (message.length > 0) alert(message);
@@ -41,44 +38,44 @@
     <div id="enter_reg" class="pass_block notop cover">
         <div class="login-block-inner">
 
-                <div class="enter-block" id="enter_reg">   
-                    <form action='@(Url.CreateRoute<Modules.Register.ModuleRegisterController>(x=>x.RegisterSave(null)))' method='post' id='reg_form' class='pass_inner'>
+            <div class="enter-block" id="enter_reg">
+                <form action='@(Url.CreateRoute<ModuleRegister, ModuleRegisterController>(x=>x.RegisterSave(null)))' method='post' id='reg_form' class='pass_inner'>
 
-                        <div class="site_reginfo">@Html.Raw(Config.Get("site_reginfo", ""))</div>
-                        <div class="login-form__row">
-                            @Html.TextBoxFor(model => model.email, new { @class = "style-input", placeholder = Html.DisplayNameFor(model => model.email) })
-                            @Html.ValidationMessageFor(model => model.email)
-                            @Html.ValidationMessageFor(model => model.EmailOrPhone)
-                        </div>
-                        <div class="login-form__row">
-                            @Html.TextBoxFor(model => model.phone, new { @class = "style-input", placeholder = Html.DisplayNameFor(model => model.phone) })
-                            @Html.ValidationMessageFor(model => model.phone)
-                            @Html.ValidationMessageFor(model => model.EmailOrPhone)
-                        </div>
-                        <div class="login-form__row">
-                            @Html.TextBoxFor(model => model.name, new { @class = "style-input", placeholder = Html.DisplayNameFor(model => model.name) })
-                            @Html.ValidationMessageFor(model => model.name)
-                        </div>
-                        <div class="login-form__row">
-                            @*Html.LabelFor(model => model.password)*@
-                            @Html.PasswordFor(model => model.password, new { @class = "style-input", placeholder = Html.DisplayNameFor(model => model.password), id = "pass" })<br />
-                            @Html.ValidationMessageFor(model => model.password)
-                        </div>
-                        <div class="login-form__row">
-                            <input type='password' class='style-input' name='password2' placeholder='Повторите пароль' id='pass2' />
-                        </div>
-                        <div class="login-form__row center-row recaptcha">
-                            @Html.RecaptchaInvisible("Зарегистрироваться", new { @class = "input-submit" })
-                        </div>
+                    <div class="site_reginfo">@Html.Raw(Config.Get("site_reginfo", ""))</div>
+                    <div class="login-form__row">
+                        @Html.TextBoxFor(model => model.email, new { @class = "style-input", placeholder = Html.DisplayNameFor(model => model.email) })
+                        @Html.ValidationMessageFor(model => model.email)
+                        @Html.ValidationMessageFor(model => model.EmailOrPhone)
+                    </div>
+                    <div class="login-form__row">
+                        @Html.TextBoxFor(model => model.phone, new { @class = "style-input", placeholder = Html.DisplayNameFor(model => model.phone) })
+                        @Html.ValidationMessageFor(model => model.phone)
+                        @Html.ValidationMessageFor(model => model.EmailOrPhone)
+                    </div>
+                    <div class="login-form__row">
+                        @Html.TextBoxFor(model => model.name, new { @class = "style-input", placeholder = Html.DisplayNameFor(model => model.name) })
+                        @Html.ValidationMessageFor(model => model.name)
+                    </div>
+                    <div class="login-form__row">
+                        @*Html.LabelFor(model => model.password)*@
+                        @Html.PasswordFor(model => model.password, new { @class = "style-input", placeholder = Html.DisplayNameFor(model => model.password), id = "pass" })<br />
+                        @Html.ValidationMessageFor(model => model.password)
+                    </div>
+                    <div class="login-form__row">
+                        <input type='password' class='style-input' name='password2' placeholder='Повторите пароль' id='pass2' />
+                    </div>
+                    <div class="login-form__row center-row recaptcha">
+                        @Html.RecaptchaInvisible("Зарегистрироваться", new { @class = "input-submit" })
+                    </div>
 
-                        <div class="login-form__row">
-                            <input type='submit' value='Регистрация' class='input-submit' name='confirm_b' id="confirm_b" />
-                        </div>
-                        <a href="@(Url.CreateRoute<Modules.Auth.ModuleAuthController>(x=>x.Index()))" title="" class="er_enter">У меня есть аккаунт!</a>
-                    </form>
-                    <div id="req_result" class="result"></div>
-                </div>
-           
+                    <div class="login-form__row">
+                        <input type='submit' value='Регистрация' class='input-submit' name='confirm_b' id="confirm_b" />
+                    </div>
+                    <a href="@(Url.CreateRoute<ModuleAuth, ModuleAuthController>(x=>x.Index()))" title="" class="er_enter">У меня есть аккаунт!</a>
+                </form>
+                <div id="req_result" class="result"></div>
+            </div>
+
         </div>
     </div>
 </div>

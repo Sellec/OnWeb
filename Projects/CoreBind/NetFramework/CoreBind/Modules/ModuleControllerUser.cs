@@ -13,7 +13,7 @@ namespace OnWeb.CoreBind.Modules
     /// Переопределяет часть стандартного функционала и предлагает другие методы вместо стандартных (см., например, <see cref="ModuleControllerBase.OnBeforeExecution(ActionExecutingContext)"/>).
     /// </summary>
     public abstract class ModuleControllerUser<TModule, TContext> : ModuleControllerBase, IModuleController<TModule>
-        where TModule : ModuleCore
+        where TModule : ModuleCore<TModule>
         where TContext : UnitOfWorkBase, new()
     {
         private class CoreComponentImpl : CoreComponentBase<ApplicationCore>
@@ -74,7 +74,7 @@ namespace OnWeb.CoreBind.Modules
 
             ////foreach($this.mExtensions as $key => $var) $this.assignRef($key."Ex", $var);
 
-            ViewData["Module"] = this;
+            ViewData["Module"] = Module;
 
             //////////////this.assignRef("Main", ApplicationCore.Instance);
             //////////////this.assignRef("UserManager", UserManager.Instance);
@@ -99,7 +99,7 @@ namespace OnWeb.CoreBind.Modules
     /// Переопределяет часть стандартного функционала и предлагает другие методы вместо стандартных (см., например, <see cref="ModuleControllerBase.OnBeforeExecution(ActionExecutingContext)"/>).
     /// </summary>
     public abstract class ModuleControllerUser<TModule> : ModuleControllerUser<TModule, CoreContext>
-        where TModule : ModuleCore
+        where TModule : ModuleCore<TModule>
     {
     }
 

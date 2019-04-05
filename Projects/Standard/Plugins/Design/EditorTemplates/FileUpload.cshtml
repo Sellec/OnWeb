@@ -67,10 +67,10 @@
     var uploadOptions = optionsFromAttributes as IDictionary<string, object>;
     uploadOptions["formData"] = new { moduleName = "" };
 
-    if (this.Module != null) { uploadOptions["formData"] = new { moduleName = this.Module.Name }; }
+    if (this.Module != null) { uploadOptions["formData"] = new { moduleName = this.Module.UrlName }; }
     uploadOptions["multiple"] = isMultiple;
 
-    Modules.FileManager.MVC.FileRenderOptions options = null;
+    FileManager.MVC.FileRenderOptions options = null;
     switch ((FileType)(ViewData.ModelMetadata.AdditionalValues.GetValueOrDefault(nameof(FileDataTypeAttribute.FileType)) ?? FileType.File))
     {
         case FileType.Image:
@@ -79,7 +79,7 @@
             if (imagePresentOptions != null && imagePresentOptions.MaxWidth.HasValue) { htmlSizes.Add($"max-width:{imagePresentOptions.MaxWidth}px;width: expression(this.width > {imagePresentOptions.MaxWidth } ? {imagePresentOptions.MaxWidth}: true);"); }
             if (imagePresentOptions != null && imagePresentOptions.MaxHeight.HasValue) { htmlSizes.Add($"max-height:{imagePresentOptions.MaxHeight}px;height: expression(this.height > {imagePresentOptions.MaxHeight } ? {imagePresentOptions.MaxHeight}: true);"); }
             var htmlSizesAttrs = "style='" + string.Join("; ", htmlSizes) + "'";
-            options = new Modules.FileManager.MVC.FileRenderOptions()
+            options = new FileManager.MVC.FileRenderOptions()
             {
                 UploadedFileInfoJS = " \"<img alt='файл №\" + data + \"' src='/fm/image/\" + data + \"' " + htmlSizesAttrs + ">\" ",
                 UploadedFileInfo = new Func<int, string>(IdFile => $"<img alt='файл №{IdFile}' src='/fm/image/{IdFile}' {htmlSizesAttrs}>")
@@ -88,7 +88,7 @@
 
         case FileType.File:
         default:
-            options = new Modules.FileManager.MVC.FileRenderOptions()
+            options = new FileManager.MVC.FileRenderOptions()
             {
                 UploadedFileInfoJS = " \"<label>файл №\" + data + \"</label>\" ",
                 UploadedFileInfo = new Func<int, string>(IdFile => $"<label>файл №{IdFile}</label>")

@@ -7,21 +7,12 @@ using System.Web.Mvc;
 
 namespace OnWeb.Plugins.Customer
 {
-    using Core.Configuration;
-    using Core.DB;
-    using Core.Items;
-    using Core.Modules;
-    using Core.Users;
-    using Core.Exceptions;
-    using CoreBind.Modules;
-    using Core.Modules;
-    using Core.Routing;
-    using CoreBind.Modules;
-    using CoreBind.Routing;
     using Core.DB;
     using Core.Journaling;
+    using CoreBind.Modules;
+    using MessagingEmail;
 
-    public class ModuleControllerAdmin : ModuleControllerAdmin<ModuleCustomer>
+    public class ModuleControllerAdminCustomer : ModuleControllerAdmin<ModuleCustomer>
     {
         [ModuleAction("users", ModuleCustomer.PERM_MANAGEUSERS)]
         public virtual ActionResult Users(UserState? state = null)
@@ -233,7 +224,7 @@ namespace OnWeb.Plugins.Customer
                                         this.assign("login", Request.Form["email"]);
                                         this.assign("message", "Ваша заявка была одобрена администратором, вы можете зайти на сайт, используя логин и пароль, указанные при регистрации!");
 
-                                        AppCore.Get<Core.Messaging.Email.IService>().SendMailFromSite(
+                                        AppCore.Get<IEmailService>().SendMailFromSite(
                                             data.ToString(),
                                             data.email,
                                             "Успешная регистрация на сайте",
@@ -256,7 +247,7 @@ namespace OnWeb.Plugins.Customer
                                         this.assign("login", data.email);
                                         this.assign("message", "Ваша заявка была отклонена администратором" + message);
 
-                                        AppCore.Get<Core.Messaging.Email.IService>().SendMailFromSite(
+                                        AppCore.Get<IEmailService>().SendMailFromSite(
                                             data.ToString(),
                                             data.email,
                                             "Регистрация на сайте отклонена",
@@ -283,7 +274,7 @@ namespace OnWeb.Plugins.Customer
 
                                         this.assign("login", data.email);
                                         this.assign("message", "Ваш аккаунт заблокирован администратором" + message);
-                                        AppCore.Get<Core.Messaging.Email.IService>().SendMailFromSite(
+                                        AppCore.Get<IEmailService>().SendMailFromSite(
                                             data.ToString(),
                                             data.email,
                                             "Аккаунт заблокирован",

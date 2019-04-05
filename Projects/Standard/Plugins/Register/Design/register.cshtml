@@ -1,34 +1,32 @@
+@using Auth
+@using Customer
+@using Register
 @model Register.Model.Register
-@{ 
+@{
     Layout = "baseCommon.cshtml";
     Title = "Регистрация";
 }
 
 @section head { <link rel="stylesheet" type="text/css" href="/data/js/uploadify/uploadify.css"> }
 
-@if (!!AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest)
+@if (AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest)
 {
     <script type='text/javascript'>
-        $(function ()
-        {
+        $(function () {
             $("#reg_form").requestJSON({
-                before: function ()
-                {
+                before: function () {
                     var res = '';
                     if ($('#pass').val() != $('#pass2').val()) res = res + ' ' + '&rarr; Пароль и подтверждение пароля должны совпадать!<br />';
-                    if (res.length > 0)
-                    {
+                    if (res.length > 0) {
                         alert(res);
                         $("#mod_error").html(res);
                         open_modal("#mod_error");
                         return false;
-                    } else
-                    {
+                    } else {
                         $("#loading_img").fadeIn();
                     }
                 },
-                after: function (result, message, data)
-                {
+                after: function (result, message, data) {
                     $("#mod_error").html(message.replace(/\n/g, '<br />')).show();
                     open_modal("#mod_error");
                     //if (message.length > 0) alert(message);
@@ -65,12 +63,12 @@
             @if (!AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest)
             {
                 <p class="pass_inner pages">Вы уже зарегистрированы, можете продолжать работу с сайтом.</p>
-                <p class="pass_inner pages"><a href="/customer" title="">Перейти к настройкам</a>, <a href="/customer/pchange" title="">Сменить пароль</a>, <a href="/login/logout" title="">Выйти из профиля</a></p>
+                <p class="pass_inner pages"><a href="@(Url.CreateRoute<ModuleCustomer, ModuleControllerCustomer>(x => x.Index(null)))" title="">Перейти к настройкам</a>, <a href="@(Url.CreateRoute<ModuleCustomer, ModuleControllerCustomer>(x => x.passwordChange()))" title="">Сменить пароль</a>, <a href="@(Url.CreateRoute<ModuleAuth, ModuleAuthController>(x => x.logout()))" title="">Выйти из профиля</a></p>
             }
             else
             {
-                <div class="enter-block" id="enter_reg">   
-                    <form action='@(Url.CreateRoute<Modules.Register.ModuleRegisterController>(x=>x.RegisterSave(null)))' method='post' id='reg_form' class='pass_inner'>
+                <div class="enter-block" id="enter_reg">
+                    <form action='@(Url.CreateRoute<ModuleRegister, ModuleRegisterController>(x=>x.RegisterSave(null)))' method='post' id='reg_form' class='pass_inner'>
 
                         <div class="site_reginfo">@Html.Raw(Config.Get("site_reginfo", ""))</div>
                         <div class="login-form__row">
@@ -99,7 +97,7 @@
                             @Html.RecaptchaInvisible("Зарегистрироваться", new { @class = "input-submit" })
                             @* @CaptchManager.reRender("regReCaptcha1", "regReCaptcha2") *@
                         </div>
-                        <a href="@(Url.CreateRoute<Modules.Auth.ModuleAuthController>(x=>x.Index()))" title="" class="er_enter">У меня есть аккаунт!</a>
+                        <a href="@(Url.CreateRoute<ModuleAuth, ModuleAuthController>(x=>x.Index()))" title="" class="er_enter">У меня есть аккаунт!</a>
                     </form>
                     <div id="req_result" class="result"></div>
                 </div>

@@ -6,6 +6,8 @@ using System.Linq;
 
 namespace OnWeb.Core.Messaging
 {
+    using Plugins.MessagingEmail;
+
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Compiler", "CS0618")]
     class SubscriptionsManager : CoreComponentBase<ApplicationCore>, ISubscriptionsManager, IUnitOfWorkAccessor<DB.CoreContext>
     {
@@ -96,7 +98,7 @@ namespace OnWeb.Core.Messaging
                     {
                         if (excludedAddresses != null && excludedAddresses.Contains(pair.Key)) continue;
 
-                        AppCore.Get<IMessagingManager>().Email.SendMailFromSite(pair.Value, pair.Key, subject, body, files);
+                        AppCore.Get<IEmailService>().SendMailFromSite(pair.Value, pair.Key, subject, body, files);
                     }
 
                     if (!full) Debug.WriteLine("IdSubscription={0}. Исполнен частично.", IdSubscription);

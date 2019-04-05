@@ -1,4 +1,6 @@
-﻿@using OnUtils.Application.Modules
+﻿@using Admin
+@using Auth
+@using OnUtils.Application.Modules
 @{
     var g = this;
 
@@ -18,6 +20,7 @@
     }
 
     var userContextCurrent = AppCore.GetUserContextManager().GetCurrentUserContext();
+    var moduleAdmin = AppCore.GetModulesManager().GetModule<ModuleAdmin>();
 }
 
 <!DOCTYPE html>
@@ -71,10 +74,8 @@
     @RenderSection("bodyTagAfter", false)
 
     <script type='text/javascript'>
-        $(function ()
-        {
-            try
-            {
+        $(function () {
+            try {
             } catch (err) { console.log(err); }
         });
 
@@ -155,14 +156,13 @@
                                 }
                                 else
                                 {
-                                    <a href="/login" title="" class="top-login">
+                                    <a href="@(Url.CreateRoute<ModuleAuth, ModuleAuthController>(x => x.Login(null)))" title="" class="top-login">
                                         <div class="top-login__content">
                                             Войти<span class="top-login__text-hidden"> в кабинет</span>
                                         </div>
                                     </a>
                                 }
                             </div>
-                            @{ var moduleAdmin = AppCore.GetModulesManager().GetModule<Plugins.Admin.ModuleAdmin>(); }
                             @if (moduleAdmin != null && moduleAdmin.CheckPermission(ModulesConstants.PermissionManage) == CheckPermissionResult.Allowed)
                             {
                                 <div class="info-top-list__item list-admin">

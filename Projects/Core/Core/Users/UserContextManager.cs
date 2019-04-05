@@ -16,7 +16,7 @@ namespace OnWeb.Core.Users
     /// Каждый поток приложения имеет ассоциированный контекст пользователя, от имени которого могут выполняться запросы и выполняться действия. 
     /// Более подробно см. <see cref="UserContextManager{TApplication}.GetCurrentUserContext"/> / <see cref="UserContextManager{TApplication}.SetCurrentUserContext(IUserContext)"/> / <see cref="UserContextManager{TApplication}.ClearCurrentUserContext"/>.
     /// </summary>
-    public sealed class UserContextManager : UserContextManager<ApplicationCore>, IUnitOfWorkAccessor<DB.CoreContext>
+    public class UserContextManager : UserContextManager<ApplicationCore>, IUnitOfWorkAccessor<DB.CoreContext>
     {
         public const string RoleUserName = "RoleUser";
         public const string RoleGuestName = "RoleGuest";

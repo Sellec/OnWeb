@@ -7,7 +7,7 @@ namespace OnWeb.Plugins.MessagingEmail
     /// <summary>
     /// Описывает сообщение электронной почты.
     /// </summary>
-    public class Message : MessageBase
+    public class EmailMessage : MessageBase
     {
         /// <summary>
         /// Отправитель сообщения.

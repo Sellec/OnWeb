@@ -322,7 +322,7 @@ namespace OnWeb.Core.Modules
 
             //if (UserManager.Instance != null)
             //{
-            //    if (!!AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest) msg += $"Пользователь: Гость\r\n";
+            //    if (AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest) msg += $"Пользователь: Гость\r\n";
             //    else msg += $"Пользователь: {AppCore.GetUserContextManager().GetCurrentUserContext().getData().ToString()} (id: {AppCore.GetUserContextManager().GetCurrentUserContext().ID})\r\n";
             //}
 

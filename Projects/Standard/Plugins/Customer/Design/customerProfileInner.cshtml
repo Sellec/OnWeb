@@ -52,7 +52,7 @@
     
     @foreach (var field in Model.Edit.Fields.Values)
     {
-        if (field.FieldType is Modules.FileManager.CustomFieldsFileTypes.FileImageFieldType)
+        if (field.FieldType is FileManager.CustomFieldsFileTypes.FileImageFieldType)
         {
             <div class="editBlock">
                 @Html.LabelFor(field)

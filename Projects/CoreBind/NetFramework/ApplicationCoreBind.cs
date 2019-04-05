@@ -1,4 +1,5 @@
 ﻿using OnUtils.Application;
+using OnUtils.Application.Users;
 using OnUtils.Architecture.AppCore;
 using OnUtils.Architecture.AppCore.DI;
 using System;
@@ -38,7 +39,8 @@ namespace OnWeb
                 ViewEngines.Engines.Insert(0, instance);
                 return instance;
             });
-            bindingsCollection.SetSingleton<CoreBind.Routing.Manager>();
+            bindingsCollection.SetSingleton<RoutingManager>();
+            bindingsCollection.SetSingleton<UserContextManager<ApplicationCore>, CoreBind.Users.UserContextManager>();
         }
 
         /// <summary>

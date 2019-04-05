@@ -88,15 +88,6 @@ namespace OnWeb.Core
             }
         }
 
-        class ReCaptcha2Answer
-        {
-            [Newtonsoft.Json.JsonProperty("success")]
-            public bool Success = false;
-
-            [Newtonsoft.Json.JsonProperty("error-codes")]
-            public string[] Errors = null;
-        }
-
         /// <summary>
         /// Проверяет текущий запрос на наличие результата проверки капчи.
         /// </summary>

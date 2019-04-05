@@ -31,8 +31,6 @@ namespace OnWeb.Plugins.Register
 
             try
             {
-                throw new NotImplementedException(); // todo проверить рекапчу. if (!IsReCaptchaValid) throw new Exception(CaptchManager.getError());
-
                 if (ModelState.IsValid)
                 {
                     using (var db = new UnitOfWork<User>())

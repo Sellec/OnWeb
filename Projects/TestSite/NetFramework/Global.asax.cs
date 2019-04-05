@@ -41,8 +41,8 @@ namespace OnWeb.Site
         protected override void OnBeginRequest()
         {
             base.OnBeginRequest();
-            AppCore.GetUserContextManager().SetCurrentUserContext(AppCore.GetUserContextManager().CreateGuestUserContext());
-            AppCore.GetUserContextManager().SetCurrentUserContext(AppCore.GetUserContextManager().GetSystemUserContext());
+            //AppCore.GetUserContextManager().SetCurrentUserContext(AppCore.GetUserContextManager().CreateGuestUserContext());
+           // AppCore.GetUserContextManager().SetCurrentUserContext(AppCore.GetUserContextManager().GetSystemUserContext());
         }
 
         public interface testinterface

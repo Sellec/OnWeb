@@ -118,11 +118,7 @@ namespace OnWeb.CoreBind.Razor
         /// </summary>
         public ModuleCore Module
         {
-            get
-            {
-                var controller = this.ViewData["Module"] as Modules.ModuleControllerBase;
-                return controller.ModuleBase;
-            }
+            get => ViewData["Module"] as ModuleCore;
         }
 
         public string Title

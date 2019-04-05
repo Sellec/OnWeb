@@ -34,7 +34,7 @@ namespace OnWeb.CoreBind.Modules
 
             if (typeof(Internal.IModuleControllerInternalErrors).IsAssignableFrom(controllerDescriptor.ControllerType))
             {
-                actionName = nameof(Internal.ModuleControllerInternalErrors<ModuleCore>.PrepareError);
+                actionName = nameof(Internal.ModuleControllerInternalErrors<Plugins.CoreModule.CoreModule>.PrepareError);
             }
 
             var action = base.FindAction(controllerContext, controllerDescriptor, actionName);
@@ -137,7 +137,7 @@ namespace OnWeb.CoreBind.Modules
 
             if (typeof(Internal.IModuleControllerInternalErrors).IsAssignableFrom(controllerDescriptor.ControllerType))
             {
-                actionName = nameof(Internal.ModuleControllerInternalErrors<ModuleCore>.PrepareError);
+                actionName = nameof(Internal.ModuleControllerInternalErrors<Plugins.CoreModule.CoreModule>.PrepareError);
             }
 
             var action = base.FindAction(controllerContext, controllerDescriptor, actionName);

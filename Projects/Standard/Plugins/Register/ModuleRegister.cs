@@ -12,6 +12,7 @@ namespace OnWeb.Plugins.Register
     using Core.Modules;
     using Core.Types;
     using CoreBind.Types;
+    using MessagingEmail;
 
     [ModuleCore("Регистрация", DefaultUrlName = "Register")]
     public class ModuleRegister : ModuleCore<ModuleRegister>
@@ -154,7 +155,7 @@ namespace OnWeb.Plugins.Register
                                     if (regMode == RegisterMode.Immediately)
                                     {
                                         if (hasEmail)
-                                            AppCore.Get<Core.Messaging.Email.IService>().SendMailFromSite(
+                                            AppCore.Get<IEmailService>().SendMailFromSite(
                                                 data.name,
                                                 data.email,
                                                 "Регистрация на сайте",
@@ -181,9 +182,9 @@ namespace OnWeb.Plugins.Register
                                     //    this.assign("id", id);
                                     //    this.assign("login", data.email"]);
                                     //    this.assign("comment", data.comment"]);
-                                    //    AppCore.Get<Core.Messaging.Email.IService>().sendMailToAdmin("Новая заявка на регистрацию", this.displayToVar("register_mail_admin.cshtml"));
-                                    //    AppCore.Get<Core.Messaging.Email.IService>().sendMailSubscription(1, "Новая заявка на регистрацию", this.displayToVar("register_mail_admin.cshtml"));
-                                    //    AppCore.Get<Core.Messaging.Email.IService>().sendMailFromSite(data.email"], data.email"], "Регистрация на сайте", this.displayToVar("register_mail2.cshtml"));
+                                    //    AppCore.Get<IEmailService>().sendMailToAdmin("Новая заявка на регистрацию", this.displayToVar("register_mail_admin.cshtml"));
+                                    //    AppCore.Get<IEmailService>().sendMailSubscription(1, "Новая заявка на регистрацию", this.displayToVar("register_mail_admin.cshtml"));
+                                    //    AppCore.Get<IEmailService>().sendMailFromSite(data.email"], data.email"], "Регистрация на сайте", this.displayToVar("register_mail2.cshtml"));
                                     //}
 
                                     //success = "<br>";
