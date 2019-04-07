@@ -8,7 +8,7 @@ namespace OnWeb.Plugins.Admin
     class ModuleController : ModuleControllerUser<ModuleAdmin>
     {
         [ModuleAction(null, ModulesConstants.PermissionManageString)]
-        public ActionResult Index()
+        public override ActionResult Index()
         {
             return display("admin.cshtml");
         }

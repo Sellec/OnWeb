@@ -30,11 +30,14 @@ namespace OnWeb.Plugins.Customer
 
         }
 
-        /*
-         * Главная инфо профиля
-         * */
         [ModuleAction(null, ModulesConstants.PermissionAccessUserString)]
-        public ActionResult Index(string part = null)
+        public override ActionResult Index()
+        {
+            return Index(null);
+        }
+
+        [ModuleAction(null, ModulesConstants.PermissionAccessUserString)]
+        public ActionResult Index(string part)
         {
             var data = AppCore.GetUserContextManager().GetCurrentUserContext().GetData();
             return this.display("customerIndex.cshtml", data);
@@ -44,7 +47,7 @@ namespace OnWeb.Plugins.Customer
          * Показывает окно редактирования личных данных.
          * */
         [ModuleAction("datas", ModulesConstants.PermissionAccessUserString)]
-        public ActionResult profile()
+        public ActionResult Profile()
         {
             return Index();
 

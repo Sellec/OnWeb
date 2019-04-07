@@ -71,7 +71,7 @@
                     <div class="login-form__row">
                         <input type='submit' value='Регистрация' class='input-submit' name='confirm_b' id="confirm_b" />
                     </div>
-                    <a href="@(Url.CreateRoute<ModuleAuth, ModuleAuthController>(x=>x.Index()))" title="" class="er_enter">У меня есть аккаунт!</a>
+                    <a href="@(Url.CreateRoute<ModuleAuth, ModuleAuthController>())" title="" class="er_enter">У меня есть аккаунт!</a>
                 </form>
                 <div id="req_result" class="result"></div>
             </div>

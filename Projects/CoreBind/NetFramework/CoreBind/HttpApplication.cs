@@ -193,6 +193,12 @@ namespace OnWeb.CoreBind.Razor
             catch (Exception ex) { Debug.WriteLine("OnBeginRequest: " + ex.Message); }
         }
 
+        internal void Application_AcquireRequestState(object sender, EventArgs e)
+        {
+            var context = _applicationCore.Get<Plugins.Auth.ModuleAuth>().RestoreUserContextFromRequest();
+            if (context != null) _applicationCore.GetUserContextManager().SetCurrentUserContext(context);
+        }
+
         internal void Application_EndRequest(Object sender, EventArgs e)
         {
             try

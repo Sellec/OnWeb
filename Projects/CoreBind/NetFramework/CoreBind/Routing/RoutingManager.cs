@@ -77,10 +77,10 @@ namespace OnWeb.CoreBind.Routing
 
                 var controllerTypeCandidate = controllerTypeCandidates.First();
                 var controllerTypeFromFactory = ControllerTypeFactory.GetControllerTypes().Where(x => x.ControllerTypeID == controllerTypeCandidate.Key).FirstOrDefault();
-                if (controllerTypeFromFactory == null) throw new HandledException("", new NotSupportedException($"Контроллер найден, но тип не поддерживается. См. '{typeof(Routing.ControllerTypeFactory).FullName}'."));
+                if (controllerTypeFromFactory == null) throw new HandledException("", new NotSupportedException($"Контроллер найден, но тип не поддерживается. См. '{typeof(ControllerTypeFactory).FullName}'."));
 
                 var methodCall = (expression.Body as MethodCallExpression);
-                if (methodCall.Method.DeclaringType != controllerType) throw new HandledException("", new ArgumentException("Выражение должно вызывать метод указаного контроллера.", nameof(expression)));
+                if (!methodCall.Method.DeclaringType.IsAssignableFrom(controllerType)) throw new HandledException("", new ArgumentException("Выражение должно вызывать метод указаного контроллера.", nameof(expression)));
 
                 var methodName = methodCall.Method.Name;
 
@@ -94,6 +94,10 @@ namespace OnWeb.CoreBind.Routing
                     var value = compiledExpression.DynamicInvoke();
                     return $"{value}";
                 }).ToList();
+
+                var defaultMethod = methodCall.Method.DeclaringType.GetMethod(nameof(ModuleControllerUser<Plugins.CoreModule.CoreModule>.Index), BindingFlags.Public | BindingFlags.Instance, null, new Type[] { }, null);
+                var isDefaultMethod = defaultMethod == methodCall.Method;
+                if (isDefaultMethod && arguments.Count == 0) methodName = null;
 
                 var url = controllerTypeFromFactory.CreateRelativeUrl(module.UrlName, methodName, arguments.ToArray());
                 return url;

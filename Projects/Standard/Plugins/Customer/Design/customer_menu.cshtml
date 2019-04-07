@@ -1,17 +1,20 @@
+@using Auth
+@using Customer
+@using Register
 @*if (ViewBag.customer_tags != null)
 {
     foreach (var tag in ViewBag.customer_tags) { <a href="/customer/tag/@tag"><i class="fa fa-tags"></i> @tag</a> }
 }*@
 @if (!AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest)
 {
-    <a href='/customer'><i class="fa fa-info-circle"></i> Общая информация</a></li>
-    <a href='/customer/datas' class='propanel'><i class="fa fa-user"></i> Данные профиля</a>
-    <a href='/customer/pchange' class='propanel'><i class="fa fa-edit"></i> Изменить пароль</a>
+    <a href='@(Url.CreateRoute<ModuleCustomer, ModuleControllerCustomer>())'><i class="fa fa-info-circle"></i> Общая информация</a></li>
+    <a href='@(Url.CreateRoute<ModuleCustomer, ModuleControllerCustomer>(x=>x.Profile()))' class='propanel'><i class="fa fa-user"></i> Данные профиля</a>
+    <a href='@(Url.CreateRoute<ModuleCustomer, ModuleControllerCustomer>(x=>x.passwordChange()))' class='propanel'><i class="fa fa-edit"></i> Изменить пароль</a>
     @*<li><a href='/@Module.Name/subscribes' class='propanel'><i class="uk-icon-envelope-o"></i> Подписки</a></li>*@
-    <a href='/login/logout' class='propanel'><i class="fa fa-times-circle"></i> Выйти</a>
+    <a href='@(Url.CreateRoute<ModuleAuth, ModuleAuthController>(x=>x.logout()))' class='propanel'><i class="fa fa-times-circle"></i> Выйти</a>
 }
 else
 {
-    <a href='/reg' class='propanel'><i class="fa fa-user"></i> Регистрация</a>
-    <a href='/login' class='propanel'><i class="fa fa-sign-in"></i> Вход</a>
+    <a href='@(Url.CreateRoute<ModuleRegister, ModuleRegisterController>())' class='propanel'><i class="fa fa-user"></i> Регистрация</a>
+    <a href='@(Url.CreateRoute<ModuleAuth, ModuleAuthController>())' class='propanel'><i class="fa fa-sign-in"></i> Вход</a>
 }

@@ -18,6 +18,11 @@ namespace OnWeb.Plugins.Developing
 
     public class ModuleDevelopingController : ModuleControllerUser<ModuleDeveloping>
     {
+        public override ActionResult Index()
+        {
+            throw new NotImplementedException();
+        }
+
         public FileResult BackupDB()
         {
             try

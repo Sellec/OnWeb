@@ -1,0 +1,14 @@
+@using Core.DB
+@using Customer
+@model User
+
+Уважаемый администратор!<br />
+На сайте зарегистрировался новый пользователь @Model.name<br /><br />
+
+@if (!string.IsNullOrEmpty(Model.Comment)) { <span>@Model.Comment</span><br /><br /> }
+
+Необходимо просмотреть заявку на регистрацию и принять решение о приеме или отказе.<br />
+Прямая ссылка на просмотр заявки: <a href='@Url.ContentFullPath(Url.CreateRoute<ModuleCustomer, ModuleControllerAdminCustomer>(x => x.UserEdit(Model.id)))'>Управление сайтом</a><br /><br />
+
+Спасибо за внимание!<br />
+Почтовый робот сайта @Url.ContentFullPath("")

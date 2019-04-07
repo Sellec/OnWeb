@@ -18,6 +18,11 @@ namespace OnWeb.CoreBind.Modules.Internal
     {
         private Exception _ex = null;
 
+        public override ActionResult Index()
+        {
+            throw new NotImplementedException();
+        }
+
         public ActionResult PrepareError()
         {
             return base.ErrorHandled(_ex);

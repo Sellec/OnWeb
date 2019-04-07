@@ -125,6 +125,10 @@ $(function ()
             if (message == undefined || message == null) message = "";
 
             var result = requestMethods.prepareAnswer(message);
+            if (response.status != undefined && response.status == 0) {
+                result.Success = JsonResult.NETWORKERROR;
+                if (!result.Message) result.Message = "Возникла ошибка сети во время выполнения запроса.";
+            }
             $.proxy(callback, this)(result.Success, result.Message, result.Data);
         },
 

@@ -50,6 +50,7 @@ namespace OnWeb.Core.Messaging
                 // todo setError(null);
 
                 using (var db = new DB.CoreContext())
+                using (var scope = db.CreateScope(System.Transactions.TransactionScopeOption.Suppress))
                 {
                     var mess = new DB.MessageQueue()
                     {
@@ -61,6 +62,7 @@ namespace OnWeb.Core.Messaging
 
                     db.MessageQueue.Add(mess);
                     db.SaveChanges();
+                    scope.Commit();
 
                     return true;
                 }

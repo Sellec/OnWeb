@@ -6,7 +6,7 @@ namespace OnWeb.Plugins.Default
 
     public class ModuleDefaultController : ModuleControllerUser<ModuleDefault>
     {
-        public ActionResult Index(string part = null)
+        public override ActionResult Index()
         {
             return this.display("Index.cshtml");
         }

@@ -16,7 +16,7 @@ namespace OnWeb.Plugins.Auth
 
     public class ModuleAuthController : ModuleControllerUser<ModuleAuth>
     {
-        public ActionResult Index()
+        public override ActionResult Index()
         {
             if (Module.IsNeededAnyUserToRegister()) return Redirect<Register.ModuleRegisterController>(x => x.Register());
 
@@ -56,6 +56,7 @@ namespace OnWeb.Plugins.Auth
                     var result = AppCore.GetUserContextManager().CreateUserContext(model.login, model.pass);
                     if (result.IsSuccess && result.AuthResult == eAuthResult.Success)
                     {
+                        Module.BindUserContextToRequest(result.Result);
                         AppCore.GetUserContextManager().SetCurrentUserContext(result.Result);
                         //message = "Авторизация прошла успешно!";
                     }

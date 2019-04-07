@@ -41,7 +41,7 @@
                             @if (moduleAdmin?.CheckPermission(ModulesConstants.PermissionManage) == CheckPermissionResult.Allowed)
                             { <li><a href="/@moduleAdmin.UrlName" title="Панель администратора" target="_blank"><strong>Управление сайтом</strong></a></li> }
                             @* <li><img src="/data/img/design/man.png" alt=""><a href='/profilepchange_usual' title='Сменить пароль'>Сменить пароль</a></li> *@
-                            <li><a href="@(Url.CreateRoute<ModuleCustomer, ModuleControllerCustomer>(x => x.Index(null)))" title="Личный кабинет">Личный кабинет</a></li>
+                            <li><a href="@(Url.CreateRoute<ModuleCustomer, ModuleControllerCustomer>())" title="Личный кабинет">Личный кабинет</a></li>
                             <li><img src="/data/img/design/lock.gif" alt=""><a href="@(Url.CreateRoute<ModuleAuth, ModuleAuthController>(x => x.logout()))" title="">Выйти</a></li>
                         </ul>
 

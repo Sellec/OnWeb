@@ -15,6 +15,10 @@ namespace OnWeb.Core.WebUtils
     {
         class FakeController<TModule> : ModuleControllerUser<TModule> where TModule : Modules.ModuleCore<TModule>
         {
+            public override ActionResult Index()
+            {
+                throw new NotImplementedException();
+            }
         }
 
         public class FakeView : IView

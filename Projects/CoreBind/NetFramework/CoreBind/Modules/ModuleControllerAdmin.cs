@@ -17,6 +17,14 @@ namespace OnWeb.CoreBind.Modules
         where TConfigurationSaveModel : Configuration.SaveModel, new()
     {
         /// <summary>
+        /// См. <see cref="ModuleControllerUser{TModule, TContext}.Index"/>.
+        /// </summary>
+        public override ActionResult Index()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Вызывается, когда требуется создать и отобразить форму настройки модуля.
         /// </summary>
         /// <returns></returns>

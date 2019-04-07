@@ -2,6 +2,7 @@
 using OnWeb.Core.Modules;
 using OnWeb.CoreBind.Routing;
 using System.Linq.Expressions;
+using OnWeb.CoreBind.Modules;
 
 namespace System.Web.Mvc
 {
@@ -103,6 +104,16 @@ namespace System.Web.Mvc
             TypeHelper.AddAnonymousObjectToDictionary(values, new { area = AreaConstants.AdminPanel });
 
             return url.Action(action, controllerName, values);
+        }
+
+        /// <summary>
+        /// Формирует url к странице по-умолчанию в пользовательской части сайта для контроллера <typeparamref name="TModuleController"/>. Более подробно см. описание <see cref="RoutingManager.CreateRoute{TModule, TModuleController}(Expression{Func{TModuleController, ActionResult}})"/>.
+        /// </summary>
+        public static string CreateRoute<TModule, TModuleController>(this UrlHelper url)
+            where TModule : ModuleCore<TModule>
+            where TModuleController : ModuleControllerUser<TModule>, IModuleController<TModule>
+        {
+            return url.CreateRoute<TModule, TModuleController>(x => x.Index());
         }
 
         /// <summary>

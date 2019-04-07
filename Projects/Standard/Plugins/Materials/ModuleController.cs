@@ -11,7 +11,7 @@ namespace OnWeb.Plugins.Materials
     /// </summary>
     public class ModuleController : ModuleControllerUser<ModuleMaterials, DB.DataLayerContext>
     {
-        public ActionResult Index()
+        public override ActionResult Index()
         {
             return ViewNewsAll();
         }

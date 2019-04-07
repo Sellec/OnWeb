@@ -18,8 +18,6 @@ namespace OnWeb.Plugins.MessagingEmail
         #region Отправка
         void IEmailService.SendMail(string name_from, string email_from, string name_to, string email_to, Encoding data_charset, Encoding send_charset, string subject, string body, List<int> files)
         {
-            email_from = "test@test.ru";
-
             var message = new EmailMessage()
             {
                 From = new Contact<string>(name_from, email_from),
@@ -80,7 +78,7 @@ namespace OnWeb.Plugins.MessagingEmail
 
         private string GetNoReplyAddress()
         {
-            var address = "no-reply@site.site";
+            var address = "no-reply@localhost";
             if (AppCore.ServerUrl != null) address = "no-reply@" + AppCore.ServerUrl.Authority;
 
             return address;

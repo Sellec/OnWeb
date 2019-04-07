@@ -91,6 +91,10 @@ namespace OnWeb.CoreBind.Modules
             //////////////this.assignRef("ThemeFolder", themeActive != null ? themeActive.FolderName : "");
         }
 
+        /// <summary>
+        /// Представляет раздел по-умолчанию.
+        /// </summary>
+        public abstract ActionResult Index();
     }
 #pragma warning restore CS0618
 

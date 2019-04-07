@@ -1,8 +1,6 @@
 @using Core.DB
+@using Auth
 @model User
-@{ 
-    var moduleAuth = AppCore.Get<Plugins.Auth.ModuleAuth>();
-}
 
 Уважаемый посетитель!<br />
 Вы успешно зарегистрировались на сайте.<br /><br />
@@ -17,7 +15,7 @@
 { <text>Номер телефона - @Model.phone.<br /></text> }
 <br />
 
-Вы можете авторизоваться, перейдя по <a href="@Url.ContentFullPath("/" + moduleAuth?.UrlName)">указанной ссылке</a>.
+Вы можете авторизоваться, перейдя по <a href="@(Url.CreateRoute<ModuleAuth, ModuleAuthController>())">указанной ссылке</a>.
 <br /><br />
 
 Спасибо за внимание!<br />

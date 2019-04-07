@@ -2,18 +2,20 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net;
 using System.Web.Mvc;
 
 namespace OnWeb.Plugins.Register
 {
     using Core.DB;
     using Core.Types;
+    using Core.Exceptions;
     using CoreBind.Modules;
 
     public class ModuleRegisterController : ModuleControllerUser<ModuleRegister>
     {
         [ModuleAction("index")]
-        public ActionResult Index()
+        public override ActionResult Index()
         {
             return Register();
         }
@@ -21,6 +23,8 @@ namespace OnWeb.Plugins.Register
         [ModuleAction("register")]
         public virtual ActionResult Register()
         {
+            var d = AppCore.Get<UsersManagement.ModuleUsersManagement>().GetUsersByRolePermission<UsersManagement.ModuleUsersManagement>(UsersManagement.ModuleUsersManagement.PermissionReceiveRegisterModeratorNotifications);
+
             return display("register.cshtml", new Model.Register());
         }
 
@@ -117,6 +121,61 @@ namespace OnWeb.Plugins.Register
             }
 
             return ReturnJson(answer);
+        }
+
+        [ModuleAction("confirm")]
+        public ActionResult Confirm(int idUser = 0, string confirmationCode = null)
+        {
+            //todo перенести из php.
+
+            if (idUser <= 0) throw new ErrorCodeException(HttpStatusCode.BadRequest, "Неправильно указан пользователь.");
+            if (string.IsNullOrEmpty(confirmationCode)) throw new ErrorCodeException(HttpStatusCode.BadRequest, "Не указан код подтверждения.");
+            if (confirmationCode.Length >= 60) throw new ErrorCodeException(HttpStatusCode.BadRequest, "Некорректный код подтверждения.");
+
+            try
+            {
+                var message = "";
+                using (var db = new CoreContext())
+                {
+                    var data = db.Users.FirstOrDefault(x => x.id == idUser);
+                    if (data == null)
+                    {
+                        message = "Пользователь с указанным идентификатором не найден.";
+                    }
+                    else
+                    {
+                        if (data.State == Core.DB.UserState.Active)
+                        {
+                            message = "Учетная запись уже активирована.";
+                        }
+                        else if (data.State != Core.DB.UserState.RegisterNeedConfirmation)
+                        {
+                            message = "Учетная запись не находится в состоянии ожидания подтверждения.";
+                        }
+                        else
+                        {
+                            if (data.StateConfirmation != confirmationCode)
+                            {
+                                message = "Код подтверждения не совпадает.";
+                            }
+                            else
+                            {
+                                data.State = Core.DB.UserState.Active;
+                                data.StateConfirmation = "";
+                                db.SaveChanges();
+                                message = "Ваша учетная запись была активирована. Теперь вы можете зайти на сайт, используя реквизиты, указанные при регистрации.";
+                            }
+                        }
+                    }
+                }
+
+                return View("Message.cshtml", new Design.Model.Message() { Subject = "Подтверждение после регистрации", Body = message });
+            }
+            catch (Exception ex)
+            {
+                this.RegisterEventWithCode(HttpStatusCode.InternalServerError, "Неизвестная ошибка при активации пользователя.", null, ex);
+                throw;
+            }
         }
     }
 }

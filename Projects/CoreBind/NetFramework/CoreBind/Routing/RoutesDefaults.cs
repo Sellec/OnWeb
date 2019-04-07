@@ -20,7 +20,7 @@ namespace OnWeb.CoreBind.Routing
 
             public string Action
             {
-                get => "Index";
+                get => nameof(Modules.ModuleControllerUser<Plugins.CoreModule.CoreModule>.Index);
             }
 
             public System.Web.Mvc.UrlParameter Url

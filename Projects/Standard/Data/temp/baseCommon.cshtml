@@ -1,5 +1,6 @@
 ﻿@using Admin
 @using Auth
+@using Customer
 @using OnUtils.Application.Modules
 @{
     var g = this;
@@ -144,7 +145,7 @@
                             <div class="info-top-list__item">
                                 @if (!userContextCurrent.IsGuest)
                                 {
-                                    <a href="/customer" class="top-user">
+                                    <a href="@(Url.CreateRoute<ModuleCustomer, ModuleControllerCustomer>())" class="top-user">
                                         <div class="top-user__content">
                                             <div class="top-user__img-block">
                                                 <img src="@(userContextCurrent.GetData().IdPhoto.HasValue ? "/fm/imageCrop/" + userContextCurrent.GetData().IdPhoto + "?MaxHeight=100&MaxWidth=100" : "/data/images/nophoto_user.jpg")" alt="" class="top-user__img">
@@ -156,7 +157,7 @@
                                 }
                                 else
                                 {
-                                    <a href="@(Url.CreateRoute<ModuleAuth, ModuleAuthController>(x => x.Login(null)))" title="" class="top-login">
+                                    <a href="@(Url.CreateRoute<ModuleAuth, ModuleAuthController>())" title="" class="top-login">
                                         <div class="top-login__content">
                                             Войти<span class="top-login__text-hidden"> в кабинет</span>
                                         </div>

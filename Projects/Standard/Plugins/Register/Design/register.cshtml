@@ -63,7 +63,7 @@
             @if (!AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest)
             {
                 <p class="pass_inner pages">Вы уже зарегистрированы, можете продолжать работу с сайтом.</p>
-                <p class="pass_inner pages"><a href="@(Url.CreateRoute<ModuleCustomer, ModuleControllerCustomer>(x => x.Index(null)))" title="">Перейти к настройкам</a>, <a href="@(Url.CreateRoute<ModuleCustomer, ModuleControllerCustomer>(x => x.passwordChange()))" title="">Сменить пароль</a>, <a href="@(Url.CreateRoute<ModuleAuth, ModuleAuthController>(x => x.logout()))" title="">Выйти из профиля</a></p>
+                <p class="pass_inner pages"><a href="@(Url.CreateRoute<ModuleCustomer, ModuleControllerCustomer>())" title="">Перейти к настройкам</a>, <a href="@(Url.CreateRoute<ModuleCustomer, ModuleControllerCustomer>(x => x.passwordChange()))" title="">Сменить пароль</a>, <a href="@(Url.CreateRoute<ModuleAuth, ModuleAuthController>(x => x.logout()))" title="">Выйти из профиля</a></p>
             }
             else
             {
@@ -97,7 +97,7 @@
                             @Html.RecaptchaInvisible("Зарегистрироваться", new { @class = "input-submit" })
                             @* @CaptchManager.reRender("regReCaptcha1", "regReCaptcha2") *@
                         </div>
-                        <a href="@(Url.CreateRoute<ModuleAuth, ModuleAuthController>(x=>x.Index()))" title="" class="er_enter">У меня есть аккаунт!</a>
+                        <a href="@(Url.CreateRoute<ModuleAuth, ModuleAuthController>())" title="" class="er_enter">У меня есть аккаунт!</a>
                     </form>
                     <div id="req_result" class="result"></div>
                 </div>

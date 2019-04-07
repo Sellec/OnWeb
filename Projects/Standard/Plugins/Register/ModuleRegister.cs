@@ -13,6 +13,7 @@ namespace OnWeb.Plugins.Register
     using Core.Types;
     using CoreBind.Types;
     using MessagingEmail;
+    using UsersManagement;
 
     [ModuleCore("Регистрация", DefaultUrlName = "Register")]
     public class ModuleRegister : ModuleCore<ModuleRegister>
@@ -132,7 +133,6 @@ namespace OnWeb.Plugins.Register
                             IP_reg = data.IP_reg,
                             Superuser = data.Superuser,
                             StateConfirmation = regMode == RegisterMode.SelfConfirmation ? stateConfirmation : string.Empty,
-                            //IP_reg = Request.ServerVariables["REMOTE_ADDR"]
                         };
 
                         query.Fields.CopyValuesFrom(data.Fields);
@@ -142,56 +142,58 @@ namespace OnWeb.Plugins.Register
                             db.Repo1.Add(query);
                             db.SaveChanges();
 
-                            var id = query.id;
-                            var can = true;
+                            var credentitals = string.Join(" или ", new string[] { hasEmail ? "адрес электронной почты" : string.Empty, hasPhone ? "номер телефона" : string.Empty }.Where(x => !string.IsNullOrEmpty(x)));
 
-                            if (can)
+                            if (regMode == RegisterMode.Immediately)
                             {
-                                var new_id = id;// = DataManager.getInsertedID();
-                                if (id > 0)
+                                if (hasEmail)
+                                    AppCore.Get<IEmailService>().SendMailFromSite(
+                                        data.name,
+                                        data.email,
+                                        "Регистрация на сайте",
+                                        Core.WebUtils.RazorRenderHelper.RenderView(this, "RegisterNotificationEmailImmediately.cshtml", query)
+                                    );
+
+                                if (hasPhone)
+                                    AppCore.Get<Core.Messaging.SMS.IService>()?.SendMessage(data.phone, "Регистрация на сайте прошла успешно.");
+
+                                answer.FromSuccess($"Вы успешно зарегистрировались на сайте и можете зайти, используя {credentitals}.");
+                            }
+                            else if (regMode == RegisterMode.SelfConfirmation)
+                            {
+                                if (hasEmail)
+                                    AppCore.Get<IEmailService>().SendMailFromSite(
+                                        data.name,
+                                        data.email,
+                                        "Регистрация на сайте",
+                                        Core.WebUtils.RazorRenderHelper.RenderView(this, "RegisterNotificationEmailConfirm.cshtml", new Model.RegisterNotificationConfirm() { Data = query, ConfirmationCode = query.StateConfirmation })
+                                    );
+
+                                answer.FromSuccess("Вы успешно зарегистрировались на сайте. В течение определенного времени на Ваш электронный адрес, указанный при регистрации, придет письмо с указаниями по дальнейшим действиям, необходимым для завершения регистрации.");
+                            }
+                            else if (regMode == RegisterMode.ManualCheck)
+                            {
+                                if (hasEmail)
+                                    AppCore.Get<IEmailService>().SendMailFromSite(
+                                        data.name,
+                                        data.email,
+                                        "Регистрация на сайте",
+                                        Core.WebUtils.RazorRenderHelper.RenderView(this, "RegisterNotificationEmailModerate.cshtml", query)
+                                    );
+
+                                answer.FromSuccess($"Заявка на регистрацию отправлена. Администратор рассмотрит Вашу заявку и примет решение, после чего Вы получите уведомление на указанный {credentitals}.");
+
+                                var usersToNotify = AppCore.Get<ModuleUsersManagement>().GetUsersByRolePermission<ModuleUsersManagement>(ModuleUsersManagement.PermissionReceiveRegisterModeratorNotifications);
+                                if (usersToNotify.Count > 0)
                                 {
-                                    var credentitals = string.Join(" или ", new string[] { hasEmail ? "адрес электронной почты" : string.Empty, hasPhone ? "номер телефона" : string.Empty }.Where(x => !string.IsNullOrEmpty(x)));
-
-                                    if (regMode == RegisterMode.Immediately)
-                                    {
-                                        if (hasEmail)
-                                            AppCore.Get<IEmailService>().SendMailFromSite(
-                                                data.name,
-                                                data.email,
-                                                "Регистрация на сайте",
-                                                Core.WebUtils.RazorRenderHelper.RenderView(this, "RegisterNotificationEmail.cshtml", query)
-                                            );
-
-                                        if (hasPhone)
-                                            AppCore.Get<Core.Messaging.SMS.IService>()?.SendMessage(data.phone, "Регистрация на сайте прошла успешно.");
-
-                                        answer.FromSuccess($"Вы успешно зарегистрировались на сайте и можете зайти, используя {credentitals}.");
-                                    }
-                                    else if (regMode == RegisterMode.SelfConfirmation)
-                                    {
-                                        answer.FromSuccess("Вы успешно зарегистрировались на сайте. В течение определенного времени на Ваш электронный адрес, указанный при регистрации, придет письмо с указаниями по дальнейшим действиям, необходимым для завершения регистрации.");
-                                    }
-                                    else if (regMode == RegisterMode.ManualCheck)
-                                    {
-                                        answer.FromSuccess($"Заявка на регистрацию отправлена. Администратор рассмотрит Вашу заявку и примет решение, после чего Вы получите уведомление на указанный {credentitals}.");
-                                    }
-
-
-                                    //if (regMode == 2)
-                                    //{
-                                    //    this.assign("id", id);
-                                    //    this.assign("login", data.email"]);
-                                    //    this.assign("comment", data.comment"]);
-                                    //    AppCore.Get<IEmailService>().sendMailToAdmin("Новая заявка на регистрацию", this.displayToVar("register_mail_admin.cshtml"));
-                                    //    AppCore.Get<IEmailService>().sendMailSubscription(1, "Новая заявка на регистрацию", this.displayToVar("register_mail_admin.cshtml"));
-                                    //    AppCore.Get<IEmailService>().sendMailFromSite(data.email"], data.email"], "Регистрация на сайте", this.displayToVar("register_mail2.cshtml"));
-                                    //}
-
-                                    //success = "<br>";
-                                    answer.Data = query;
+                                    var mailAdmin = Core.WebUtils.RazorRenderHelper.RenderView(this, "RegisterNotificationEmailAdmin.cshtml", query);
+                                    usersToNotify.
+                                        Where(x => !string.IsNullOrEmpty(x.email)).
+                                        ForEach(x => AppCore.Get<IEmailService>().SendMailFromSite(x.email, x.email, "Новая заявка на регистрацию", mailAdmin));
                                 }
                             }
-                            else answer.FromFail("Ошибка во время регистрации пользователя. Обратитесь к администратору сайта.");
+
+                            answer.Data = query;
 
                             if (answer.Success) scope.Commit();
                         }
