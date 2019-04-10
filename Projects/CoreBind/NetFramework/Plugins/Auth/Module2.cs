@@ -120,7 +120,6 @@ namespace OnWeb.Plugins.Auth
             HttpContext.Current.Session["UserId"] = context.GetIdUser();
             HttpContext.Current.Session["Timestamp"] = DateTime.UtcNow.ToString();
             HttpContext.Current.Session["VerificationKey"] = verificationKey;
-
         }
     }
 }
