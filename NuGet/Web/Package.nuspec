@@ -2,7 +2,7 @@
 <package >
   <metadata minClientVersion="3.3.0">
     <id>OnWeb</id>
-    <version>0.1.1.23</version>
+    <version>0.1.1.24</version>
     <authors>Sellec</authors>
     <owners>Sellec</owners>
     <description>
@@ -20,7 +20,7 @@
     <dependencies>
       <group>
       </group>
-      <group targetFramework="net471">
+      <group targetFramework="net461">
         <dependency id="OnUtils" version="0.1.1" />
         <dependency id="OnUtils.Application" version="0.1.1" />
         <dependency id="OnUtils.Data.EntityFramework" version="0.1.1" />
