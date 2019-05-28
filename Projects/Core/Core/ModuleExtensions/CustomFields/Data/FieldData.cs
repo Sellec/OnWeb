@@ -203,7 +203,12 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
                     }
                 }
 
-                _values.Add(Convert.ChangeType(val, typeToConvert));
+                try
+                {
+                    _values.Add(Convert.ChangeType(val, typeToConvert));
+                }
+                catch (FormatException) { }
+                catch { throw; }
             }
         }
 

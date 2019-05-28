@@ -171,14 +171,15 @@ namespace OnWeb.Core.ModuleExtensions.ExtensionUrl
                     //{ }
 
                     var IdItemType = ItemTypeAttribute.GetValueFromType(type);
-                    var dataForItems = ExtensionUrlStaticInternal.GetForQuery(IdItemType, type, items.Keys);
+                    var dataForItems = GetForQuery(IdItemType, type, items.Keys);
                     try
                     {
                         if (dataForItems != null)
                         {
                             foreach (var p in dataForItems)
                             {
-                                p.Key._routingUrlMain = p.Value;
+                                p.Key._routingUrlMain = p.Value?.Item1;
+                                p.Key._routingUrlMainSourceType = p.Value?.Item2 ?? UrlSourceType.None;
                             }
                         }
                     }
@@ -186,6 +187,68 @@ namespace OnWeb.Core.ModuleExtensions.ExtensionUrl
                 }
                 //finally { items.Clear(); }
             }
+        }
+
+        internal Dictionary<ItemBase, Tuple<Uri, UrlSourceType>> GetForQuery(int IdItemType, Type type, IEnumerable<ItemBase> items)
+        {
+            //var m = new MeasureTime();
+
+            //try
+            {
+                //lock (SyncRoot)
+                {
+                    var itemsSet = items.GroupBy(x => x.OwnerModule, x => x).SelectMany(gr_ =>
+                    {
+                        var itemsModule = gr_.ToDictionary<ItemBase, ItemBase, Tuple<Uri, UrlSourceType>>(x => x, x => null);
+
+                        if (gr_.Key != null)
+                        {
+                            var keys = itemsModule.Keys.ToList();
+                            var result = DeprecatedSingletonInstances.UrlManager.GetUrl(gr_.Key, keys.Select(x => x.ID), IdItemType, Routing.RoutingConstants.MAINKEY);
+                            if (!result.IsSuccess)
+                            {
+                                Debug.WriteLine("ItemBase.GetForQuery({0}): {1}", IdItemType, result.Message);
+                                throw new Exception("Ошибка получения адресов");
+                            }
+                            else
+                            {
+                                var itemsEmpty = new System.Collections.ObjectModel.Collection<ItemBase>();
+
+                                foreach (var x in keys)
+                                {
+                                    if (result.Result.TryGetValue(x.ID, out string value) && !string.IsNullOrEmpty(value))
+                                    {
+                                        if (Uri.TryCreate(value, UriKind.Absolute, out Uri url)) itemsModule[x] = new Tuple<Uri, UrlSourceType>(url, UrlSourceType.Routing);
+                                        else
+                                        {
+                                            Debug.WriteLineNoLog("УРЛ ОТНОСИТЕЛЬНЫЙ, НАДО ДОДЕЛАТЬ СБОРКУ ПОЛНОГО АДРЕСА С АДРЕСОМ СЕРВЕРА.");
+                                            if (Module?.AppCore?.ServerUrl != null)
+                                                if (Uri.TryCreate(Module.AppCore.ServerUrl, value, out Uri url2)) itemsModule[x] = new Tuple<Uri, UrlSourceType>(url2, UrlSourceType.Routing);
+                                        }
+                                    }
+                                    else itemsEmpty.Add(x);
+                                }
+
+                                if (itemsEmpty.Count > 0)
+                                {
+                                    var generated = gr_.Key.GenerateLinks(itemsEmpty);
+                                    if (generated != null)
+                                        foreach (var pair in generated)
+                                            if (pair.Value != null)
+                                                itemsModule[pair.Key] = new Tuple<Uri, UrlSourceType>(pair.Value, UrlSourceType.Module);
+                                }
+                            }
+                        }
+                        return itemsModule;
+                    });
+
+                    var measure = new MeasureTime();
+                    var itemsResult = itemsSet.ToDictionary(x => x.Key, x => x.Value);
+
+                    return itemsResult;
+                }
+            }
+            //finally { Debug.WriteLineNoLog($"ExtensionUrl.GetForQuery IdItemType={IdItemType}, type='{type.FullName}', count = {items.Count()} with {m.Calculate().TotalMilliseconds}ms."); }
         }
         #endregion
 

@@ -7,8 +7,8 @@ using System.Linq;
 
 namespace OnWeb.Core.Routing
 {
-    using ExecutionResultUrl = ExecutionResult<string>;
     using ExecutionResultUrlList = ExecutionResult<Dictionary<int, string>>;
+    using ExecutionResultUrl = ExecutionResult<string>;
 
     /// <summary>
     /// Менеджер маршрутизации. Позволяет получать и управлять адресами сущностей.
@@ -21,11 +21,11 @@ namespace OnWeb.Core.Routing
             { "и", "i" }, { "й", "y" }, { "к", "k" }, { "л", "l" }, { "м", "m" }, { "н", "n" }, { "о", "o" }, { "п", "p" },
             { "р", "r" }, { "с", "s" }, { "т", "t" }, { "у", "u" }, { "ф", "f" }, { "ы", "y" }, { "э", "e" }, { "ё", "yo" },
             { "х", "h" }, { "ц", "ts" }, { "ч", "ch" }, { "ш", "sh" }, { "щ", "shch" }, { "ъ", "" }, { "ь", "" }, { "ю", "yu" },
-            { "я", "ya" }, { "*", "" }, { "'", "" }, { "|", "" }, { "~", "" },
+            { "я", "ya" }, { "*", "" }, { "\"", "" }, { "'", "" }, { "|", "" }, { "~", "" },
             { "`", "" }, { "@", "" }, { "#", "" }, { "№", "" }, { "$", "" }, { ";", "" }, { "%", "" }, { "^", "" }, { ":", "" },
             { "&", "-" }, { "?", "" }, { "(", "" }, { ")", "" }, { "<", "" }, { ">", "" }, { "\n", "" }, { " }, {", "" },
-            { "  ", " " }, { " ", "-" }, { "!", "" }, { "+", "" }, { "=", "" }, { "…", "" }, { "...", "" },
-            { ", ", "-" }, { ",", "-" }
+            { "  ", " " }, { " ", "-" }, { "!", "" }, { "+", "" }, { "=", "" }, { "…", "" }, { "...", "" }, { ".", "-" },
+            { ", ", "-" }, { ",", "-" }, { "--", "-" }
         };
 
         /// <summary>
@@ -38,11 +38,14 @@ namespace OnWeb.Core.Routing
             var str = text.Trim();
             if (lowercaseText) str = str.ToLower();
 
-            str = str.Replace(TRANSLATETABLE.Keys.ToArray(), TRANSLATETABLE.Values.ToArray());
-            str = str.Replace(TRANSLATETABLE.Keys.ToArray(), TRANSLATETABLE.Values.ToArray());
-            str = str.Replace(TRANSLATETABLE.Keys.ToArray(), TRANSLATETABLE.Values.ToArray());
+            for (int i = 0; i < 50; i++)
+            {
+                var strOld = str;
+                str = str.Replace(TRANSLATETABLE.Keys.ToArray(), TRANSLATETABLE.Values.ToArray());
+                if (str == strOld) break;
+            }
 
-            var urlname = str;// strtr($str, $tbl);
+            var urlname = str;
             return urlname;
         }
 
@@ -309,7 +312,7 @@ namespace OnWeb.Core.Routing
                 this.RegisterEvent(
                     Journaling.EventType.Error,
                     "register: ошибка при получении адресов",
-                    $"Модуль: {(module == null ? "не указан" : module.ID.ToString())}\r\n" + 
+                    $"Модуль: {(module == null ? "не указан" : module.ID.ToString())}\r\n" +
                     $"IdItemList='{string.Join(", ", IdItemList)}'\r\nIdItemType={IdItemType}\r\nUniqueKey='{UniqueKey}'",
                     exception: ex
                 );

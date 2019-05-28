@@ -4,13 +4,10 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection.Emit;
-using System.Web.Mvc;
 
 namespace OnWeb.Plugins.FileManager.CustomFieldsFileTypes
 {
-    using Core.ModuleExtensions.CustomFields.Data;
     using Core.ModuleExtensions.CustomFields.Field;
-    using CoreBind.Razor;
     using DB;
 
     public class FileFieldType : FieldType

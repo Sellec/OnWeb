@@ -447,16 +447,19 @@ $(function ()
 
             var uploadObjectUpdate = uploadObject.update;
 
-            uploadObject.update = function (settingsNew)
-            {
+            uploadObject.update = function (settingsNew) {
                 var config = getConfig(settingsNew);
                 uploadObjectUpdate(config);
-            }
+            };
 
-            uploadObject.getElement = function ()
-            {
+            uploadObject.getElement = function () {
                 return element;
-            }
+            };
+
+            uploadObject.addFile = function (idFile) {
+                $.proxy(config.after, element)(JsonResult.OK, "", idFile);
+                $(element).trigger('requestFileUploadSingleAfter', [JsonResult.OK, "", idFile]);
+            };
 
             return uploadObject;
         }
@@ -657,6 +660,26 @@ $(function ()
             }
         });
         return o;
+    };
+
+    $.fn.elementsDisabler = function (makeDisabled) {
+        return this.each(function () {
+            var isDisabled = $(this).data("ElementsDisablerState");
+            if (makeDisabled === true) {
+                if ($(this).is('input') || $(this).is('button') || $(this).is('textarea') || $(this).is('select')) {
+                    if (isDisabled !== true && !$($(this)).is(":disabled")) {
+                        $(this).data("ElementsDisablerState", true);
+                        $(this).prop("disabled", true);
+                    }
+                }
+            }
+            else if (makeDisabled === false) {
+                if (isDisabled === true) {
+                    $(this).data("ElementsDisablerState", false);
+                    $(this).prop("disabled", false);
+                }
+            }
+        });
     };
 });
 

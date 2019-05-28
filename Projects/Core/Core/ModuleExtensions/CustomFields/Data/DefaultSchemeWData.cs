@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
@@ -13,7 +14,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
     [NotMapped]
     public class DefaultSchemeWData : ISchemeWData
     {
-        private Dictionary<int, FieldData> _dictionary = new Dictionary<int, FieldData>();
+        private ConcurrentDictionary<int, FieldData> _dictionary = new ConcurrentDictionary<int, FieldData>();
         private Scheme.DefaultScheme _defaultScheme = null;
         private Dictionary<uint, SchemeWData> _schemes = new Dictionary<uint, SchemeWData>();
         internal Scheme.SchemeItem _schemeItemSource = null;
@@ -31,17 +32,18 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
         /// <summary>
         /// Возвращает поле с указанным <see cref="DB.CustomFieldsField.IdField"/>. Если такое поле отсутствует в коллекции, то возвращает null. 
         /// </summary>
-        /// <param name="IdField">Идентификатор поля.</param>
+        /// <param name="idField">Идентификатор поля.</param>
         /// <returns></returns>
-        public FieldData this[int IdField]
+        public FieldData this[int idField]
         {
             get
             {
-                if (_defaultScheme.ContainsKey(IdField))
+                if (_defaultScheme.TryGetValue(idField, out Field.IField value))
                 {
-                    if (!_dictionary.ContainsKey(IdField)) _dictionary[IdField] = new FieldData(_defaultScheme[IdField]);
-                    return _dictionary[IdField];
+                    var data = _dictionary.GetOrAdd(idField, key => new FieldData(value));
+                    return data;
                 }
+
                 return null;
             }
         }
@@ -51,7 +53,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
         /// </summary>
         public int Count
         {
-            get { return _defaultScheme.Count; }
+            get => _defaultScheme.Count;
         }
 
         /// <summary>
@@ -59,7 +61,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
         /// </summary>
         public IEnumerable<int> Keys
         {
-            get { return _defaultScheme.Keys; }
+            get => _defaultScheme.Keys;
         }
 
         /// <summary>
@@ -67,10 +69,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
         /// </summary>
         public IEnumerable<FieldData> Values
         {
-            get
-            {
-                return _defaultScheme.Select(x => this[x.Key]).ToList();
-            }
+            get => Keys.Select(x => this[x]).ToList();
         }
 
         /// <summary>
@@ -98,7 +97,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
 
         public IEnumerator<KeyValuePair<int, FieldData>> GetEnumerator()
         {
-            return _defaultScheme.Select(x => new KeyValuePair<int, FieldData>(x.Key, this[x.Key])).GetEnumerator();
+            return Keys.Select(x => new KeyValuePair<int, FieldData>(x, this[x])).GetEnumerator();
         }
 
         public bool Remove(KeyValuePair<int, FieldData> item)
@@ -108,16 +107,12 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
 
         public bool Remove(int key)
         {
-            return _dictionary.Remove(key);
+            return _dictionary.TryRemove(key, out FieldData value);
         }
 
         public bool TryGetValue(int key, out FieldData value)
         {
-            value = null;
-
-            if (this is IDictionary<int, FieldData>) value = (this as IDictionary<int, FieldData>)[key];
-            else if (this is IReadOnlyDictionary<int, FieldData>) value = (this as IReadOnlyDictionary<int, FieldData>)[key];
-
+            value = this[key];
             return value != null;
         }
 
@@ -153,12 +148,12 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
 
         /// <summary>
         /// </summary>
-        internal protected TOutType ProxyGetValue<TOutType>(int IdField)
+        internal protected TOutType ProxyGetValue<TOutType>(int idField)
         {
-            var field = this[IdField];
-            if (field != null)
+            var fieldData = this[idField];
+            if (fieldData != null)
             {
-                var value = field.Value;
+                var value = fieldData.Value;
                 var d = typeof(TOutType);
                 if (value != null) return (TOutType)value;
             }
@@ -167,12 +162,12 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
 
         /// <summary>
         /// </summary>
-        internal protected void ProxySetValue<TOutType>(int IdField, TOutType value)
+        internal protected void ProxySetValue<TOutType>(int idField, TOutType value)
         {
-            var field = this[IdField];
-            if (field != null)
+            var fieldData = this[idField];
+            if (fieldData != null)
             {
-                field.Value = value;
+                fieldData.Value = value;
             }
         }
 
@@ -187,30 +182,30 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
             {
                 foreach (var field in valuesSource)
                 {
-                    if (this.ContainsKey(field.Key) && (copyFilter == null || copyFilter(field.Value)))
+                    if (TryGetValue(field.Key, out FieldData value) && (copyFilter == null || copyFilter(field.Value)))
                     {
-                        this[field.Key].Value = field.Value.Value;
+                        value.Value = field.Value.Value;
                     }
                 }
             }
         }
 
         /// <summary>
-        /// Возвращает дополнительную схему с идентификатором <paramref name="IdScheme"/> со значениями полей текущего объекта.
+        /// Возвращает дополнительную схему с идентификатором <paramref name="idScheme"/> со значениями полей текущего объекта.
         /// Для значения 0 возвращает текущий объект.
         /// </summary>
-        public ISchemeWData GetScheme(uint IdScheme)
+        public ISchemeWData GetScheme(uint idScheme)
         {
-            if (IdScheme == 0) return this;
+            if (idScheme == 0) return this;
 
-            if (!_schemes.ContainsKey(IdScheme))
+            if (!_schemes.ContainsKey(idScheme))
             {
-                var scheme = this.Default.Schemes.GetValueOrDefault(IdScheme, (k) => new Scheme.Scheme(null, this.Default)) as Scheme.Scheme;
+                var scheme = this.Default.Schemes.GetValueOrDefault(idScheme, (k) => new Scheme.Scheme(null, this.Default)) as Scheme.Scheme;
                 var schemeWData = new SchemeWData(scheme, this);
-                _schemes[IdScheme] = schemeWData; 
+                _schemes[idScheme] = schemeWData;
             }
 
-            return _schemes[IdScheme];
+            return _schemes[idScheme];
         }
     }
 }

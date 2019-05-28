@@ -33,8 +33,8 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Scheme
         /// </summary>
         public Field.IField this[int idField]
         {
-            get { return _dictionary.ContainsKey(idField) ? _dictionary[idField] : null; }
-            set { _dictionary[idField] = value; }
+            get => _dictionary.TryGetValue(idField, out Field.IField value) ? value : null;
+            set => _dictionary[idField] = value;
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Scheme
         /// </summary>
         public int Count
         {
-            get { return _dictionary.Count; }
+            get => _dictionary.Count;
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Scheme
         /// </summary>
         public IEnumerable<int> Keys
         {
-            get { return _dictionary.Keys; }
+            get => _dictionary.Keys;
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Scheme
         /// </summary>
         public IEnumerable<Field.IField> Values
         {
-            get { return _dictionary.Values; }
+            get => _dictionary.Values;
         }
 
         /// <summary>

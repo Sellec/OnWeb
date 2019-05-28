@@ -6,19 +6,25 @@ using System.Reflection;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
+using System.IO.Compression;
 
 namespace OnWeb.CoreBind.Razor
 {
+    /// <summary>
+    /// Представляет приложение ASP.NET, умеющее инициализировать OnWeb.
+    /// </summary>
     public class HttpApplication : System.Web.HttpApplication
     {
         private static object SyncRootStart = new object();
-        private static volatile bool _initialized = false;
         private static volatile int _instancesCount = 0;
         private static ApplicationCoreBind _applicationCore = null;
 
         [ThreadStatic]
         internal Queue<IDisposable> _requestSpecificDisposables;
 
+        /// <summary>
+        /// Создает новый экземпляр приложения ASP.NET.
+        /// </summary>
         public HttpApplication()
         {
         }
@@ -96,12 +102,12 @@ namespace OnWeb.CoreBind.Razor
                         Debug.WriteLine("OnAfterApplicationStart: {0}", ex.Message);
                         throw;
                     }
-
-                    _initialized = true;
                 }
         }
 
-        //Не убирать. Нужен для обмана Readonly-режима сессий, чтобы новые сессии создавались и записывались. Иначе будут меняться только существующие сессии.
+        /// <summary>
+        /// Не убирать. Нужен для обмана Readonly-режима сессий, чтобы новые сессии создавались и записывались. Иначе будут меняться только существующие сессии.
+        /// </summary>
         public void Session_OnStart()
         {
         }
@@ -120,6 +126,8 @@ namespace OnWeb.CoreBind.Razor
                     Response.Write(@"[html]");
                     Response.End();
                 }
+
+                Response.Filter = null;
 
                 this.OnError(exception);
             }
@@ -185,12 +193,34 @@ namespace OnWeb.CoreBind.Razor
             catch (ThreadAbortException) { throw; }
             catch { }
 
+            IsCompressionEnabled = true;
+
             try
             {
                 this.OnBeginRequest();
             }
             catch (ThreadAbortException) { throw; }
             catch (Exception ex) { Debug.WriteLine("OnBeginRequest: " + ex.Message); }
+
+            var encodings = Request.Headers.Get("Accept-Encoding");
+            if (IsCompressionEnabled && encodings != null)
+            {
+                // Check the browser accepts deflate or gzip (deflate takes preference)
+                encodings = encodings.ToLower();
+                if (encodings.Contains("deflate"))
+                {
+                    Response.Filter = new DeflateStream(Response.Filter, CompressionMode.Compress);
+                    Response.AppendHeader("Content-Encoding", "deflate");
+                    Response.AppendHeader("Vary", "Content-Encoding");
+                }
+                else if (encodings.Contains("gzip"))
+                {
+                    Response.Filter = new GZipStream(Response.Filter, CompressionMode.Compress);
+                    Response.AppendHeader("Content-Encoding", "gzip");
+                    Response.AppendHeader("Vary", "Content-Encoding");
+                }
+            }
+
         }
 
         internal void Application_AcquireRequestState(object sender, EventArgs e)
@@ -222,6 +252,8 @@ namespace OnWeb.CoreBind.Razor
             Providers.TraceSessionStateProvider.SaveUnsavedSessionItem();
         }
 
+        /// <summary>
+        /// </summary>
         public void Application_PostRequestHandlerExecute(object sender, EventArgs e)
         {
             UpdateSessionCookieExpiration();
@@ -244,12 +276,16 @@ namespace OnWeb.CoreBind.Razor
             sessionCookie.Value = sessionState.SessionID;
         }
 
+        /// <summary>
+        /// </summary>
         public sealed override void Init()
         {
             _instancesCount++;
             base.Init();
         }
 
+        /// <summary>
+        /// </summary>
         public sealed override void Dispose()
         {
             _instancesCount--;
@@ -272,6 +308,15 @@ namespace OnWeb.CoreBind.Razor
         public ApplicationCore AppCore
         {
             get => _applicationCore;
+        }
+
+        /// <summary>
+        /// Указывает, следует ли использовать gzip/deflate, если браузер поддерживает сжатие.
+        /// </summary>
+        public bool IsCompressionEnabled
+        {
+            get;
+            set;
         }
         #endregion
 

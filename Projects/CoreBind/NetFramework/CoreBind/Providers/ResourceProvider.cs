@@ -126,12 +126,14 @@ namespace OnWeb.CoreBind.Providers
             {
                 var ctt = MimeMapping.GetMimeMapping(fileReal);
                 requestContext.HttpContext.Response.ContentType = ctt;
-                requestContext.HttpContext.Response.WriteFile(fileReal);
+                requestContext.HttpContext.Response.TransmitFile(fileReal);
             }
 
-            HttpContext.Current.Response.Flush(); // Sends all currently buffered output to the client.
-            HttpContext.Current.Response.SuppressContent = true;  // Gets or sets a value indicating whether to send HTTP content to the client.
-            HttpContext.Current.ApplicationInstance.CompleteRequest(); // Causes ASP.NET to bypass all events and filtering in the HTTP pipeline chain of execution and directly execute the EndRequest event.
+            //todo эти две строки ломают сжатие gzip, если его включить.
+            //HttpContext.Current.Response.Flush();
+            //HttpContext.Current.Response.SuppressContent = true;
+
+            HttpContext.Current.ApplicationInstance.CompleteRequest();
 
             return new Handler();
         }

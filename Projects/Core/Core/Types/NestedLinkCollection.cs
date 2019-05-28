@@ -35,7 +35,7 @@ namespace OnWeb.Core.Types
         public NestedLinkCollection(IEnumerable<Items.ItemBase> source) : base(source)
         { }
 
-        public NestedListCollectionSimplified GetSimplifiedHiararchy(string separator = " -> ")
+        public NestedListCollectionSimplified GetSimplifiedHierarchy(string separator = " -> ")
         {
             var items = new NestedListCollectionSimplified();
 

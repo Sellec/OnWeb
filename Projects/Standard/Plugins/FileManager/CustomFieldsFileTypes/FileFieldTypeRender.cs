@@ -70,7 +70,19 @@ namespace OnWeb.Plugins.FileManager.CustomFieldsFileTypes
                     $('div#FileUploadField_Files_{containerID} input.buttonDelete').unbind('click').click(function(){{ $(this).parent().remove(); }});
                     var {containerID} = $('#{containerID}').requestFileUploadSingle({Newtonsoft.Json.JsonConvert.SerializeObject(uploadOptions)}); 
                     {(!string.IsNullOrEmpty(field.alias) ? $"FileUploadField_{field.alias} = {containerID};" : "")}
-                    {containerID}.getElement().bind('requestFileUploadSingleAfter', function(e, result, message, data) {{ {containerID}.reset(); if (result == JsonResult.OK) $('div#FileUploadField_Files_{containerID}').{(field.IsMultipleValues ? "append" : "html")}(""<span class='FileUploadField' data-idfile='"" + data + ""'><input type='button' class='buttonDelete' value='X'>&nbsp;<input type='checkbox' checked name='fieldValue_{field.IdField}[]' value='"" + data + ""'>&nbsp;<label>файл №"" + data + ""</label></span>""); }});
+                    {containerID}.getElement().bind('requestFileUploadSingleAfter', function(e, result, message, data) {{" +
+                        $@"{containerID}.reset();" +
+                        $@"if (result == JsonResult.OK) {{" +
+                            $@"$('div#FileUploadField_Files_{containerID}').{(field.IsMultipleValues ? "append" : "html")}(""" +
+                                $@"<span class='FileUploadField' data-idfile='"" + data + ""'>" +
+                                    $@"<input type='button' class='buttonDelete' value='X'>&nbsp;" +
+                                    $@"<input type='checkbox' checked name='fieldValue_{field.IdField}[]' value='"" + data + ""'>&nbsp;" +
+                                    $@"<label>файл №"" + data + ""</label>" +
+                                $@"</span>" +
+                            $@""");" +
+                            $@"$('div#FileUploadField_Files_{containerID} input.buttonDelete').unbind('click').click(function(){{ $(this).parent().remove(); }});" +
+                        $@"}}" +
+                    $@"}});                    
                 }});</script>
                 {divBuilder.ToString(TagRenderMode.Normal)}
             ";

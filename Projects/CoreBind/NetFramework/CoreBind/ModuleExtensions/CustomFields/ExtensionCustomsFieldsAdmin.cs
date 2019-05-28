@@ -68,7 +68,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
                 else
                 {
                     var _itemsPre = this.Module.GetItems(itemType.IdItemType, Types.eSortType.Name);
-                    var _items = _itemsPre != null ? _itemsPre.GetSimplifiedHiararchy() : new Types.NestedListCollectionSimplified();
+                    var _items = _itemsPre != null ? _itemsPre.GetSimplifiedHierarchy() : new Types.NestedListCollectionSimplified();
 
                     if (_items != null && _items.Count() > 0)
                         foreach (var res in _items)

@@ -1,0 +1,16 @@
+@model List<Core.Items.ItemBase>
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>@Url.ContentFullPath("")</loc>
+        <lastmod>@DateTime.Now.ToString("yyyy-MM-dd")</lastmod>
+    </url>
+    @foreach (var pair in Model)
+    {
+    <url>
+        <loc>@Url.ContentFullPath(pair.Url).Replace("&", "&amp;")</loc>
+        <lastmod>@((pair.DateChangeBase != DateTime.MinValue  ? pair.DateChangeBase : DateTime.Now).ToString("yyyy-MM-dd"))</lastmod>
+    </url>
+    }
+</urlset>

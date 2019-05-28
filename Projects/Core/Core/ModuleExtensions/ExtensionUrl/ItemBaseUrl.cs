@@ -4,11 +4,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace OnWeb.Core.Items
 {
     using OnUtils.Items;
+    using OnWeb.Core.ModuleExtensions.ExtensionUrl;
 
     public abstract partial class ItemBase
     {
         [Newtonsoft.Json.JsonIgnore]
         internal Uri _routingUrlMain = null;
+
+        [Newtonsoft.Json.JsonIgnore]
+        internal UrlSourceType _routingUrlMainSourceType = UrlSourceType.None;
 
         [ConstructorInitializer]
         private void ExtensionUrlInitializer()
@@ -54,8 +58,22 @@ namespace OnWeb.Core.Items
         }
 
         /// <summary>
-        /// Возвращает url-адрес объекта, если определен родительский модуль объекта.
+        /// Указывает источник, предоставивший значение <see cref="Url"/>.
         /// </summary>
+        [NotMapped]
+        public UrlSourceType UrlSourceType
+        {
+            get
+            {
+                var url = Url; // эта строка нужна для получения значения _routingUrlMainSourceType.
+                return _routingUrlMainSourceType;
+            }
+        }
+
+        /// <summary>
+        /// Возвращает url-адрес объекта. 
+        /// </summary>
+        /// <seealso cref="UrlSourceType"/>
         [NotMapped]
         public virtual Uri Url
         {
@@ -70,7 +88,11 @@ namespace OnWeb.Core.Items
                     }
                 }
 
-                if (_routingUrlMain == null) _routingUrlMain = _empty;
+                if (_routingUrlMain == null)
+                {
+                    _routingUrlMain = _empty;
+                    _routingUrlMainSourceType = UrlSourceType.None;
+                }
 
                 return _routingUrlMain;
             }

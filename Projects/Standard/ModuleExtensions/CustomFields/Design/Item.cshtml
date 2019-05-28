@@ -87,7 +87,7 @@
                     $("input#scheme_remove").show();
 
                     for (var i in Fields[$(this).val()].Fields)
-                        $("li.schemeMain_" + Fields[$(this).val()].Fields[i].id + " input.schemeCheck").attr('checked', true);
+                        $("li.schemeMain_" + Fields[$(this).val()].Fields[i].IdField + " input.schemeCheck").attr('checked', true);
                 }
             }
         });
@@ -104,7 +104,7 @@
                 for (var i in Fields)
                 {
                     fields[i] = new Array();
-                    for (var j in Fields[i].Fields) fields[i][fields[i].length] = Fields[i].Fields[j].id;
+                    for (var j in Fields[i].Fields) fields[i][fields[i].length] = Fields[i].Fields[j].IdField;
                 }
 
                 $.requestJSON("/@moduleAdmin.UrlName/madmin/@Module.UrlName/fieldsItemSave/@Model.SchemeItem.IdItem/@Model.SchemeItem.IdItemType", fields, function(result, message){
@@ -150,7 +150,7 @@
             for (var i in fields)
             {
                 var field = fields[i];
-                valuesForCustomizeAdd(field.id);
+                valuesForCustomizeAdd(field.IdField);
             }
         }
 

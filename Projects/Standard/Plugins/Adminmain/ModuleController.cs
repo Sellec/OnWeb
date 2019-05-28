@@ -260,23 +260,16 @@ namespace OnWeb.Plugins.Adminmain
 
             try
             {
-                throw new NotImplementedException(); // todo перенести исправления из TraceWeb и вынести список модулей для генерации сайтмапа в настройки.
-                //var linksAll = modules_list.SelectMany(moduleNameBase =>
-                //{
-                //    var module = AppCore.GetModulesManager().getModuleByName(moduleNameBase) ?? AppCore.GetModulesManager().getModuleByNameBase(moduleNameBase);
-                //    return module?.GetItemTypes().
-                //                   Where(x => x != null).
-                //                   Select(x => module.GetItems(x.IdItemType)).
-                //                   Where(x => x != null).
-                //                   SelectMany(x => x).
-                //                   Where(x => x is Items.ItemBase).
-                //                   OrderBy(x => x.Caption);
-                //}).Select(x => x as Items.ItemBase);
+                var linksAll = AppCore.
+                    GetModulesManager().
+                    GetModules().
+                    SelectMany(module => module.GetItemsForSitemap()).
+                    ToList();
 
-                //var code = this.displayToVar("admin_adminmain_sitemap_templ.cshtml", linksAll);
+                var code = this.displayToVar("SitemapXml.cshtml", linksAll);
 
-                //var path = System.IO.Path.Combine(this.Request.PhysicalApplicationPath, "sitemap.xml");
-                //System.IO.File.WriteAllText(path, code);
+                var path = System.IO.Path.Combine(this.Request.PhysicalApplicationPath, "sitemap.xml");
+                System.IO.File.WriteAllText(path, code);
 
                 success = true;
                 result = "Файл sitemap.xml был успешно обновлен.";
