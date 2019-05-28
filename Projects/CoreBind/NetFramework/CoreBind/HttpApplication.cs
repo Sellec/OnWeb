@@ -8,7 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.IO.Compression;
 
-namespace OnWeb.CoreBind.Razor
+namespace OnWeb.CoreBind
 {
     /// <summary>
     /// Представляет приложение ASP.NET, умеющее инициализировать OnWeb.

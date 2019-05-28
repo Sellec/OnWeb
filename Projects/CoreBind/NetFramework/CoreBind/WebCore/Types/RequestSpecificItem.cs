@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using System.Web;
-using System.Web.Mvc;
 
 namespace OnWeb.CoreBind.WebCore.Types
 {
@@ -21,7 +17,7 @@ namespace OnWeb.CoreBind.WebCore.Types
         {
             _disposableAction = disposableAction;
 
-            var app = HttpContext.Current.ApplicationInstance as Razor.HttpApplication;
+            var app = HttpContext.Current.ApplicationInstance as CoreBind.HttpApplication;
             if (app != null)
             {
                 app._requestSpecificDisposables.Enqueue(this);
@@ -44,7 +40,7 @@ namespace OnWeb.CoreBind.WebCore.Types
 
             try
             {
-                if (_disposableAction != null) _disposableAction();
+                _disposableAction?.Invoke();
             }
             catch (Exception ex)
             {
