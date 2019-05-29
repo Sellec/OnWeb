@@ -4,10 +4,15 @@ using System.Text;
 
 namespace OnWeb.Core
 {
-    internal static class DeprecatedSingletonInstances
+    /// <summary>
+    /// Будет удалено в будущих версиях.
+    /// </summary>
+    public static class DeprecatedSingletonInstances
     {
-        public static Modules.ModulesManager ModulesManager { get; set; }
+        [Obsolete("Будет удалено в будущих версиях.")]
+        public static OnUtils.Application.Modules.ModulesManager<ApplicationCore> ModulesManager { get; set; }
 
+        [Obsolete("Будет удалено в будущих версиях.")]
         public static Routing.UrlManager UrlManager { get; set; }
 
     }

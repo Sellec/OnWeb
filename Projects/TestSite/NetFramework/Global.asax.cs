@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace OnWeb.Site
 {
-    public class MvcApplication : CoreBind.Razor.HttpApplication
+    public class MvcApplication : CoreBind.HttpApplication
     {
         public MvcApplication() 
         {
