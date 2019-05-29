@@ -15,6 +15,7 @@ namespace OnWeb.Plugins.Adminmain
     using Core.Journaling;
     using Core.DB;
     using Core.Items;
+    using Services;
 
     /// <summary>
     /// Представляет контроллер для панели управления.
@@ -248,31 +249,44 @@ namespace OnWeb.Plugins.Adminmain
         [MenuAction("Sitemap", "sitemap", Module.PERM_SITEMAP)]
         public ActionResult Sitemap()
         {
-            var model = (from p in AppCore.GetModulesManager().GetModules() orderby p.Caption select p).ToList();
-            return this.display("Sitemap.cshtml", model);
+            var sitemapProviderTypes = AppCore.GetQueryTypes().Where(x => typeof(ISitemapProvider).IsAssignableFrom(x)).ToList();
+            var providerList = sitemapProviderTypes.Select(x =>
+            {
+                var p = new Design.Model.SitemapProvider()
+                {
+                    NameProvider = "",
+                    TypeName = x.FullName,
+                    IsCreatedNormally = false
+                };
+                try
+                {
+                    var pp = AppCore.Create<ISitemapProvider>(x);
+                    p.NameProvider = pp.NameProvider;
+                    p.IsCreatedNormally = true;
+                }
+                catch (Exception ex)
+                {
+                    p.TypeName = ex.ToString();
+                    p.IsCreatedNormally = false;
+                }
+                return p;
+            }).ToList();
+
+            return View("Sitemap.cshtml", new Design.Model.Sitemap() { ProviderList = providerList });
         }
 
         [ModuleAction("sitemap_save", Module.PERM_SITEMAP)]
-        public JsonResult SitemapGenerate(string[] modules_list)
+        public JsonResult SitemapGenerate()
         {
             var success = false;
             var result = "";
 
             try
             {
-                var linksAll = AppCore.
-                    GetModulesManager().
-                    GetModules().
-                    SelectMany(module => module.GetItemsForSitemap()).
-                    ToList();
-
-                var code = this.displayToVar("SitemapXml.cshtml", linksAll);
-
-                var path = System.IO.Path.Combine(this.Request.PhysicalApplicationPath, "sitemap.xml");
-                System.IO.File.WriteAllText(path, code);
+                Module.MarkSitemapGenerationToRun();
 
                 success = true;
-                result = "Файл sitemap.xml был успешно обновлен.";
+                result = "Процесс обновления карты сайта запущен.";
             }
             catch (Exception ex)
             {

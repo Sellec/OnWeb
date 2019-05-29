@@ -1,11 +1,11 @@
-@model List<Core.Modules.ModuleCore>
+@model Plugins.Adminmain.Design.Model.Sitemap
 @{ var moduleAdmin = AppCore.Get<Plugins.Admin.ModuleAdmin>(); }
 
 <script type='text/javascript'>
     $(document).ready(function () {
         try {
             $("#block").hide();
-            changeTitle('Генерация sitemap.xml сайта');
+            changeTitle('Карта сайта');
             $(".i_adminmenu ul").show();
 
             $("form#form_ae").requestJSON({
@@ -29,20 +29,24 @@
     });
 
 </script>
-<h2>Генерация sitemap.xml сайта</h2>
+<h2>Карта сайта</h2>
 <br>
-<table id="items_results">
-    <tr>
-        <td>
-            Выберите модули, которые следует включить в sitemap:<br>
-            <form action='/@moduleAdmin.UrlName/madmin/@Module.UrlName/sitemap_save' method='post' id='form_ae'>
-                <select name='modules_list[]' size='10' style="width:270px;" multiple="true" id="modules_list">
-                    @foreach (var module in Model)
-                    {
-                        <option value='@Module.UrlName'>@module.Caption</option>}
-                </select>
-                <input type='submit' id='conf_submit' value='Сохранить'> <img src="/data/img/loading.gif" alt="" id="loading_img">
-            </form>
-        </td>
-    </tr>
+Карта сайта автоматически собирается из данных, предоставляемых специальными провайдерами. На данный момент доступны следующие провайдеры:
+<table class="admtable">
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Тип</th>
+        </tr>
+    </thead>
+    @foreach (var provider in Model.ProviderList)
+    {
+        <tr>
+            <td @(provider.IsCreatedNormally ? "" : "style='background-color:red'")>@provider.NameProvider</td>
+            <td @(provider.IsCreatedNormally ? "" : "style='background-color:red'")>@provider.TypeName</td>
+        </tr>
+    }
 </table>
+<form action='/@moduleAdmin.UrlName/madmin/@Module.UrlName/SitemapGenerate' method='post' id='form_ae'>
+    <input type='submit' id='conf_submit' value='Обновить карту сайта'> <img src="/data/img/loading.gif" alt="" id="loading_img">
+</form>

@@ -127,6 +127,9 @@
     <Compile Include="Design\Additionals\Plugins\Model\EditableMenu.cs" />
     <Compile Include="Plugins\AdminForModules\Menu\IAdminMenuProvider.cs" />
     <Compile Include="Plugins\AdminForModules\Menu\MenuAction.cs" />
+    <Compile Include="Plugins\Adminmain\Design\Model\Sitemap.cs" />
+    <Compile Include="Plugins\Adminmain\Services\ISitemapProvider.cs" />
+    <Compile Include="Plugins\Adminmain\Services\SitemapGeneration.cs" />
     <Compile Include="Plugins\Auth\Design\Model\Login.cs" />
     <Compile Include="Plugins\Auth\Design\Model\ModuleSettings.cs" />
     <Compile Include="Plugins\Auth\Design\Model\PasswordRestoreSend.cs" />

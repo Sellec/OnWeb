@@ -265,23 +265,6 @@ namespace OnWeb.Core.Modules
         }
 
         /// <summary>
-        /// Возвращает список пар объектов, относящихся к данному модулю, для построения карты пользовательской части сайта.
-        /// </summary>
-        /// <returns></returns>
-        public virtual IEnumerable<Items.ItemBase> GetItemsForSitemap()
-        {
-            return GetItemTypes().
-                    Where(x => x != null).
-                    Select(x => GetItems(x.IdItemType)).
-                    Where(x => x != null).
-                    SelectMany(x => x.GetSimplifiedHierarchy(null)).
-                    Select(x => x.Key).
-                    Where(x => x != null).
-                    OrderBy(x => x.Caption).
-                    ToList();
-        }
-
-        /// <summary>
         /// Уничтожает и выгружает модуль.
         /// </summary>
         public virtual void Dispose()
