@@ -11,7 +11,7 @@ namespace OnWeb.Plugins.Customer
     /// <summary>
     /// См. <see cref="ModuleCustomer"/>.
     /// </summary>
-    class ModuleStandard : ModuleCustomer, IMenuProvider
+    public class ModuleStandard : ModuleCustomer, IMenuProvider
     {
         NestedLinkCollection IMenuProvider.GetAdminMenuItemsBase()
         {
