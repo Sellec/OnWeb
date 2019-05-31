@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 
-namespace OnWeb.Core.Items
+namespace OnWeb.Core.ModuleExtensions.ExtensionUrl
 {
+    using Items;
+
     /// <summary>
     /// Перечисляет виды источников url-адресов объектов (см. <see cref="ItemBase.Url"/>).
     /// </summary>
