@@ -12,6 +12,7 @@ using OnUtils.Data;
 using OnUtils.Utils;
 using OnUtils.Architecture.AppCore;
 using OnUtils.Architecture.AppCore.DI;
+using OnUtils.Application.Users;
 
 namespace OnWeb.Core.Modules
 {
@@ -80,13 +81,25 @@ namespace OnWeb.Core.Modules
         }
 
         /// <summary>
-        /// Проверяет, доступно ли указанное разрешение <paramref name="key"/> пользователю, ассоциированному с текущим контекстом (см. <see cref="OnUtils.Application.Users.UserContextManager{TApplication}.GetCurrentUserContext"/>).
+        /// Проверяет, доступно ли указанное разрешение <paramref name="key"/> пользователю, ассоциированному с текущим контекстом (см. <see cref="UserContextManager{TApplication}.GetCurrentUserContext"/>).
         /// </summary>
         /// <param name="key">Уникальный ключ разрешения. См. <see cref="Permission.Key"/>.</param>
         /// <returns>Возвращает результат проверки.</returns>
         public CheckPermissionResult CheckPermission(string key)
         {
             return CheckPermission(AppCore.GetUserContextManager().GetCurrentUserContext(), key.GenerateGuid());
+        }
+
+        /// <summary>
+        /// Проверяет, доступно ли указанное разрешение <paramref name="key"/> пользователю, ассоциированному с контекстом <paramref name="context"/>.
+        /// </summary>
+        /// <param name="context">Контекст пользователя.</param>
+        /// <param name="key">Уникальный ключ разрешения. См. <see cref="Permission.Key"/>.</param>
+        /// <returns>Возвращает результат проверки.</returns>
+        /// <exception cref="ArgumentNullException">Возникает, если context равен null.</exception>
+        public CheckPermissionResult CheckPermission(IUserContext context, string key)
+        {
+            return CheckPermission(context, key.GenerateGuid());
         }
 
         #endregion
