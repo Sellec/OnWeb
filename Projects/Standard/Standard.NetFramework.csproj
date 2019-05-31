@@ -169,6 +169,7 @@
     <Compile Include="Plugins\FileManager\MVC\FileRenderOptions.cs" />
     <Compile Include="Plugins\FileManager\MVC\HtmlHelper.cs" />
     <Compile Include="Plugins\FileManager\MVC\TraceModelMetadataProviderWithFiles.cs" />
+    <Compile Include="Plugins\FileManager\RegisterResult.cs" />
     <Compile Include="Plugins\Materials\DB\DataLayerContext.cs" />
     <Compile Include="Plugins\Materials\DB\News.cs" />
     <Compile Include="Plugins\Materials\DB\Page.cs" />

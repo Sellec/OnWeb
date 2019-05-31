@@ -8,7 +8,6 @@ using System.Linq;
 
 namespace OnWeb.Plugins.FileManager
 {
-    using Core;
     using DictionaryFiles = Dictionary<int, DB.File>;
     using Journaling = Core.Journaling;
 
@@ -50,23 +49,26 @@ namespace OnWeb.Plugins.FileManager
         #endregion
 
         /// <summary>
-        /// Возвращает файл с идентификатором <paramref name="idFile"/> (см. <see cref="DB.File.IdFile"/>).
+        /// Пытается получить файл с идентификатором <paramref name="idFile"/>.
         /// </summary>
-        /// <returns>Возвращает объект <see cref="DB.File"/> или null, если файл не найден или произошла ошибка.</returns>
-        public DB.File GetFile(int idFile)
+        /// <param name="idFile">Идентификатор файла, который необходимо получить  (см. <see cref="DB.File.IdFile"/>).</param>
+        /// <param name="result">В случае успеха содержит данные о файле.</param>
+        /// <returns>Возвращает результат поиска файла.</returns>
+        public NotFound TryGetFile(int idFile, out DB.File result)
         {
             try
             {
                 using (var db = this.CreateUnitOfWork())
                 {
-                    var data = db.Repo1.Where(x => x.IdFile == idFile).FirstOrDefault();
-                    return data;
+                    result = db.Repo1.Where(x => x.IdFile == idFile).FirstOrDefault();
+                    return result != null ? NotFound.Success : NotFound.NotFound;
                 }
             }
             catch (Exception ex)
             {
+                result = null;
                 this.RegisterEvent(Journaling.EventType.Error, "Ошибка получения файла", $"Идентификатор файла: {idFile}.", null, ex);
-                return null;
+                return NotFound.Error;
             }
         }
 
@@ -111,19 +113,22 @@ namespace OnWeb.Plugins.FileManager
         /// <param name="pathFile">Путь к существующему файлу. Файл должен существовать в момент вызова, иначе будет сгенерировано исключение <see cref="FileNotFoundException"/>.</param>
         /// <param name="uniqueKey">Уникальный ключ файла, по которому его можно идентифицировать. Один и тот же ключ может быть указан сразу у многих файлов.</param>
         /// <param name="dateExpires">Дата окончения срока хранения файла, после которой он будет автоматически удален. Если равно null, то устанавливается безлимитный срок хранения.</param>
+        /// <param name="result">В случае успешной регистрации содержит данные зарегистрированного файла.</param>
         /// <returns>Возвращает объект <see cref="DB.File"/>, если файл был зарегистрирован, либо null, если произошла ошибка.</returns>
         /// <exception cref="ArgumentNullException">Возникает, если <paramref name="nameFile"/> является пустой строкой или null.</exception>
         /// <exception cref="ArgumentNullException">Возникает, если <paramref name="pathFile"/> является пустой строкой или null.</exception>
         /// <exception cref="ArgumentException">Возникает, если <paramref name="nameFile"/> содержит специальные символы, не разрешенные в именах файлов (см. <see cref="Path.GetInvalidFileNameChars"/>).</exception>
         /// <exception cref="FileNotFoundException">Возникает, если файл <paramref name="pathFile"/> не найден на диске.</exception>
-        public DB.File Register(string nameFile, string pathFile, string uniqueKey = null, DateTime? dateExpires = null)
+        public RegisterResult Register(out DB.File result, string nameFile, string pathFile, string uniqueKey = null, DateTime? dateExpires = null)
         {
             if (string.IsNullOrEmpty(nameFile)) throw new ArgumentNullException(nameof(nameFile));
             if (string.IsNullOrEmpty(pathFile)) throw new ArgumentNullException(nameof(pathFile));
             if (Path.GetInvalidFileNameChars().Any(x => nameFile.Contains(x))) throw new ArgumentException("Содержит символы, не разрешенные в имени файла.", nameof(nameFile));
 
+            result = null;
+
             var pathFileFull = Path.Combine(AppCore.ApplicationWorkingFolder, pathFile);
-            if (!File.Exists(pathFileFull)) throw new FileNotFoundException("Файл не существует", pathFile);
+            if (!File.Exists(pathFileFull)) return RegisterResult.NotFound; // throw new FileNotFoundException("Файл не существует", pathFile);
 
             try
             {
@@ -169,13 +174,14 @@ namespace OnWeb.Plugins.FileManager
                             if (File.Exists(pathFileFullOld)) File.Delete(pathFileFullOld);
                         }
                     }
-                    return data;
+                    result = data;
+                    return RegisterResult.Success;
                 }
             }
             catch (Exception ex)
             {
                 this.RegisterEvent(Journaling.EventType.Error, "Ошибка регистрации файла", $"nameFile='{nameFile}'.\r\npathFile='{pathFile}'.\r\nuniqueKey='{uniqueKey}'.\r\ndateExpires={dateExpires?.ToString("dd.MM.yyyy HH:mm:ss")}.", null, ex);
-                return null;
+                return RegisterResult.Error;
             }
         }
 

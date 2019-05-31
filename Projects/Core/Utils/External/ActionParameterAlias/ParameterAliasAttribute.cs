@@ -8,6 +8,7 @@ namespace External.ActionParameterAlias
     /// <summary>
     /// Позволяет задать альтернативное имя аргумента метода, которое будет восприниматься парсером из адресной строки или из данных формы.
     /// </summary>
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class ParameterAliasAttribute : Attribute
     {
         private readonly string _parameterName;
