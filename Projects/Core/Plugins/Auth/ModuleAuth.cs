@@ -82,7 +82,7 @@ namespace OnWeb.Plugins.Auth
             if (TryGetUserCredentialsFromRequest(out int? idUser))
             {
                 var userContextResult = AppCore.GetUserContextManager().CreateUserContext(idUser.Value, out var userContext, out var resultReason);
-                return userContext;
+                return userContextResult == Core.Users.eAuthResult.Success ? userContext : null;
             }
 
             return null;
