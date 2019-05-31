@@ -53,14 +53,14 @@ namespace OnWeb.Plugins.Auth
 
                 if (ModelState.IsValid)
                 {
-                    var result = AppCore.GetUserContextManager().CreateUserContext(model.login, model.pass);
-                    if (result.IsSuccess && result.AuthResult == eAuthResult.Success)
+                    var result = AppCore.GetUserContextManager().CreateUserContext(model.login, model.pass, out var userContext, out var resultReason);
+                    if (result == eAuthResult.Success)
                     {
-                        Module.BindUserContextToRequest(result.Result);
-                        AppCore.GetUserContextManager().SetCurrentUserContext(result.Result);
+                        Module.BindUserContextToRequest(userContext);
+                        AppCore.GetUserContextManager().SetCurrentUserContext(userContext);
                         //message = "Авторизация прошла успешно!";
                     }
-                    else throw new BehaviourException(result.Message);
+                    else throw new BehaviourException(resultReason);
                 }
             }
             catch(BehaviourException ex)
@@ -105,13 +105,13 @@ namespace OnWeb.Plugins.Auth
                 var phone = PhoneBuilder.ParseString(model.login);
                 if (!model.login.isEmail() && !phone.IsCorrect) throw new BehaviourException("Неправильно введен логин.");
 
-                var result = AppCore.GetUserContextManager().CreateUserContext(model.login, model.pass);
-                if (result.IsSuccess && result.AuthResult == eAuthResult.Success)
+                var result = AppCore.GetUserContextManager().CreateUserContext(model.login, model.pass, out var userContext, out var resultReason);
+                if (result == eAuthResult.Success)
                 {
                     message = "Авторизация прошла успешно!";
                     success = true;
                 }
-                else throw new BehaviourException(result.Message);
+                else throw new BehaviourException(resultReason);
             }
             catch (BehaviourException ex)
             {

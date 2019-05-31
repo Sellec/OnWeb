@@ -8,7 +8,6 @@ using System.Linq;
 
 namespace OnWeb.Core.Users
 {
-    using ExecutionAuthResultContext = ExecutionAuthResult<IUserContext>;
     using ExecutionPermissionsResult = ExecutionResult<PermissionsList>;
 
     /// <summary>
@@ -41,13 +40,131 @@ namespace OnWeb.Core.Users
         }
 
         #region Login
-        private eAuthResult CheckLogin(int idUser, string login, string password, UnitOfWork<DB.User> db, out DB.User outData)
+        /// <summary>
+        /// Возвращает контекст пользователя с идентификатором <paramref name="idUser"/>.
+        /// </summary>
+        /// <param name="idUser">Идентификатор пользователя.</param>
+        /// <param name="userContext">Содержит контекст в случае успеха.</param>
+        /// <param name="resultReason">Содержит текстовое пояснение к ответу функции.</param>
+        /// <returns>Возвращает результат создания контекста.</returns>
+        public eAuthResult CreateUserContext(int idUser, out IUserContext userContext, out string resultReason)
+        {
+            return CreateUserContext(idUser, null, null, out userContext, out resultReason);
+        }
+
+        /// <summary>
+        /// Возвращает контекст пользователя с указанными реквизитами <paramref name="login"/>/<paramref name="password"/>. 
+        /// </summary>
+        /// <param name="login">Логин для авторизации. В качестве логина может выступать Email-адрес или номер телефона (в зависимости от настроек системы).</param>
+        /// <param name="password">Пароль для авторизации. Должен передаваться в незашифрованном виде.</param>
+        /// <param name="userContext">Содержит контекст в случае успеха.</param>
+        /// <param name="resultReason">Содержит текстовое пояснение к ответу функции.</param>
+        /// <returns>Возвращает результат создания контекста.</returns>
+        public eAuthResult CreateUserContext(string login, string password, out IUserContext userContext, out string resultReason)
+        {
+            return CreateUserContext(0, login, password, out userContext, out resultReason);
+        }
+
+        private eAuthResult CreateUserContext(int IdUser, string user, string password, out IUserContext userContext, out string resultReason)
+        {
+            var authorizationAttemptsExceeded = false;
+            var id = 0;
+            userContext = null;
+            resultReason = null;
+
+            using (var db = new UnitOfWork<DB.User>())
+            {
+                var returnNewFailedResultWithAuthAttempt = new Func<eAuthResult, string, ExecutionAuthResult<IUserContext>>((authResult, message) =>
+                {
+                    var idEvent = AppCore.ConfigurationOptionGet("eventLoginError", 0);
+                    if (idEvent > 0) RegisterLogHistoryEvent(id, idEvent, message);
+
+                    if (id > 0)
+                    {
+                        db.DataContext.ExecuteQuery(
+                            $"UPDATE users SET AuthorizationAttempts = (AuthorizationAttempts + 1){(authorizationAttemptsExceeded ? ", BlockedUntil=@BlockedUntil, BlockedReason=@BlockedReason" : "")} WHERE id=@IdUser",
+                            new
+                            {
+                                IdUser = id,
+                                BlockedUntil = DateTime.Now.Timestamp() + AppCore.ConfigurationOptionGet("AuthorizationAttemptsBlock", 0),
+                                BlockedReason = AppCore.ConfigurationOptionGet("AuthorizationAttemptsBlockMessage", ""),
+                            }
+                        );
+                    }
+
+                    return new ExecutionAuthResult<IUserContext>(authResult, message + (authorizationAttemptsExceeded ? " " + AppCore.ConfigurationOptionGet("AuthorizationAttemptsMessage", "") : ""));
+                });
+
+                try
+                {
+                    var checkLoginResult = CheckLogin(IdUser, user, password, db, out DB.User res);
+                    if (!checkLoginResult.IsSuccess)
+                    {
+                        var result = returnNewFailedResultWithAuthAttempt(checkLoginResult.AuthResult, checkLoginResult.Message);
+                        resultReason = result.Message;
+                        return result.AuthResult;
+                    }
+
+                    id = res.id;
+                    var attempts = AppCore.ConfigurationOptionGet("AuthorizationAttempts", 0);
+                    authorizationAttemptsExceeded = attempts > 0 && (res.AuthorizationAttempts + 1) >= attempts;
+
+                    if (res.BlockedUntil > DateTime.Now.Timestamp())
+                    {
+                        var result = returnNewFailedResultWithAuthAttempt(
+                            eAuthResult.BlockedUntil, 
+                            "Учетная запись заблокирована до " + (new DateTime()).FromUnixtime(res.BlockedUntil).ToString("yyyy-mm-dd HH:MM") + (!string.IsNullOrEmpty(res.BlockedReason) ? " по причине: " + res.BlockedReason : ".")
+                        );
+                        resultReason = result.Message;
+                        return result.AuthResult;
+                    }
+
+                    var checkStateResult = this.CheckUserState(res, res.Comment);
+                    if (!checkStateResult.IsSuccess)
+                    {
+                        var result = returnNewFailedResultWithAuthAttempt(checkStateResult.AuthResult, checkStateResult.Message);
+                        resultReason = result.Message;
+                        return result.AuthResult;
+                    }
+
+                    AppCore.Get<IUsersManager>().getUsers(new Dictionary<int, DB.User>() { { id, res } });
+
+                    var permissionsResult = GetPermissions(res.id);
+                    if (!permissionsResult.IsSuccess)
+                    {
+                        var result = returnNewFailedResultWithAuthAttempt(eAuthResult.UnknownError, permissionsResult.Message);
+                        resultReason = result.Message;
+                        return result.AuthResult;
+                    }
+
+                    var context = new UserManager(res, true, permissionsResult.Result);
+                    context.Start(AppCore);
+
+                    var idEvent = AppCore.ConfigurationOptionGet("eventLoginSuccess", 0);
+                    if (idEvent > 0) RegisterLogHistoryEvent(id, idEvent);
+
+                    res.AuthorizationAttempts = 0;
+                    db.SaveChanges();
+
+                    userContext = context;
+                    return eAuthResult.Success;
+                }
+                catch (Exception ex)
+                {
+                    this.RegisterEvent(Journaling.EventType.CriticalError, "Неизвестная ошибка во время получения контекста пользователя.", $"IdUser={IdUser}, Login='{user}'.", null, ex);
+                    resultReason = "Неизвестная ошибка во время получения контекста пользователя.";
+                    return eAuthResult.UnknownError;
+                }
+            }
+        }
+
+        private ExecutionAuthResult CheckLogin(int idUser, string login, string password, UnitOfWork<DB.User> db, out DB.User outData)
         {
             outData = null;
 
             try
             {
-                if (idUser <= 0 && string.IsNullOrEmpty(login)) return eAuthResult.WrongAuthData;
+                if (idUser <= 0 && string.IsNullOrEmpty(login)) return new ExecutionAuthResult(eAuthResult.WrongAuthData, "Не указаны реквизиты для авторизации!");
 
                 List<DB.User> query = null;
                 bool directAuthorize = false;
@@ -65,10 +182,10 @@ namespace OnWeb.Core.Users
                     switch (AppCore.Config.userAuthorizeAllowed)
                     {
                         case eUserAuthorizeAllowed.Nothing:
-                            return eAuthResult.AuthDisabled;
+                            return new ExecutionAuthResult(eAuthResult.AuthDisabled, "Авторизация запрещена.");
 
                         case eUserAuthorizeAllowed.OnlyPhone:
-                            return eAuthResult.AuthMethodNotAllowed;
+                            return new ExecutionAuthResult(eAuthResult.AuthMethodNotAllowed, "Авторизация возможна только по номеру телефона.");
 
                         case eUserAuthorizeAllowed.EmailAndPhone:
                             query = (from p in db.Repo1 where string.Compare(p.email, login, true) == 0 select p).ToList();
@@ -89,10 +206,10 @@ namespace OnWeb.Core.Users
                         switch (AppCore.Config.userAuthorizeAllowed)
                         {
                             case eUserAuthorizeAllowed.Nothing:
-                                return eAuthResult.AuthDisabled;
+                                return new ExecutionAuthResult(eAuthResult.AuthDisabled, "Авторизация запрещена.");
 
                             case eUserAuthorizeAllowed.OnlyEmail:
-                                return eAuthResult.AuthMethodNotAllowed;
+                                return new ExecutionAuthResult(eAuthResult.AuthMethodNotAllowed, "Авторизация возможна только через электронную почту.");
 
                             case eUserAuthorizeAllowed.EmailAndPhone:
                                 query = (from p in db.Repo1 where string.Compare(p.phone, phone.ParsedPhoneNumber, true) == 0 select p).ToList();
@@ -107,7 +224,7 @@ namespace OnWeb.Core.Users
 
                 if (query == null)
                 {
-                    return eAuthResult.UnknownError;
+                    return new ExecutionAuthResult(eAuthResult.UnknownError, "Что-то пошло не так во время авторизации.");
                 }
 
                 if (query.Count == 1)
@@ -117,159 +234,63 @@ namespace OnWeb.Core.Users
                     if (directAuthorize || res.password == UsersExtensions.hashPassword(password))
                     {
                         outData = res;
-                        return eAuthResult.Success;
+                        return new ExecutionAuthResult(eAuthResult.Success);
                     }
                     else
                     {
-                        return eAuthResult.WrongPassword;
+                        return new ExecutionAuthResult(eAuthResult.WrongPassword, "Неверный пароль.");
                     }
                 }
                 else if (query.Count > 1)
                 {
-                    AppCore.Get<Messaging.IMessagingManager>().GetCriticalMessagesReceivers().ForEach(x=>x.SendToAdmin("Одинаковые реквизиты входа!", "Найдено несколько пользователей с логином '" + login + "'"));
-                    return eAuthResult.MultipleFound;
+                    AppCore.Get<Messaging.IMessagingManager>().GetCriticalMessagesReceivers().ForEach(x => x.SendToAdmin("Одинаковые реквизиты входа!", "Найдено несколько пользователей с логином '" + login + "'"));
+                    return new ExecutionAuthResult(eAuthResult.MultipleFound, "Найдено несколько пользователей с логином '" + login + "'. Обратитесь к администратору для решения проблемы.");
                 }
                 else
                 {
-                    return eAuthResult.NothingFound;
+                    return new ExecutionAuthResult(eAuthResult.NothingFound, $"Пользователь '{login}' не найден в базе данных.");
                 }
             }
             catch (Exception ex)
             {
                 this.RegisterEvent(Journaling.EventType.Error, "Ошибка во время поиска и проверки пользователя", $"IdUser={idUser}, Login='{login}'.", null, ex);
-                return eAuthResult.UnknownError;
+                return new ExecutionAuthResult(eAuthResult.UnknownError, "Неизвестная ошибка во время проверки авторизации.");
             }
         }
 
-        /// <summary>
-        /// Возвращает контекст пользователя с идентификатором <paramref name="idUser"/>.
-        /// </summary>
-        /// <param name="idUser">Идентификатор пользователя.</param>
-        /// <param name="userContext">Содержит контекст в случае успеха.</param>
-        /// <returns>Возвращает результат создания контекста.</returns>
-        public eAuthResult CreateUserContext(int idUser, out IUserContext userContext, out string resultReason)
-        {
-            return CreateUserContext(idUser, null, null, out userContext, out resultReason);
-        }
-
-        /// <summary>
-        /// Возвращает контекст пользователя с указанными реквизитами <paramref name="login"/>/<paramref name="password"/>. 
-        /// </summary>
-        /// <param name="login">Логин для авторизации. В качестве логина может выступать Email-адрес или номер телефона (в зависимости от настроек системы).</param>
-        /// <param name="password">Пароль для авторизации. Должен передаваться в незашифрованном виде.</param>
-        /// <param name="userContext">Содержит контекст в случае успеха.</param>
-        /// <returns>Возвращает результат создания контекста.</returns>
-        public eAuthResult CreateUserContext(string login, string password, out IUserContext userContext, out string resultReason)
-        {
-            return CreateUserContext(0, login, password, out userContext);
-        }
-
-        private eAuthResult CreateUserContext(int IdUser, string user, string password, out IUserContext userContext, out string resultReason)
-        {
-            var authorizationAttemptsExceeded = false;
-            var id = 0;
-            userContext = null;
-
-            using (var db = new UnitOfWork<DB.User>())
-            {
-                var returnNewFailedResultWithAuthAttempt = new Func<eAuthResult, string, eAuthResult>((authResult, message) =>
-                {
-                    var idEvent = AppCore.ConfigurationOptionGet("eventLoginError", 0);
-                    if (idEvent > 0) RegisterLogHistoryEvent(id, idEvent, $"{authResult}: {message}");
-
-                    if (id > 0)
-                    {
-                        db.DataContext.ExecuteQuery(
-                            $"UPDATE users SET AuthorizationAttempts = (AuthorizationAttempts + 1){(authorizationAttemptsExceeded ? ", BlockedUntil=@BlockedUntil, BlockedReason=@BlockedReason" : "")} WHERE id=@IdUser",
-                            new
-                            {
-                                IdUser = id,
-                                BlockedUntil = DateTime.Now.Timestamp() + AppCore.ConfigurationOptionGet("AuthorizationAttemptsBlock", 0),
-                                BlockedReason = AppCore.ConfigurationOptionGet("AuthorizationAttemptsBlockMessage", ""),
-                            }
-                        );
-                    }
-
-                    return authResult; // new ExecutionAuthResult<IUserContext>(authResult, message + (authorizationAttemptsExceeded ? " " + AppCore.ConfigurationOptionGet("AuthorizationAttemptsMessage", "") : ""));
-                });
-
-                try
-                {
-                    var checkLoginResult = CheckLogin(IdUser, user, password, db, out DB.User res);
-                    if (checkLoginResult != eAuthResult.Success)
-                    {
-                        return returnNewFailedResultWithAuthAttempt(checkLoginResult, null);
-                    }
-
-                    id = res.id;
-                    var attempts = AppCore.ConfigurationOptionGet("AuthorizationAttempts", 0);
-                    authorizationAttemptsExceeded = attempts > 0 && (res.AuthorizationAttempts + 1) >= attempts;
-
-                    var checkStateResult = CheckUserState(res, res.Comment);
-                    if (checkStateResult != eAuthResult.Success)
-                    {
-                        return returnNewFailedResultWithAuthAttempt(checkStateResult, null);
-                    }
-
-                    AppCore.Get<IUsersManager>().getUsers(new Dictionary<int, DB.User>() { { id, res } });
-
-                    var permissionsResult = GetPermissions(res.id);
-                    if (!permissionsResult.IsSuccess)
-                    {
-                        return eAuthResult.UnknownError;
-                    }
-
-                    var context = new UserManager(res, true, permissionsResult.Result);
-                    context.Start(AppCore);
-
-
-                    var idEvent = AppCore.ConfigurationOptionGet("eventLoginSuccess", 0);
-                    if (idEvent > 0) RegisterLogHistoryEvent(id, idEvent);
-
-                    res.AuthorizationAttempts = 0;
-                    db.SaveChanges();
-
-                    userContext = context;
-                    return eAuthResult.Success;
-                }
-                catch (Exception ex)
-                {
-                    this.RegisterEvent(Journaling.EventType.CriticalError, "Неизвестная ошибка во время авторизации пользователя", $"IdUser={IdUser}, Login='{user}'.", null, ex);
-                    return eAuthResult.UnknownError;
-                }
-            }
-        }
-
-        private eAuthResult CheckUserState(DB.User data, string comment = null)
+        private ExecutionAuthResult CheckUserState(DB.User data, string comment = null)
         {
             if (data.State == DB.UserState.Active)
             {
                 if (data.BlockedUntil > DateTime.Now.Timestamp())
                 {
-                    return eAuthResult.BlockedUntil;
+                    return new ExecutionAuthResult(eAuthResult.BlockedUntil, "Учетная запись заблокирована до " + (new DateTime()).FromUnixtime(data.BlockedUntil).ToString("yyyy-mm-dd HH:MM") +
+                        (!string.IsNullOrEmpty(data.BlockedReason) ? " по причине: " + data.BlockedReason : "."));
                 }
 
-                return eAuthResult.Success;
+                return new ExecutionAuthResult(eAuthResult.Success);
             }
             else if (data.State == DB.UserState.RegisterNeedConfirmation)
             {
-                return eAuthResult.RegisterNeedConfirmation;
+                return new ExecutionAuthResult(eAuthResult.RegisterNeedConfirmation, "Необходимо подтвердить регистрацию путем перехода по ссылке из письма, отправленного на указанный при регистрации Email-адрес.");
             }
             else if (data.State == DB.UserState.RegisterWaitForModerate)
             {
-                return eAuthResult.RegisterWaitForModerate;
+                return new ExecutionAuthResult(eAuthResult.RegisterWaitForModerate, "Заявка на регистрацию еще не проверена администратором.");
             }
             else if (data.State == DB.UserState.RegisterDecline)
             {
-                return eAuthResult.RegisterDecline;
+                var msg = "Заявка на регистрацию отклонена администратором.";
+                return new ExecutionAuthResult(eAuthResult.RegisterDecline, !string.IsNullOrEmpty(comment) ? $"{msg}\r\n\r\nПричина: {comment}" : msg);
             }
             else if (data.State == DB.UserState.Disabled)
             {
-                return eAuthResult.Disabled;
+                var msg = "Учетная запись отключена.";
+                return new ExecutionAuthResult(eAuthResult.Disabled, !string.IsNullOrEmpty(comment) ? $"{msg}\r\n\r\nПричина: {comment}" : msg);
             }
             else
             {
-                return eAuthResult.UnknownError;
+                return new ExecutionAuthResult(eAuthResult.UnknownError, "Ошибка при авторизации");
             }
         }
         #endregion
