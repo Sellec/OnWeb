@@ -97,7 +97,7 @@ namespace OnWeb.Core.Users
 
                 try
                 {
-                    var checkLoginResult = CheckLogin(IdUser, user, password, db, out DB.User res);
+                    var checkLoginResult = CheckLogin(IdUser, user, password, db, out var res);
                     if (!checkLoginResult.IsSuccess)
                     {
                         var result = returnNewFailedResultWithAuthAttempt(checkLoginResult.AuthResult, checkLoginResult.Message);
