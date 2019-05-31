@@ -7,7 +7,7 @@ namespace OnWeb.Plugins.Lexicon
     {
         void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
         {
-            bindingsCollection.SetSingleton<Manager>();
+            bindingsCollection.SetSingleton<LexiconManager>();
         }
     }
 }

@@ -10,7 +10,10 @@ namespace OnWeb.Plugins.Lexicon
     using DB = Core.DB;
     using Journaling = Core.Journaling;
 
-    public class Manager : CoreComponentBase<ApplicationCore>, IComponentSingleton<ApplicationCore>, IUnitOfWorkAccessor<UnitOfWork<DB.WordCase>>
+    /// <summary>
+    /// Менеджер для работы со словарными формами.
+    /// </summary>
+    public class LexiconManager : CoreComponentBase<ApplicationCore>, IComponentSingleton<ApplicationCore>, IUnitOfWorkAccessor<UnitOfWork<DB.WordCase>>
     {
         /// <summary>
         /// Структура для запроса числительной и падежной формы слова.
@@ -33,7 +36,7 @@ namespace OnWeb.Plugins.Lexicon
         #region CoreComponentBase
         protected sealed override void OnStart()
         {
-            AppCore.Get<Journaling.IJournalingManager>().RegisterJournalTyped<Manager>("Журнал лексического менеджера");
+            AppCore.Get<Journaling.IJournalingManager>().RegisterJournalTyped<LexiconManager>("Журнал лексического менеджера");
         }
 
         protected sealed override void OnStop()
@@ -41,7 +44,7 @@ namespace OnWeb.Plugins.Lexicon
         }
         #endregion
 
-        static Manager()
+        static LexiconManager()
         {
         }
 
@@ -278,6 +281,9 @@ namespace OnWeb.Plugins.Lexicon
             return null;
         }
 
+        /// <summary>
+        /// Обрабатывает новые добавленные слова, получая для них словарные формы.
+        /// </summary>
         public void PrepareNewWords()
         {
             try

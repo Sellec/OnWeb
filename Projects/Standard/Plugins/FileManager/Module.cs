@@ -63,7 +63,7 @@ namespace OnWeb.Plugins.FileManager
             /**
              * Регулярная проверка новых слов в лексическом менеджере.
              * */
-            TasksManager.SetTask(typeof(Lexicon.Manager).FullName + "_" + nameof(Lexicon.Manager.PrepareNewWords) + "_minutely2", Cron.MinuteInterval(2), () => LexiconNewWordsStatic());
+            TasksManager.SetTask(typeof(Lexicon.LexiconManager).FullName + "_" + nameof(Lexicon.LexiconManager.PrepareNewWords) + "_minutely2", Cron.MinuteInterval(2), () => LexiconNewWordsStatic());
 
             ModelMetadataProviders.Current = new MVC.TraceModelMetadataProviderWithFiles();
         }
@@ -99,7 +99,7 @@ namespace OnWeb.Plugins.FileManager
         #region Lexicon new words
         public static void LexiconNewWordsStatic()
         {
-            _thisModule.AppCore.Get<Lexicon.Manager>().PrepareNewWords();
+            _thisModule.AppCore.Get<Lexicon.LexiconManager>().PrepareNewWords();
         }
         #endregion
 
