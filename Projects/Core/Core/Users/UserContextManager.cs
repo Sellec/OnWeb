@@ -357,13 +357,13 @@ namespace OnWeb.Core.Users
                 using (var db = this.CreateUnitOfWork())
                 {
                     var authCfg = AppCore.Get<Plugins.Auth.ModuleAuth>().GetConfiguration<Plugins.Auth.ModuleConfiguration>();
-                    var IdRoleUser = authCfg.RoleUser;
-                    var IdRoleGuest = authCfg.RoleGuest;
+                    var idRoleUser = authCfg.RoleUser;
+                    var idRoleGuest = authCfg.RoleGuest;
 
                     var perms2 = (from p in db.RolePermission
                                   join ru in db.RoleUser on p.IdRole equals ru.IdRole into gj
                                   from subru in gj.DefaultIfEmpty()
-                                  where (subru.IdUser == idUser) || (idUser > 0 && p.IdRole == IdRoleUser) || (idUser == 0 && p.IdRole == IdRoleGuest)
+                                  where (subru.IdUser == idUser) || (idUser > 0 && p.IdRole == idRoleUser) || (idUser == 0 && p.IdRole == idRoleGuest)
                                   select new { p.IdModule, p.Permission });
 
                     var perms = new Dictionary<Guid, List<Guid>>();

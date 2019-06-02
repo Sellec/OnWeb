@@ -19,60 +19,70 @@ namespace OnWeb.Core.Users
         }
         #endregion
 
-        IEnumerable<DB.User> IUsersManager.UsersByRoles(int[] IdRoleList, bool onlyActive, bool exceptSuperuser, Dictionary<string, bool> orderBy)
+        Dictionary<DB.User, int[]> IUsersManager.UsersByRoles(int[] roleIdList, bool onlyActive, bool exceptSuperuser, Dictionary<string, bool> orderBy)
         {
             try
             {
-                if (IdRoleList == null || IdRoleList.Length == 0) return Enumerable.Empty<DB.User>();
+                if (roleIdList == null || roleIdList.Length == 0) return new Dictionary<DB.User, int[]>();
 
                 if (orderBy != null) throw new ArgumentException("Параметр не поддерживается.", nameof(orderBy));
 
                 using (var db = this.CreateUnitOfWork())
                 {
-                    var query = db.Users.AsQueryable();
+                    var queryBase = db.Users.AsQueryable();
 
-                    if (onlyActive) query = query.Where(x => x.State == 0);
+                    if (onlyActive) queryBase = queryBase.Where(x => x.State == 0);
 
-                    var IdRoleUser = AppCore.ConfigurationOptionGet(UserContextManager.RoleUserName, 0);
-                    if (!IdRoleList.Contains(IdRoleUser))
+                    var idRoleUser = AppCore.ConfigurationOptionGet(UserContextManager.RoleUserName, 0);
+                    if (!roleIdList.Contains(idRoleUser))
                     {
-                        var q = exceptSuperuser ? (from user in query
-                                                   join role in db.RoleUser on user.id equals role.IdUser
-                                                   where IdRoleList.Contains(role.IdRole)
-                                                   group user.id by user.id into id_gr
-                                                   select id_gr.Key) : (from user in query
-                                                                        join role in db.RoleUser on user.id equals role.IdUser
-                                                                        where IdRoleList.Contains(role.IdRole) || user.Superuser != 0
-                                                                        group user.id by user.id into id_gr
-                                                                        select id_gr.Key);
+                        var queryRolesWithUsers = exceptSuperuser ? (from user in queryBase
+                                                                     join role in db.RoleUser on user.id equals role.IdUser
+                                                                     where roleIdList.Contains(role.IdRole)
+                                                                     select new { role.IdUser, role.IdRole }) : (from user in queryBase
+                                                                                                                 join role in db.RoleUser on user.id equals role.IdUser
+                                                                                                                 where roleIdList.Contains(role.IdRole) || user.Superuser != 0
+                                                                                                                 select new { role.IdUser, role.IdRole });
 
-                        query = from user in db.Users
-                                join p in q on user.id equals p
-                                select user;
+                        var data = queryRolesWithUsers.ToList().GroupBy(x => x.IdUser, x => x.IdRole).ToDictionary(x => x.Key, x => x.Distinct().ToArray());
+
+                        var queryUsers = from user in db.Users
+                                         where data.Keys.Contains(user.id)
+                                         select user;
+
+                        var data2 = queryUsers.ToList().ToDictionary(x => x, x => data[x.id]);
+                        return data2;
                     }
-
-                    return query.ToList();
-                    //$order = count($order) > 0 ? "ORDER BY ".implode(", ", $order) : "";
+                    else
+                    {
+                        return queryBase.ToDictionary(x => x, x => new int[] { idRoleUser });
+                    }
                 }
             }
+            catch (ArgumentException) { throw; }
             catch (Exception ex)
             {
-                Debug.Logs($"user: {IdRoleList}; {ex.Message}");
+                Debug.Logs($"user: {roleIdList}; {ex.Message}");
+                this.RegisterEvent(
+                    Journaling.EventType.Error, 
+                    "Ошибка получения списка пользователей, обладающих ролями.", 
+                    $"Идентификаторы ролей: {string.Join(", ", roleIdList)}.\r\nПо активности: {(onlyActive ? "только активных" : "всех")}.\r\nСуперпользователи: {(exceptSuperuser ? "только если роль назначена напрямую" : "добавлять всегда")}.\r\nСортировка: {orderBy?.ToString()}.", 
+                    ex);
                 throw;
             }
         }
 
-        IDictionary<int, List<DB.Role>> IUsersManager.RolesByUser(int[] IdUserList)
+        Dictionary<int, List<DB.Role>> IUsersManager.RolesByUser(int[] userIdList)
         {
             try
             {
-                if (IdUserList == null || IdUserList.Length == 0) throw new ArgumentNullException(nameof(IdUserList));
+                if (userIdList == null || userIdList.Length == 0) return new Dictionary<int, List<DB.Role>>();
 
                 using (var db = this.CreateUnitOfWork())
                 {
                     var query = from roleJoin in db.RoleUser
                                 join role in db.Role on roleJoin.IdRole equals role.IdRole
-                                where IdUserList.Contains(roleJoin.IdUser)
+                                where userIdList.Contains(roleJoin.IdUser)
                                 group role by roleJoin.IdUser into gr
                                 select new { IdUser = gr.Key, Roles = gr.ToList() };
 
@@ -81,71 +91,76 @@ namespace OnWeb.Core.Users
             }
             catch (Exception ex)
             {
-                Debug.Logs($"rolesByUser: {IdUserList}; {ex.Message}");
+                Debug.Logs($"rolesByUser: {userIdList}; {ex.Message}");
+                this.RegisterEvent(Journaling.EventType.Error, "Ошибка получения списка ролей, назначенных пользователям.", $"Идентификаторы пользователей: {(userIdList?.Any() == true ? "не задано" : string.Join(", ", userIdList))}", ex);
                 throw;
             }
         }
 
-        bool IUsersManager.SetRoleUsers(int IdRole, IEnumerable<int> users)
+        NotFound IUsersManager.SetRoleUsers(int idRole, IEnumerable<int> userIdList)
         {
             try
             {
                 using (var db = this.CreateUnitOfWork())
                 using (var scope = db.CreateScope())
                 {
-                    if (users == null) db.RoleUser.Where(x => x.IdRole == IdRole).Delete();
-                    else db.RoleUser.Where(x => x.IdRole == IdRole && !users.Contains(x.IdUser)).Delete();
+                    if (db.Role.Where(x => x.IdRole == idRole).Count() == 0) return NotFound.NotFound;
 
-                    var context = AppCore.GetUserContextManager().GetCurrentUserContext();
-                    var IdUserChange = context.GetIdUser();
-
-                    if (users != null)
+                    if (userIdList?.Any() == true)
                     {
-                        var usersInRole = db.RoleUser.Where(x => x.IdRole == IdRole).Select(x => x.IdUser).ToList();
-                        users.Where(x => !usersInRole.Contains(x)).ToList().ForEach(IdUser =>
+                        db.RoleUser.Where(x => x.IdRole == idRole && !userIdList.Contains(x.IdUser)).Delete();
+
+                        var context = AppCore.GetUserContextManager().GetCurrentUserContext();
+                        var IdUserChange = context.GetIdUser();
+
+                        var usersInRole = db.RoleUser.Where(x => x.IdRole == idRole).Select(x => x.IdUser).ToList();
+                        userIdList.Where(x => !usersInRole.Contains(x)).ToList().ForEach(IdUser =>
                         {
                             db.RoleUser.Add(new DB.RoleUser()
                             {
-                                IdRole = IdRole,
+                                IdRole = idRole,
                                 IdUser = IdUser,
                                 IdUserChange = IdUserChange,
                                 DateChange = DateTime.Now.Timestamp()
                             });
                         });
                     }
+                    else
+                    {
+                        db.RoleUser.Where(x => x.IdRole == idRole).Delete();
+                    }
 
                     db.SaveChanges();
                     scope.Commit();
                 }
 
-                return true;
+                return NotFound.Success;
             }
             catch (Exception ex)
             {
-                Debug.Logs($"setRoleUsers: {IdRole}, {users}; {ex}");
-                //setError(ex.Message);
-                return false;
+                Debug.Logs($"setRoleUsers: {idRole}, {userIdList}; {ex}");
+                this.RegisterEvent(Journaling.EventType.Error, "Ошибка при замене пользователей роли.", $"Идентификатор роли: {idRole}\r\nИдентификаторы пользователей: {(userIdList?.Any() == true ? "не задано" : string.Join(", ", userIdList))}", ex);
+                return NotFound.Error;
             }
         }
 
-        bool IUsersManager.AddRoleUsers(int IdRole, IEnumerable<int> users)
+        NotFound IUsersManager.AddRoleUsers(int idRole, IEnumerable<int> userIdList)
         {
             try
             {
                 using (var db = this.CreateUnitOfWork())
                 using (var scope = db.CreateScope())
                 {
-                    var role = db.Role.Where(x => x.IdRole == IdRole).FirstOrDefault();
-                    if (role == null) throw new Exception("Указанная роль не найдена.");
+                    if (db.Role.Where(x => x.IdRole == idRole).Count() == 0) return NotFound.NotFound;
 
                     var context = AppCore.GetUserContextManager().GetCurrentUserContext();
                     var IdUserChange = context.GetIdUser();
 
-                    db.Users.Where(x => users.Contains(x.id)).ToList().ForEach((DB.User x) =>
+                    db.Users.Where(x => userIdList.Contains(x.id)).ToList().ForEach((DB.User x) =>
                     {
                         db.RoleUser.AddOrUpdate(new DB.RoleUser()
                         {
-                            IdRole = IdRole,
+                            IdRole = idRole,
                             IdUser = x.id,
                             IdUserChange = IdUserChange,
                             DateChange = DateTime.Now.Timestamp()
@@ -156,20 +171,22 @@ namespace OnWeb.Core.Users
                     scope.Commit();
                 }
 
-                return true;
+                return NotFound.Success;
             }
             catch (Exception ex)
             {
-                Debug.Logs($"addRoleUsers: {IdRole}, {users}; {ex}");
-                //setError(ex.Message);
-                return false;
+                Debug.Logs($"addRoleUsers: {idRole}, {userIdList}; {ex}");
+                this.RegisterEvent(Journaling.EventType.Error, "Ошибка при регистрации роли для списка пользователей.", $"Идентификатор роли: {idRole}\r\nИдентификаторы пользователей: {(userIdList?.Any() == true ? "не задано" : string.Join(", ", userIdList))}", ex);
+                return NotFound.Error;
             }
         }
 
-        bool IUsersManager.getUsers(IDictionary<int, DB.User> users)
+        bool IUsersManager.getUsers(Dictionary<int, DB.User> users)
         {
             try
             {
+                if (users == null || !users.Any()) return true;
+
                 var listIDForRequest = new List<int>();
 
                 foreach (var pair in users)
@@ -191,6 +208,7 @@ namespace OnWeb.Core.Users
             catch (Exception ex)
             {
                 Debug.WriteLine("user: {0}; ", ex.Message);
+                this.RegisterEvent(Journaling.EventType.Error, "Ошибка при получении данных пользователей.", $"Идентификаторы пользователей: {(users?.Any() == true ? "не задано" : string.Join(", ", users.Keys))}", ex);
                 throw ex;
             }
         }
