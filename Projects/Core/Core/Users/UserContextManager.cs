@@ -45,11 +45,34 @@ namespace OnWeb.Core.Users
         /// </summary>
         /// <param name="idUser">Идентификатор пользователя.</param>
         /// <param name="userContext">Содержит контекст в случае успеха.</param>
+        /// <returns>Возвращает результат создания контекста.</returns>
+        public eAuthResult CreateUserContext(int idUser, out IUserContext userContext)
+        {
+            return CreateUserContext(idUser, null, null, out userContext, out var resultReason);
+        }
+
+        /// <summary>
+        /// Возвращает контекст пользователя с идентификатором <paramref name="idUser"/>.
+        /// </summary>
+        /// <param name="idUser">Идентификатор пользователя.</param>
+        /// <param name="userContext">Содержит контекст в случае успеха.</param>
         /// <param name="resultReason">Содержит текстовое пояснение к ответу функции.</param>
         /// <returns>Возвращает результат создания контекста.</returns>
         public eAuthResult CreateUserContext(int idUser, out IUserContext userContext, out string resultReason)
         {
             return CreateUserContext(idUser, null, null, out userContext, out resultReason);
+        }
+
+        /// <summary>
+        /// Возвращает контекст пользователя с указанными реквизитами <paramref name="login"/>/<paramref name="password"/>. 
+        /// </summary>
+        /// <param name="login">Логин для авторизации. В качестве логина может выступать Email-адрес или номер телефона (в зависимости от настроек системы).</param>
+        /// <param name="password">Пароль для авторизации. Должен передаваться в незашифрованном виде.</param>
+        /// <param name="userContext">Содержит контекст в случае успеха.</param>
+        /// <returns>Возвращает результат создания контекста.</returns>
+        public eAuthResult CreateUserContext(string login, string password, out IUserContext userContext)
+        {
+            return CreateUserContext(0, login, password, out userContext, out var resultReason);
         }
 
         /// <summary>
@@ -74,7 +97,7 @@ namespace OnWeb.Core.Users
 
             using (var db = new UnitOfWork<DB.User>())
             {
-                var returnNewFailedResultWithAuthAttempt = new Func<eAuthResult, string, ExecutionAuthResult<IUserContext>>((authResult, message) =>
+                var returnNewFailedResultWithAuthAttempt = new Func<string, string>(message =>
                 {
                     var idEvent = AppCore.ConfigurationOptionGet("eventLoginError", 0);
                     if (idEvent > 0) RegisterLogHistoryEvent(id, idEvent, message);
@@ -92,7 +115,7 @@ namespace OnWeb.Core.Users
                         );
                     }
 
-                    return new ExecutionAuthResult<IUserContext>(authResult, message + (authorizationAttemptsExceeded ? " " + AppCore.ConfigurationOptionGet("AuthorizationAttemptsMessage", "") : ""));
+                    return message + (authorizationAttemptsExceeded ? " " + AppCore.ConfigurationOptionGet("AuthorizationAttemptsMessage", "") : "");
                 });
 
                 try
@@ -100,41 +123,21 @@ namespace OnWeb.Core.Users
                     var checkLoginResult = CheckLogin(IdUser, user, password, db, out var res);
                     if (!checkLoginResult.IsSuccess)
                     {
-                        var result = returnNewFailedResultWithAuthAttempt(checkLoginResult.AuthResult, checkLoginResult.Message);
-                        resultReason = result.Message;
-                        return result.AuthResult;
+                        resultReason = returnNewFailedResultWithAuthAttempt(checkLoginResult.Message);
+                        return checkLoginResult.AuthResult;
                     }
 
                     id = res.id;
                     var attempts = AppCore.ConfigurationOptionGet("AuthorizationAttempts", 0);
                     authorizationAttemptsExceeded = attempts > 0 && (res.AuthorizationAttempts + 1) >= attempts;
 
-                    if (res.BlockedUntil > DateTime.Now.Timestamp())
-                    {
-                        var result = returnNewFailedResultWithAuthAttempt(
-                            eAuthResult.BlockedUntil, 
-                            "Учетная запись заблокирована до " + (new DateTime()).FromUnixtime(res.BlockedUntil).ToString("yyyy-mm-dd HH:MM") + (!string.IsNullOrEmpty(res.BlockedReason) ? " по причине: " + res.BlockedReason : ".")
-                        );
-                        resultReason = result.Message;
-                        return result.AuthResult;
-                    }
-
-                    var checkStateResult = this.CheckUserState(res, res.Comment);
-                    if (!checkStateResult.IsSuccess)
-                    {
-                        var result = returnNewFailedResultWithAuthAttempt(checkStateResult.AuthResult, checkStateResult.Message);
-                        resultReason = result.Message;
-                        return result.AuthResult;
-                    }
-
                     AppCore.Get<IUsersManager>().getUsers(new Dictionary<int, DB.User>() { { id, res } });
 
                     var permissionsResult = GetPermissions(res.id);
                     if (!permissionsResult.IsSuccess)
                     {
-                        var result = returnNewFailedResultWithAuthAttempt(eAuthResult.UnknownError, permissionsResult.Message);
-                        resultReason = result.Message;
-                        return result.AuthResult;
+                        resultReason = returnNewFailedResultWithAuthAttempt(permissionsResult.Message);
+                        return eAuthResult.UnknownError;
                     }
 
                     var context = new UserManager(res, true, permissionsResult.Result);
@@ -147,11 +150,22 @@ namespace OnWeb.Core.Users
                     db.SaveChanges();
 
                     userContext = context;
-                    return eAuthResult.Success;
+
+                    var checkStateResult = CheckUserState(res, res.Comment);
+                    if (checkStateResult.IsSuccess)
+                    {
+                        return eAuthResult.Success;
+                    }
+                    else
+                    {
+                        resultReason = returnNewFailedResultWithAuthAttempt(checkStateResult.Message);
+                        return checkStateResult.AuthResult;
+                    }
                 }
                 catch (Exception ex)
                 {
                     this.RegisterEvent(Journaling.EventType.CriticalError, "Неизвестная ошибка во время получения контекста пользователя.", $"IdUser={IdUser}, Login='{user}'.", null, ex);
+                    userContext = null;
                     resultReason = "Неизвестная ошибка во время получения контекста пользователя.";
                     return eAuthResult.UnknownError;
                 }
@@ -295,90 +309,9 @@ namespace OnWeb.Core.Users
         }
         #endregion
 
-        ///*
-        // * Попытка авторизации через сохраненную сессию.
-        // * */
-        //public void loginFromSession()
-        //{
-        //    setError(null);
-
-        //    if (HttpContext.Current == null || HttpContext.Current.Session == null) return;
-
-        //    if (HttpContext.Current.Session["authorized"] is int &&
-        //        (int)HttpContext.Current.Session["authorized"] == 1 &&
-        //        HttpContext.Current.Session["id"] is int)
-        //    {
-        //        var id = (int)HttpContext.Current.Session["id"];
-
-        //        //Debug.WriteLineNoLog("UserManager.loginFromSession session says is auth={0}, {1}", id, HttpContext.Current.Session.SessionID);
-
-        //        using (var db = new UnitOfWork<DB.User>())
-        //        {
-        //            var res = db.Repo1.Where(r => r.id == id).FirstOrDefault();
-
-        //            if (res != null)
-        //            {
-        //                if (this.checkUserState(res, res.Comment) == eAuthResult.Success)
-        //                {
-        //                    this.isAuthorized = true;
-        //                    Users.getUsers(new Dictionary<int, DB.User>() { { id, res } });
-
-        //                    this.isSuperuser = res.Superuser != 0;
-
-        //                    mData = res;
-
-        //                    mPermissions = Users.loadPermissions(res.id);
-        //                    checkLogonAs();
-
-        //                    if (HttpContext.Current.Session["lastEnter"] == null)
-        //                        HttpContext.Current.Session["lastEnter"] = DateTime.Now.Timestamp();
-
-        //                    var lastEnter = (int)HttpContext.Current.Session["lastEnter"];
-        //                    var diff = DateTime.Now.Timestamp() - lastEnter;
-
-        //                    if (diff > 3600 * 4)
-        //                    {
-        //                        try
-        //                        {
-        //                            var IdEvent = AppCore.ConfigurationOptionGet("eventLoginUpdate", 0);
-        //                            if (IdEvent > 0) UserLogHistoryManager.register(this.getID(), IdEvent, TimeSpan.FromSeconds(diff).ToString(@"d\.hh\:mm\:ss"));
-        //                            HttpContext.Current.Session["lastEnter"] = DateTime.Now.Timestamp();
-        //                        }
-        //                        catch (Exception) { }
-        //                    }
-        //                }
-        //                else this.logout();
-        //            }
-        //            else this.logout();
-        //        }
-        //    }
-        //    else
-        //    {
-        //        //Debug.WriteLineNoLog(string.Format("UserManager.loginFromSession session says nothing, {0}", HttpContext.Current.Session.SessionID));
-        //    }
-        //}
-
         public void DestroyUserContext(IUserContext context)
         {
-            // TODO перенести это в регистрацию контекста пользователя в сессии в asp.net.
-            //if (this.isAuthorized)
-            //{
-            //    //HttpContext.Current.Session["authorized"] = null;
-            //    //HttpContext.Current.Session["id"] = null;
-            //    //HttpContext.Current.Session["UserId"] = 0;
 
-            //    HttpContext.Current.Session.Abandon();
-
-            //    var IdEvent = AppCore.ConfigurationOptionGet("eventLogout", 0);
-            //    if (IdEvent > 0) UserLogHistoryManager.register(this.getID(), IdEvent);
-
-            //    this.isAuthorized = false;
-            //    this.mData = null;
-            //    this.isSuperuser = false;
-            //    this.mPermissions = null;
-
-            //    ////foreach ($this.mExtensions as $k=>$v) $v.logout();
-            //}
         }
         #endregion
 
