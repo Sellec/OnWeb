@@ -292,7 +292,7 @@ namespace OnWeb.Core.Modules
         /// </summary>
         public ModuleExtensions.CustomFields.ExtensionCustomsFieldsBase Fields
         {
-            get { return getExtension<ModuleExtensions.CustomFields.ExtensionCustomsFieldsBase>(); }
+            get => getExtension<ModuleExtensions.CustomFields.ExtensionCustomsFieldsBase>();
         }
 
         /// <summary>
@@ -300,7 +300,7 @@ namespace OnWeb.Core.Modules
         /// </summary>
         internal ModuleExtensions.ExtensionUrl.ExtensionUrl Urls
         {
-            get { return getExtension<ModuleExtensions.ExtensionUrl.ExtensionUrl>(); }
+            get => getExtension<ModuleExtensions.ExtensionUrl.ExtensionUrl>();
         }
         #endregion
 

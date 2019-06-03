@@ -26,6 +26,7 @@ namespace OnWeb.Plugins.Customer
 
             //registerExtensionNeeded<Core.ModuleExtensions.CustomFields.ExtensionCustomsFields>();
             //registerExtensionNeeded<Core.ModuleExtensions.CustomFields.ExtensionCustomsFieldsAdmin>();
+            registerExtensionNeeded<Core.ModuleExtensions.CustomFields.ExtensionCustomsFieldsBase>();
             registerExtensionNeeded<Core.ModuleExtensions.ExtensionUrl.ExtensionUrl>();
 
             RegisterPermission(PERM_MANAGEUSERS, "Управление пользователями");
