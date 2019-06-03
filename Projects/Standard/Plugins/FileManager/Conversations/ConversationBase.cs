@@ -7,7 +7,7 @@ namespace OnWeb.Plugins.FileManager.Conversations
     /// <summary>
     /// Представляет базовые возможности для преобразований файлов на уровне файлового менеджера.
     /// </summary>
-    public abstract class ConversationBase : ItemBase<Module>
+    public abstract class ConversationBase : ItemBase<FileManager>
     {
         /// <summary>
         /// Уникальный ключ преобразования, генерируется динамически при создании экземпляра преобразования.
