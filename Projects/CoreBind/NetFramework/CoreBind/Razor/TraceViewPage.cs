@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OnUtils.Application.Users;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -119,6 +120,14 @@ namespace OnWeb.CoreBind.Razor
         public ModuleCore Module
         {
             get => ViewData["Module"] as ModuleCore;
+        }
+
+        /// <summary>
+        /// Возвращает контекст, ассоциированный с пользователем, от имени которого сгенерировано представление.
+        /// </summary>
+        public IUserContext CurrentUserContext
+        {
+            get => AppCore.GetUserContextManager().GetCurrentUserContext();
         }
 
         public string Title
