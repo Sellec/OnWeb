@@ -11,8 +11,18 @@ using OnUtils.Data;
 
 namespace OnWeb.Plugins.FileManager
 {
-    public class Controller : ModuleController<Module, UnitOfWork<DB.File>>
+    using CoreBind.Modules;
+    using Core.Modules;
+    using Core.Routing;
+    using CoreBind.Routing;
+
+    public class FileManagerController : ModuleControllerUser<FileManager, UnitOfWork<DB.File>>
     {
+        public override ActionResult Index()
+        {
+            return Content("");
+        }
+
         [HttpPost]
         public ActionResult UploadFile(string moduleName = null, string uniqueKey = null)
         {
@@ -23,7 +33,7 @@ namespace OnWeb.Plugins.FileManager
                 if (!string.IsNullOrEmpty(uniqueKey) && uniqueKey.Length > 255) throw new ArgumentOutOfRangeException(nameof(uniqueKey), "Длина уникального ключа не может быть больше 255 символов.");
                 if (string.IsNullOrEmpty(moduleName)) throw new ArgumentNullException(nameof(moduleName), "Не указан модуль, для которого загружается файл.");
 
-                var module = ModulesManager.getModuleByName(moduleName) ?? ModulesManager.getModuleByNameBase(moduleName);
+                var module = AppCore.GetModulesManager().GetModule(moduleName) ?? (int.TryParse(moduleName, out int idModule) ? AppCore.GetModulesManager().GetModule(idModule) : null);
                 if (module == null) throw new Exception("Указанный модуль не найден.");
 
                 var hpf = HttpContext.Request.Files["file"] as HttpPostedFileBase;
@@ -35,40 +45,51 @@ namespace OnWeb.Plugins.FileManager
                 Directory.CreateDirectory(Path.GetDirectoryName(filePath));
 
                 hpf.SaveAs(filePath);
-                var file = TraceWeb.FileManager.Register(module, hpf.FileName, filePathRelative, AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser(), uniqueKey, DateTime.Now.AddDays(1));
-                if (file == null) throw new Exception(TraceWeb.FileManager.getError());
+                switch (Module.Register(out var file, hpf.FileName, filePathRelative, uniqueKey, DateTime.Now.AddDays(1)))
+                {
+                    case RegisterResult.Error:
+                    case RegisterResult.NotFound:
+                        result.FromFail("Не удалось зарегистрировать переданный файл.");
+                        break;
 
-                result.Data = file.IdFile;
-                result.FromSuccess("");
+                    case RegisterResult.Success:
+                        result.Data = file.IdFile;
+                        result.FromSuccess("");
+                        break;
+                }
             }
-            catch (Exception ex) { result.FromException(ex); }
+            catch (Exception ex)
+            {
+                this.RegisterEventWithCode(System.Net.HttpStatusCode.InternalServerError, "Ошибка во время регистрации файла", $"moduleName='{moduleName}'.\r\nuniqueKey='{uniqueKey}'.", ex);
+                result.FromFail("Неожиданная ошибка во время регистрации файла.");
+            }
 
             return ReturnJson(result);
         }
 
-        [Route("{url}")]
-        public ActionResult DownloadFile(string url)
-        {
-            return File(url, "application/pdf");
-        }
+        //[Route("{url}")]
+        //public ActionResult DownloadFile(string url)
+        //{
+        //    return File(url, "application/pdf");
+        //}
 
-        [HttpPost]
-        public ActionResult DeleteFile(string url)
-        {
-            try
-            {
-                System.IO.File.Delete(url);
-                var msg = new { msg = "File Deleted!" };
-                return Json(msg);
-            }
-            catch (Exception e)
-            {
-                //If you want this working with a custom error you need to change the name of 
-                //variable customErrorKeyStr in line 85, from jquery-upload-file-error to jquery_upload_file_error 
-                var msg = new { jquery_upload_file_error = e.Message };
-                return Json(msg);
-            }
-        }
+        //[HttpPost]
+        //public ActionResult DeleteFile(string url)
+        //{
+        //    try
+        //    {
+        //        System.IO.File.Delete(url);
+        //        var msg = new { msg = "File Deleted!" };
+        //        return Json(msg);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        //If you want this working with a custom error you need to change the name of 
+        //        //variable customErrorKeyStr in line 85, from jquery-upload-file-error to jquery_upload_file_error 
+        //        var msg = new { jquery_upload_file_error = e.Message };
+        //        return Json(msg);
+        //    }
+        //}
 
         [ModuleAction("file")]
         public FileResult File(int? IdFile = null)
@@ -251,59 +272,6 @@ namespace OnWeb.Plugins.FileManager
             {
                 return null;
             }
-        }
-
-        public ActionResult SuggestionsAddress()
-        {
-            if (Request.Path.Contains("suggest/address"))
-            {
-                try
-                {
-                    var data1 = Request.Headers.AllKeys.ToDictionary(x => x, x => Request.Headers[x]);
-                    var data2 = Request.Form.AllKeys.ToDictionary(x => x, x => Request.Headers[x]);
-                    var data3 = Request.QueryString.AllKeys.ToDictionary(x => x, x => Request.Headers[x]);
-
-                    string documentContents;
-                    using (var receiveStream = Request.InputStream)
-                    {
-                        using (var readStream = new StreamReader(receiveStream, Request.ContentEncoding))
-                        {
-                            documentContents = readStream.ReadToEnd();
-                        }
-                    }
-
-                    var dd = Newtonsoft.Json.JsonConvert.DeserializeObject<DaData.Entities.Suggestions.AddressSuggestQuery>(documentContents);
-                    if (dd != null)
-                    {
-                        var client = AddressManager.Instance.GetDadataClient();
-                        var result = client.QueryAddress(dd);
-
-                        if (result.IsSuccess && result.Data != null && result.Data.suggestions != null)
-                        {
-                            var preparedResult = AddressManager.Instance.PrepareAddressDataIntoDB(result.Data.suggestions.Select(x =>
-                            {
-                                //if (x.data.fias_level == "8") x.data.ka
-                                return x.data;
-                            }).ToArray());
-
-                            if (preparedResult != null)
-                                foreach (var pair in preparedResult)
-                                    if (pair.Key.kladr_id == pair.Value.KodBuildingCommon)
-                                        pair.Key.kladr_id = pair.Value.KodBuilding;
-                        }
-
-                        var resultText = Newtonsoft.Json.JsonConvert.SerializeObject(result.Data);
-                        return Content(resultText);
-                    }
-
-                    var d = Request.Params;
-                }
-                catch (Exception ex)
-                {
-                }
-            }
-
-            return null;
         }
 
         private Tuple<Image, ImageFormat> cropImage(string aInitialImageFilePath, int aNewImageWidth, int aNewImageHeight)

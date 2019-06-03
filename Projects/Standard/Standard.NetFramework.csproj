@@ -157,13 +157,14 @@
     <Compile Include="Plugins\Default\Startup.cs" />
     <Compile Include="Plugins\Developing\ModuleDevelopingController.cs" />
     <Compile Include="Plugins\Developing\ModuleDeveloping.cs" />
+    <Compile Include="Plugins\FileManager\FileManagerController.cs" />
     <Compile Include="Plugins\FileManager\Conversations\ConversationBase.cs" />
     <Compile Include="Plugins\FileManager\CustomFieldsFileTypes\FileImageFieldTypeRender.cs" />
     <Compile Include="Plugins\FileManager\CustomFieldsFileTypes\FileFieldTypeRender.cs" />
     <Compile Include="Plugins\FileManager\CustomFieldsFileTypes\FileFieldType.cs" />
     <Compile Include="Plugins\FileManager\CustomFieldsFileTypes\FileImageFieldType.cs" />
     <Compile Include="Plugins\FileManager\CustomFieldsFileTypes\RequiredAttributeCustom.cs" />
-    <Compile Include="Plugins\FileManager\Module.cs" />
+    <Compile Include="Plugins\FileManager\FileManager.cs" />
     <Compile Include="Plugins\FileManager\MVC\FilePresentOptions\FilePresentOptions.cs" />
     <Compile Include="Plugins\FileManager\MVC\FilePresentOptions\ImagePresentOptions.cs" />
     <Compile Include="Plugins\FileManager\MVC\FileRenderOptions.cs" />
@@ -182,7 +183,6 @@
     <Compile Include="Plugins\Customer\NetSpecific\NetFramework\CustomerModelValidator.cs" />
     <Compile Include="Plugins\Customer\Startup.cs" />
     <Compile Include="Plugins\FileManager\DB\File.cs" />
-    <Compile Include="Plugins\FileManager\FileManager.cs" />
     <Compile Include="Plugins\FileManager\MVC\FileDataTypeAttribute.cs" />
     <Compile Include="Plugins\FileManager\MVC\FileType.cs" />
     <Compile Include="Plugins\Adminmain\DataContext.cs" />

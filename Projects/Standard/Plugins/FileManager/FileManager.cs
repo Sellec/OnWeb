@@ -1,15 +1,17 @@
 ﻿using MimeDetective;
-using OnUtils.Architecture.AppCore;
 using OnUtils.Data;
+using OnUtils.Tasks;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Web.Mvc;
 
 namespace OnWeb.Plugins.FileManager
 {
+    using Core.Journaling;
+    using Core.Modules;
     using DictionaryFiles = Dictionary<int, DB.File>;
-    using Journaling = Core.Journaling;
 
     /// <summary>
     /// Общий тип файла.
@@ -36,18 +38,45 @@ namespace OnWeb.Plugins.FileManager
     /// <summary>
     /// Менеджер, позволяющий управлять файлами в хранилище файлов (локально или cdn).
     /// </summary>
-    public class FileManager : CoreComponentBase<ApplicationCore>, IComponentSingleton<ApplicationCore>, IUnitOfWorkAccessor<UnitOfWork<DB.File>>
+    [ModuleCore("Управление файлами")]
+    public class FileManager : ModuleCore<FileManager>, IUnitOfWorkAccessor<UnitOfWork<DB.File>>
     {
-        #region CoreComponentBase
-        protected sealed override void OnStart()
+        private static FileManager _thisModule = null;
+
+        protected override void InitModuleCustom()
         {
+            _thisModule = this;
+
+            /*
+             * Обслуживание индексов запускаем один раз при старте и раз в несколько часов
+             * */
+            TasksManager.SetTask(typeof(FileManager).FullName + "_" + nameof(MaintenanceIndexes), DateTime.Now.AddSeconds(30), () => MaintenanceIndexesStatic());
+            TasksManager.SetTask(typeof(FileManager).FullName + "_" + nameof(MaintenanceIndexes) + "_hourly6", Cron.HourInterval(6), () => MaintenanceIndexesStatic());
+
+            /*
+             * Прекомпиляция шаблонов при запуске.
+             * */
+            //if (!Debug.IsDeveloper)
+            //    Tasks.TasksManager.SetTask(typeof(Module).FullName + "_" + nameof(RazorPrecompilationStatic), DateTime.Now.AddMinutes(1), () => RazorPrecompilationStatic());
+
+#if DEBUG
+            /*
+             * Регулярная сборка мусора для сборки в режиме отладки.
+             * */
+            TasksManager.SetTask(typeof(FileManager).FullName + "_" + nameof(GCCollect) + "_minutely1", Cron.MinuteInterval(1), () => GCCollectStatic());
+#endif
+
+            /*
+             * Регулярная проверка новых слов в лексическом менеджере.
+             * */
+            TasksManager.SetTask(typeof(Lexicon.LexiconManager).FullName + "_" + nameof(Lexicon.LexiconManager.PrepareNewWords) + "_minutely2", Cron.MinuteInterval(2), () => LexiconNewWordsStatic());
+
+            ModelMetadataProviders.Current = new MVC.TraceModelMetadataProviderWithFiles();
         }
 
-        protected sealed override void OnStop()
-        {
-        }
-        #endregion
+        public Dictionary<string, Conversations.ConversationBase> Conversations { get; } = new Dictionary<string, Conversations.ConversationBase>();
 
+        #region FileManager
         /// <summary>
         /// Пытается получить файл с идентификатором <paramref name="idFile"/>.
         /// </summary>
@@ -67,7 +96,7 @@ namespace OnWeb.Plugins.FileManager
             catch (Exception ex)
             {
                 result = null;
-                this.RegisterEvent(Journaling.EventType.Error, "Ошибка получения файла", $"Идентификатор файла: {idFile}.", null, ex);
+                this.RegisterEvent(EventType.Error, "Ошибка получения файла", $"Идентификатор файла: {idFile}.", null, ex);
                 return NotFound.Error;
             }
         }
@@ -101,7 +130,7 @@ namespace OnWeb.Plugins.FileManager
             }
             catch (Exception ex)
             {
-                this.RegisterEvent(Journaling.EventType.Error, "Ошибка получения списка файлов", $"Идентификаторы файлов: {string.Join(", ", fileList)}.", null, ex);
+                this.RegisterEvent(EventType.Error, "Ошибка получения списка файлов", $"Идентификаторы файлов: {string.Join(", ", fileList)}.", null, ex);
                 return null;
             }
         }
@@ -180,7 +209,7 @@ namespace OnWeb.Plugins.FileManager
             }
             catch (Exception ex)
             {
-                this.RegisterEvent(Journaling.EventType.Error, "Ошибка регистрации файла", $"nameFile='{nameFile}'.\r\npathFile='{pathFile}'.\r\nuniqueKey='{uniqueKey}'.\r\ndateExpires={dateExpires?.ToString("dd.MM.yyyy HH:mm:ss")}.", null, ex);
+                this.RegisterEvent(EventType.Error, "Ошибка регистрации файла", $"nameFile='{nameFile}'.\r\npathFile='{pathFile}'.\r\nuniqueKey='{uniqueKey}'.\r\ndateExpires={dateExpires?.ToString("dd.MM.yyyy HH:mm:ss")}.", null, ex);
                 return RegisterResult.Error;
             }
         }
@@ -209,7 +238,7 @@ namespace OnWeb.Plugins.FileManager
             catch (Exception ex)
             {
                 this.RegisterEvent(
-                    Journaling.EventType.Error,
+                    EventType.Error,
                     "Ошибка обновления срока хранения файла",
                     $"Идентификатор файла: {idFile}.\r\nНовый срок: {dateExpires?.ToString("dd.MM.yyyy HH:mm:ss")}.",
                     null,
@@ -253,7 +282,7 @@ namespace OnWeb.Plugins.FileManager
             catch (Exception ex)
             {
                 this.RegisterEvent(
-                    Journaling.EventType.Error,
+                    EventType.Error,
                     "Ошибка обновления срока хранения файлов",
                     $"Идентификаторы файлов: {string.Join(", ", fileList)}.\r\nНовый срок: {dateExpires?.ToString("dd.MM.yyyy HH:mm:ss")}.",
                     null,
@@ -299,7 +328,7 @@ namespace OnWeb.Plugins.FileManager
             }
             catch (Exception ex)
             {
-                this.RegisterEvent(Journaling.EventType.Error, "Ошибка удаления файлов с истекшим сроком", null, null, ex);
+                this.RegisterEvent(EventType.Error, "Ошибка удаления файлов с истекшим сроком", null, null, ex);
                 return false;
             }
         }
@@ -331,7 +360,7 @@ namespace OnWeb.Plugins.FileManager
             }
             catch (Exception ex)
             {
-                this.RegisterEvent(Journaling.EventType.Error, "Ошибка удаления файлов с истекшим сроком", null, null, ex);
+                this.RegisterEvent(EventType.Error, "Ошибка удаления файлов с истекшим сроком", null, null, ex);
                 return false;
             }
         }
@@ -368,12 +397,12 @@ namespace OnWeb.Plugins.FileManager
 
                 if (countCleared > 0)
                 {
-                    this.RegisterEvent(Journaling.EventType.Info, "Удаление файлов с истекшим сроком", $"Удалено {countCleared} файлов.");
+                    this.RegisterEvent(EventType.Info, "Удаление файлов с истекшим сроком", $"Удалено {countCleared} файлов.");
                 }
             }
             catch (Exception ex)
             {
-                this.RegisterEvent(Journaling.EventType.Error, "Ошибка удаления файлов с истекшим сроком", null, null, ex);
+                this.RegisterEvent(EventType.Error, "Ошибка удаления файлов с истекшим сроком", null, null, ex);
             }
         }
 
@@ -388,8 +417,84 @@ namespace OnWeb.Plugins.FileManager
             }
             catch (Exception ex)
             {
-                this.RegisterEvent(Journaling.EventType.Error, "Ошибка обновления количества файловых связей", null, null, ex);
+                this.RegisterEvent(EventType.Error, "Ошибка обновления количества файловых связей", null, null, ex);
             }
         }
+        #endregion
+
+        #region Maintenance indexes
+        public static void MaintenanceIndexesStatic()
+        {
+            var module = _thisModule;
+            if (module == null) throw new Exception("Модуль не найден.");
+
+            module.MaintenanceIndexes();
+        }
+
+        private void MaintenanceIndexes()
+        {
+            try
+            {
+                using (var db = this.CreateUnitOfWork())
+                {
+                    var result = db.DataContext.StoredProcedure<object>("Maintenance_RebuildIndexes", new { MinimumIndexFragmentstionToSearch = 5 });
+                }
+            }
+            catch (Exception ex)
+            {
+                this.RegisterEvent(EventType.CriticalError, $"Ошибка обслуживания индексов", null, ex);
+                Debug.WriteLine("FileManager.Module.MaintenanceIndexes: {0}", ex.Message);
+            }
+        }
+        #endregion
+
+        #region Lexicon new words
+        public static void LexiconNewWordsStatic()
+        {
+            _thisModule.AppCore.Get<Lexicon.LexiconManager>().PrepareNewWords();
+        }
+        #endregion
+
+        #region RazorPrecompilation
+        public static void RazorPrecompilationStatic()
+        {
+            var module = _thisModule;
+            if (module == null) throw new Exception("Модуль не найден.");
+
+            module.RazorPrecompilation();
+        }
+
+        private void RazorPrecompilation()
+        {
+            try
+            {
+                throw new NotImplementedException();
+                // todo ApplicationCore.Instance.ResourceManager.GeneratePrecompiled();
+            }
+            catch (Exception ex)
+            {
+                this.RegisterEvent(EventType.CriticalError, $"Ошибка прекомпиляции шаблонов", null, ex);
+                Debug.WriteLine("FileManager.Module.RazorPrecompilation: {0}", ex.Message);
+            }
+        }
+        #endregion
+
+#if DEBUG
+        #region GC collect for debug
+        public static void GCCollectStatic()
+        {
+            var module = _thisModule;
+            if (module == null) throw new Exception("Модуль не найден.");
+
+            module.GCCollect();
+        }
+
+        private void GCCollect()
+        {
+            GC.Collect();
+        }
+        #endregion
+#endif
+
     }
 }
