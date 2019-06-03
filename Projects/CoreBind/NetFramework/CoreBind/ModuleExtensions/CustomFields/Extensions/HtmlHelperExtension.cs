@@ -65,11 +65,10 @@ namespace System.Web.Mvc.Html
 
         public static MvcHtmlString EditorFor<TModel>(this HtmlHelper<TModel> html, IField field, IDictionary<string, object> htmlAttributes, params object[] additionalParameters)
         {
-            var module = html.ViewDataContainer as ModuleCore;
-            var appCore = module.AppCore;
+            var module = (html.ViewDataContainer as OnWeb.CoreBind.Razor.IModuleProvider)?.Module;
+            var appCore = module?.AppCore;
 
-            throw new NotImplementedException();
-            var renderType = typeof(ICustomFieldRender<>).MakeGenericType(field.GetType());
+            var renderType = typeof(ICustomFieldRender<>).MakeGenericType(field.FieldType.GetType());
             var customFieldRender = appCore.Create<ICustomFieldRender<FieldType>>(renderType);
             return customFieldRender?.RenderHtmlEditor(html, field, htmlAttributes, additionalParameters);
         }
