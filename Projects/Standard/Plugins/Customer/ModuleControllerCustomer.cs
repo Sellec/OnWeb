@@ -33,12 +33,6 @@ namespace OnWeb.Plugins.Customer
         [ModuleAction(null, ModulesConstants.PermissionAccessUserString)]
         public override ActionResult Index()
         {
-            return Index(null);
-        }
-
-        [ModuleAction(null, ModulesConstants.PermissionAccessUserString)]
-        public ActionResult Index(string part)
-        {
             var data = AppCore.GetUserContextManager().GetCurrentUserContext().GetData();
             return this.display("customerIndex.cshtml", data);
         }
