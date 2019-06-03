@@ -9,3 +9,11 @@
     CONSTRAINT [PK_MessageQueue] PRIMARY KEY CLUSTERED ([IdQueue] ASC)
 );
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex_1]
+    ON [dbo].[MessageQueue]([IdMessageType] ASC, [IsSent] ASC)
+    INCLUDE([IdQueue], [MessageInfo], [DateCreate], [DateSent], [ExternalID]);
+

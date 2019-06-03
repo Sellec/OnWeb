@@ -21,8 +21,11 @@
     [CommentAdmin]          NVARCHAR (MAX) NULL,
     [name]                  NVARCHAR (200) CONSTRAINT [DF__UserHistory__name__7D63964E] DEFAULT (N'') NULL,
     [about]                 NVARCHAR (MAX) NULL,
+    [DateChangeHistory]     DATETIME       CONSTRAINT [DF_UserHistory_DateChangeHistory] DEFAULT (getdate()) NOT NULL,
     CONSTRAINT [PK_UserHistory_IdUserHistory] PRIMARY KEY CLUSTERED ([IdUserHistory] ASC)
 );
+
+
 
 
 GO

@@ -12,6 +12,8 @@
 
 
 
+
+
 GO
 CREATE NONCLUSTERED INDEX [IdItem_IdItemType]
     ON [dbo].[CustomFieldsData]([IdItem] DESC, [IdItemType] ASC);
@@ -21,4 +23,15 @@ GO
 CREATE NONCLUSTERED INDEX [IdField_with_IdItem_IdFieldValue]
     ON [dbo].[CustomFieldsData]([IdField] ASC)
     INCLUDE([IdItem], [IdFieldValue]);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IdField_IdItem_with_FieldValue]
+    ON [dbo].[CustomFieldsData]([IdField] ASC, [IdItem] ASC)
+    INCLUDE([FieldValue]);
+
+
+GO
+ALTER INDEX [IdField_IdItem_with_FieldValue]
+    ON [dbo].[CustomFieldsData] DISABLE;
 

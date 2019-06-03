@@ -27,6 +27,8 @@
 
 
 
+
+
 GO
 
 
@@ -47,4 +49,10 @@ CREATE NONCLUSTERED INDEX [UniqueKey2]
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [UniqueKey]
     ON [dbo].[ModuleSearchSet]([UniqueKey] ASC) WHERE ([UniqueKey] IS NOT NULL);
+
+
+GO
+CREATE NONCLUSTERED INDEX [Realty_IdModule_urlname_UniqueKey_with_IdSearchSet_DateChange]
+    ON [dbo].[ModuleSearchSet]([IdModule] ASC, [urlname] ASC, [UniqueKey] ASC)
+    INCLUDE([IdSearchSet], [DateChange]);
 

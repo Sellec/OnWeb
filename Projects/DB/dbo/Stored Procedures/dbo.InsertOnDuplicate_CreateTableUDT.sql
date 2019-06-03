@@ -27,7 +27,7 @@ BEGIN
 				END +
 			+ ')' 
 			ELSE
-				CASE WHEN s.name = 'decimal' THEN 
+				CASE WHEN s.name = 'decimal' OR s.name = 'numeric' THEN 
 					CASE WHEN c.[precision] > 0 AND c.[scale] > 0 THEN '(' + convert(nvarchar(10), c.[precision]) + ', ' + convert(nvarchar(10), c.[scale]) + ')'
 						 WHEN c.[precision] > 0 THEN '(' + convert(nvarchar(10), c.[precision]) + ')'
 						 ELSE '' 

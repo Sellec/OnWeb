@@ -20,5 +20,8 @@
     [Comment]               NVARCHAR (MAX) NULL,
     [CommentAdmin]          NVARCHAR (MAX) NULL,
     [name]                  NVARCHAR (200) DEFAULT (N'') NULL,
-    [about]                 NVARCHAR (MAX) NULL);
+    [about]                 NVARCHAR (MAX) NULL,
+    [DateChangeHistory]     DATETIME       DEFAULT (getdate()) NOT NULL);
+
+
 

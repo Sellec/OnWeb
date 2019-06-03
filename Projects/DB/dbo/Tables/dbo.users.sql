@@ -33,6 +33,8 @@
 
 
 
+
+
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_SSMA_SOURCE', @value = N'fabrikae_fabrikanew.users', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'users';
 
@@ -52,8 +54,8 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE TRIGGER UsersUpsertHistory
-   ON  dbo.users
+CREATE TRIGGER [dbo].[UsersUpsertHistory]
+   ON  [dbo].[users]
    AFTER INSERT, UPDATE
 AS 
 BEGIN
@@ -62,8 +64,8 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for trigger here
-	INSERT INTO [dbo].[UserHistory] ([id], [email], [phone], [username], [password], [salt], [Superuser], [State], [StateConfirmation], [AuthorizationAttempts], [Block], [BlockedUntil], [BlockedReason], [IP_reg], [DateReg], [DateChange], [IdUserChange], [Comment], [CommentAdmin], [name], [about])
-	select [id], [email], [phone], [username], [password], [salt], [Superuser], [State], [StateConfirmation], [AuthorizationAttempts], [Block], [BlockedUntil], [BlockedReason], [IP_reg], [DateReg], [DateChange], [IdUserChange], [Comment], [CommentAdmin], [name], [about]
+	INSERT INTO [dbo].[UserHistory] ([id], [email], [phone], [username], [password], [salt], [Superuser], [State], [StateConfirmation], [AuthorizationAttempts], [Block], [BlockedUntil], [BlockedReason], [IP_reg], [DateReg], [DateChange], [IdUserChange], [Comment], [CommentAdmin], [name], [about], [DateChangeHistory])
+	select [id], [email], [phone], [username], [password], [salt], [Superuser], [State], [StateConfirmation], [AuthorizationAttempts], [Block], [BlockedUntil], [BlockedReason], [IP_reg], [DateReg], [DateChange], [IdUserChange], [Comment], [CommentAdmin], [name], [about], GETDATE()
 	from inserted
 
 END

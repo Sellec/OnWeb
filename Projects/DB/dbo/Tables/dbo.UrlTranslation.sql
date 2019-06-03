@@ -1,4 +1,4 @@
-CREATE TABLE [dbo].[UrlTranslation] (
+﻿CREATE TABLE [dbo].[UrlTranslation] (
     [IdTranslation]     INT             IDENTITY (1, 1) NOT NULL,
     [IdTranslationType] INT             CONSTRAINT [DF_UrlTranslation_IdTranslationType] DEFAULT ((0)) NOT NULL,
     [IdModule]          INT             CONSTRAINT [DF__urltransl__IdMod__6A50C1DA] DEFAULT ((0)) NOT NULL,
@@ -13,6 +13,8 @@ CREATE TABLE [dbo].[UrlTranslation] (
     [UniqueKey]         NVARCHAR (200)  NULL,
     CONSTRAINT [PK_urltranslation_IdTranslation] PRIMARY KEY CLUSTERED ([IdTranslation] ASC)
 );
+
+
 
 
 
@@ -54,8 +56,7 @@ CREATE UNIQUE NONCLUSTERED INDEX [urltranslationUniqueKey]
 
 
 GO
-CREATE NONCLUSTERED INDEX [NonClusteredIndex_RoutingByUrlFull_20180405_065514]
-    ON [dbo].[UrlTranslation]([UrlFull] ASC, [IsFixedLength] ASC);
+
 
 
 GO
@@ -163,17 +164,23 @@ BEGIN
 
     --print @Result
 
-    DELETE FROM [UrlTranslation]
-    FROM [UrlTranslation] u
-    INNER JOIN inserted i ON i.[UrlFull] = u.[UrlFull] AND i.[IdTranslation] <> u.[IdTranslation]
-    WHERE 
-	   i.[IdTranslationType] = 1 AND 
-	   u.[IdTranslationType] = 1 AND 
-	   u.[IdTranslation] NOT IN (
-		  SELECT MAX(i.[IdTranslation]) AS IdTranslationMax
-		  FROM [UrlTranslation] u
-		  INNER JOIN inserted i ON i.[UrlFull] = u.[UrlFull] AND i.[IdTranslation] <> u.[IdTranslation]
-		  WHERE i.[IdTranslationType] = 1 AND u.[IdTranslationType] = 1
-    )
+	--это убрал. пусь будут одинаковые urlfull у разных итемов, система всё равно будет брать последний зарегистрированный.
+    --DELETE FROM [UrlTranslation]
+    --FROM [UrlTranslation] u
+    --INNER JOIN inserted i ON i.[UrlFull] = u.[UrlFull] AND i.[IdTranslation] <> u.[IdTranslation]
+    --WHERE 
+	   --i.[IdTranslationType] = 1 AND 
+	   --u.[IdTranslationType] = 1 AND 
+	   --u.[IdTranslation] NOT IN (
+		  --SELECT MAX(i.[IdTranslation]) AS IdTranslationMax
+		  --FROM [UrlTranslation] u
+		  --INNER JOIN inserted i ON i.[UrlFull] = u.[UrlFull] AND i.[IdTranslation] <> u.[IdTranslation]
+		  --WHERE i.[IdTranslationType] = 1 AND u.[IdTranslationType] = 1
+    --)
 	   
 END
+GO
+CREATE NONCLUSTERED INDEX [NonClusteredIndex_RoutingByUrlFull]
+    ON [dbo].[UrlTranslation]([UrlFull] ASC, [IsFixedLength] ASC)
+    INCLUDE([IdTranslation], [IdTranslationType], [DateChange]);
+

@@ -33,6 +33,8 @@
 
 
 
+
+
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_SSMA_SOURCE', @value = N'fabrikae_fabrikanew.address', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'Address';
 
@@ -53,4 +55,10 @@ GO
 CREATE NONCLUSTERED INDEX [KodDistrict_with_KodAddress_KodCity]
     ON [dbo].[Address]([KodDistrict] ASC)
     INCLUDE([KodAddress], [KodCity]);
+
+
+GO
+CREATE NONCLUSTERED INDEX [NameAddressShort_IsDistrictCenter_KodFias_with_DateChange]
+    ON [dbo].[Address]([NameAddressShort] ASC, [IsDistrictCenter] ASC, [KodFias] ASC)
+    INCLUDE([DateChange]);
 
