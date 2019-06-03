@@ -91,7 +91,7 @@ namespace OnWeb.CoreBind.Modules
                                     parametersValues[parametersValues.ElementAt(i + 2).Key].HasDefaultValue = true;
                                 }
 
-                            extension.Controller = controllerContext.Controller as ModuleControllerBase;
+                            extension.ControllerBase = controllerContext.Controller as ModuleControllerBase;
                             action = new CustomReflectedActionDescriptor(mm, actionName, controllerDescriptor)
                             {
                                 args = parametersValues
@@ -194,7 +194,8 @@ namespace OnWeb.CoreBind.Modules
                                     parametersValues[parametersValues.ElementAt(i + 2).Key].HasDefaultValue = true;
                                 }
 
-                            extension.Controller = controllerContext.Controller as ModuleControllerBase;
+                            extension.ModelStateBase = (controllerContext.Controller as Controller)?.ModelState;
+                            extension.ControllerBase = controllerContext.Controller as ModuleControllerBase;
                             action = new CustomReflectedActionDescriptor(mm, actionName, controllerDescriptor)
                             {
                                 args = parametersValues

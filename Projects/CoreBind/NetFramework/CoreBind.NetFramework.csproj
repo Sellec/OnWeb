@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationCoreBind.cs" />
+    <Compile Include="CoreBind\ModuleExtensions\CustomFields\ExtensionCustomsFieldsAdmin.cs" />
     <Compile Include="CoreBind\Modules\Configuration\SaveModel.cs" />
     <Compile Include="CoreBind\Modules\CustomReflectedActionDescriptor.cs" />
     <Compile Include="CoreBind\Modules\ModuleControllerUser.cs" />

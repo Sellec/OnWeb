@@ -25,7 +25,6 @@ namespace OnWeb.Plugins.Customer
             base.InitModuleCustom();
 
             //registerExtensionNeeded<Core.ModuleExtensions.CustomFields.ExtensionCustomsFields>();
-            //registerExtensionNeeded<Core.ModuleExtensions.CustomFields.ExtensionCustomsFieldsAdmin>();
             registerExtensionNeeded<Core.ModuleExtensions.CustomFields.ExtensionCustomsFieldsBase>();
             registerExtensionNeeded<Core.ModuleExtensions.ExtensionUrl.ExtensionUrl>();
 

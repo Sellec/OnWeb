@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OnUtils.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -7,18 +8,16 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
 {
     using Core.DB;
     using Core.Modules;
+    using CoreBind.Modules;
     using DB;
-    using Modules;
     using Modules.Extensions;
     using Scheme;
-    using Utils.Data;
-    using NetMVC.Modules;
 
     /// <summary>
     /// Админский класс расширения пользовательских полей. 
     /// </summary>
     [ModuleExtension("CustomFields", true)]
-    public class ExtensionCustomsFieldsAdmin : ExtensionCustomsFields
+    public class ExtensionCustomsFieldsAdmin : ExtensionCustomsFieldsBase
     {
         public ExtensionCustomsFieldsAdmin(ModuleCore moduleObject)
             : base(moduleObject)
@@ -102,14 +101,13 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
                               orderby p.name
                               select p).ToDictionary(x => x.IdField, x => x as Field.IField);
 
-                //todo return this.display("ModuleExtensions/CustomFields/Design/SchemesEdit.cshtml", new Model.Fields
-                //{
-                //    FieldsList = fields,
-                //    SchemeItems = schemeItems,
-                //    Schemes = schemes,
-                //    AllowSchemesManage = AllowSchemeManage
-                //});
-                return null;
+                return Controller.display("ModuleExtensions/CustomFields/Design/SchemesEdit.cshtml", new Model.Fields
+                {
+                    FieldsList = fields,
+                    SchemeItems = schemeItems,
+                    Schemes = schemes,
+                    AllowSchemesManage = AllowSchemeManage
+                });
             }
         }
 
@@ -155,14 +153,14 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
                     p.Value.Fields = p.Value.Fields.Where(x => schemes[0].Fields.ContainsKey(x.Key)).ToDictionary(x => i++, x => x.Value);
                 }
 
-                return this.display("ModuleExtensions/CustomFields/Design/Item.cshtml", model);
+                return Controller.display("ModuleExtensions/CustomFields/Design/Item.cshtml", model);
             }
         }
 
         [ModuleAction("fieldsItemSave")]
         public JsonResult ContainerItemSave(int idSchemeItem = 0, int idSchemeItemType = 0, Dictionary<string, int[]> model = null)
         {
-            var result = this.Controller.JsonAnswer();
+            var result = Controller.JsonAnswer();
 
             try
             {
@@ -212,13 +210,13 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
             }
             catch (Exception ex) { result.Message = ex.Message; }
 
-            return this.ReturnJson(result);
+            return Controller.ReturnJson(result);
         }
 
         [ModuleAction("fields_scheme_add")]
         public JsonResult SchemeAdd(string schemeName = null)
         {
-            var result = this.Controller.JsonAnswer<uint>();
+            var result = Controller.JsonAnswer<uint>();
 
             try
             {
@@ -251,13 +249,13 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
             }
             catch (Exception ex) { result.Message = ex.Message; }
 
-            return this.ReturnJson(result);
+            return Controller.ReturnJson(result);
         }
 
         [ModuleAction("fields_scheme_delete")]
         public JsonResult SchemeDelete(int IdScheme)
         {
-            var result = this.Controller.JsonAnswer<int>();
+            var result = Controller.JsonAnswer<int>();
 
             try
             {
@@ -287,7 +285,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
             }
             catch (Exception ex) { result.Message = ex.Message; }
 
-            return this.ReturnJson(result);
+            return Controller.ReturnJson(result);
         }
 
         [ModuleAction("fieldEdit")]
@@ -302,7 +300,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
                     if (data == null) throw new Exception("Такое поле не найдено в базе данных!");
                     if (data.IdModule != this.Module.ID)
                     {
-                        var module = ModulesManager.getModuleByID(data.IdModule);
+                        var module = AppCore.GetModulesManager().GetModule(data.IdModule);
                         if (module == null) throw new Exception("Это поле относится к другому модулю.");
                         else throw new Exception(string.Format("Это поле относится к модулю '{0}'.", module.Caption));
                     }
@@ -313,13 +311,13 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
                 data = new DB.CustomFieldsField() { IdFieldType = 0, IdModule = this.Module.ID };
             }
 
-            return this.display("ModuleExtensions/CustomFields/Design/FieldEdit.cshtml", new Model.FieldEdit(data));
+            return Controller.display("ModuleExtensions/CustomFields/Design/FieldEdit.cshtml", new Model.FieldEdit(data));
         }
 
         [ModuleAction("fieldSave")]
         public JsonResult FieldSave(Model.FieldEdit model = null)
         {
-            var result = this.Controller.JsonAnswer();
+            var result = Controller.JsonAnswer();
 
             try
             {
@@ -332,7 +330,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
                         if (data == null) throw new Exception("Такое поле не найдено в базе данных!");
                         if (data.IdModule != this.Module.ID)
                         {
-                            var module = ModulesManager.getModuleByID(data.IdModule);
+                            var module = AppCore.GetModulesManager().GetModule(data.IdModule);
                             if (module == null) throw new Exception("Это поле относится к другому модулю.");
                             else throw new Exception(string.Format("Это поле относится к модулю '{0}'.", module.Caption));
                         }
@@ -435,13 +433,13 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
             catch (OnUtils.Data.Validation.EntityValidationException ex) { result.Message = ex.CreateComplexMessage(); }
             catch (Exception ex) { result.Message = ex.Message; }
 
-            return this.ReturnJson(result);
+            return Controller.ReturnJson(result);
         }
 
         [ModuleAction("fieldDelete")]
         public JsonResult FieldDelete(int IdField = 0)
         {
-            var result = this.Controller.JsonAnswer();
+            var result = Controller.JsonAnswer();
 
             try
             {
@@ -451,7 +449,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
                     if (data == null) throw new Exception("Такое поле не найдено в базе данных!");
                     if (data.IdModule != this.Module.ID)
                     {
-                        var module = ModulesManager.getModuleByID(data.IdModule);
+                        var module = AppCore.GetModulesManager().GetModule(data.IdModule);
                         if (module == null) throw new Exception("Это поле относится к другому модулю.");
                         else throw new Exception(string.Format("Это поле относится к модулю '{0}'.", module.Caption));
                     }
@@ -475,333 +473,24 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
             }
             catch (Exception ex) { result.Message = ex.Message; }
 
-            return this.ReturnJson(result);
+            return Controller.ReturnJson(result);
         }
 
-        //    /*
-        //    Просмотр кастомных списков.
-        //    */
-        //    function custom_lists()
-        //    {
-        //        $lists = array();
-
-        //        $sql = DataManager.executeQuery("
-        //            SELECT *
-        //            FROM custom_lists
-        //            ORDER BY ListName
-        //        ");
-        //        while ($res = DataManager.getSelectedRecord($sql)) 
-        //        {
-        //            $res['id"] = (int)$res['IdList"];
-        //            $lists[(int)$res['IdList"]] = $res;
-        //        }
-
-        //        $this.assign('lists', json_encode($lists));
-        //        $this.display('admin/admin_custom_lists.cshtml");
-        //    }
-
-        //    /*
-        //    Добавляет новый список
-        //    */
-        //    function custom_lists_add()
-        //    {
-        //        $result = '';
-        //        $success = false;
-        //        $id = 0;
-
-        //        try
-        //        {
-        //            if (!isset(Request.Form["ListName"]) && strlen(Request.Form["ListName"]) == 0) $result = 'Не указано название списка!';
-        //            else if (!Base::isOneStringTextOnly(Request.Form["ListName"])) $result = 'Некорректно указано название списка!';
-        //            else {
-        //                $name = DataManager.prepare(Request.Form["ListName"]);
-        //                if (isset(Request.Form["ViewScheme"])) $vs = DataManager.prepare(Request.Form["ViewScheme"]); else $vs = '';
-
-        //                if (isset(Request.Form["ValueStr1"])) $vs1 = DataManager.prepare(Request.Form["ValueStr1"]); else $vs1 = '';
-        //                if (isset(Request.Form["ValueStr2"])) $vs2 = DataManager.prepare(Request.Form["ValueStr2"]); else $vs2 = '';
-        //                if (isset(Request.Form["ValueList1"])) $vl1 = DataManager.prepare(Request.Form["ValueList1"]); else $vl1 = '';
-        //                if (isset(Request.Form["ValueList2"])) $vl2 = DataManager.prepare(Request.Form["ValueList2"]); else $vl2 = '';
-        //                if (isset(Request.Form["ValueBool1"])) $vb1 = DataManager.prepare(Request.Form["ValueBool1"]); else $vb1 = '';
-        //                if (isset(Request.Form["ValueBool2"])) $vb2 = DataManager.prepare(Request.Form["ValueBool2"]); else $vb2 = '';
-        //                if (isset(Request.Form["ValueBool3"])) $vb3 = DataManager.prepare(Request.Form["ValueBool3"]); else $vb3 = '';
-
-        //                $sql = DataManager.executeQuery("
-        //                    INSERT INTO `custom_lists` (ListName, ViewScheme, ValueStr1, ValueStr2, ValueList1, ValueList2, ValueBool1, ValueBool2, ValueBool3) 
-        //                    VALUES('$name', '$vs', '$vs1', '$vs2', '$vl1', '$vl2', '$vb1', '$vb2', '$vb3')
-        //                ");
-        //                if ($sql > 0) 
-        //                {
-        //                    $result = 'Список добавлен.';
-        //                    $success = true;
-        //                    $id = DataManager.getInsertedID();
-        //                } 
-        //                else $result = 'По неизвестной причине список не получилось добавить.';
-        //            }
-        //        } catch (Exception $ex) { $result = $ex.getMessage(); }
-
-        //        $this.ReturnJson($success, $result, $id);
-        //    }
-
-        //    /*
-        //    Добавляет новый список
-        //    */
-        //    function custom_lists_edit($IdList = null)
-        //    {
-        //        $result = '';
-        //        $success = false;
-
-        //        try
-        //        {
-        //            if (!Base::isInt($IdList)) $result = 'Некорректно указан номер списка!';
-        //            else if (!isset(Request.Form["ListName"]) && strlen(Request.Form["ListName"]) == 0) $result = 'Не указано название списка!';
-        //            else if (!Base::isOneStringTextOnly(Request.Form["ListName"])) $result = 'Некорректно указано название списка!';
-        //            else 
-        //            {
-        //                $name = DataManager.prepare(Request.Form["ListName"]);
-        //                if (isset(Request.Form["ViewScheme"])) $vs = DataManager.prepare(Request.Form["ViewScheme"]); else $vs = '';
-
-        //                if (isset(Request.Form["ValueStr1"])) $vs1 = DataManager.prepare(Request.Form["ValueStr1"]); else $vs1 = '';
-        //                if (isset(Request.Form["ValueStr2"])) $vs2 = DataManager.prepare(Request.Form["ValueStr2"]); else $vs2 = '';
-        //                if (isset(Request.Form["ValueList1"])) $vl1 = DataManager.prepare(Request.Form["ValueList1"]); else $vl1 = '';
-        //                if (isset(Request.Form["ValueList2"])) $vl2 = DataManager.prepare(Request.Form["ValueList2"]); else $vl2 = '';
-        //                if (isset(Request.Form["ValueBool1"])) $vb1 = DataManager.prepare(Request.Form["ValueBool1"]); else $vb1 = '';
-        //                if (isset(Request.Form["ValueBool2"])) $vb2 = DataManager.prepare(Request.Form["ValueBool2"]); else $vb2 = '';
-        //                if (isset(Request.Form["ValueBool3"])) $vb3 = DataManager.prepare(Request.Form["ValueBool3"]); else $vb3 = '';
-
-        //                $sql = DataManager.executeQuery("
-        //                    UPDATE `custom_lists` 
-        //                    SET ListName='$name', ViewScheme='$vs', ValueStr1='$vs1', ValueStr2='$vs2', ValueList1='$vl1', ValueList2='$vl2', ValueBool1='$vb1', ValueBool2='$vb2', ValueBool3='$vb3'
-        //                    WHERE IdList='$IdList'
-        //                ");
-        //                if ($sql > 0) 
-        //                {
-        //                    $result = 'Список отредактирован.';
-        //                    $success = true;
-        //                } 
-        //                else $result = 'По неизвестной причине список не получилось отредактировать.';
-        //            }
-        //        } 
-        //        catch (Exception $ex) { $result = $ex.getMessage(); }
-
-        //        $this.ReturnJson($success, $result);
-        //    }
-
-        //    /*
-        //    Удаляет указанный список
-        //    */
-        //    function custom_lists_delete($IdList = null)
-        //    {
-        //        $result = '';
-        //        $success = false;
-
-        //        try
-        //        {
-        //            if (!Base::isInt($IdList)) $result = 'Некорректно указан номер списка!';
-        //            else 
-        //            {
-        //                $sql = DataManager.executeQuery("DELETE FROM `custom_lists` WHERE `custom_lists`.`IdList`='$IdList'");
-
-        //                if ($sql > 0)
-        //                {
-        //                    $result = 'Список удален.';
-        //                    $success = true;
-        //                }
-        //            }
-        //        } 
-        //        catch (Exception $ex) { $result = $ex.getMessage(); }
-
-        //        $this.ReturnJson($success, $result);
-        //    }
-
-        //    /*
-        //    Выдает json-массив со списком данных, относящихся к указанному списку.
-        //    */
-        //    function custom_list_data($IdList = null)
-        //    {
-        //        $list = array();
-
-        //        if (Base::isInt($IdList)) 
-        //        {
-        //            $list = $this.get_custom_list_data($IdList);
-        //            $list = $list['data"];
-        //        }
-
-        //        $this.ReturnJson(true, null, $list);
-        //    }
-
-        //    /*
-        //    Выдает json-массив со списком данных, относящихся к указанному списку.
-        //    */
-        //    function custom_list_data_edit($IdList = null)
-        //    {
-        //        $list = array();
-        //        $scheme = array();
-        //        $result = '';
-        //        $success = false;
-
-        //        if (Base::isInt($IdList))
-        //        {
-        //            $sql = DataManager.executeQuery("SELECT * FROM custom_lists WHERE IdList='$IdList'");
-        //            if (DataManager.getNumSelectedRecords($sql) > 0)
-        //            {
-        //                $data = DataManager.getSelectedRecord($sql);
-        //                if (isset($data['ValueStr1"]) && strlen($data['ValueStr1"])) $scheme['ValueStr1"] = $data['ValueStr1"];
-        //                if (isset($data['ValueStr2"]) && strlen($data['ValueStr2"])) $scheme['ValueStr2"] = $data['ValueStr2"];
-        //                if (isset($data['ValueBool1"]) && strlen($data['ValueBool1"])) $scheme['ValueBool1"] = $data['ValueBool1"];
-        //                if (isset($data['ValueBool2"]) && strlen($data['ValueBool2"])) $scheme['ValueBool2"] = $data['ValueBool2"];
-        //                if (isset($data['ValueBool3"]) && strlen($data['ValueBool3"])) $scheme['ValueBool3"] = $data['ValueBool3"];
-        //                if (isset($data['ValueList1"]) && $data['ValueList1"] > 0) 
-        //                {
-        //                    $val = $this.get_custom_list_data($data['ValueList1"]);
-        //                    if ($val != null)
-        //                    {
-        //                        $scheme['ValueList1"] = $val['name"];
-        //                        $scheme['ValueList1Data"] = $val['data"];
-        //                    }                        
-        //                }
-        //                if (isset($data['ValueList2"]) && $data['ValueList2"] > 0) 
-        //                {
-        //                    $val = $this.get_custom_list_data($data['ValueList2"]);
-        //                    if ($val != null)
-        //                    {
-        //                        $scheme['ValueList2"] = $val['name"];
-        //                        $scheme['ValueList2Data"] = $val['data"];
-        //                    }                        
-        //                }                      
-
-        //                if (count($scheme) > 0)
-        //                {
-        //                    $sql = DataManager.executeQuery("SELECT * FROM custom_lists_data WHERE IdList='$IdList'");
-
-        //                    $datas = array();
-        //                    while ($res = DataManager.getSelectedRecord($sql)) 
-        //                    {
-        //                        $res['id"] = $res['IdData"];
-        //                        $datas[$res['IdData"]] = array(
-        //                            'id'        =>  $res['IdData"],
-        //                            'IdData'    =>  $res['IdData"],
-        //                            'IdList'    =>  $res['IdList"]
-        //                        );
-        //                        foreach ($scheme as $k=>$v) if (isset($res[$k])) $datas[$res['IdData"]][$k] = $res[$k];
-        //                    }
-        //                    $list = $datas;
-        //                    $success = true;
-        //                } 
-        //                else $result = 'Нет полей для отображения';
-        //            } 
-        //            else $result = 'Список не найден.';
-        //        } 
-        //        else $result = 'Неправильно задан список.';
-
-        //        $this.ReturnJson($success, $result, array('scheme' =>  $scheme, 'data' =>  $list));
-        //    }
-
-        //    /*
-        //    Выдает json-массив со списком данных, относящихся к указанному списку.
-        //    */
-        //    function custom_list_data_add($IdList = null)
-        //    {
-        //        $result = '';
-        //        $success = false;
-        //        $id = 0;
-
-        //        try
-        //        {
-        //            if (!Base::isInt($IdList)) $result = 'Некорректно указан номер списка!';
-        //            else 
-        //            {
-        //                if (isset(Request.Form["ValueStr1"])) $vs1 = DataManager.prepare(Request.Form["ValueStr1"]); else $vs1 = '';
-        //                if (isset(Request.Form["ValueStr2"])) $vs2 = DataManager.prepare(Request.Form["ValueStr2"]); else $vs2 = '';
-        //                if (isset(Request.Form["ValueList1"])) $vl1 = (int)DataManager.prepare(Request.Form["ValueList1"]); else $vl1 = 0;
-        //                if (isset(Request.Form["ValueList2"])) $vl2 = (int)DataManager.prepare(Request.Form["ValueList2"]); else $vl2 = 0;
-        //                if (isset(Request.Form["ValueBool1"])) $vb1 = (int)DataManager.prepare(Request.Form["ValueBool1"]); else $vb1 = 0;
-        //                if (isset(Request.Form["ValueBool2"])) $vb2 = (int)DataManager.prepare(Request.Form["ValueBool2"]); else $vb2 = 0;
-        //                if (isset(Request.Form["ValueBool3"])) $vb3 = (int)DataManager.prepare(Request.Form["ValueBool3"]); else $vb3 = 0;
-
-        //                $sql = DataManager.executeQuery("
-        //                    INSERT INTO `custom_lists_data` (IdList, ValueStr1, ValueStr2, ValueList1, ValueList2, ValueBool1, ValueBool2, ValueBool3)
-        //                    VALUES('$IdList', '$vs1', '$vs2', $vl1, $vl2, $vb1, $vb2, $vb3)
-        //                ");
-        //                if ($sql > 0) 
-        //                {
-        //                    $result = 'Элемент добавлен.';
-        //                    $success = true;
-        //                    $id = DataManager.getInsertedID();
-        //                } 
-        //                else $result = 'По неизвестной причине элемент не получилось добавить.';
-        //            }
-        //        }
-        //        catch (Exception $ex) { $result = $ex.getMessage(); }
-
-        //        $this.ReturnJson($success,$result, $id);
-        //    }
-
-        //    /*
-        //    Выдает json-массив со списком данных, относящихся к указанному списку.
-        //    */
-        //    function custom_list_data_editsave($IdData = null)
-        //    {
-        //        $result = '';
-        //        $success = false;
-
-        //        try
-        //        {
-        //            if (!Base::isInt($IdData)) $result = 'Некорректно указан номер элемента списка!';
-        //            else 
-        //            {
-        //                if (isset(Request.Form["ValueStr1"])) $vs1 = DataManager.prepare(Request.Form["ValueStr1"]); else $vs1 = '';
-        //                if (isset(Request.Form["ValueStr2"])) $vs2 = DataManager.prepare(Request.Form["ValueStr2"]); else $vs2 = '';
-        //                if (isset(Request.Form["ValueList1"])) $vl1 = (int)DataManager.prepare(Request.Form["ValueList1"]); else $vl1 = 0;
-        //                if (isset(Request.Form["ValueList2"])) $vl2 = (int)DataManager.prepare(Request.Form["ValueList2"]); else $vl2 = 0;
-        //                if (isset(Request.Form["ValueBool1"])) $vb1 = (int)DataManager.prepare(Request.Form["ValueBool1"]); else $vb1 = 0;
-        //                if (isset(Request.Form["ValueBool2"])) $vb2 = (int)DataManager.prepare(Request.Form["ValueBool2"]); else $vb2 = 0;
-        //                if (isset(Request.Form["ValueBool3"])) $vb3 = (int)DataManager.prepare(Request.Form["ValueBool3"]); else $vb3 = 0;
-
-        //                $sql = DataManager.executeQuery("
-        //                    UPDATE `custom_lists_data` 
-        //                    SET ValueStr1='$vs1', ValueStr2='$vs2', ValueList1=$vl1, ValueList2=$vl2, ValueBool1=$vb1, ValueBool2=$vb2, ValueBool3=$vb3
-        //                    WHERE IdData='$IdData'
-        //                ");
-        //                if ($sql > 0) 
-        //                {
-        //                    $result = 'Элемент отредактирован.';
-        //                    $success = true;
-        //                }
-        //                else $result = 'По неизвестной причине элемент не получилось отредактировать.';
-        //            }
-        //        } 
-        //        catch (Exception $ex) { $result = $ex.getMessage(); }
-
-        //        $this.ReturnJson($success, $result);
-        //    }
-
-        //    /*
-        //    Выдает json-массив со списком данных, относящихся к указанному списку.
-        //    */
-        //    function custom_list_data_delete($IdData = null)
-        //    {
-        //        $result = '';
-        //        $success = false;
-
-        //        try
-        //        {
-        //            if (!Base::isInt($IdData)) $result = 'Некорректно указан номер элемента списка!';
-        //            else 
-        //            {
-        //                $sql = DataManager.executeQuery("DELETE FROM `custom_lists_data` WHERE `IdData`='$IdData'");
-
-        //                if ($sql > 0)
-        //                {
-        //                    $result = 'Элемент списка удален.';
-        //                    $success = true;
-        //                }
-        //            }
-        //        } 
-        //        catch (Exception $ex) { $result = $ex.getMessage(); }
-
-        //        $this.ReturnJson($success, $result);
-        //    }
-
         #endregion
+
+        protected ModuleControllerBase Controller
+        {
+            get => ControllerBase as ModuleControllerBase;
+        }
+
+        protected System.Web.HttpRequest Request
+        {
+            get => System.Web.HttpContext.Current.Request;
+        }
+
+        protected ModelStateDictionary ModelState
+        {
+            get => Controller?.ModelState;
+        }
     }
 }

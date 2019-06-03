@@ -4,6 +4,8 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using OnUtils.Application.Modules;
+using OnUtils.Data;
 
 namespace OnWeb.Core.ModuleExtensions.CustomFields
 {
@@ -11,7 +13,6 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
     using Modules;
     using Modules.Extensions;
     using Scheme;
-    using OnUtils.Data;
 
 #pragma warning disable CS1591 // todo внести комментарии.
     public class ExtensionCustomsFieldsBase : ModuleExtension<DB.Context>
@@ -129,10 +130,10 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
             }
         }
 
-        //todo protected bool AllowSchemeManage
-        //{
-        //    get { return this.Module.CheckPermission(PERM_EXTFIELDS_ALLOWMANAGE); }
-        //}
+        protected bool AllowSchemeManage
+        {
+            get => Module.CheckPermission(PERM_EXTFIELDS_ALLOWMANAGE) == CheckPermissionResult.Allowed;
+        }
         #endregion
 
         #region Cache

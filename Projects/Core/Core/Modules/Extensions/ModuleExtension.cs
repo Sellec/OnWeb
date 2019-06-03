@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace OnWeb.Core.Modules.Extensions
 {
+    using Core.Modules;
+    using Core.Routing;
+
 #pragma warning disable CS1591 // todo внести комментарии.
     public class ModuleExtension : CoreComponentBase<ApplicationCore>
     {
@@ -17,7 +20,8 @@ namespace OnWeb.Core.Modules.Extensions
 
         protected ModuleCore Module = null;
         // todo internal ModuleController Controller = null;
-        public object Controller = null;
+        public object ControllerBase = null;
+        public object ModelStateBase = null;
 
         protected object DataPostResult = null;
     

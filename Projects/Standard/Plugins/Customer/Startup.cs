@@ -5,12 +5,17 @@ namespace OnWeb.Plugins.Customer
 {
     using Core.Modules;
 
-    class Startup : IConfigureBindings
+    class Startup : IConfigureBindings, IExecuteStart
     {
         void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
         {
             bindingsCollection.SetSingleton<ModuleCustomer, ModuleStandard>();
             bindingsCollection.SetTransient<IModuleController<ModuleCustomer>>(typeof(ModuleControllerCustomer), typeof(ModuleControllerAdminCustomer));
+        }
+
+        void IExecuteStart<ApplicationCore>.ExecuteStart(ApplicationCore core)
+        {
+            core.Get<ModuleCustomer>().registerExtensionNeeded<Core.ModuleExtensions.CustomFields.ExtensionCustomsFieldsAdmin>();
         }
     }
 }
