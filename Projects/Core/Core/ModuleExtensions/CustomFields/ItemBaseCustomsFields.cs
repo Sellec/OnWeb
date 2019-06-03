@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace OnWeb.Core.Items
@@ -93,6 +94,7 @@ namespace OnWeb.Core.Items
         /// Если во время получения значений полей возникло исключение (т.е. информация не была получена), то при повторном обращении к свойству произойдет повторная попытка получить значения полей.
         /// Таким образом, свойство никогда не вернет null, только объект с данными, либо сгенерирует исключение.
         /// </exception>
+        [NotMapped]
         [Newtonsoft.Json.JsonConverter(typeof(CustomPropertyConverter))]
         public DefaultSchemeWData Fields
         {
@@ -108,6 +110,7 @@ namespace OnWeb.Core.Items
         /// Свойство <see cref="Fields"/> представляет собой прокси-объект, сгенерированный на основе класса <see cref="DefaultSchemeWData"/> с динамически генерируемыми дополнительными свойствами, основанными на полях, содержащихся в полной схеме.
         /// Например, если в полной схеме содержится поле с Id=155 и Alias="TestField", то прокси-объект будет иметь динамические свойства field_155 и TestField. Эти свойства напрямую ссылаются на <see cref="FieldData.Value"/>, т.о. можно напрямую получить значение поля №155, просто обратившись к FieldsDynamic.TestField.
         /// </summary>
+        [NotMapped]
         [Newtonsoft.Json.JsonConverter(typeof(CustomPropertyConverter))]
         public dynamic FieldsDynamic
         {
@@ -125,6 +128,7 @@ namespace OnWeb.Core.Items
         /// <summary>
         /// См. <see cref="Fields"/>.
         /// </summary>
+        [NotMapped]
         [Newtonsoft.Json.JsonConverter(typeof(CustomPropertyConverter))]
         public DefaultSchemeWData fields
         {
@@ -138,6 +142,7 @@ namespace OnWeb.Core.Items
         /// <summary>
         /// Возвращает коллекцию именованных полей со значениями для объекта. Не может быть равен null (см. <see cref="Fields"/>).
         /// </summary>
+        [NotMapped]
         public ReadOnlyDictionary<string, FieldData> fieldsNamed
         {
             get

@@ -122,9 +122,9 @@ namespace OnWeb.Core.Items
         /// </summary>
         [NotMapped]
         [Newtonsoft.Json.JsonIgnore]
-        public Modules.ModuleCore OwnerModule
+        public ModuleCore OwnerModule
         {
-            get { return Owner as Modules.ModuleCore; }
+            get { return Owner as ModuleCore; }
         }
 
         #endregion
