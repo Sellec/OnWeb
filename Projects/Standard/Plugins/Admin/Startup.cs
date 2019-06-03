@@ -10,7 +10,7 @@ namespace OnWeb.Plugins.Admin
         void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
         {
             bindingsCollection.SetSingleton<ModuleAdmin, ModuleStandard>();
-            bindingsCollection.SetTransient<IModuleController<ModuleAdmin>, ModuleController>();
+            bindingsCollection.SetTransient<IModuleController<ModuleAdmin>, ModuleAdminController>();
         }
     }
 }

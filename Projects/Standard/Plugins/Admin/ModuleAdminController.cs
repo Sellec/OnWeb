@@ -5,7 +5,7 @@ namespace OnWeb.Plugins.Admin
 {
     using CoreBind.Modules;
 
-    class ModuleController : ModuleControllerUser<ModuleAdmin>
+    public sealed class ModuleAdminController : ModuleControllerUser<ModuleAdmin>
     {
         [ModuleAction(null, ModulesConstants.PermissionManageString)]
         public override ActionResult Index()
