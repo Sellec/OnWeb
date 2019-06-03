@@ -17,6 +17,7 @@ namespace OnWeb.Plugins.Auth
     using CoreBind.Routing;
     using Core.DB;
     using Core.Journaling;
+    using OnWeb.Plugins.Auth.Model;
 
     public class ModuleAuthControllerAdmin : ModuleControllerAdmin<ModuleAuth, CoreContext, Model.ConfigurationSaveModel>
     {
@@ -29,18 +30,19 @@ namespace OnWeb.Plugins.Auth
             return View("ModuleSettings.cshtml", model);
         }
 
-        protected override void ConfigurationSaveCustom(Model.ConfigurationSaveModel model)
+        protected override ModuleConfiguration<ModuleAuth> ConfigurationSaveCustom(ConfigurationSaveModel formData, out string outputMessage)
         {
             var cfg = Module.GetConfigurationManipulator().GetEditable<ModuleConfiguration>();
 
-            if (model.RoleGuest.HasValue) cfg.RoleGuest = model.RoleGuest.Value;
-            if (model.RoleUser.HasValue) cfg.RoleUser = model.RoleUser.Value;
-            if (model.EventLoginSuccess.HasValue) cfg.EventLoginSuccess = model.EventLoginSuccess.Value;
-            if (model.EventLoginError.HasValue) cfg.EventLoginError = model.EventLoginError.Value;
-            if (model.EventLoginUpdate.HasValue) cfg.EventLoginUpdate = model.EventLoginUpdate.Value;
-            if (model.EventLogout.HasValue) cfg.EventLogout = model.EventLogout.Value;
+            if (formData.RoleGuest.HasValue) cfg.RoleGuest = formData.RoleGuest.Value;
+            if (formData.RoleUser.HasValue) cfg.RoleUser = formData.RoleUser.Value;
+            if (formData.EventLoginSuccess.HasValue) cfg.EventLoginSuccess = formData.EventLoginSuccess.Value;
+            if (formData.EventLoginError.HasValue) cfg.EventLoginError = formData.EventLoginError.Value;
+            if (formData.EventLoginUpdate.HasValue) cfg.EventLoginUpdate = formData.EventLoginUpdate.Value;
+            if (formData.EventLogout.HasValue) cfg.EventLogout = formData.EventLogout.Value;
 
-            Module.GetConfigurationManipulator().ApplyConfiguration(cfg);
+            outputMessage = null;
+            return cfg;
         }
     }
 }
