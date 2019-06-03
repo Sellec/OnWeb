@@ -9,6 +9,7 @@ namespace OnWeb.CoreBind.Modules
     using Core.Modules;
     using CoreBind.Types;
     using Routing;
+    using Core.Configuration;
 
     [ModuleController(ControllerTypeAdmin.TypeID)]
     public abstract class ModuleControllerAdmin<TModule, TContext, TConfigurationSaveModel> : ModuleControllerUser<TModule, TContext>
@@ -31,10 +32,10 @@ namespace OnWeb.CoreBind.Modules
         [ModuleAction("config")]
         public virtual ActionResult Configuration()
         {
-            return View("AdminForModules/Design/ModuleEdit.cshtml");
+            return View("AdminForModules/Design/ModuleEdit.cshtml", new Configuration.SaveModel() { ModuleName = Module.GetConfiguration<ModuleConfiguration<TModule>>().UrlName });
         }
 
-        public ActionResult ConfigurationSave(TConfigurationSaveModel model)
+        public ActionResult ConfigurationSave(TConfigurationSaveModel formData)
         {
             var answer = JsonAnswer();
 
@@ -42,13 +43,13 @@ namespace OnWeb.CoreBind.Modules
             {
                 if (ModelState.IsValid)
                 {
-                    ConfigurationSaveCustom(model);
-                }
-
-                if (ModelState.IsValid)
-                {
-                    // todo нужен перезапуск или переназначение urlname через modulesmanager. Module.UrlName = model.ModuleName;
-                  // todo  (Module as ModuleCore).SaveConfiguration();
+                    var cfg = ConfigurationSaveCustom(formData, out var outputMessage);
+                    if (cfg == null) answer.FromFail($"Сохранение настроек не удалось. {outputMessage}".TrimEnd());
+                    else
+                    {
+                        Module.GetConfigurationManipulator().ApplyConfiguration(cfg);
+                        answer.FromSuccess($"{outputMessage}".Trim());
+                    }
                 }
             }
             catch (Exception ex) { answer.FromException(ex); }
@@ -58,13 +59,23 @@ namespace OnWeb.CoreBind.Modules
 
         /// <summary>
         /// Вызывается во время сохранения настроек модуля в функции <see cref="ConfigurationSave(TConfigurationSaveModel)"/>, если данные из формы были переданы корректно (т.е. если <see cref="Controller.ModelState"/> не содержит информации об ошибках валидации модели).
-        /// Может вносить собственные коррективы в <see cref="Controller.ModelState"/>, т.к. после вызова <see cref="ConfigurationSaveCustom(TConfigurationSaveModel)"/> выполняется повторная проверка <see cref="Controller.ModelState"/> на валидность.
-        /// 
+        /// Возвращает объект настроек модуля, который будет применен к модулю.
         /// </summary>
-        /// <param name="model"></param>
-        protected virtual void ConfigurationSaveCustom(TConfigurationSaveModel model)
+        /// <param name="formData">Содержит модель данных, переданных из формы.</param>
+        /// <param name="outputMessage">Может содержать выходное сообщение, которое необходимо добавить к ответу сервера.</param>
+        /// <returns>Возвращает объект настроек модуля. Если возвращает null, то сохранение настроек модуля прерывается.</returns>
+        protected virtual ModuleConfiguration<TModule> ConfigurationSaveCustom(TConfigurationSaveModel formData, out string outputMessage)
         {
+            if (formData == null)
+            {
+                outputMessage = "Из формы не передавались данные.";
+                return null;
+            }
 
+            var cfg = Module.GetConfigurationManipulator().GetEditable<ModuleConfiguration<TModule>>();
+            cfg.UrlName = formData.ModuleName;
+            outputMessage = "";
+            return cfg;
         }
 
         protected sealed override ActionResult ErrorHandled(Exception exception)
