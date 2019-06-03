@@ -14,7 +14,7 @@ namespace OnWeb.Core.Routing
     /// Менеджер маршрутизации. Позволяет получать и управлять адресами сущностей.
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Compiler", "CS0618")]
-    public class UrlManager : CoreComponentBase<ApplicationCore>, IComponentSingleton<ApplicationCore>, IUnitOfWorkAccessor<UnitOfWork<DB.Routing, DB.ModuleConfig>>
+    public class UrlManager : CoreComponentBase<ApplicationCore>, IComponentSingleton<ApplicationCore>, IUnitOfWorkAccessor<UnitOfWork<DB.Routing, DB.ModuleConfig>>, IAutoStart
     {
         private static Dictionary<string, string> TRANSLATETABLE = new Dictionary<string, string>() {
             { "а", "a" }, { "б", "b" }, { "в", "v" }, { "г", "g" }, { "д", "d" }, { "е", "e" }, { "ж", "g" }, { "з", "z" },
@@ -76,7 +76,6 @@ namespace OnWeb.Core.Routing
         /// </summary>
         public UrlManager()
         {
-            DeprecatedSingletonInstances.UrlManager = this;
         }
 
         #region CoreComponentBase
@@ -84,6 +83,7 @@ namespace OnWeb.Core.Routing
         /// </summary>
         protected sealed override void OnStart()
         {
+            DeprecatedSingletonInstances.UrlManager = this;
             AppCore.Get<Journaling.IJournalingManager>().RegisterJournalTyped<UrlManager>("Журнал менеджера адресов");
         }
 
@@ -91,6 +91,7 @@ namespace OnWeb.Core.Routing
         /// </summary>
         protected sealed override void OnStop()
         {
+            if (DeprecatedSingletonInstances.UrlManager == this) DeprecatedSingletonInstances.UrlManager = null;
         }
         #endregion
 
