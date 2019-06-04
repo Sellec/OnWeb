@@ -219,12 +219,7 @@ namespace OnWeb.Core.ModuleExtensions.ExtensionUrl
                                     if (result.Result.TryGetValue(x.ID, out string value) && !string.IsNullOrEmpty(value))
                                     {
                                         if (Uri.TryCreate(value, UriKind.Absolute, out Uri url)) itemsModule[x] = new Tuple<Uri, UrlSourceType>(url, UrlSourceType.Routing);
-                                        else
-                                        {
-                                            Debug.WriteLineNoLog("УРЛ ОТНОСИТЕЛЬНЫЙ, НАДО ДОДЕЛАТЬ СБОРКУ ПОЛНОГО АДРЕСА С АДРЕСОМ СЕРВЕРА.");
-                                            if (Module?.AppCore?.ServerUrl != null)
-                                                if (Uri.TryCreate(Module.AppCore.ServerUrl, value, out Uri url2)) itemsModule[x] = new Tuple<Uri, UrlSourceType>(url2, UrlSourceType.Routing);
-                                        }
+                                        else if (Uri.TryCreate(Module.AppCore.ServerUrl, value, out Uri url2)) itemsModule[x] = new Tuple<Uri, UrlSourceType>(url2, UrlSourceType.Routing);
                                     }
                                     else itemsEmpty.Add(x);
                                 }
