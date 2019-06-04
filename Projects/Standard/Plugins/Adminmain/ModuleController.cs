@@ -20,7 +20,7 @@ namespace OnWeb.Plugins.Adminmain
     /// <summary>
     /// Представляет контроллер для панели управления.
     /// </summary>
-    public class ModuleController : ModuleControllerAdmin<Module, DataContext>
+    public class ModuleController : ModuleControllerAdmin<Module>
     {
         [MenuAction("Настройки", "info", Module.PERM_CONFIGMAIN)]
         public virtual ActionResult MainSettings()
@@ -68,7 +68,7 @@ namespace OnWeb.Plugins.Adminmain
             {
                 if (ModelState.IsValid)
                 {
-                    var cfg = AppCore.GetModulesManager().GetModule<Plugins.CoreModule.CoreModule>().GetConfigurationManipulator().GetEditable<CoreConfiguration>();
+                    var cfg = AppCore.GetModulesManager().GetModule<CoreModule.CoreModule>().GetConfigurationManipulator().GetEditable<CoreConfiguration>();
 
                     cfg.IdModuleDefault = model.Configuration.IdModuleDefault;
                     cfg.index_page = model.Configuration.index_page;
@@ -86,7 +86,7 @@ namespace OnWeb.Plugins.Adminmain
 
                     cfg.userAuthorizeAllowed = model.Configuration.userAuthorizeAllowed;
 
-                    switch (AppCore.GetModulesManager().GetModule<Plugins.CoreModule.CoreModule>().GetConfigurationManipulator().ApplyConfiguration(cfg))
+                    switch (AppCore.GetModulesManager().GetModule<CoreModule.CoreModule>().GetConfigurationManipulator().ApplyConfiguration(cfg))
                     {
                         case ApplyConfigurationResult.PermissionDenied:
                             result.Message = "Недостаточно прав для сохранения конфигурации системы.";
@@ -126,27 +126,33 @@ namespace OnWeb.Plugins.Adminmain
                               select new Model.Module(p)).ToList()
             };
 
-            return this.display("admin_adminmain_modules.cshtml", model);
+            return this.display("Modules.cshtml", model);
         }
             
         [MenuAction("Редактируемое меню", "editablemenu", Module.PERM_EDITABLEMENU)]
         public ActionResult EditableMenu()
         {
-            var model = DB.EditableMenu.OrderBy(x => x.id).ToList();
-            return this.display("EditableMenuEdit.cshtml", model);
+            using (var db = Module.CreateUnitOfWork())
+            {
+                var model = db.EditableMenu.OrderBy(x => x.id).ToList();
+                return this.display("EditableMenuEdit.cshtml", model);
+            }
         }
 
         [ModuleAction("editablemenu_edit", Module.PERM_EDITABLEMENU)]
         public ActionResult EditableMenuEdit(int IdMenu = 0)
         {
-            var menu = IdMenu == 0 ? new menus() : DB.EditableMenu.Where(x => x.id == IdMenu).FirstOrDefault();
-            if (menu == null) throw new Exception(string.Format("Меню с id={0} не найдено.", IdMenu));
-
-            return this.display("EditableMenuEdit.cshtml", new Model.EditableMenu()
+            using (var db = Module.CreateUnitOfWork())
             {
-                Menu = menu,
-                Modules = (from p in AppCore.GetModulesManager().GetModules() orderby p.Caption select p).ToList()
-            });
+                var menu = IdMenu == 0 ? new menus() : db.EditableMenu.Where(x => x.id == IdMenu).FirstOrDefault();
+                if (menu == null) throw new Exception(string.Format("Меню с id={0} не найдено.", IdMenu));
+
+                return this.display("EditableMenuEdit.cshtml", new Model.EditableMenu()
+                {
+                    Menu = menu,
+                    Modules = (from p in AppCore.GetModulesManager().GetModules() orderby p.Caption select p).ToList()
+                });
+            }
         }
 
         [ModuleAction("editablemenu_getmenu", Module.PERM_EDITABLEMENU)]
@@ -190,22 +196,24 @@ namespace OnWeb.Plugins.Adminmain
 
             try
             {
-                if (menu == null) throw new Exception("Не удалось получить данные из формы.");
-
-                var dbmenu = menu.id > 0 ? DB.EditableMenu.Where(x => x.id == menu.id).FirstOrDefault() : menu;
-                if (dbmenu == null) throw new Exception(string.Format("Не удалось найти меню с id={0}", menu.id));
-
-                if (string.IsNullOrEmpty(menu.name)) throw new Exception("Название меню не может быть пустым.");
-
-                if (dbmenu.id == 0) DB.EditableMenu.Add(menu);
-                else
+                using (var db = Module.CreateUnitOfWork())
                 {
-                    dbmenu.name = menu.name;
-                    dbmenu.code = menu.code;
+                    if (menu == null) throw new Exception("Не удалось получить данные из формы.");
+
+                    var dbmenu = menu.id > 0 ? db.EditableMenu.Where(x => x.id == menu.id).FirstOrDefault() : menu;
+                    if (dbmenu == null) throw new Exception(string.Format("Не удалось найти меню с id={0}", menu.id));
+
+                    if (string.IsNullOrEmpty(menu.name)) throw new Exception("Название меню не может быть пустым.");
+
+                    if (dbmenu.id == 0) db.EditableMenu.Add(menu);
+                    else
+                    {
+                        dbmenu.name = menu.name;
+                        dbmenu.code = menu.code;
+                    }
+
+                    db.SaveChanges();
                 }
-
-                DB.SaveChanges();
-
                 success = true;
                 result = "Изменения в свойствах меню успешно сохранены.";
             }
@@ -227,13 +235,14 @@ namespace OnWeb.Plugins.Adminmain
             try
             {
                 if (IdMenu == 0) throw new Exception("Следует указать номер существующего меню.");
+                using (var db = Module.CreateUnitOfWork())
+                {
+                    var menu = db.EditableMenu.Where(x => x.id == IdMenu).FirstOrDefault();
+                    if (menu == null) throw new Exception(string.Format("Меню с id={0} не найдено.", IdMenu));
 
-                var menu = DB.EditableMenu.Where(x => x.id == IdMenu).FirstOrDefault();
-                if (menu == null) throw new Exception(string.Format("Меню с id={0} не найдено.", IdMenu));
-
-                DB.EditableMenu.Delete(menu);
-                DB.SaveChanges();
-
+                    db.EditableMenu.Delete(menu);
+                    db.SaveChanges();
+                }
                 success = true;
                 //result = "Меню было успешно удалено.";
             }
@@ -302,23 +311,26 @@ namespace OnWeb.Plugins.Adminmain
         {
             var model = new Model.Routing() { Modules = AppCore.GetModulesManager().GetModules().OrderBy(x => x.Caption).ToList() };
 
-            var modulesIdList = model.Modules.Select(x => x.ID).ToArray();
-            var query = DB.Routes
-                            .Where(x => modulesIdList.Contains(x.IdModule))
-                            .GroupBy(x => new { x.IdModule, x.IdRoutingType })
-                            .Select(x => new { x.Key.IdModule, x.Key.IdRoutingType, Count = x.Count() })
-                            .GroupBy(x => x.IdRoutingType)
-                            .ToDictionary(x => x.Key, x => x.ToDictionary(y => y.IdModule, y => y.Count))
-                            ;
+            using (var db = Module.CreateUnitOfWork())
+            {
+                var modulesIdList = model.Modules.Select(x => x.ID).ToArray();
+                var query = db.Routes
+                                .Where(x => modulesIdList.Contains(x.IdModule))
+                                .GroupBy(x => new { x.IdModule, x.IdRoutingType })
+                                .Select(x => new { x.Key.IdModule, x.Key.IdRoutingType, Count = x.Count() })
+                                .GroupBy(x => x.IdRoutingType)
+                                .ToDictionary(x => x.Key, x => x.ToDictionary(y => y.IdModule, y => y.Count))
+                                ;
 
-            var query2 = (new RoutingType.eTypes[] { RoutingType.eTypes.Main, RoutingType.eTypes.Additional, RoutingType.eTypes.Old })
-                            .ToDictionary(x => x,
-                                          x => model.Modules.ToDictionary(y => y.ID,
-                                                                               y => query.ContainsKey(x) && query[x].ContainsKey(y.ID) ? query[x][y.ID] : 0));
+                var query2 = (new RoutingType.eTypes[] { RoutingType.eTypes.Main, RoutingType.eTypes.Additional, RoutingType.eTypes.Old })
+                                .ToDictionary(x => x,
+                                              x => model.Modules.ToDictionary(y => y.ID,
+                                                                                   y => query.ContainsKey(x) && query[x].ContainsKey(y.ID) ? query[x][y.ID] : 0));
 
-            model.RoutesMain = query2[RoutingType.eTypes.Main];
-            model.RoutesAdditional = query2[RoutingType.eTypes.Additional];
-            model.RoutesOld = query2[RoutingType.eTypes.Old];
+                model.RoutesMain = query2[RoutingType.eTypes.Main];
+                model.RoutesAdditional = query2[RoutingType.eTypes.Additional];
+                model.RoutesOld = query2[RoutingType.eTypes.Old];
+            }
 
             return this.display("routing.cshtml", model);
         }
@@ -333,43 +345,46 @@ namespace OnWeb.Plugins.Adminmain
 
             var model = new Model.RoutingModule() { Module = module };
 
-            model.RoutingTypes = DB.RouteTypes.OrderBy(x => x.NameTranslationType).Select(x => new SelectListItem() { Value = x.IdTranslationType.ToString(), Text = x.NameTranslationType }).ToList();
-
-            var moduleActionAttributeType = typeof(ModuleActionAttribute);
-            var moduleActionGetDisplayName = new Func<ActionDescriptor, string>(action =>
+            using (var db = Module.CreateUnitOfWork())
             {
-                var attr = action.GetCustomAttributes(moduleActionAttributeType, true).OfType<ModuleActionAttribute>().FirstOrDefault();
-                if (attr != null)
+                model.RoutingTypes = db.RouteTypes.OrderBy(x => x.NameTranslationType).Select(x => new SelectListItem() { Value = x.IdTranslationType.ToString(), Text = x.NameTranslationType }).ToList();
+
+                var moduleActionAttributeType = typeof(ModuleActionAttribute);
+                var moduleActionGetDisplayName = new Func<ActionDescriptor, string>(action =>
                 {
-                    if (!string.IsNullOrEmpty(attr.Caption)) return attr.Caption;
-                }
+                    var attr = action.GetCustomAttributes(moduleActionAttributeType, true).OfType<ModuleActionAttribute>().FirstOrDefault();
+                    if (attr != null)
+                    {
+                        if (!string.IsNullOrEmpty(attr.Caption)) return attr.Caption;
+                    }
 
-                return action.ActionName;
-            });
+                    return action.ActionName;
+                });
 
-            var modulesActions = AppCore.GetModulesManager().GetModules().Select(x => new
-            {
-                Module = x,
-                UserDescriptor = x.ControllerUser() != null ? new ReflectedControllerDescriptor(x.ControllerUser()) : null,
-                AdminDescriptor = x.ControllerAdmin() != null ? new ReflectedControllerDescriptor(x.ControllerAdmin()) : null,
-            }).Select(x => new
-            {
-                x.Module,
-                UserActions = x.UserDescriptor != null ? x.UserDescriptor.GetCanonicalActions().Where(y => y.IsDefined(moduleActionAttributeType, true)).ToDictionary(y => y.ActionName, y => "Общее: " + moduleActionGetDisplayName(y)) : new Dictionary<string, string>(),
-                AdminActions = x.AdminDescriptor != null ? x.AdminDescriptor.GetCanonicalActions().Where(y => y.IsDefined(moduleActionAttributeType, true)).ToDictionary(y => y.ActionName, y => "Администрирование: " + moduleActionGetDisplayName(y)) : new Dictionary<string, string>(),
-            }).ToDictionary(x => x.Module, x => x.UserActions.Merge(x.AdminActions).OrderBy(y => y.Value).ToDictionary(y => y.Key, y => y.Value));
+                var modulesActions = AppCore.GetModulesManager().GetModules().Select(x => new
+                {
+                    Module = x,
+                    UserDescriptor = x.ControllerUser() != null ? new ReflectedControllerDescriptor(x.ControllerUser()) : null,
+                    AdminDescriptor = x.ControllerAdmin() != null ? new ReflectedControllerDescriptor(x.ControllerAdmin()) : null,
+                }).Select(x => new
+                {
+                    x.Module,
+                    UserActions = x.UserDescriptor != null ? x.UserDescriptor.GetCanonicalActions().Where(y => y.IsDefined(moduleActionAttributeType, true)).ToDictionary(y => y.ActionName, y => "Общее: " + moduleActionGetDisplayName(y)) : new Dictionary<string, string>(),
+                    AdminActions = x.AdminDescriptor != null ? x.AdminDescriptor.GetCanonicalActions().Where(y => y.IsDefined(moduleActionAttributeType, true)).ToDictionary(y => y.ActionName, y => "Администрирование: " + moduleActionGetDisplayName(y)) : new Dictionary<string, string>(),
+                }).ToDictionary(x => x.Module, x => x.UserActions.Merge(x.AdminActions).OrderBy(y => y.Value).ToDictionary(y => y.Key, y => y.Value));
 
-            model.ModulesActions = modulesActions.
-                Select(x => new { Group = new SelectListGroup() { Name = x.Key.Caption }, Items = x.Value, Module = x.Key }).
-                SelectMany(x => x.Items.Select(y => new SelectListItem() { Text = y.Value, Value = $"{x.Module.ID}_{y.Key}", Group = x.Group })).ToList();
+                model.ModulesActions = modulesActions.
+                    Select(x => new { Group = new SelectListGroup() { Name = x.Key.Caption }, Items = x.Value, Module = x.Key }).
+                    SelectMany(x => x.Items.Select(y => new SelectListItem() { Text = y.Value, Value = $"{x.Module.ID}_{y.Key}", Group = x.Group })).ToList();
 
-            model.Routes = DB.Routes
-                    .Where(x => x.IdModule == module.ID)
-                    .OrderBy(x => x.IdRoutingType)
-                    .ToList()
-                    .Select(x => new { Route = x, Item = ItemTypeFactory.GetItemOfType(x.IdItemType, x.IdItem) })
-                    .Select(x => new Model.RouteInfo() { Route = x.Route, ItemName = x.Route.IdItem > 0 ? (x.Item != null ? x.Item.ToString() : "Не найден") : "Без объекта" })
-                    .ToList();
+                model.Routes = db.Routes
+                        .Where(x => x.IdModule == module.ID)
+                        .OrderBy(x => x.IdRoutingType)
+                        .ToList()
+                        .Select(x => new { Route = x, Item = ItemTypeFactory.GetItemOfType(x.IdItemType, x.IdItem) })
+                        .Select(x => new Model.RouteInfo() { Route = x.Route, ItemName = x.Route.IdItem > 0 ? (x.Item != null ? x.Item.ToString() : "Не найден") : "Без объекта" })
+                        .ToList();
+            }
 
             return this.display("routing_module.cshtml", model);
         }

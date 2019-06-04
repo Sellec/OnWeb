@@ -1,36 +1,28 @@
-﻿using System.Linq;
-using System.Web.Mvc;
+﻿using System;
+using System.Linq;
 
 namespace OnWeb.Plugins.Auth
 {
     using Core.Configuration;
-    using Core.DB;
-    using Core.Items;
-    using Core.Modules;
-    using Core.Users;
-    using Core.Exceptions;
     using CoreBind.Modules;
-    using Core.Types;
-    using Core.Modules;
-    using Core.Routing;
-    using CoreBind.Modules;
-    using CoreBind.Routing;
-    using Core.DB;
-    using Core.Journaling;
-    using OnWeb.Plugins.Auth.Model;
+    using Model;
 
-    public class ModuleAuthControllerAdmin : ModuleControllerAdmin<ModuleAuth, CoreContext, Model.ConfigurationSaveModel>
+    public class ModuleAuthControllerAdmin : ModuleControllerAdmin<ModuleAuth, Design.Model.ModuleSettings, Configuration>
     {
-        public override ActionResult Configuration()
+        protected override void ConfigurationViewFill(Design.Model.ModuleSettings viewModelForFill, out string viewName)
         {
-            var model = new Design.Model.ModuleSettings();
-            model.Roles = (from p in DB.Role orderby p.NameRole ascending select p).ToList();
-            model.EventTypes = (from p in DB.UserLogHistoryEventType orderby p.NameEventType ascending select p).ToList();
-
-            return View("ModuleSettings.cshtml", model);
+            using (var db = Module.CreateUnitOfWork())
+            {
+                viewModelForFill.ApplyConfiguration(Module.GetConfiguration<ModuleConfiguration>());
+                viewModelForFill.Roles = (from p in db.Role orderby p.NameRole ascending select p).ToList();
+                viewModelForFill.Roles.Insert(0, new Core.DB.Role() { IdRole = 0, NameRole = "Не выбрано" });
+                viewModelForFill.EventTypes = (from p in db.UserLogHistoryEventType orderby p.NameEventType ascending select p).ToList();
+                viewModelForFill.EventTypes.Insert(0, new Core.DB.UserLogHistoryEventType() { IdEventType = 0, NameEventType = "Не выбрано" });
+                viewName = "ModuleSettings.cshtml";
+            }
         }
 
-        protected override ModuleConfiguration<ModuleAuth> ConfigurationSaveCustom(ConfigurationSaveModel formData, out string outputMessage)
+        protected override ModuleConfiguration<ModuleAuth> ConfigurationSaveCustom(Configuration formData, out string outputMessage)
         {
             var cfg = Module.GetConfigurationManipulator().GetEditable<ModuleConfiguration>();
 

@@ -75,6 +75,9 @@ namespace OnWeb.CoreBind.Providers
                  * Ищем модуль, к которому обращаются запросом.
                  * */
                 module = AppCore.Get<ModulesManager<ApplicationCore>>().GetModule(moduleName);
+                if (int.TryParse(moduleName, out int moduleId) && moduleId.ToString() == moduleName)
+                    module = AppCore.Get<ModulesManager<ApplicationCore>>().GetModule(moduleId);
+
                 if (module == null) throw new Core.Exceptions.ErrorCodeException(HttpStatusCode.NotFound, $"Адрес '{moduleName}' не найден.");
 
                 /*
@@ -124,7 +127,7 @@ namespace OnWeb.CoreBind.Providers
             }
         }
 
-        private IController CreateController(Routing.ControllerType controllerType, ModuleCore module, RouteValueDictionary routeValues)
+        private IController CreateController(ControllerType controllerType, ModuleCore module, RouteValueDictionary routeValues)
         {
             var targetType = module.ControllerTypes.GetValueOrDefault(controllerType.ControllerTypeID);
             if (targetType == null) throw new NotSupportedException(controllerType.ErrorCannotFindControllerTypeSpecified(module, routeValues));

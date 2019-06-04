@@ -1,3 +1,4 @@
+@model CoreBind.Modules.Configuration.SaveModel
 @{ 
     Layout = nameof(Plugins.Admin) + "/Design/baseAdmin.cshtml";
     var moduleAdmin = AppCore.Get<Plugins.Admin.ModuleAdmin>();
@@ -21,7 +22,7 @@ $(document).ready(function(){
 });
 </script>
 @RenderSection("scripts", false)
-<form id="config_form" action="/@moduleAdmin.UrlName/madmin/@Module.UrlName/ConfigurationSave" method="post">
+<form id="config_form" action="/@moduleAdmin.UrlName/madmin/@Module.IdModule/ConfigurationSave" method="post">
     <table width='100%' id='table_results' class='admtable'>
         <tr>
             <th style="min-width:150px;" width='50%'>Параметр</th>
@@ -32,8 +33,8 @@ $(document).ready(function(){
             <td><b>@Module.Caption</b></td>
         </tr>
         <tr>
-            <td>Класс модуля:</td>
-            <td><b>@Module.GetType().FullName</b></td>
+            <td>Query-тип модуля и использованная реализация:</td>
+            <td><b>@Module.QueryType.FullName -> @Module.GetType().FullName</b></td>
         </tr>
         <tr class="registered">
             <td>ID модуля:</td>
@@ -42,6 +43,13 @@ $(document).ready(function(){
         <tr class="registered">
             <td>Использующееся URL-доступное имя модуля:</td>
             <td><b>@Module.UrlName</b></td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(x => x.UrlName)</td>
+            <td>
+                @Html.TextBoxFor(x => x.UrlName, new { size = 30 })<br />
+                @Html.ValidationMessageFor(x => x.UrlName)
+            </td>
         </tr>
         @RenderSection("ModuleConfiguration", false)
         <tr>

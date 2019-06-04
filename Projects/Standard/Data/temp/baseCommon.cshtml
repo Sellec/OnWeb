@@ -20,7 +20,6 @@
         this.Keywords = Config.site_keys.Replace(" \"", "&quot;");
     }
 
-    var userContextCurrent = AppCore.GetUserContextManager().GetCurrentUserContext();
     var moduleAdmin = AppCore.GetModulesManager().GetModule<ModuleAdmin>();
 }
 
@@ -143,12 +142,12 @@
                         </ul>
                         <div class="info-top-list clearfix">
                             <div class="info-top-list__item">
-                                @if (!userContextCurrent.IsGuest)
+                                @if (!CurrentUserContext.IsGuest)
                                 {
                                     <a href="@(Url.CreateRoute<ModuleCustomer, ModuleControllerCustomer>())" class="top-user">
                                         <div class="top-user__content">
                                             <div class="top-user__img-block">
-                                                <img src="@(userContextCurrent.GetData().IdPhoto.HasValue ? "/fm/imageCrop/" + userContextCurrent.GetData().IdPhoto + "?MaxHeight=100&MaxWidth=100" : "/data/images/nophoto_user.jpg")" alt="" class="top-user__img">
+                                                <img src="@(CurrentUserContext.GetData().IdPhoto.HasValue ? "/fm/imageCrop/" + CurrentUserContext.GetData().IdPhoto + "?MaxHeight=100&MaxWidth=100" : "/data/images/nophoto_user.jpg")" alt="" class="top-user__img">
                                             </div>
                                             <div class="top-user__name">Личный кабинет</div>
                                         </div>
@@ -213,7 +212,7 @@
     @RenderSection("scripts", false)
     @RenderSection("stats", false)
 
-    @if (userContextCurrent.IsSuperuser)
+    @if (CurrentUserContext.IsSuperuser)
     {
         var isShow = Request.Params.HasKey("queries");
         var isBatch = false;

@@ -146,13 +146,19 @@ namespace OnWeb.Core.Modules
             var permissionCheck = module.CheckPermission(context, ModuleCore.PermissionSaveConfiguration);
             if (permissionCheck == CheckPermissionResult.Denied) return ApplyConfigurationResult.PermissionDenied;
 
+            var moduleType = typeof(TModule);
+            var moduleCoreAttribute = moduleType.GetCustomAttribute<ModuleCoreAttribute>();
+
+            var urlNameEncoded = System.Web.HttpUtility.UrlEncode(configuration.UrlName);
+            configuration.UrlName = urlNameEncoded;
+
             using (var db = this.CreateUnitOfWork())
             using (var scope = db.CreateScope())
             {
                 var moduleConfig = db.Module.FirstOrDefault(x => x.IdModule == module.ID);
                 if (moduleConfig == null)
                 {
-                    moduleConfig = new DB.ModuleConfig() { UniqueKey = typeof(TModule).FullName, DateChange = DateTime.Now, IdUserChange = 0 };
+                    moduleConfig = new ModuleConfig() { UniqueKey = typeof(TModule).FullName, DateChange = DateTime.Now, IdUserChange = 0 };
                     db.Module.AddOrUpdate(moduleConfig);
                 }
 
@@ -164,6 +170,7 @@ namespace OnWeb.Core.Modules
                 scope.Commit();
 
                 module._moduleId = moduleConfig.IdModule;
+                module._moduleUrlName = string.IsNullOrEmpty(configuration.UrlName) ? moduleCoreAttribute.DefaultUrlName : configuration.UrlName;
                 moduleConfigurationManipulator._valuesProviderUsable.Load(moduleConfig.Configuration);
             }
 

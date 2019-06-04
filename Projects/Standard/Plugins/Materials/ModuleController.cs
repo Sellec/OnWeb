@@ -9,7 +9,7 @@ namespace OnWeb.Plugins.Materials
     /// <summary>
     /// Представляет контроллер для панели управления.
     /// </summary>
-    public class ModuleController : ModuleControllerUser<ModuleMaterials, DB.DataLayerContext>
+    public class ModuleController : ModuleControllerUser<ModuleMaterials>
     {
         public override ActionResult Index()
         {
@@ -19,9 +19,11 @@ namespace OnWeb.Plugins.Materials
         [ModuleAction("newsAll")]
         public ActionResult ViewNewsAll()
         {
-            var data = DB.News.Where(x => !x.Block).OrderByDescending(x => x.date).ToList();
-
-            return this.display("NewsList.cshtml", data);
+            using (var db = Module.CreateUnitOfWork())
+            {
+                var data = db.News.Where(x => !x.Block).OrderByDescending(x => x.date).ToList();
+                return this.display("NewsList.cshtml", data);
+            }
         }
 
         [ModuleAction("news")]
@@ -29,19 +31,19 @@ namespace OnWeb.Plugins.Materials
         {
             if (!IdNews.HasValue || IdNews.Value <= 0) throw new Exception("Не указан номер новости.");
 
-            var data = DB.News.Where(x => x.id == IdNews.Value).FirstOrDefault();
-            if (data == null) throw new Exception("Указанная новость не найдена.");
-
-            if (data.Block)
+            using (var db = Module.CreateUnitOfWork())
             {
-                if (AppCore.GetUserContextManager().GetCurrentUserContext().IsSuperuser) throw new Exception("Указанная новость удалена (сообщение для суперпользователя).");
-                else throw new Exception("Указанная новость не найдена.");
+                var data = db.News.Where(x => x.id == IdNews.Value).FirstOrDefault();
+                if (data == null) throw new Exception("Указанная новость не найдена.");
+
+                if (data.Block)
+                {
+                    if (AppCore.GetUserContextManager().GetCurrentUserContext().IsSuperuser) throw new Exception("Указанная новость удалена (сообщение для суперпользователя).");
+                    else throw new Exception("Указанная новость не найдена.");
+                }
+
+                return this.display("News.cshtml", data);
             }
-
-            return this.display("News.cshtml", data);
         }
-
-
     }
-
 }

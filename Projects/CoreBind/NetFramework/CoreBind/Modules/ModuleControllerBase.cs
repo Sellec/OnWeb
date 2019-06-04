@@ -69,8 +69,8 @@ namespace OnWeb.CoreBind.Modules
 
         internal ModuleControllerBase()
         {
-            var extractedType = OnUtils.Types.TypeHelpers.ExtractGenericType(this.GetType(), typeof(ModuleControllerUser<,>));
-            if (extractedType == null) throw new TypeAccessException($"Тип '{typeof(ModuleControllerBase).FullName}' должен находиться в цепочке наследования после '{typeof(ModuleControllerUser<>).FullName}' или '{typeof(ModuleControllerUser<,>).FullName}'");
+            var extractedType = OnUtils.Types.TypeHelpers.ExtractGenericType(this.GetType(), typeof(ModuleControllerUser<>));
+            if (extractedType == null) throw new TypeAccessException($"Тип '{typeof(ModuleControllerBase).FullName}' должен находиться в цепочке наследования после '{typeof(ModuleControllerUser<>).FullName}' или '{typeof(ModuleControllerUser<>).FullName}'");
         }
 
         #region ICoreComponent

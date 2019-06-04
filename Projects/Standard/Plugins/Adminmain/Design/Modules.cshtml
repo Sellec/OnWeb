@@ -21,7 +21,8 @@
             $("a", tr_elem).each(function(){
                 $(this).attr('href', $(this).attr('href') + data.@nameof(Plugins.Adminmain.Model.Module.UrlName));
             });
-            $("a.link_ext", tr_elem).attr('href', '/@moduleAdmin.UrlName/mnadmin/' + data.@nameof(Plugins.Adminmain.Model.Module.UrlName) + '/config');
+            if (!data.IsConfigAllowed) $("a.js-link__settings", tr_elem).remove();
+            $("a.js-link__ext", tr_elem).attr('href', '/@moduleAdmin.UrlName/mnadmin/' + data.@nameof(Plugins.Adminmain.Model.Module.Id) + '/config');
         }, null, function(){
             $('a.link_delete', this).click(function(e){
                 e.preventDefault();
@@ -35,8 +36,25 @@
                 }
             });
 
+            $("a.js-link__ext", this).click(function (e) {
+                e.preventDefault();
+                var url = $(this).attr('href').replace("/mnadmin/", "/madmin/");
+                $("#containerForLoading").html("<img src='/data/img/loading.gif' />").requestLoad(url, null, function (result, message) {
+                    if (result != JsonResult.OK)
+                        $(this).html("");
+
+                    if (message.length > 0) {
+                        if (result != JsonResult.OK)
+                            $(this).html(message);
+                        else 
+                            alert(message);
+                    }
+                });
+            })
+
             $("span#countRegistered").text($("tr.TrElem", this).length);
         });
+
     });
 </script>
 <h2>Модули</h2>
@@ -52,8 +70,8 @@
                 <thead>
                     <tr>
                         <th style="width:15px">№</th>
-                        <th style="width:150px">Название</th>
-                        <th>Имя типа модуля</th>
+                        <th style="width:150px" class="tablesorter-headerAsc">Название</th>
+                        <th>Query-тип модуля</th>
                         <th style="width:200px">URL-доступное имя модуля</th>
                         <th>Действия</th>
                     </tr>
@@ -70,13 +88,12 @@
                     <td class="left"></td>
                     <td class="left"></td>
                     <td>
-                        <a href='/@moduleAdmin.UrlName/mnadmin/@Module.UrlName/modedit/' class='link_ext' target="_blank">Редактировать</a><br />
+                        <a href='/@moduleAdmin.UrlName/mnadmin/@Module.UrlName/modedit/' class='js-link__ext js-link__settings' target="_blank">Редактировать</a><br />
                     </td>
                 </tr>
             </table>
         </td>
-        <td style='width:50px;'></td>
-        <td style='width:100%;vertical-align:top;align:left;padding-top:21px;' id="containerForLoading">
+        <td style='width:100%;vertical-align:top;align:left;padding-top:21px;padding-left:15px;' id="containerForLoading">
 
             <h4> </h4>
             <div id='moduleData'></div>

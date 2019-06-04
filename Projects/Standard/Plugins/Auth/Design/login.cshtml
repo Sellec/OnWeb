@@ -5,7 +5,7 @@
 @model Auth.Design.Model.Login
 @{
     Layout = "baseAuth.cshtml";
-    Title = !AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest ? "Управление профилем" : "Войти в систему";
+    Title = !CurrentUserContext.IsGuest ? "Управление профилем" : "Войти в систему";
     var moduleAdmin = AppCore.Get<Admin.ModuleAdmin>();
 }
 
@@ -25,7 +25,7 @@
 
 <div class="login-block">
     <div class="cover">
-        @if (!AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest != true)
+        @if (!CurrentUserContext.IsGuest != true)
         {
             @RenderPartial("LoginFormInner.cshtml")
         }

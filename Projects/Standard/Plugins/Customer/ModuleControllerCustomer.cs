@@ -17,17 +17,19 @@ namespace OnWeb.Plugins.Customer
     {
         protected override void onDisplayModule(object model)
         {
-            var tags = (from p in DB.UserEntity where p.IsTagged group p.Tag by p.Tag into gr orderby gr.Key select gr.Key).ToList();
+            using (var db = Module.CreateUnitOfWork())
+            {
+                var tags = (from p in db.UserEntity where p.IsTagged group p.Tag by p.Tag into gr orderby gr.Key select gr.Key).ToList();
 
-            var externalParts = new Hashtable();
-            //externalParts["/".this.getName()."/external/energy/counters"] = "Счетчики";
+                var externalParts = new Hashtable();
+                //externalParts["/".this.getName()."/external/energy/counters"] = "Счетчики";
 
-            this.assign("data", AppCore.GetUserContextManager().GetCurrentUserContext().GetData());
+                this.assign("data", AppCore.GetUserContextManager().GetCurrentUserContext().GetData());
 
-            this.assign("customer_tags", tags);
-            this.assign("externalParts", externalParts);
-            this.assign("is_customer", 1);
-
+                this.assign("customer_tags", tags);
+                this.assign("externalParts", externalParts);
+                this.assign("is_customer", 1);
+            }
         }
 
         [ModuleAction(null, ModulesConstants.PermissionAccessUserString)]
@@ -199,6 +201,7 @@ namespace OnWeb.Plugins.Customer
                     if (!ModelState.Keys.Contains("passwordNew")) result.Add("Не указан новый пароль.");
                 }
 
+                //todo сделать сохранение пароля.
                 if (result.Count == 0)
                 {
                     data_.password = UsersExtensions.hashPassword(model.passwordNew);
@@ -210,7 +213,6 @@ namespace OnWeb.Plugins.Customer
                 result.Add(ex.Message);
                 success = false;
             }
-            if (success) DB.SaveChanges();// else DB.RevertChanges();
 
             return this.ReturnJson(success, result.Count > 0 ? " - " + string.Join("\r\n - ", result) : "");
         }

@@ -26,7 +26,7 @@ namespace OnWeb.CoreBind.Routing
         }
 
         /// <summary>
-        /// См. <see cref="ControllerType.IsThisRequestIsThisControllerType(HttpContext, string)"/>.
+        /// См. <see cref="ControllerType.IsThisRequestIsThisControllerType(HttpRequestBase, string)"/>.
         /// </summary>
         public override bool IsThisRequestIsThisControllerType(HttpRequestBase request, string relativeURL)
         {

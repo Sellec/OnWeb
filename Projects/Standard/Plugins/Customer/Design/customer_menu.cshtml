@@ -5,7 +5,7 @@
 {
     foreach (var tag in ViewBag.customer_tags) { <a href="/customer/tag/@tag"><i class="fa fa-tags"></i> @tag</a> }
 }*@
-@if (!AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest)
+@if (!CurrentUserContext.IsGuest)
 {
     <a href='@(Url.CreateRoute<ModuleCustomer, ModuleControllerCustomer>())'><i class="fa fa-info-circle"></i> Общая информация</a></li>
     <a href='@(Url.CreateRoute<ModuleCustomer, ModuleControllerCustomer>(x=>x.Profile()))' class='propanel'><i class="fa fa-user"></i> Данные профиля</a>

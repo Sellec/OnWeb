@@ -1,12 +1,4 @@
-@model CoreBind.Modules.Configuration.SaveModel
 @{ Layout = "AdminForModules/Design/baseModuleEdit.cshtml"; }
 
 @section ModuleConfiguration {
-    <tr>
-        <td>@Html.LabelFor(x => x.ModuleName)</td>
-        <td>
-            @Html.TextBoxFor(x => x.ModuleName, new { size = 30 })<br />
-            @Html.ValidationMessageFor(x => x.ModuleName)
-        </td>
-    </tr>
 }

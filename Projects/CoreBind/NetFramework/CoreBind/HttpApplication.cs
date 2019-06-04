@@ -238,14 +238,18 @@ namespace OnWeb.CoreBind
             catch (ThreadAbortException) { throw; }
             catch (Exception ex) { Debug.WriteLine("OnBeginRequest: " + ex.Message); }
 
-            while (_requestSpecificDisposables.Count > 0)
+            var requestSpecificDisposables = _requestSpecificDisposables;
+            if (requestSpecificDisposables != null)
             {
-                var item = _requestSpecificDisposables.Dequeue();
-                try
+                while (requestSpecificDisposables.Count > 0)
                 {
-                    item.Dispose();
+                    var item = requestSpecificDisposables.Dequeue();
+                    try
+                    {
+                        item.Dispose();
+                    }
+                    catch (Exception ex) { Debug.WriteLine("TraceHttpApplication.EndRequest Disposables: {0}", ex.Message); }
                 }
-                catch (Exception ex) { Debug.WriteLine("TraceHttpApplication.EndRequest Disposables: {0}", ex.Message); }
             }
             _requestSpecificDisposables = null;
 

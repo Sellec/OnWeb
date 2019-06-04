@@ -8,7 +8,7 @@
 @if (ViewBag.has_result == true)
 {<text>@ViewBag.result</text>}
 
-@if (!AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest)
+@if (!CurrentUserContext.IsGuest)
 {
     <p>Вы хотите удалить аккаунт?</p>
     <form action='/@Module.UrlName/del2' method='post'>

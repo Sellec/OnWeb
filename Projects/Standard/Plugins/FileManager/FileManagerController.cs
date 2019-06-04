@@ -16,7 +16,7 @@ namespace OnWeb.Plugins.FileManager
     using Core.Routing;
     using CoreBind.Routing;
 
-    public class FileManagerController : ModuleControllerUser<FileManager, UnitOfWork<DB.File>>
+    public class FileManagerController : ModuleControllerUser<FileManager>
     {
         public override ActionResult Index()
         {
@@ -98,13 +98,16 @@ namespace OnWeb.Plugins.FileManager
             {
                 if (!IdFile.HasValue) throw new ArgumentNullException(nameof(IdFile), "Не указан номер файла.");
 
-                var file = DB.Repo1.Where(x => x.IdFile == IdFile.Value).Select(x => new { x.PathFile, x.NameFile }).FirstOrDefault();
-                if (file == null) throw new Exception("Файл не найден.");
+                using (var db = Module.CreateUnitOfWork())
+                {
+                    var file = db.Repo1.Where(x => x.IdFile == IdFile.Value).Select(x => new { x.PathFile, x.NameFile }).FirstOrDefault();
+                    if (file == null) throw new Exception("Файл не найден.");
 
-                var rootDirectory = System.Web.Hosting.HostingEnvironment.MapPath("/");
+                    var rootDirectory = System.Web.Hosting.HostingEnvironment.MapPath("/");
 
-                byte[] fileBytes = System.IO.File.ReadAllBytes(Path.Combine(rootDirectory, file.PathFile));
-                return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, file.NameFile);
+                    byte[] fileBytes = System.IO.File.ReadAllBytes(Path.Combine(rootDirectory, file.PathFile));
+                    return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, file.NameFile);
+                }
             }
             catch (Exception ex)
             {
@@ -124,26 +127,29 @@ namespace OnWeb.Plugins.FileManager
                 if (!IdFile.HasValue) filePath = "data/img/files/argumentzero.jpg"; //Не указан номер файла.
                 else
                 {
-                    var file = DB.Repo1.Where(x => x.IdFile == IdFile.Value).Select(x => new { x.PathFile, x.NameFile }).FirstOrDefault();
-                    if (file == null) filePath = "data/img/files/notfound.jpg"; //Файл не найден.
-                    else
+                    using (var db = Module.CreateUnitOfWork())
                     {
-                        if (!System.IO.File.Exists(Path.Combine(rootDirectory, file.PathFile)) && !System.IO.File.Exists(Path.Combine(rootDirectory, "bin", file.PathFile)))
-                        {
-                            filePath = "data/img/files/notfound.jpg"; //Файл не найден.
-                            if (Debug.IsDeveloper)
-                            {
-                                var paramss = string.Join("&", new List<string>() { !MaxWidth.HasValue ? null : "MaxWidth=" + MaxWidth.Value, !MaxHeight.HasValue ? null : "MaxHeight=" + MaxHeight.Value }.
-                                Where(x => !string.IsNullOrEmpty(x)));
-
-                                var url = "http://dombonus.ru/fm/image/" + IdFile.Value + (!string.IsNullOrEmpty(paramss) ? "?" + paramss : "");
-                                return Redirect(url);
-                            }
-                        }
+                        var file = db.Repo1.Where(x => x.IdFile == IdFile.Value).Select(x => new { x.PathFile, x.NameFile }).FirstOrDefault();
+                        if (file == null) filePath = "data/img/files/notfound.jpg"; //Файл не найден.
                         else
                         {
-                            filePath = file.PathFile;
-                            fileName = file.NameFile;
+                            if (!System.IO.File.Exists(Path.Combine(rootDirectory, file.PathFile)) && !System.IO.File.Exists(Path.Combine(rootDirectory, "bin", file.PathFile)))
+                            {
+                                filePath = "data/img/files/notfound.jpg"; //Файл не найден.
+                                if (Debug.IsDeveloper)
+                                {
+                                    var paramss = string.Join("&", new List<string>() { !MaxWidth.HasValue ? null : "MaxWidth=" + MaxWidth.Value, !MaxHeight.HasValue ? null : "MaxHeight=" + MaxHeight.Value }.
+                                    Where(x => !string.IsNullOrEmpty(x)));
+
+                                    var url = "http://dombonus.ru/fm/image/" + IdFile.Value + (!string.IsNullOrEmpty(paramss) ? "?" + paramss : "");
+                                    return Redirect(url);
+                                }
+                            }
+                            else
+                            {
+                                filePath = file.PathFile;
+                                fileName = file.NameFile;
+                            }
                         }
                     }
                 }
@@ -198,27 +204,30 @@ namespace OnWeb.Plugins.FileManager
                 if (!IdFile.HasValue) filePath = "data/img/files/argumentzero.jpg"; //Не указан номер файла.
                 else
                 {
-                    var file = DB.Repo1.Where(x => x.IdFile == IdFile.Value).Select(x => new { x.PathFile, x.NameFile, x.DateChange }).FirstOrDefault();
-                    if (file == null) filePath = "data/img/files/notfound.jpg"; //Файл не найден.
-                    else
+                    using (var db = Module.CreateUnitOfWork())
                     {
-                        if (!System.IO.File.Exists(Path.Combine(rootDirectory, file.PathFile)) && !System.IO.File.Exists(Path.Combine(rootDirectory, "bin", file.PathFile)))
-                        {
-                            filePath = "data/img/files/notfound.jpg"; //Файл не найден.
-                            if (Debug.IsDeveloper)
-                            {
-                                var paramss = string.Join("&", new List<string>() { !MaxWidth.HasValue ? null : "MaxWidth=" + MaxWidth.Value, !MaxHeight.HasValue ? null : "MaxHeight=" + MaxHeight.Value }.
-                                Where(x => !string.IsNullOrEmpty(x)));
-
-                                var url = "http://dombonus.ru/fm/imageCrop/" + IdFile.Value + (!string.IsNullOrEmpty(paramss) ? "?" + paramss : "");
-                                return Redirect(url);
-                            }
-                        }
+                        var file = db.Repo1.Where(x => x.IdFile == IdFile.Value).Select(x => new { x.PathFile, x.NameFile, x.DateChange }).FirstOrDefault();
+                        if (file == null) filePath = "data/img/files/notfound.jpg"; //Файл не найден.
                         else
                         {
-                            filePath = file.PathFile;
-                            fileName = file.NameFile;
-                            dbChangeTime = file.DateChange.FromTimestamp();
+                            if (!System.IO.File.Exists(Path.Combine(rootDirectory, file.PathFile)) && !System.IO.File.Exists(Path.Combine(rootDirectory, "bin", file.PathFile)))
+                            {
+                                filePath = "data/img/files/notfound.jpg"; //Файл не найден.
+                                if (Debug.IsDeveloper)
+                                {
+                                    var paramss = string.Join("&", new List<string>() { !MaxWidth.HasValue ? null : "MaxWidth=" + MaxWidth.Value, !MaxHeight.HasValue ? null : "MaxHeight=" + MaxHeight.Value }.
+                                    Where(x => !string.IsNullOrEmpty(x)));
+
+                                    var url = "http://dombonus.ru/fm/imageCrop/" + IdFile.Value + (!string.IsNullOrEmpty(paramss) ? "?" + paramss : "");
+                                    return Redirect(url);
+                                }
+                            }
+                            else
+                            {
+                                filePath = file.PathFile;
+                                fileName = file.NameFile;
+                                dbChangeTime = file.DateChange.FromTimestamp();
+                            }
                         }
                     }
                 }

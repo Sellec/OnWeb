@@ -68,7 +68,7 @@ namespace OnWeb.CoreBind.Routing
                 if (module == null) throw new HandledException("", new NotSupportedException($"Модуль типа '{typeof(TModule).FullName}' не найден среди активных модулей."));
 
                 var controllerType = typeof(TModuleController);
-                if (!controllerType.IsAssignableToGenericType(typeof(ModuleControllerUser<>)) && !controllerType.IsAssignableToGenericType(typeof(ModuleControllerUser<,>)))
+                if (!controllerType.IsAssignableToGenericType(typeof(ModuleControllerUser<>)) && !controllerType.IsAssignableToGenericType(typeof(ModuleControllerUser<>)))
                     throw new HandledException("", new NotSupportedException($"Передаваемый тип контроллера должен быть наследником универсального типа {typeof(ModuleControllerUser<>).FullName} или {typeof(ModuleControllerAdmin<>).FullName}."));
 
                 var controllerTypeCandidates = module.ControllerTypes.Where(x => controllerType.IsAssignableFrom(x.Value)).ToList();

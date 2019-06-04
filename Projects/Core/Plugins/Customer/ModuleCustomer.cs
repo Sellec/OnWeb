@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OnUtils.Data;
+using System;
 using System.Collections.Generic;
 
 namespace OnWeb.Plugins.Customer
@@ -11,7 +12,7 @@ namespace OnWeb.Plugins.Customer
     /// Модуль для управления пользователями и личным кабинетом.
     /// </summary>
     [ModuleCore("Личный кабинет", DefaultUrlName = "Customer")]
-    public abstract class ModuleCustomer : ModuleCore<ModuleCustomer>
+    public abstract class ModuleCustomer : ModuleCore<ModuleCustomer>, IUnitOfWorkAccessor<CoreContext>
     {
         public const string PERM_MANAGEUSERS = "manage_users";
         public const string PERM_MANAGEROLES = "manage_roles";

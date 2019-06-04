@@ -1,7 +1,4 @@
-﻿@{ 
-    var userContextCurrent = AppCore.GetUserContextManager().GetCurrentUserContext();
-}
-@helper submodule(IList<Core.Items.ItemBase> links)
+﻿@helper submodule(IList<Core.Items.ItemBase> links)
 {
     if (links != null)
     {
@@ -29,6 +26,12 @@
     }
 }
 
+@if (Request.Url.ToString().Contains("/madmin/"))
+{
+    @: @RenderBody()
+}
+else
+{
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -200,7 +203,7 @@
             <li class='padd'><a href='/' target='_blank' class=''>Главная страница</a></li>
             <li>↓ <a href='' class='open_all'>Раскрыть меню</a></li>
             <li>↑ <a href='' class='close_all'>Свернуть меню</a></li>
-            <li class='admin_login'><a href='/admin' title=''>@userContextCurrent.GetData()</a></li>
+            <li class='admin_login'><a href='/admin' title=''>@CurrentUserContext.GetData()</a></li>
         </ul>
     </div>
     <div id="right_panel">
@@ -218,7 +221,7 @@
                         <li class='i_@module.Key.UrlName'>
                             <span class="lmain">
                                 <a href="" title="" class="lmain2">@module.Key.Caption</a>
-                                <a href='/@moduleAdmin.UrlName/mnadmin/@module.Key.UrlName/config/' style='float:right;margin-right:5px;'><img src='/data/img/admin/gear_wheel.png'></a>
+                                <a href='/@moduleAdmin.UrlName/mnadmin/@module.Key.IdModule/config/' style='float:right;margin-right:5px;'><img src='/data/img/admin/gear_wheel.png'></a>
                             </span>
                             @submodule(module.Value)
                         </li>
@@ -233,3 +236,4 @@
     </div>
 </body>
 </html>
+}

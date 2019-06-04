@@ -135,7 +135,7 @@
     <Compile Include="Plugins\Auth\Design\Model\PasswordRestoreSend.cs" />
     <Compile Include="Plugins\Auth\Design\Model\PasswordRestoreVerify.cs" />
     <Compile Include="Plugins\Auth\Model\AuthLoginData.cs" />
-    <Compile Include="Plugins\Auth\Model\ConfigurationSaveModel.cs" />
+    <Compile Include="Plugins\Auth\Model\Configuration.cs" />
     <Compile Include="Plugins\Auth\Model\PasswordRestore.cs" />
     <Compile Include="Plugins\Auth\Model\PasswordRestoreVerify.cs" />
     <Compile Include="Plugins\Auth\ModuleAuthController.cs" />
@@ -1966,7 +1966,7 @@
     <Content Include="Plugins\Adminmain\Design\EditableMenu.cshtml" />
     <Content Include="Plugins\Adminmain\Design\EditableMenuEdit.cshtml" />
     <Content Include="Plugins\Adminmain\Design\admin_adminmain_info.cshtml" />
-    <Content Include="Plugins\Adminmain\Design\admin_adminmain_modules.cshtml" />
+    <Content Include="Plugins\Adminmain\Design\Modules.cshtml" />
     <Content Include="Plugins\Adminmain\Design\admin_adminmain_modules_extensions.cshtml" />
     <Content Include="Plugins\Adminmain\Design\admin_adminmain_rss.cshtml" />
     <Content Include="Plugins\Adminmain\Design\Sitemap.cshtml" />

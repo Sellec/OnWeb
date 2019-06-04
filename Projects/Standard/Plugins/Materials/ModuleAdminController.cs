@@ -6,27 +6,29 @@ using System.Web.Mvc;
 namespace OnWeb.Plugins.Materials
 {
     using AdminForModules.Menu;
-    using Core.Modules;
-    using CoreBind.Modules;
-    using Core.Routing;
     using Core.Items;
     using Core.Journaling;
+    using Core.Routing;
+    using CoreBind.Modules;
 
     /// <summary>
     /// Представляет контроллер для панели управления.
     /// </summary>
-    public class ModuleAdminController : ModuleControllerAdmin<ModuleMaterials, DB.DataLayerContext>
+    public class ModuleAdminController : ModuleControllerAdmin<ModuleMaterials>
     {
         [MenuAction("Новости")]
         public ActionResult News()
         {
-            var showDeleted = Request.Form.GetValues("ShowDeleted")?.Contains("true") ?? false;
-            var query = DB.News.AsQueryable();
-            if (!showDeleted) query = query.Where(x => !x.Block);
+            using (var db = Module.CreateUnitOfWork())
+            {
+                var showDeleted = Request.Form.GetValues("ShowDeleted")?.Contains("true") ?? false;
+                var query = db.News.AsQueryable();
+                if (!showDeleted) query = query.Where(x => !x.Block);
 
-            var model = query.OrderByDescending(x => x.date).ToList();
+                var model = query.OrderByDescending(x => x.date).ToList();
 
-            return this.display("Admin/NewsList.cshtml", model);
+                return this.display("Admin/NewsList.cshtml", model);
+            }
         }
 
         public ActionResult NewsEdit(int? IdNews = null)
@@ -36,11 +38,14 @@ namespace OnWeb.Plugins.Materials
 
             try
             {
-                Plugins.Materials.DB.News data = null;
-                if (!IdNews.HasValue || IdNews.Value <= 0) data = new Plugins.Materials.DB.News();
+                DB.News data = null;
+                if (!IdNews.HasValue || IdNews.Value <= 0) data = new DB.News();
                 else
                 {
-                    data = DB.News.Where(x => x.id == IdNews.Value).FirstOrDefault();
+                    using (var db = Module.CreateUnitOfWork())
+                    {
+                        data = db.News.Where(x => x.id == IdNews.Value).FirstOrDefault();
+                    }
                     if (data == null) throw new Exception("Указанная новость не найдена.");
 
                     if (data.Block)
@@ -69,17 +74,18 @@ namespace OnWeb.Plugins.Materials
             {
                 if (ModelState.IsValid)
                 {
-                    using (var trans = DB.CreateScope())
+                    using (var db = Module.CreateUnitOfWork())
+                    using (var trans = db.CreateScope())
                     {
                         DB.News data = null;
                         if (model.id <= 0)
                         {
                             data = new DB.News() { date = DateTime.Now, user = AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser(), status = true, Block = false };
-                            DB.News.Add(data);
+                            db.News.Add(data);
                         }
                         else
                         {
-                            data = DB.News.Where(x => x.id == model.id).FirstOrDefault();
+                            data = db.News.Where(x => x.id == model.id).FirstOrDefault();
                             if (data == null) throw new Exception("Указанная новость не найдена.");
 
                             if (data.Block)
@@ -93,7 +99,7 @@ namespace OnWeb.Plugins.Materials
                         data.text = model.text;
                         data.short_text = model.short_text;
 
-                        DB.SaveChanges();
+                        db.SaveChanges();
 
                         answer.Data = data.id;
 
@@ -131,17 +137,20 @@ namespace OnWeb.Plugins.Materials
             {
                 if (!IdNews.HasValue || IdNews.Value <= 0) throw new Exception("Не указан номер новости.");
 
-                var data = DB.News.Where(x => x.id == IdNews.Value).FirstOrDefault();
-                if (data == null) throw new Exception("Указанная новость не найдена.");
-
-                if (data.Block)
+                using (var db = Module.CreateUnitOfWork())
                 {
-                    if (AppCore.GetUserContextManager().GetCurrentUserContext().IsSuperuser) throw new Exception("Указанная новость удалена (сообщение для суперпользователя).");
-                    else throw new Exception("Указанная новость не найдена.");
-                }
+                    var data = db.News.Where(x => x.id == IdNews.Value).FirstOrDefault();
+                    if (data == null) throw new Exception("Указанная новость не найдена.");
 
-                data.Block = true;
-                DB.SaveChanges();
+                    if (data.Block)
+                    {
+                        if (AppCore.GetUserContextManager().GetCurrentUserContext().IsSuperuser) throw new Exception("Указанная новость удалена (сообщение для суперпользователя).");
+                        else throw new Exception("Указанная новость не найдена.");
+                    }
+
+                    data.Block = true;
+                    db.SaveChanges();
+                }
 
                 success = true;
                 //result = "Меню было успешно удалено.";
@@ -154,8 +163,5 @@ namespace OnWeb.Plugins.Materials
 
             return ReturnJson(success, result);
         }
-
-
     }
-
 }

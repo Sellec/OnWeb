@@ -108,7 +108,7 @@ namespace OnWeb.Core.Modules
         /// <summary>
         /// Возвращает идентификатор модуля <see cref="ID"/>, представленный в виде GUID.
         /// </summary>
-        public override Guid ModuleID { get;}
+        public override Guid ModuleID { get; }
 
         /// <summary>
         /// Возвращает идентификатор модуля в базе данных.
@@ -161,6 +161,15 @@ namespace OnWeb.Core.Modules
         {
             get => ID;
         }
+
+        /// <summary>
+        /// Возвращает query-тип модуля.
+        /// </summary>
+        public virtual Type QueryType
+        {
+            get => GetType();
+        }
+
         #endregion
 
         #region Блок расширений
@@ -382,7 +391,7 @@ namespace OnWeb.Core.Modules
         /// <exception cref="InvalidOperationException">Возникает, если модуль не зарегистрирован.</exception>
         /// <seealso cref="Configuration.ModuleConfigurationManipulator{TModule}"/>
         /// <seealso cref="GetConfigurationManipulator"/>
-        public TConfiguration GetConfiguration<TConfiguration>() 
+        public TConfiguration GetConfiguration<TConfiguration>()
             where TConfiguration : Configuration.ModuleConfiguration<TSelfReference>, new()
         {
             return _configurationManipulator.GetUsable<TConfiguration>();
@@ -438,5 +447,14 @@ namespace OnWeb.Core.Modules
                 return _moduleUrlName;
             }
         }
+
+        /// <summary>
+        /// Возвращает query-тип модуля.
+        /// </summary>
+        public override Type QueryType
+        {
+            get => typeof(TSelfReference);
+        }
+
     }
 }

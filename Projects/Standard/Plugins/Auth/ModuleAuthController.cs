@@ -63,7 +63,7 @@ namespace OnWeb.Plugins.Auth
                     else throw new BehaviourException(resultReason);
                 }
             }
-            catch(BehaviourException ex)
+            catch (BehaviourException ex)
             {
                 Module.RegisterEvent(EventType.Warning, "Ошибка авторизации", ex.Message, ex.InnerException);
                 message = ex.Message;
@@ -197,54 +197,57 @@ namespace OnWeb.Plugins.Auth
 
                 if (ModelState.IsValid)
                 {
-                    var sql = from p in DB.Users
-                              where (!isPhone && p.email.Length > 0 && p.email.ToLower() == model.email.ToLower()) || (isPhone && p.phone.Length > 0 && p.phone.ToLower() == model.phone.ToLower())
-                              select p;
-
-                    var user = sql.FirstOrDefault();
-
-                    if (user == null)
+                    using (var db = Module.CreateUnitOfWork())
                     {
-                        if (!isPhone)
-                            throw new BehaviourException("Указанный Email-адрес не найден на сайте!");
-                        else
-                            throw new BehaviourException("Указанный номер телефона не найден на сайте!");
-                    }
-                    else
-                    {
-                        var codeType = !isPhone ? "email" : "phone";
+                        var sql = from p in db.Users
+                                  where (!isPhone && p.email.Length > 0 && p.email.ToLower() == model.email.ToLower()) || (isPhone && p.phone.Length > 0 && p.phone.ToLower() == model.phone.ToLower())
+                                  select p;
 
-                        using (var scope = DB.CreateScope())
+                        var user = sql.FirstOrDefault();
+
+                        if (user == null)
                         {
                             if (!isPhone)
-                            {
-                                var code = DateTime.Now.Microtime().MD5();
-                                DB.PasswordRemember.Add(new PasswordRemember() { user_id = user.id, code = code });
-
-                                AppCore.Get<IEmailService>().SendMailFromSite(
-                                    user.Caption,
-                                    user.email,
-                                    "Восстановление пароля на сайте",
-                                    this.displayToVar("PasswordRestoreNotificationEmail.cshtml", new Design.Model.PasswordRestoreSend() { User = user, Code = code, CodeType = codeType })
-                                );
-                            }
+                                throw new BehaviourException("Указанный Email-адрес не найден на сайте!");
                             else
-                            {
-                                var code = OnUtils.Utils.StringsHelper.GenerateRandomString("0123456789", 4);
-                                DB.PasswordRemember.Add(new PasswordRemember() { user_id = user.id, code = code });
+                                throw new BehaviourException("Указанный номер телефона не найден на сайте!");
+                        }
+                        else
+                        {
+                            var codeType = !isPhone ? "email" : "phone";
 
-                                AppCore.Get<Core.Messaging.SMS.IService>().SendMessage(user.phone, "Код восстановления пароля: " + code);
+                            using (var scope = db.CreateScope())
+                            {
+                                if (!isPhone)
+                                {
+                                    var code = DateTime.Now.Microtime().MD5();
+                                    db.PasswordRemember.Add(new PasswordRemember() { user_id = user.id, code = code });
+
+                                    AppCore.Get<IEmailService>().SendMailFromSite(
+                                        user.Caption,
+                                        user.email,
+                                        "Восстановление пароля на сайте",
+                                        this.displayToVar("PasswordRestoreNotificationEmail.cshtml", new Design.Model.PasswordRestoreSend() { User = user, Code = code, CodeType = codeType })
+                                    );
+                                }
+                                else
+                                {
+                                    var code = OnUtils.Utils.StringsHelper.GenerateRandomString("0123456789", 4);
+                                    db.PasswordRemember.Add(new PasswordRemember() { user_id = user.id, code = code });
+
+                                    AppCore.Get<Core.Messaging.SMS.IService>().SendMessage(user.phone, "Код восстановления пароля: " + code);
+                                }
+
+                                db.SaveChanges();
+                                scope.Commit();
                             }
 
-                            DB.SaveChanges();
-                            scope.Commit();
+                            answer.Data = codeType;
+                            if (!isPhone)
+                                answer.FromSuccess("На указанный адрес электронной почты был отправлен код подтверждения.");
+                            else
+                                answer.FromSuccess("На указанный номер телефона был отправлен код подтверждения.");
                         }
-
-                        answer.Data = codeType;
-                        if (!isPhone)
-                            answer.FromSuccess("На указанный адрес электронной почты был отправлен код подтверждения.");
-                        else
-                            answer.FromSuccess("На указанный номер телефона был отправлен код подтверждения.");
                     }
                 }
             }
@@ -282,37 +285,40 @@ namespace OnWeb.Plugins.Auth
 
                 if (ModelState.IsValid)
                 {
-                    var res = (from p in DB.PasswordRemember
-                               join u in DB.Users on p.user_id equals u.id
-                               where p.code == model.Code
-                               select new { Password = p, User = u }).FirstOrDefault();
-
-                    if (res == null) ModelState.AddModelError(nameof(model.Code), "Некорректный код подтверждения.");
-                    else
+                    using (var db = Module.CreateUnitOfWork())
                     {
-                        var symbols = new char[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'r', 's', 't', 'u', 'v', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'U', 'V', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-                        var salt = "";
+                        var res = (from p in db.PasswordRemember
+                                   join u in db.Users on p.user_id equals u.id
+                                   where p.code == model.Code
+                                   select new { Password = p, User = u }).FirstOrDefault();
 
-                        var rand = new Random();
-                        for (int i = 0; i < 5; i++)
+                        if (res == null) ModelState.AddModelError(nameof(model.Code), "Некорректный код подтверждения.");
+                        else
                         {
-                            var index = rand.Next(0, symbols.Length - 1);
-                            salt = salt + symbols[index];
+                            var symbols = new char[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'r', 's', 't', 'u', 'v', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'U', 'V', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+                            var salt = "";
+
+                            var rand = new Random();
+                            for (int i = 0; i < 5; i++)
+                            {
+                                var index = rand.Next(0, symbols.Length - 1);
+                                salt = salt + symbols[index];
+                            }
+
+                            using (var scope = new System.Transactions.TransactionScope())
+                            {
+                                db.PasswordRemember.Delete(res.Password);
+
+                                res.User.password = UsersExtensions.hashPassword(model.Password);
+                                res.User.salt = salt;
+
+                                db.SaveChanges();
+
+                                scope.Complete();
+                            }
+
+                            answer.FromSuccess("Новый пароль был сохранен.");
                         }
-
-                        using (var scope = new System.Transactions.TransactionScope())
-                        {
-                            DB.PasswordRemember.Delete(res.Password);
-
-                            res.User.password = UsersExtensions.hashPassword(model.Password);
-                            res.User.salt = salt;
-
-                            DB.SaveChanges();
-
-                            scope.Complete();
-                        }
-
-                        answer.FromSuccess("Новый пароль был сохранен.");
                     }
                 }
             }
@@ -331,8 +337,5 @@ namespace OnWeb.Plugins.Auth
 
             return ReturnJson(answer);
         }
-
-
     }
-
 }

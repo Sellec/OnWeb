@@ -2,7 +2,6 @@
 @{
     Layout = "baseCommon.cshtml";
     Title = "Отсутствует доступ к странице";
-    var userContextCurrent = AppCore.GetUserContextManager().GetCurrentUserContext();
 }
 
 @section breadcrumbs {
@@ -34,7 +33,7 @@
                     }
                 </div>
 
-                @if (userContextCurrent.IsGuest)
+                @if (CurrentUserContext.IsGuest)
                 {
                     <form action='/login/login' method='post' id="enter_login">
                         @Html.Hidden("urlFrom", Url.RequestContext.HttpContext.Request.Url.PathAndQuery)
