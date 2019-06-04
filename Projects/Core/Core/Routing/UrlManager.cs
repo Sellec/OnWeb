@@ -195,9 +195,11 @@ namespace OnWeb.Core.Routing
                         );
                         scope.Commit();
                     }
-                    catch (System.Data.SqlClient.SqlException ex)
+                    catch (Exception ex)
                     {
-                        Debug.WriteLineNoLog($"UrlManager.register({System.Threading.Thread.CurrentThread.ManagedThreadId}) !! with {itemsToRegister.Count} at {DateTime.Now.ToString()} with {ex.Message}");
+                        if (ex.GetType().FullName == "System.Data.SqlClient.SqlException")
+                            Debug.WriteLineNoLog($"UrlManager.register({System.Threading.Thread.CurrentThread.ManagedThreadId}) !! with {itemsToRegister.Count} at {DateTime.Now.ToString()} with {ex.Message}");
+
                         throw;
                     }
                 }
