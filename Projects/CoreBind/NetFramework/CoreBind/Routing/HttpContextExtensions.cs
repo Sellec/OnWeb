@@ -17,16 +17,6 @@ namespace System.Web.Mvc
     {
         const string EXTENSIONPREFIX = "HttpContextExtensions_";
 
-        internal static string RoutingGetURL(this HttpContext context)
-        {
-            return (string)context.Items[EXTENSIONPREFIX + "URL"];
-        }
-
-        internal static string RoutingGetURL(this HttpContextBase context)
-        {
-            return (string)context.Items[EXTENSIONPREFIX + "URL"];
-        }
-
         public static ApplicationCore GetAppCore(this HttpContextBase context)
         {
             return context.Items.Contains(EXTENSIONPREFIX + "ApplicationCore") ? (ApplicationCore)context.Items[EXTENSIONPREFIX + "ApplicationCore"] : null;
