@@ -124,7 +124,7 @@ namespace OnWeb.CoreBind.Routing
 
                     requestContext.RouteData.Values["controller"] = module.UrlName;
                     requestContext.RouteData.Values["action"] = route.Action;
-                    requestContext.RouteData.Values["url"] = requestContext.HttpContext.RoutingGetURL().Replace(route.UrlFull, "");
+                    requestContext.RouteData.Values["url"] = requestContext.HttpContext.Request.Url?.PathAndQuery?.Replace(route.UrlFull, "");
 
                     if (arguments != null)
                         arguments.ForEach(x => requestContext.RouteData.Values[x.ArgumentName] = x.ArgumentValue);

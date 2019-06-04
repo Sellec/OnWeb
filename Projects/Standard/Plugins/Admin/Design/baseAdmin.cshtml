@@ -211,7 +211,7 @@ else
             <div class="wrapper h40"></div>
             <ul>
                 @{
-                    var moduleAdmin = AppCore.GetModulesManager().GetModule<Plugins.Admin.ModuleAdmin>();
+                    var moduleAdmin = AppCore.GetModulesManager().GetModule<Admin.ModuleAdmin>();
                     var menu = moduleAdmin.GetAdminMenuList();
                 }
                 @if (menu != null)
