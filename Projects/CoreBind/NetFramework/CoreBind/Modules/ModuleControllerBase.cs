@@ -240,7 +240,7 @@ namespace OnWeb.CoreBind.Modules
                 if (exception is ErrorCodeException exc)
                 {
                     code = (int)exc.Code;
-                    exception = exception.InnerException;
+                    if (exception.InnerException != null) exception = exception.InnerException;
                 }
 
                 // Не регистрируем HttpRequestValidationException.
