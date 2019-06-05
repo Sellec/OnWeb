@@ -103,8 +103,6 @@ namespace OnWeb.Core.Modules
 
         internal ModuleCore GetModuleInternal(string urlName)
         {
-            Debug.WriteLineNoLog($"GetModuleInternal -> {urlName}");
-
             lock (_syncRoot)
             {
                 var module = (from p in _modules.Select(x => x.Item2).OfType<ModuleCore>() where p._moduleUrlName == urlName select p).FirstOrDefault();

@@ -109,7 +109,7 @@ namespace OnWeb.CoreBind.Modules
 
         #region Методы для переопределения в контроллерах.
         /// <summary>
-        /// Вызывается перед вызовом метода контроллера. Должен использоваться вместо <see cref="OnActionExecuting(ActionExecutingContext)"/>, т.к. <see cref="OnActionExecuting(ActionExecutingContext)"/> закрыт.
+        /// Вызывается перед вызовом метода контроллера. Должен использоваться вместо <see cref="OnActionExecuting(ActionExecutingContext)"/>, т.к. <see cref="OnActionExecuting(ActionExecutingContext)"/> запечатан.
         /// </summary>
         /// <param name="filterContext">Информация о текущем запросе и методе.</param>
         protected virtual void OnBeforeExecution(ActionExecutingContext filterContext)
@@ -118,7 +118,7 @@ namespace OnWeb.CoreBind.Modules
         }
 
         /// <summary>
-        /// Вызывается после вызова метода контроллера. Должен использоваться вместо <see cref="OnActionExecuted(ActionExecutedContext)"/>, т.к. <see cref="OnActionExecuted(ActionExecutedContext)"/> закрыт.
+        /// Вызывается после вызова метода контроллера. Должен использоваться вместо <see cref="OnActionExecuted(ActionExecutedContext)"/>, т.к. <see cref="OnActionExecuted(ActionExecutedContext)"/> запечатан.
         /// </summary>
         /// <param name="filterContext">Информация о текущем запросе и методе.</param>
         protected virtual void OnAfterExecution(ActionExecutedContext filterContext)
@@ -139,7 +139,7 @@ namespace OnWeb.CoreBind.Modules
             var exceptionType = exception.GetType();
 
             int code = 500;
-            if (exception is Core.Exceptions.ErrorCodeException exc) code = (int)exc.Code;
+            if (exception is ErrorCodeException exc) code = (int)exc.Code;
 
             Response.StatusCode = code;
 
@@ -162,7 +162,7 @@ namespace OnWeb.CoreBind.Modules
 
         #region Переопределение стандартного поведения контроллеров ASP.NET MVC.
         /// <summary>
-        /// Закрыт.
+        /// Запечатан.
         /// </summary>
         protected sealed override IActionInvoker CreateActionInvoker()
         {
@@ -172,7 +172,7 @@ namespace OnWeb.CoreBind.Modules
         }
 
         /// <summary>
-        /// Закрыт. Для определения дополнительной логики авторизации следует воспользоваться атрибутом <see cref="AuthorizeAttribute"/>.
+        /// Запечатан. Для определения дополнительной логики авторизации следует воспользоваться атрибутом <see cref="AuthorizeAttribute"/>.
         /// </summary>
         protected sealed override void OnAuthentication(AuthenticationContext filterContext)
         {
@@ -198,7 +198,21 @@ namespace OnWeb.CoreBind.Modules
         }
 
         /// <summary>
-        /// Закрыт. Вместо этого метода следует пользоваться <see cref="OnAfterExecution(ActionExecutedContext)"/>.
+        /// Запечатан. Вместо этого метода следует пользоваться <see cref="OnBeforeExecution(ActionExecutingContext)"/>.
+        /// </summary>
+        protected sealed override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            if (filterContext.ActionDescriptor is ReflectedActionDescriptor)
+            {
+                var attr = (filterContext.ActionDescriptor as ReflectedActionDescriptor).MethodInfo.GetCustomAttributes(typeof(ModuleActionAttribute), true);
+                if (attr == null) throw new InvalidOperationException("Поддерживается вызов только тех методов, к которым применен атрибут '" + typeof(ModuleActionAttribute).FullName + "'");
+            }
+
+            OnBeforeExecution(filterContext);
+        }
+
+        /// <summary>
+        /// Запечатан. Вместо этого метода следует пользоваться <see cref="OnAfterExecution(ActionExecutedContext)"/>.
         /// </summary>
         protected sealed override void OnActionExecuted(ActionExecutedContext filterContext)
         {
@@ -207,7 +221,7 @@ namespace OnWeb.CoreBind.Modules
         }
 
         /// <summary>
-        /// Закрыт. Вместо этого метода следует пользоваться <see cref="ErrorHandled(Exception)"/>.
+        /// Запечатан. Вместо этого метода следует пользоваться <see cref="ErrorHandled(Exception)"/>.
         /// Если <see cref="ErrorHandled(Exception)"/> возвращает null, то включается стандартное поведение <see cref="ControllerBase"/> с выбрасыванием стандартного окна ошибки. 
         /// </summary>
         protected sealed override void OnException(ExceptionContext filterContext)
@@ -223,7 +237,7 @@ namespace OnWeb.CoreBind.Modules
                 }
 
                 int code = 500;
-                if (exception is Core.Exceptions.ErrorCodeException exc)
+                if (exception is ErrorCodeException exc)
                 {
                     code = (int)exc.Code;
                     exception = exception.InnerException;
@@ -275,7 +289,7 @@ namespace OnWeb.CoreBind.Modules
 
             this.RegisterEventWithCode(HttpStatusCode.NotFound, "Указанный адрес не найден", string.Format("Раздел '{0}' в модуле '{1}' отсутствует.", actionName, this.ModuleBase.Caption));
 
-            var result = ErrorHandled(new Core.Exceptions.ErrorCodeException(HttpStatusCode.NotFound, $"Раздел '{actionName}' в модуле '{this.ModuleBase.Caption}' отсутствует."));
+            var result = ErrorHandled(new ErrorCodeException(HttpStatusCode.NotFound, $"Раздел '{actionName}' в модуле '{this.ModuleBase.Caption}' отсутствует."));
             result = PrepareActionResultToCurrentRequestType(result);
             result.ExecuteResult(ControllerContext);
         }
@@ -541,29 +555,14 @@ namespace OnWeb.CoreBind.Modules
 
         #region Переадресация на другие модули.
         /// <summary>
-        /// Выполняет переадресацию к методу в выражении <paramref name="expression"/> для контроллера <typeparamref name="TModuleController"/>. Более подробно см. описание <see cref="Routing.RoutingManager.CreateRoute{TModuleController}(Expression{Func{TModuleController, ActionResult}})"/>.
+        /// Выполняет переадресацию к методу в выражении <paramref name="expression"/> для контроллера <typeparamref name="TModuleController"/>. Более подробно см. описание <see cref="Routing.RoutingManager.CreateRoute{TModule, TModuleController}(Expression{Func{TModuleController, ActionResult}})"/>.
         /// </summary>
-        public RedirectResult Redirect<TModuleController>(Expression<Func<TModuleController, ActionResult>> expression) where TModuleController : ModuleControllerBase
+        public RedirectResult Redirect<TModule, TModuleController>(Expression<Func<TModuleController, ActionResult>> expression)
+            where TModule : ModuleCore<TModule>
+            where TModuleController : IModuleController<TModule>
         {
-            return null;// todo return new RedirectResult(_wrappingController.GetAppCore().Get<Core.Routing.IUrlManager Routing.Manager.Instance.CreateRoute<TModuleController>(expression));
+            return Redirect(AppCore.Get<Routing.RoutingManager>().CreateRoute<TModule, TModuleController>(expression));
         }
-        #endregion
-
-        #region Temp property
-        internal virtual ModuleCore ModuleBase
-        {
-            get => throw new NotImplementedException();
-        }
-        #endregion
-
-        #region Расширения
-        ///// <summary>
-        ///// Предоставляет доступ к расширению настраиваемых полей.
-        ///// </summary>
-        //public Core.ModuleExtensions.CustomFields.ExtensionCustomsFields Fields
-        //{
-        //    get => null; //todo ModuleBase.Fields;
-        //}
         #endregion
 
         #region Error
@@ -665,6 +664,14 @@ namespace OnWeb.CoreBind.Modules
         #endregion
 
         #region Свойства
+        /// <summary>
+        /// Для внутреннего использования. Some magic.
+        /// </summary>
+        internal virtual ModuleCore ModuleBase
+        {
+            get => throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Возвращает ядро приложения, в рамках которого запущен контроллер.
         /// </summary>
