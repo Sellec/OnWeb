@@ -18,7 +18,7 @@ namespace OnWeb.Plugins.Auth
     {
         public override ActionResult Index()
         {
-            if (Module.IsNeededAnyUserToRegister()) return Redirect<Register.ModuleRegisterController>(x => x.Register());
+            if (Module.IsNeededAnyUserToRegister()) return Redirect<Register.ModuleRegister, Register.ModuleRegisterController>(x => x.Register());
 
             this.assign("authorized", !AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest);
             this.assign("result", "");
@@ -29,7 +29,7 @@ namespace OnWeb.Plugins.Auth
         [ModuleAction("unauthorized")]
         public ActionResult UnauthorizedAccess(string RedirectedFrom = null)
         {
-            if (Module.IsNeededAnyUserToRegister()) return Redirect<Register.ModuleRegisterController>(x => x.Register());
+            if (Module.IsNeededAnyUserToRegister()) return Redirect<Register.ModuleRegister, Register.ModuleRegisterController>(x => x.Register());
 
             this.assign("authorized", !AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest);
 
@@ -162,7 +162,7 @@ namespace OnWeb.Plugins.Auth
         [ModuleAction("restore")]
         public ActionResult PasswordRestore()
         {
-            if (Module.IsNeededAnyUserToRegister()) return Redirect<Register.ModuleRegisterController>(x => x.Register());
+            if (Module.IsNeededAnyUserToRegister()) return Redirect<Register.ModuleRegister, Register.ModuleRegisterController>(x => x.Register());
 
             if (!AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest) return RedirectToAction(nameof(Login));
             return display("PasswordRestore.cshtml", new Model.PasswordRestore());
@@ -270,7 +270,7 @@ namespace OnWeb.Plugins.Auth
         [ModuleAction("restore3")]
         public ActionResult PasswordRestoreVerify(string Code = null, string CodeType = null)
         {
-            if (Module.IsNeededAnyUserToRegister()) return Redirect<Register.ModuleRegisterController>(x => x.Register());
+            if (Module.IsNeededAnyUserToRegister()) return Redirect<Register.ModuleRegister, Register.ModuleRegisterController>(x => x.Register());
 
             return this.display("PasswordRestoreVerify.cshtml", new Design.Model.PasswordRestoreVerify() { Code = Code?.Truncate(0, 32), CodeType = CodeType?.Truncate(0, 6) });
         }
