@@ -174,8 +174,8 @@ namespace OnWeb.CoreBind.Modules
         /// <summary>
         /// Запечатан. Для определения дополнительной логики авторизации следует воспользоваться атрибутом <see cref="AuthorizeAttribute"/>.
         /// </summary>
-        protected sealed override void OnAuthentication(AuthenticationContext filterContext)
-        {
+        protected override void OnAuthorization(AuthorizationContext filterContext)
+        { 
             var isAllowed = true;
 
             var moduleActionAttribute = (filterContext?.ActionDescriptor as ReflectedActionDescriptor)?.MethodInfo?.GetCustomAttributes<ModuleActionAttribute>(true).FirstOrDefault();
