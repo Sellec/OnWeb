@@ -69,7 +69,7 @@ namespace OnWeb.Core.Modules
                     db.SaveChanges();
                 }
 
-                module._moduleId = config.IdModule;
+                module.ID = config.IdModule;
                 module._moduleCaption = moduleCoreAttribute.Caption;
                 module._moduleUrlName = moduleCoreAttribute.DefaultUrlName;
 
@@ -167,7 +167,7 @@ namespace OnWeb.Core.Modules
                 db.SaveChanges();
                 scope.Commit();
 
-                module._moduleId = moduleConfig.IdModule;
+                module.ID = moduleConfig.IdModule;
                 module._moduleUrlName = string.IsNullOrEmpty(configuration.UrlName) ? moduleCoreAttribute.DefaultUrlName : configuration.UrlName;
                 moduleConfigurationManipulator._valuesProviderUsable.Load(moduleConfig.Configuration);
             }

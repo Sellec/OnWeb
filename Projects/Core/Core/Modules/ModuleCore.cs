@@ -108,7 +108,10 @@ namespace OnWeb.Core.Modules
         /// <summary>
         /// Возвращает идентификатор модуля <see cref="ID"/>, представленный в виде GUID.
         /// </summary>
-        public override Guid ModuleID { get; }
+        public override Guid ModuleID
+        {
+            get => _moduleBaseID;
+        }
 
         /// <summary>
         /// Возвращает идентификатор модуля в базе данных.
