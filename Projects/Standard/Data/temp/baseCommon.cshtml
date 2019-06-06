@@ -163,7 +163,7 @@
                                     </a>
                                 }
                             </div>
-                            @if (moduleAdmin != null && moduleAdmin.CheckPermission(ModulesConstants.PermissionManage) == CheckPermissionResult.Allowed)
+                            @if (moduleAdmin != null && moduleAdmin.CheckPermission(CurrentUserContext, ModulesConstants.PermissionManage) == CheckPermissionResult.Allowed)
                             {
                                 <div class="info-top-list__item list-admin">
                                     <a href="/@moduleAdmin.UrlName" class="top-user" target="_blank">
