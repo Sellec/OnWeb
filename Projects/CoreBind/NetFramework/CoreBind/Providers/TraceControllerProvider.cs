@@ -74,9 +74,10 @@ namespace OnWeb.CoreBind.Providers
                 /*
                  * Ищем модуль, к которому обращаются запросом.
                  * */
-                module = AppCore.Get<ModulesManager<ApplicationCore>>().GetModule(moduleName);
                 if (int.TryParse(moduleName, out int moduleId) && moduleId.ToString() == moduleName)
                     module = AppCore.Get<ModulesManager<ApplicationCore>>().GetModule(moduleId);
+                else
+                    module = AppCore.Get<ModulesManager<ApplicationCore>>().GetModule(moduleName);
 
                 if (module == null) throw new Core.Exceptions.ErrorCodeException(HttpStatusCode.NotFound, $"Адрес '{moduleName}' не найден.");
 

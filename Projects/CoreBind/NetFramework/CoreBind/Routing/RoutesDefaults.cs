@@ -10,7 +10,8 @@ namespace OnWeb.CoreBind.Routing
             {
                 var moduleID = core.Config.IdModuleDefault;
                 var module = core.GetModulesManager().GetModule(moduleID) ?? core.GetModulesManager().GetModule<Plugins.Default.ModuleDefault>();
-                Controller = module?.UrlName;
+
+                Controller = module.IdModule.ToString();
             }
 
             public string Controller

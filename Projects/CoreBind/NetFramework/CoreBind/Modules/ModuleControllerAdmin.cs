@@ -71,6 +71,9 @@ namespace OnWeb.CoreBind.Modules
                     {
                         ModelState.AddModelError(nameof(formData.UrlName), $"Такое значение URL-доступного имени используется в следующих модулях: {string.Join(", ", sameUrlName)}");
                     }
+
+                    if (int.TryParse(urlNameNew, out int moduleId) && moduleId.ToString() == urlNameNew)
+                        ModelState.AddModelError(nameof(formData.UrlName), $"Нельзя использовать число в качестве URL-доступного имени, так как парсер будет пытаться сопоставить число с идентификатором модуля, а не с URL-доступным именем.");
                 }
 
                 if (ModelState.IsValid)
