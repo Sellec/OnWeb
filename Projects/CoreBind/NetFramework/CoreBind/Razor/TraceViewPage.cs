@@ -127,25 +127,25 @@ namespace OnWeb.CoreBind.Razor
         /// </summary>
         public IUserContext CurrentUserContext
         {
-            get => AppCore.GetUserContextManager().GetCurrentUserContext();
+            get => ViewData["CurrentUserContext"] as IUserContext;
         }
 
         public string Title
         {
-            get => this.ViewData.ContainsKey("Title") ? this.ViewData["Title"]?.ToString() : "";
-            set => this.ViewData["Title"] = value;
+            get => ViewData.ContainsKey("Title") ? ViewData["Title"]?.ToString() : "";
+            set => ViewData["Title"] = value;
         }
 
         public string Description
         {
-            get => this.ViewData.ContainsKey("Description") ? this.ViewData["Description"]?.ToString() : "";
-            set => this.ViewData["Description"] = value;
+            get => ViewData.ContainsKey("Description") ? ViewData["Description"]?.ToString() : "";
+            set => ViewData["Description"] = value;
         }
 
         public string Keywords
         {
-            get => this.ViewData.ContainsKey("Keywords") ? this.ViewData["Keywords"]?.ToString() : "";
-            set => this.ViewData["Keywords"] = value;
+            get => ViewData.ContainsKey("Keywords") ? ViewData["Keywords"]?.ToString() : "";
+            set => ViewData["Keywords"] = value;
         }
 
             #endregion

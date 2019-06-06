@@ -58,6 +58,7 @@ namespace OnWeb.CoreBind.Modules
             ////foreach($this.mExtensions as $key => $var) $this.assignRef($key."Ex", $var);
 
             ViewData["Module"] = Module;
+            ViewData["CurrentUserContext"] = AppCore.GetUserContextManager().GetCurrentUserContext();
 
             //////////////this.assignRef("Main", ApplicationCore.Instance);
             //////////////this.assignRef("UserManager", UserManager.Instance);

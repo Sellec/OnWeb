@@ -61,6 +61,7 @@ namespace OnWeb.Core.WebUtils
                     if (viewResult.View == null) throw new ArgumentException($"Представление '{template}' не найдено.", nameof(template));
                     var viewData = new ViewDataDictionary(model);
                     viewData["Module"] = module;
+                    viewData["CurrentUserContext"] = module.AppCore.GetUserContextManager().GetCurrentUserContext();
                     var viewContext = new ViewContext(controllerContext, viewResult.View, viewData, new TempDataDictionary(), sw);
                     viewResult.View.Render(viewContext, sw);
                     viewResult.ViewEngine.ReleaseView(controllerContext, viewResult.View);
