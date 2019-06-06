@@ -184,8 +184,6 @@ namespace OnWeb.Core.Routing
 
                     try
                     {
-                        Debug.WriteLineNoLog($"UrlManager.register({System.Threading.Thread.CurrentThread.ManagedThreadId}) ! with {itemsToRegister.Count} at {DateTime.Now.ToString()}");
-
                         sql = db.Repo1.InsertOrDuplicateUpdate(itemsToRegister,
                             new UpsertField(nameof(DB.Routing.UrlFull)),
                             new UpsertField(nameof(DB.Routing.Arguments)),
