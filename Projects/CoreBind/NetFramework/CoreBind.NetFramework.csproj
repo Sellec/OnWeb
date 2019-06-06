@@ -173,7 +173,7 @@
       <Version>12.0.1</Version>
     </PackageReference>
     <PackageReference Include="OnUtils.Application">
-      <Version>0.1.1.4</Version>
+      <Version>0.1.1.5</Version>
     </PackageReference>
     <PackageReference Include="OnUtils">
       <Version>0.1.1.11</Version>

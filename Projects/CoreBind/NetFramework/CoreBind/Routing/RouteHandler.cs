@@ -70,7 +70,10 @@ namespace OnWeb.CoreBind.Routing
         private string GetExistingFile(RouteValueDictionary routeValues)
         {
             var fileRelative = routeValues["url"] as string;
-            var fileReal = ((Providers.ResourceProvider)_core.Get<Core.Storage.ResourceProvider>()).GetFilePath(null, fileRelative, false, out IEnumerable<string> searchLocations);
+            if (string.IsNullOrEmpty(fileRelative)) return null;
+
+            var fileRelativeQithoutQuery = fileRelative.Split(new char[] { '?' }, 2)[0];
+            var fileReal = ((Providers.ResourceProvider)_core.Get<Core.Storage.ResourceProvider>()).GetFilePath(null, fileRelativeQithoutQuery, false, out IEnumerable<string> searchLocations);
             if (!string.IsNullOrEmpty(fileReal))
             {
                 var directoryRoot = System.IO.Path.GetDirectoryName(_core.ApplicationWorkingFolder);
