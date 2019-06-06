@@ -5,6 +5,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 
 namespace OnWeb.Core.Journaling
 {
@@ -42,9 +43,11 @@ namespace OnWeb.Core.Journaling
                 };
 
                 using (var db = this.CreateUnitOfWork())
+                using (var scope = db.CreateScope(TransactionScopeOption.Suppress))
                 {
                     db.Repo2.AddOrUpdate(x => x.UniqueKey, data);
                     db.SaveChanges();
+                    scope.Commit();
                 }
 
                 return new ExecutionResultJournalName(true, null, data);
@@ -207,22 +210,22 @@ namespace OnWeb.Core.Journaling
 
                 using (var db = this.CreateUnitOfWork())
                 {
-                    db.Repo1.Add(data);
-                    db.SaveChanges();
+                    using (var scope = db.CreateScope(TransactionScopeOption.Suppress))
+                    {
+                        db.Repo1.Add(data);
+                        db.SaveChanges();
+                        scope.Commit();
+                    }
 
                     if (eventType == EventType.CriticalError)
                     {
-                        //С машин разработчика не нужна рассылка. Мало ли сколько косяков мы сами себе генерим во время разработки.
-                        //if (!Debug.IsDeveloper)
-                        {
-                            var journal = db.Repo2.FirstOrDefault(x => x.IdJournal == IdJournal);
-                            var body = $"Дата события: {data.DateEvent.ToString("dd.MM.yyyy HH:mm:ss")}\r\n";
-                            body += $"Сообщение: {data.EventInfo}\r\n";
-                            if (!string.IsNullOrEmpty(data.EventInfoDetailed)) body += $"Подробная информация: {data.EventInfoDetailed}\r\n";
-                            if (!string.IsNullOrEmpty(data.ExceptionDetailed)) body += $"Исключение: {data.ExceptionDetailed}\r\n";
+                        var journal = db.Repo2.FirstOrDefault(x => x.IdJournal == IdJournal);
+                        var body = $"Дата события: {data.DateEvent.ToString("dd.MM.yyyy HH:mm:ss")}\r\n";
+                        body += $"Сообщение: {data.EventInfo}\r\n";
+                        if (!string.IsNullOrEmpty(data.EventInfoDetailed)) body += $"Подробная информация: {data.EventInfoDetailed}\r\n";
+                        if (!string.IsNullOrEmpty(data.ExceptionDetailed)) body += $"Исключение: {data.ExceptionDetailed}\r\n";
 
-                            AppCore.Get<Messaging.IMessagingManager>().GetCriticalMessagesReceivers().ForEach(x => x.SendToAdmin(journal != null ? $"Критическая ошибка в журнале '{journal.Name}'" : "Критическая ошибка", body));
-                        }
+                        AppCore.Get<Messaging.IMessagingManager>().GetCriticalMessagesReceivers().ForEach(x => x.SendToAdmin(journal != null ? $"Критическая ошибка в журнале '{journal.Name}'" : "Критическая ошибка", body));
                     }
                 }
 
