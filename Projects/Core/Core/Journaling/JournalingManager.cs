@@ -219,7 +219,7 @@ namespace OnWeb.Core.Journaling
 
                     if (eventType == EventType.CriticalError)
                     {
-                        var journal = db.Repo2.FirstOrDefault(x => x.IdJournal == IdJournal);
+                        var journal = db.Repo2.Where(x => x.IdJournal == IdJournal).FirstOrDefault();
                         var body = $"Дата события: {data.DateEvent.ToString("dd.MM.yyyy HH:mm:ss")}\r\n";
                         body += $"Сообщение: {data.EventInfo}\r\n";
                         if (!string.IsNullOrEmpty(data.EventInfoDetailed)) body += $"Подробная информация: {data.EventInfoDetailed}\r\n";
