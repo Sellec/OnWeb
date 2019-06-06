@@ -1,7 +1,6 @@
 namespace OnWeb.Core.DB
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
@@ -32,8 +31,8 @@ namespace OnWeb.Core.DB
         /// </summary>
         public override int ID
         {
-            get { return IdTheme; }
-            set { IdTheme = value; }
+            get => IdTheme;
+            set => IdTheme = value;
         }
 
         /// <summary>
@@ -41,8 +40,8 @@ namespace OnWeb.Core.DB
         /// </summary>
         public override string Caption
         {
-            get { return NameTheme; }
-            set { NameTheme = value; }
+            get => NameTheme;
+            set => NameTheme = value;
         }
 
         /// <summary>
@@ -50,8 +49,8 @@ namespace OnWeb.Core.DB
         /// </summary>
         public override DateTime DateChangeBase
         {
-            get { return DateChange.FromTimestamp(); }
-            set { DateChange = value.Timestamp(); }
+            get => DateChange.FromTimestamp();
+            set => DateChange = value.Timestamp();
         }
         #endregion
 

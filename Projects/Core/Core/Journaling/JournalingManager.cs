@@ -74,7 +74,7 @@ namespace OnWeb.Core.Journaling
                 if (string.IsNullOrEmpty(uniqueKey)) throw new ArgumentNullException(nameof(uniqueKey));
 
                 using (var db = this.CreateUnitOfWork())
-                using (var scope = db.CreateScope(System.Transactions.TransactionScopeOption.Suppress))
+                using (var scope = db.CreateScope(TransactionScopeOption.Suppress))
                 {
                     var data = db.Repo2.Where(x => x.UniqueKey == uniqueKey).FirstOrDefault();
                     return new ExecutionResultJournalName(data != null, data != null ? null : "Журнал с указанным уникальным ключом не найден.", data);
@@ -210,22 +210,28 @@ namespace OnWeb.Core.Journaling
 
                 using (var db = this.CreateUnitOfWork())
                 {
+                    DB.JournalName journalForCritical = null;
+
                     using (var scope = db.CreateScope(TransactionScopeOption.Suppress))
                     {
                         db.Repo1.Add(data);
                         db.SaveChanges();
+
+                        if (eventType == EventType.CriticalError)
+                        {
+                            journalForCritical = db.Repo2.Where(x => x.IdJournal == IdJournal).FirstOrDefault();
+                        }
                         scope.Commit();
                     }
 
                     if (eventType == EventType.CriticalError)
                     {
-                        var journal = db.Repo2.Where(x => x.IdJournal == IdJournal).FirstOrDefault();
                         var body = $"Дата события: {data.DateEvent.ToString("dd.MM.yyyy HH:mm:ss")}\r\n";
                         body += $"Сообщение: {data.EventInfo}\r\n";
                         if (!string.IsNullOrEmpty(data.EventInfoDetailed)) body += $"Подробная информация: {data.EventInfoDetailed}\r\n";
                         if (!string.IsNullOrEmpty(data.ExceptionDetailed)) body += $"Исключение: {data.ExceptionDetailed}\r\n";
 
-                        AppCore.Get<Messaging.IMessagingManager>().GetCriticalMessagesReceivers().ForEach(x => x.SendToAdmin(journal != null ? $"Критическая ошибка в журнале '{journal.Name}'" : "Критическая ошибка", body));
+                        AppCore.Get<Messaging.IMessagingManager>().GetCriticalMessagesReceivers().ForEach(x => x.SendToAdmin(journalForCritical != null ? $"Критическая ошибка в журнале '{journalForCritical.Name}'" : "Критическая ошибка", body));
                     }
                 }
 

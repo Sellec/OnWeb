@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -96,7 +95,7 @@ namespace OnWeb.CoreBind.Providers
         {
             public bool IsReusable
             {
-                get { return true; }
+                get => true;
             }
 
             public void ProcessRequest(HttpContext context)

@@ -38,9 +38,9 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
         {
             var schemes = new Dictionary<uint, string>() { { 0, "По-умолчанию" } };
 
-            using (var db = CreateContext())
+            using (var db = this.CreateUnitOfWork())
             {
-                var idmodule = this.getModuleID();
+                var idmodule = this.GetModuleID();
                 foreach (var res in (from p in db.CustomFieldsSchemes where p.IdModule == idmodule && p.IdScheme > 0 orderby p.NameScheme select p))
                     schemes[(uint)res.IdScheme] = res.NameScheme;
             }
@@ -92,9 +92,9 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
             var schemes = GetSchemeList();
             var schemeItems = GetSchemeItemsList();
 
-            var id = this.getModuleID();
+            var id = this.GetModuleID();
 
-            using (var db = CreateContext())
+            using (var db = this.CreateUnitOfWork())
             {
                 var fields = (from p in db.CustomFieldsFields
                               where p.Block == 0 && p.IdModule == id
@@ -116,7 +116,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
         {
             var schemeItem = new SchemeItem(idSchemeItem, idSchemeItemType);
 
-            using (var db = CreateContext())
+            using (var db = this.CreateUnitOfWork())
             {
                 var fields = db.CustomFieldsFields.Where(x => x.IdModule == Module.ID && x.Block == 0).ToDictionary(x => x.IdField, x => x);
 
@@ -166,7 +166,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
             {
                 var schemeItem = new SchemeItem(idSchemeItem, idSchemeItemType);
 
-                using (var db = CreateContext())
+                using (var db = this.CreateUnitOfWork())
                 using (var scope = db.CreateScope())
                 {
                     db.CustomFieldsSchemeDatas.Where(x => x.IdModule == this.Module.ID && x.IdSchemeItem == schemeItem.IdItem && x.IdItemType == schemeItem.IdItemType).Delete();
@@ -227,7 +227,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
                 else if (!schemeName.isOneStringTextOnly()) result.Message = "Некорректно указано название схемы!";
                 else
                 {
-                    using (var db = CreateContext())
+                    using (var db = this.CreateUnitOfWork())
                     {
                         var data = new CustomFieldsScheme()
                         {
@@ -263,7 +263,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
                 else if (IdScheme == 0) result.Message = "Схема \"По-умолчанию\" не удаляется.";
                 else
                 {
-                    using (var db = CreateContext())
+                    using (var db = this.CreateUnitOfWork())
                     using (var scope = db.CreateScope())
                     {
                         var data = db.CustomFieldsSchemes.Where(x => x.IdScheme == IdScheme).FirstOrDefault();
@@ -294,7 +294,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
             CustomFieldsField data = null;
             if (IdField > 0)
             {
-                using (var db = CreateContext())
+                using (var db = this.CreateUnitOfWork())
                 {
                     data = db.CustomFieldsFields.Where(x => x.IdField == IdField).Include(x => x.data).FirstOrDefault();
                     if (data == null) throw new Exception("Такое поле не найдено в базе данных!");
@@ -321,7 +321,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
 
             try
             {
-                using (var db = CreateContext())
+                using (var db = this.CreateUnitOfWork())
                 {
                     CustomFieldsField data = null;
                     if (model.IdField > 0)
@@ -443,7 +443,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
 
             try
             {
-                using (var db = CreateContext())
+                using (var db = this.CreateUnitOfWork())
                 {
                     var data = db.CustomFieldsFields.Where(x => x.IdField == IdField).Include(x => x.data).FirstOrDefault();
                     if (data == null) throw new Exception("Такое поле не найдено в базе данных!");

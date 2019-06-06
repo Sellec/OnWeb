@@ -10,14 +10,14 @@ namespace OnWeb.Plugins.Materials.DB
     {
         public override int ID
         {
-            get { return id; }
-            set { id = value; }
+            get => id;
+            set => id = value; 
         }
 
         public override string Caption
         {
-            get { return name; }
-            set { name = value; }
+            get => name;
+            set => name = value; 
         }
 
         public int id { get; set; }

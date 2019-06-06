@@ -82,27 +82,27 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Field.FieldTypes
 
         public override int IdType
         {
-            get { return 3; } 
+            get => 3; 
         }
 
         public override string TypeName
         {
-            get { return "Группа элементов 'Checkbox'"; }
+            get => "Группа элементов 'Checkbox'";
         }
 
         public override bool IsRawOrSourceValue
         {
-            get { return false; }
+            get => false;
         }
 
         public override bool? ForcedIsMultipleValues
         {
-            get { return true; }
+            get => true;
         }
 
         public override FieldValueType? ForcedIdValueType
         {
-            get { return FieldValueType.KeyFromSource; }
+            get => FieldValueType.KeyFromSource;
         }
     }
 }

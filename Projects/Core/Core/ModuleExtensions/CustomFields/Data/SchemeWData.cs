@@ -24,22 +24,22 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
         #region IDictionary<int, FieldData>
         public FieldData this[int key]
         {
-            get { return _scheme.ContainsKey(key) ? (_defaultScheme as IReadOnlyDictionary<int, FieldData>)[key] : null; }
+            get => _scheme.ContainsKey(key) ? (_defaultScheme as IReadOnlyDictionary<int, FieldData>)[key] : null;
         }
 
         public int Count
         {
-            get { return _scheme.Count; }
+            get => _scheme.Count;
         }
 
         public IEnumerable<int> Keys
         {
-            get { return _scheme.Keys; }
+            get => _scheme.Keys;
         }
 
         public IEnumerable<FieldData> Values
         {
-            get { return _scheme.Select(x => this[x.Key]).ToList(); }
+            get => _scheme.Select(x => this[x.Key]).ToList();
         }
 
         public void Clear()
@@ -84,17 +84,17 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
         #region Свойства
         public string NameScheme
         {
-            get { return _scheme.NameScheme; }
+            get => _scheme.NameScheme;
         }
 
         public Scheme.DefaultScheme Default
         {
-            get { return _scheme.Default; }
+            get => _scheme.Default;
         }
 
         public bool IsFullScheme
         {
-            get { return _scheme.IsFullScheme; }
+            get => _scheme.IsFullScheme;
         }
 
         #endregion

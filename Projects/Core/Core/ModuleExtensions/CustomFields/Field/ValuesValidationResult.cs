@@ -22,7 +22,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Field
 
         public bool IsSuccess
         {
-            get { return this == ValidationResult.Success || Values != null; }
+            get => this == ValidationResult.Success || Values != null;
         }
     }
 }

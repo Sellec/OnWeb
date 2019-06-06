@@ -29,22 +29,22 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Field.FieldTypes
 
         public override int IdType
         {
-            get { return 9; } 
+            get => 9;
         }
 
         public override string TypeName
         {
-            get { return "Скрытое многострочное поле"; }
+            get => "Скрытое многострочное поле";
         }
 
         public override bool IsRawOrSourceValue
         {
-            get { return true; }
+            get => true;
         }
 
         public override bool? ForcedIsMultipleValues
         {
-            get { return false; }
+            get => false;
         }
     }
 }

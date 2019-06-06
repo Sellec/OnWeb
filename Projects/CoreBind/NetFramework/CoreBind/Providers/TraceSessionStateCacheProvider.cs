@@ -401,7 +401,7 @@
 
 //        private Session.SessionContext _dbContext
 //        {
-//            get { return ApplicationCore.Instance.getInstance<Session.SessionContext>(ApplicationCore.eContextType.AppDomainContext); }
+//            get => ApplicationCore.Instance.getInstance<Session.SessionContext>(ApplicationCore.eContextType.AppDomainContext);
 //        }
 
 //        #endregion

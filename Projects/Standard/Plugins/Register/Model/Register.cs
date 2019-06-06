@@ -13,7 +13,7 @@ namespace OnWeb.Plugins.Register.Model
         /// </summary>
         public override int ID
         {
-            get { return 0; }
+            get => 0;
             set { }
         }
 
@@ -37,7 +37,7 @@ namespace OnWeb.Plugins.Register.Model
         [Display(Name = "Email-адрес или телефон"), Required(ErrorMessage = "Следует указать адрес электронной почты или номер телефона.")]
         public string EmailOrPhone
         {
-            get { return email + phone; }
+            get => email + phone;
         }
 
         [StringLength(100)]

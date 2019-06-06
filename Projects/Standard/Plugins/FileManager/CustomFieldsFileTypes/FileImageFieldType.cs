@@ -47,12 +47,12 @@ namespace OnWeb.Plugins.FileManager.CustomFieldsFileTypes
 
         public override int IdType
         {
-            get { return 12; }
+            get => 12;
         }
 
         public override string TypeName
         {
-            get { return "Файл-изображение"; }
+            get => "Файл-изображение";
         }
     }
 }

@@ -130,7 +130,7 @@ namespace OnWeb.CoreBind.Providers
         //        {
         //            public bool IsReusable
         //            {
-        //                get { return true; }
+        //                get => true;
         //            }
 
         //            public void ProcessRequest(HttpContext context)

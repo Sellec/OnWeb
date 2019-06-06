@@ -1,7 +1,6 @@
 namespace OnWeb.Core.DB
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
@@ -34,7 +33,7 @@ namespace OnWeb.Core.DB
         [StringLength(255)]
         public string UrlFull
         {
-            get { return _UrlFull; }
+            get => _UrlFull;
             set
             {
                 var url = UriExtensions.MakeRelativeFromUrl(value);

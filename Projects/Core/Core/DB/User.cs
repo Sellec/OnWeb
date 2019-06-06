@@ -43,7 +43,7 @@ namespace OnWeb.Core.DB
         /// </summary>
         public override int ID
         {
-            get { return id; }
+            get => id;
             set { }
         }
 
@@ -52,8 +52,8 @@ namespace OnWeb.Core.DB
         /// </summary>
         public override string Caption
         {
-            get { return !string.IsNullOrEmpty(name) ? name : !string.IsNullOrEmpty(email) ? email : id.ToString(); }
-            set { name = value; }
+            get => !string.IsNullOrEmpty(name) ? name : !string.IsNullOrEmpty(email) ? email : id.ToString();
+            set => name = value;
         }
 
         [DefaultValue("")]
@@ -116,16 +116,13 @@ namespace OnWeb.Core.DB
         /// </summary>
         public override DateTime DateChangeBase
         {
-            get { return DateChange.FromTimestamp(); }
-            set { DateChange = value.Timestamp(); }
+            get => DateChange.FromTimestamp();
+            set => DateChange = value.Timestamp();
         }
 
         public override Uri Url
         {
-            get
-            {
-                return null;
-            }
+            get => null;           
         }
 
         public int IdUserChange { get; set; }

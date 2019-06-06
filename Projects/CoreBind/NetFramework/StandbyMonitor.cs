@@ -79,27 +79,27 @@ namespace OnWeb.Core
         #region IMonitoredService
         Guid IMonitoredService.ServiceID
         {
-            get { return _serviceID; }
+            get => _serviceID;
         }
 
         string IMonitoredService.ServiceName
         {
-            get { return "Standby"; }
+            get => "Standby";
         }
 
         ServiceStatus IMonitoredService.ServiceStatus
         {
-            get { throw new NotImplementedException(); }
+            get => throw new NotImplementedException();
         }
 
         string IMonitoredService.ServiceStatusDetailed
         {
-            get { throw new NotImplementedException(); }
+            get => throw new NotImplementedException();
         }
 
         bool IMonitoredService.IsSupportsCurrentStatusInfo
         {
-            get { return false; }
+            get => false;
         }
 
         #endregion

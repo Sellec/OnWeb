@@ -17,22 +17,22 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Field.FieldTypes
 
         public override int IdType
         {
-            get { return 0; } 
+            get => 0; 
         }
 
         public override string TypeName
         {
-            get { return "Неизвестный тип поля"; }
+            get => "Неизвестный тип поля";
         }
 
         public override bool IsRawOrSourceValue
         {
-            get { return true; }
+            get => true;
         }
 
         public override bool? ForcedIsMultipleValues
         {
-            get { return false; }
+            get => false;
         }
     }
 }

@@ -31,7 +31,6 @@ namespace OnWeb.Plugins.MessagingEmail
 
         void IEmailService.SendToAdmin(string subject, string body)
         {
-
             ((IEmailService)this).SendMail(
                 "Почтовый робот сайта",
                 GetNoReplyAddress(),
@@ -82,6 +81,11 @@ namespace OnWeb.Plugins.MessagingEmail
             if (AppCore.ServerUrl != null) address = "no-reply@" + AppCore.ServerUrl.Authority;
 
             return address;
+        }
+
+        void ICriticalMessagesReceiver.SendToAdmin(string subject, string body)
+        {
+            ((IEmailService)this).SendToAdmin(subject, body);
         }
 
         #endregion

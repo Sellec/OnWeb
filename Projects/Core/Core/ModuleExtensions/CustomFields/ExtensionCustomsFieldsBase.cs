@@ -15,9 +15,9 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
     using Scheme;
 
 #pragma warning disable CS1591 // todo внести комментарии.
-    public class ExtensionCustomsFieldsBase : ModuleExtension<DB.Context>
+    public class ExtensionCustomsFieldsBase : ModuleExtension, IUnitOfWorkAccessor<Context>
     {
-        public class CacheCollection : IReadOnlyDictionary<Scheme.SchemeItem, Scheme.DefaultScheme>
+        public class CacheCollection : IReadOnlyDictionary<SchemeItem, DefaultScheme>
         {
             private ExtensionCustomsFieldsBase _extension = null;
             private IList<CustomFieldsScheme> _schemes = null;
@@ -25,7 +25,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
 
             internal CacheCollection(ExtensionCustomsFieldsBase extension)
             {
-                using (var db = extension.CreateContext())
+                using (var db = extension.CreateUnitOfWork())
                 {
                     this._extension = extension;
                     this._schemes = db.CustomFieldsSchemes.Where(x => x.IdModule == _extension.Module.ID && x.IdScheme > 0).ToList();
@@ -51,17 +51,17 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
             #region IReadOnlyDictionary<Scheme.SchemeItem, Scheme.DefaultScheme>
             public IEnumerable<SchemeItem> Keys
             {
-                get { return _dictionary.Keys; }
+                get => _dictionary.Keys;
             }
 
             public IEnumerable<DefaultScheme> Values
             {
-                get { return _dictionary.Values; }
+                get => _dictionary.Values;
             }
 
             public int Count
             {
-                get { return _dictionary.Count; }
+                get => _dictionary.Count;
             }
 
             public bool ContainsKey(SchemeItem key)
@@ -86,7 +86,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
             }
             #endregion
 
-            public Scheme.DefaultScheme this[Scheme.SchemeItem key]
+            public DefaultScheme this[SchemeItem key]
             {
                 get
                 {
@@ -111,7 +111,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
             //    ValueProviderFactories.Factories.Add(new MetadataAndValues.FieldValueProviderFactory());
             //}
 
-            using (var db = CreateContext())
+            using (var db = this.CreateUnitOfWork())
                 db.DataContext.ExecuteQuery($"UPDATE CustomFieldsSchemeData SET IdItemType='{ModuleCore.CategoryType}' WHERE IdModule='{Module.ID}' AND IdItemType=0");
 
             Task.Delay(60000).ContinueWith(t => TimerCallback());
@@ -150,7 +150,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
 
                     var IdModule = this.Module.ID;
 
-                    using (var db = CreateContext())
+                    using (var db = this.CreateUnitOfWork())
                     {
                         var q_items = (from ip in db.ItemParent
                                        where ip.IdModule == IdModule
@@ -440,7 +440,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
                 {
                     var IdModule = this.Module.ID;
 
-                    using (var db = CreateContext())
+                    using (var db = this.CreateUnitOfWork())
                     {
                         var _ids = ids.ToArray();
                         var values = (from p in db.CustomFieldsDatas.AsNoTracking()
@@ -550,7 +550,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
         {
             try
             {
-                using (var db = CreateContext())
+                using (var db = this.CreateUnitOfWork())
                 {
                     var q_fields = db.CustomFieldsFields.Where(x => x.alias == alias && x.Block == 0).Include(x => x.data);
                     return q_fields.FirstOrDefault();
@@ -572,7 +572,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
         {
             try
             {
-                using (var db = CreateContext())
+                using (var db = this.CreateUnitOfWork())
                 {
                     var q_fields = db.CustomFieldsFields.Where(x => x.IdField == idField && x.Block == 0).Include(x => x.data);
                     return q_fields.FirstOrDefault();

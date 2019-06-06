@@ -117,27 +117,27 @@ namespace OnWeb.CoreBind.Routing
         #region ServiceMonitor.IMonitoredService
         Guid IMonitoredService.ServiceID
         {
-            get { return _serviceID; }
+            get => _serviceID;
         }
 
         string IMonitoredService.ServiceName
         {
-            get { return "Менеджер адресов КЛАДР/ФИАС"; }
+            get => "Менеджер адресов КЛАДР/ФИАС";
         }
 
         string IMonitoredService.ServiceStatusDetailed
         {
-            get { return string.Empty; }
+            get => string.Empty;
         }
 
         bool IMonitoredService.IsSupportsCurrentStatusInfo
         {
-            get { return false; }
+            get => false;
         }
 
         ServiceStatus IMonitoredService.ServiceStatus
         {
-            get { throw new NotImplementedException(); }
+            get => throw new NotImplementedException();
         }
 
         #endregion

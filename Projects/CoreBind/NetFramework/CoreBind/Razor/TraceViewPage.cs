@@ -132,20 +132,20 @@ namespace OnWeb.CoreBind.Razor
 
         public string Title
         {
-            get { return this.ViewData.ContainsKey("Title") ? this.ViewData["Title"]?.ToString() : ""; }
-            set { this.ViewData["Title"] = value; }
+            get => this.ViewData.ContainsKey("Title") ? this.ViewData["Title"]?.ToString() : "";
+            set => this.ViewData["Title"] = value;
         }
 
         public string Description
         {
-            get { return this.ViewData.ContainsKey("Description") ? this.ViewData["Description"]?.ToString() : ""; }
-            set { this.ViewData["Description"] = value; }
+            get => this.ViewData.ContainsKey("Description") ? this.ViewData["Description"]?.ToString() : "";
+            set => this.ViewData["Description"] = value;
         }
 
         public string Keywords
         {
-            get { return this.ViewData.ContainsKey("Keywords") ? this.ViewData["Keywords"]?.ToString() : ""; }
-            set { this.ViewData["Keywords"] = value; }
+            get => this.ViewData.ContainsKey("Keywords") ? this.ViewData["Keywords"]?.ToString() : "";
+            set => this.ViewData["Keywords"] = value;
         }
 
             #endregion

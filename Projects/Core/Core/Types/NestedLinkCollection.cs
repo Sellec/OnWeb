@@ -110,30 +110,30 @@ namespace OnWeb.Core.Types
 
         public override int ID
         {
-            get { return _groupItem.ID; }
-            set { _groupItem.ID = value; }
+            get => _groupItem.ID;
+            set => _groupItem.ID = value;
         }
 
         public override string Caption
         {
-            get { return _groupItem.Caption; }
-            set { _groupItem.Caption = value; }
+            get => _groupItem.Caption;
+            set => _groupItem.Caption = value; 
         }
 
         public override DateTime DateChangeBase
         {
-            get { return _groupItem.DateChangeBase; }
-            set { _groupItem.DateChangeBase = value; }
+            get => _groupItem.DateChangeBase;
+            set => _groupItem.DateChangeBase = value; 
         }
 
         public override Uri Url
         {
-            get { return _groupItem.Url; }
+            get => _groupItem.Url;
         }
 
         public Items.ItemBase SourceItem
         {
-            get { return _groupItem; }
+            get => _groupItem;
         }
     }
 

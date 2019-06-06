@@ -104,20 +104,20 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.DB
         #region Items.ItemBase
         public override int ID
         {
-            get { return IdField; }
-            set { IdField = value; }
+            get => IdField;
+            set => IdField = value;
         }
 
         public override string Caption
         {
-            get { return name; }
-            set { name = value; }
+            get => name;
+            set => name = value;
         }
 
         public override DateTime DateChangeBase
         {
-            get { return DateChange.FromTimestamp(); }
-            set { DateChange = value.Timestamp(); }
+            get => DateChange.FromTimestamp();
+            set => DateChange = value.Timestamp();
         }
 
         #endregion

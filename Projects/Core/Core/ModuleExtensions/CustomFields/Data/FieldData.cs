@@ -30,7 +30,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
         /// </summary>
         public DateTime DateChangeBase
         {
-            get { return _field.DateChangeBase; }
+            get => _field.DateChangeBase;
         }
 
         /// <summary>
@@ -38,8 +38,8 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
         /// </summary>
         public string alias
         {
-            get { return _field.alias; }
-            set { _field.alias = value; }
+            get => _field.alias;
+            set => _field.alias = value;
         }
 
         /// <summary>
@@ -47,8 +47,8 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
         /// </summary>
         public int IdField
         {
-            get { return _field.IdField; }
-            set { _field.IdField = value; }
+            get => _field.IdField;
+            set => _field.IdField = value;
         }
 
         /// <summary>
@@ -56,8 +56,8 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
         /// </summary>
         public bool IsValueRequired
         {
-            get { return _field.IsValueRequired; }
-            set { _field.IsValueRequired = value; }
+            get => _field.IsValueRequired;
+            set => _field.IsValueRequired = value;
         }
 
         /// <summary>
@@ -65,8 +65,8 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
         /// </summary>
         public string name
         {
-            get { return _field.name; }
-            set { _field.name = value; }
+            get => _field.name;
+            set => _field.name = value;
         }
 
         /// <summary>
@@ -74,8 +74,8 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
         /// </summary>
         public int size
         {
-            get { return _field.size; }
-            set { _field.size = value; }
+            get => _field.size;
+            set => _field.size = value;
         }
 
         /// <summary>
@@ -83,8 +83,8 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
         /// </summary>
         public string formatCheck
         {
-            get { return _field.formatCheck; }
-            set { _field.formatCheck = value; }
+            get => _field.formatCheck;
+            set => _field.formatCheck = value;
         }
 
         /// <summary>
@@ -100,8 +100,8 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
         /// </summary>
         public Field.FieldValueType IdValueType
         {
-            get { return _field.IdValueType; }
-            set { _field.IdValueType = value; }
+            get => _field.IdValueType;
+            set => _field.IdValueType = value;
         }
 
         /// <summary>
@@ -109,8 +109,8 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
         /// </summary>
         public string nameEnding
         {
-            get { return _field.nameEnding; }
-            set { _field.nameEnding = value; }
+            get => _field.nameEnding;
+            set => _field.nameEnding = value;
         }
 
         /// <summary>
@@ -118,8 +118,8 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
         /// </summary>
         public string nameAlt
         {
-            get { return _field.nameAlt; }
-            set { _field.nameAlt = value; }
+            get => _field.nameAlt;
+            set => _field.nameAlt = value;
         }
 
         /// <summary>
@@ -127,8 +127,8 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
         /// </summary>
         public float ParameterNumeric01
         {
-            get { return _field.ParameterNumeric01; }
-            set { _field.ParameterNumeric01 = value; }
+            get => _field.ParameterNumeric01;
+            set => _field.ParameterNumeric01 = value;
         }
 
         /// <summary>
@@ -136,8 +136,8 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
         /// </summary>
         public float ParameterNumeric02
         {
-            get { return _field.ParameterNumeric02; }
-            set { _field.ParameterNumeric02 = value; }
+            get => _field.ParameterNumeric02;
+            set => _field.ParameterNumeric02 = value;
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
         /// </summary>
         public bool IsMultipleValues
         {
-            get { return _field.IsMultipleValues; }
+            get => _field.IsMultipleValues;
         }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
 
         public Field.ValueVariantCollection data
         {
-            get { return _field.data; }
+            get => _field.data;
         }
 
         #endregion
@@ -303,7 +303,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
         #region IReadOnlyCollection<object>
         public int Count
         {
-            get { return _values != null ? _values.Count : 0; }
+            get => _values != null ? _values.Count : 0;
         }
 
         public IEnumerator<object> GetEnumerator()

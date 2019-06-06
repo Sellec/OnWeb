@@ -125,24 +125,18 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
         #region Свойства
         public string NameScheme
         {
-            get { return _defaultScheme.NameScheme; }
+            get => _defaultScheme.NameScheme;
         }
 
         public Scheme.DefaultScheme Default
         {
-            get { return _defaultScheme.Default; }
+            get => _defaultScheme.Default;
         }
 
         public bool IsFullScheme
         {
-            get { return _defaultScheme.IsFullScheme; }
+            get => _defaultScheme.IsFullScheme;
         }
-
-        //public ReadOnlyDictionary<int, SchemeWData> Schemes
-        //{
-        //    get;
-        //    internal set;
-        //}
 
         #endregion
 

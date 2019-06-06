@@ -221,7 +221,7 @@ namespace OnWeb.Core.Storage
         /// </summary>
         public IReadOnlyCollection<string> SourcePathList
         {
-            get { return _listSourcePaths.AsReadOnly(); }
+            get => _listSourcePaths.AsReadOnly();
         }
 
         /// <summary>

@@ -1,11 +1,11 @@
 ﻿using OnUtils.Application.Modules;
+using OnUtils.Items;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OnWeb.Core.Items
 {
     using Modules;
-    using OnUtils.Items;
 
     /// <summary>
     /// Базовый класс для сущностей.
@@ -124,7 +124,7 @@ namespace OnWeb.Core.Items
         [Newtonsoft.Json.JsonIgnore]
         public ModuleCore OwnerModule
         {
-            get { return Owner as ModuleCore; }
+            get => Owner as ModuleCore;
         }
 
         #endregion

@@ -149,11 +149,5 @@ namespace OnWeb.Core.Items
                 return _itemsTypes.Value.Item2;
             }
         }
-
-        //protected Configuration.CoreContext DB
-        //{
-        //    get { return ApplicationCore.Instance.getInstance<Configuration.CoreContext>(); }
-        //}
-
     }
 }

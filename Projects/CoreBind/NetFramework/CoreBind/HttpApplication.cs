@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
+using System.IO.Compression;
 using System.Reflection;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
-using System.IO.Compression;
 
 namespace OnWeb.CoreBind
 {
@@ -303,7 +303,7 @@ namespace OnWeb.CoreBind
         /// </summary>
         public static int InstancesCount
         {
-            get { return _instancesCount; }
+            get => _instancesCount;
         }
 
         /// <summary>

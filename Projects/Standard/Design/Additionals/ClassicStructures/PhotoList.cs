@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace OnWeb.Design.Additionals.ClassicStructures
 {
@@ -15,8 +12,8 @@ namespace OnWeb.Design.Additionals.ClassicStructures
 
         public Photo this[int index]
         {
-            get { return this[index.ToString()]; }
-            set { this[index.ToString()] = value; }
+            get => this[index.ToString()];
+            set => this[index.ToString()] = value;
         }
     }
 }

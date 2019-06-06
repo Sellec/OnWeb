@@ -65,12 +65,12 @@ namespace OnWeb.Core.ServiceMonitor
         #region Свойства
         public Guid ServiceID
         {
-            get { return _serviceID; }
+            get => _serviceID;
         }
 
         public virtual string ServiceName
         {
-            get { return _serviceName; }
+            get => _serviceName;
         }
 
         public bool IsSupportsCurrentStatusInfo

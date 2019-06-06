@@ -176,10 +176,10 @@
       <Version>0.1.1.4</Version>
     </PackageReference>
     <PackageReference Include="OnUtils">
-      <Version>0.1.1.6</Version>
+      <Version>0.1.1.11</Version>
     </PackageReference>
     <PackageReference Include="OnUtils.Data.EntityFramework">
-      <Version>0.1.1</Version>
+      <Version>0.1.1.2</Version>
     </PackageReference>
     <PackageReference Include="OnUtils.Tasks.MomentalThreading">
       <Version>0.1.1.1</Version>

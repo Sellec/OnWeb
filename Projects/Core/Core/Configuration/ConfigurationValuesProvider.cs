@@ -77,17 +77,17 @@ namespace OnWeb.Core.Configuration
 
         public int Count
         {
-            get { return _storage.Rows.Count; }
+            get => _storage.Rows.Count;
         }
 
         public IEnumerable<string> Keys
         {
-            get { return (from DataRow p in _storage.Rows select p["Property"].ToString()).ToList(); }
+            get => (from DataRow p in _storage.Rows select p["Property"].ToString()).ToList();
         }
 
         public IEnumerable<object> Values
         {
-            get { return (from DataRow p in _storage.Rows select p["Value"]).ToList(); }
+            get => (from DataRow p in _storage.Rows select p["Value"]).ToList();
         }
 
         private void Add(string key, object value)

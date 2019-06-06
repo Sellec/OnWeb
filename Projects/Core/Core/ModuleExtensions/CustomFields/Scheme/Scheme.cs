@@ -53,7 +53,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Scheme
         /// </summary>
         public int Count
         {
-            get { return _fields.Count; }
+            get => _fields.Count;
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Scheme
         /// </summary>
         public bool IsReadOnly
         {
-            get { return true; }
+            get => true;
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Scheme
         /// </summary>
         public IEnumerable<int> Keys
         {
-            get { return _fields; }
+            get => _fields;
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Scheme
         /// </summary>
         public IEnumerable<Field.IField> Values
         {
-            get { return Default.Where(x => _fields.Contains(x.Key)).Select(x => x.Value) as ICollection<Field.IField>; }
+            get => Default.Where(x => _fields.Contains(x.Key)).Select(x => x.Value) as ICollection<Field.IField>;
         }
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Scheme
         /// <summary>
         /// Указывает, является ли объект полной или частичной схемой.
         /// </summary>
-        public bool IsFullScheme { get { return false; } }
+        public bool IsFullScheme { get => false; }
         #endregion
     }
 

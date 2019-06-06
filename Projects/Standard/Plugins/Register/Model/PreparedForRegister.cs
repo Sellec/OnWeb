@@ -14,7 +14,7 @@ namespace OnWeb.Plugins.Register.Model
         /// </summary>
         public override int ID
         {
-            get { return 0; }
+            get => 0;
             set { }
         }
 
@@ -23,8 +23,8 @@ namespace OnWeb.Plugins.Register.Model
         /// </summary>
         public override string Caption
         {
-            get { return !string.IsNullOrEmpty(name) ? name : !string.IsNullOrEmpty(email) ? email : string.Empty; }
-            set { name = value; }
+            get => !string.IsNullOrEmpty(name) ? name : !string.IsNullOrEmpty(email) ? email : string.Empty;
+            set => name = value;
         }
 
         [DefaultValue("")]
@@ -40,7 +40,7 @@ namespace OnWeb.Plugins.Register.Model
         [Display(Name = "Email-адрес или телефон"), Required]
         public string EmailOrPhone
         {
-            get { return email + phone; }
+            get => email + phone;
         }
 
         [StringLength(100)]
@@ -79,8 +79,8 @@ namespace OnWeb.Plugins.Register.Model
         /// </summary>
         public override DateTime DateChangeBase
         {
-            get { return DateReg; }
-            set { DateReg = value; }
+            get => DateReg;
+            set => DateReg = value;
         }
 
         [StringLength(2000)]

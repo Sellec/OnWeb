@@ -1,11 +1,9 @@
 ﻿using OnUtils.Architecture.AppCore;
-using OnUtils.Data;
 using System.Linq;
 
 namespace OnWeb.Core.Modules.Extensions
 {
     using Core.Modules;
-    using Core.Routing;
 
 #pragma warning disable CS1591 // todo внести комментарии.
     public class ModuleExtension : CoreComponentBase<ApplicationCore>
@@ -65,14 +63,6 @@ namespace OnWeb.Core.Modules.Extensions
         }
 
         #region Property
-        //*
-        // * 
-        // * */
-        //protected System.Web.HttpContext Context
-        //{
-        //    get { return System.Web.HttpContext.Current; }
-        //}
-
         /*
          * Атрибуты текущего расширения
          * */
@@ -81,25 +71,6 @@ namespace OnWeb.Core.Modules.Extensions
             get;
             private set;
         } = new ModuleExtensionAttribute("", false);
-
-        ///// <summary>
-        ///// См. <see cref="Controller.Request"/>.
-        ///// </summary>
-        //public HttpRequestBase Request
-        //{
-        //    get { return this.Controller?.Request; }
-        //}
-
-
-        ///// <summary>
-        ///// Возвращает объект <see cref="Controller.ModelState"/> для выполняемого контроллера. 
-        ///// Если попытка обратиться к свойству производится не в контексте запроса, то может вернуть null.
-        ///// </summary>
-        //protected ModelStateDictionary ModelState
-        //{
-        //    get { return Controller?.ModelState; }
-        //}
-
 
         #endregion
 
@@ -133,63 +104,11 @@ namespace OnWeb.Core.Modules.Extensions
             return null;
         }
 
-        //todo ActionResult display
-        //protected ActionResult display(string template, object model = null)
-        //{
-        //    return this.Controller.display(template, model);
-        //}
-
-        //protected void assign(string name, object value)
-        //{
-        //    this.Controller.assign(name, value);
-        //}
-
-        //#region Json
-        ///// <summary>
-        ///// См. <see cref="ModuleController.ReturnJson{TData}(Types.ResultWData{TData})"/> 
-        ///// </summary>
-        //protected JsonResult ReturnJson<TData>(Types.ResultWData<TData> result)
-        //{
-        //    return Controller.ReturnJson<TData>(result);
-        //}
-
-        ///// <summary>
-        ///// См. <see cref="ModuleController.ReturnJson(Types.ResultWData{Object})"/> 
-        ///// </summary>
-        //protected JsonResult ReturnJson(bool success, string message, object data = null)
-        //{
-        //    return ReturnJson<object>(new Types.ResultWData<object>(success, message, data));
-        //}
-        //#endregion
-
-        protected int getModuleID()
+        protected int GetModuleID()
         {
             return this.ModuleID_Override > 0 ? this.ModuleID_Override : this.Module.ID;
         }
 
-    }
-
-    public class ModuleExtension<TContextType> : ModuleExtension where TContextType : UnitOfWorkBase, new()
-    {
-        /// <summary>
-        /// Создает новый экземпляр объекта <see cref="ModuleExtension"/>.
-        /// </summary>
-        public ModuleExtension()
-        {
-
-        }
-
-        /// <summary>
-        /// Создает новый экземпляр объекта <see cref="ModuleExtension"/>.
-        /// </summary>
-        public ModuleExtension(ModuleCore moduleObject) : base(moduleObject)
-        {
-        }
-
-        protected TContextType CreateContext()
-        {
-            return new TContextType();
-        }
     }
 
 }

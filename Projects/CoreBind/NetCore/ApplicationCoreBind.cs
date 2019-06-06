@@ -155,7 +155,7 @@ namespace OnWeb
         /// </summary>
         public override Uri ServerUrl
         {
-            get { return _serverUrl; }
+            get => _serverUrl;
             set
             {
                 _serverUrl = value;

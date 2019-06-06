@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace OnWeb.Plugins.Auth.Model
 {
@@ -21,7 +15,7 @@ namespace OnWeb.Plugins.Auth.Model
         [Display(Name = "Email-адрес или телефон"), Required(ErrorMessage = "Следует указать адрес электронной почты или номер телефона.")]
         public string EmailOrPhone
         {
-            get { return email + phone; }
+            get => email + phone;
         }
 
     }

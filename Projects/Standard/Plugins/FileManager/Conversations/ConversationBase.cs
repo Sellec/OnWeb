@@ -36,7 +36,7 @@ namespace OnWeb.Plugins.FileManager.Conversations
         /// </summary>
         public sealed override Uri Url
         {
-            get { return null; }
+            get => null;
         }
         #endregion
     }

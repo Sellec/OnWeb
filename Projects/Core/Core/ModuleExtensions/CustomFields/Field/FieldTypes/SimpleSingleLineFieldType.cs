@@ -49,22 +49,22 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Field.FieldTypes
 
         public override int IdType
         {
-            get { return 1; } 
+            get => 1; 
         }
 
         public override string TypeName
         {
-            get { return "Простое однострочное поле"; }
+            get => "Простое однострочное поле";
         }
 
         public override bool IsRawOrSourceValue
         {
-            get { return true; }
+            get => true;
         }
 
         public override bool? ForcedIsMultipleValues
         {
-            get { return false; }
+            get => false;
         }
     }
 }

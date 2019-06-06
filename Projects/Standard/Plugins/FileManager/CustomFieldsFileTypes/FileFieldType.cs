@@ -88,24 +88,22 @@ namespace OnWeb.Plugins.FileManager.CustomFieldsFileTypes
 
         public override int IdType
         {
-            get { return 10; }
+            get => 10;
         }
 
         public override string TypeName
         {
-            get { return "Файл"; }
+            get => "Файл";
         }
 
         public override bool IsRawOrSourceValue
         {
-            get { return false; }
+            get => false;
         }
 
         public override FieldValueType? ForcedIdValueType
         {
-            get { return FieldValueType.KeyFromSource; }
+            get => FieldValueType.KeyFromSource;
         }
     }
-
-
 }

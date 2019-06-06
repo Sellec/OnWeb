@@ -52,27 +52,27 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Field.FieldTypes
 
         public override int IdType
         {
-            get { return 2; } 
+            get => 2; 
         }
 
         public override string TypeName
         {
-            get { return "Группа элементов 'Radiobutton'"; }
+            get => "Группа элементов 'Radiobutton'";
         }
 
         public override bool IsRawOrSourceValue
         {
-            get { return false; }
+            get => false;
         }
 
         public override bool? ForcedIsMultipleValues
         {
-            get { return false; }
+            get => false;
         }
 
         public override FieldValueType? ForcedIdValueType
         {
-            get { return FieldValueType.KeyFromSource; }
+            get => FieldValueType.KeyFromSource;
         }
     }
 }

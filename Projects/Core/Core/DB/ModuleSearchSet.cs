@@ -1,7 +1,5 @@
 namespace OnWeb.Core.DB
 {
-    using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
@@ -29,7 +27,7 @@ namespace OnWeb.Core.DB
 
         public int IdModule
         {
-            get { return _idModule; }
+            get => _idModule;
             set
             {
                 _idModule = value;
@@ -72,14 +70,14 @@ namespace OnWeb.Core.DB
         #region Items.ItemBase
         public override int ID
         {
-            get { return IdSearchSet; }
-            set { IdSearchSet = value; }
+            get => IdSearchSet;
+            set => IdSearchSet = value;
         }
 
         public override string Caption
         {
-            get { return NameSearchSet; }
-            set { NameSearchSet = value; }
+            get => NameSearchSet;
+            set => NameSearchSet = value;
         }
         #endregion
     }
