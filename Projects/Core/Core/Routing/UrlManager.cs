@@ -167,7 +167,7 @@ namespace OnWeb.Core.Routing
                     IdItemType = x.IdItemType,
                     Action = x.action,
                     Arguments = Newtonsoft.Json.JsonConvert.SerializeObject(x.Arguments),
-                    UrlFull = "/" + x.Url.Trim('/'),
+                    UrlFull = "/" + x.Url.Trim('/').ToLower(),
                     UniqueKey = string.IsNullOrEmpty(x.UniqueKey) ? null : x.UniqueKey,
                     DateChange = DateTime.Now.Timestamp(),
                     IdUserChange = idUser,

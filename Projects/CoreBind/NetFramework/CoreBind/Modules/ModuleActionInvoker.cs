@@ -51,7 +51,7 @@ namespace OnWeb.CoreBind.Modules
                         {
                             method = (from p in extension.GetType().GetMethods()
                                       where Attribute.IsDefined(p, typeof(ModuleActionAttribute)) &&
-                                            p.GetCustomAttributes<ModuleActionAttribute>(true).First().Alias == actionName
+                                            string.Equals(p.GetCustomAttributes<ModuleActionAttribute>(true).First().Alias, actionName, StringComparison.InvariantCultureIgnoreCase)
                                       select p).FirstOrDefault();
                         }
 
@@ -154,7 +154,7 @@ namespace OnWeb.CoreBind.Modules
                         {
                             method = (from p in extension.GetType().GetMethods()
                                       where Attribute.IsDefined(p, typeof(ModuleActionAttribute)) &&
-                                            p.GetCustomAttributes<ModuleActionAttribute>(true).First().Alias == actionName
+                                            string.Equals(p.GetCustomAttributes<ModuleActionAttribute>(true).First().Alias, actionName, StringComparison.InvariantCultureIgnoreCase)
                                       select p).FirstOrDefault();
                         }
 

@@ -66,7 +66,13 @@ namespace OnWeb.CoreBind.Modules
 
                 if (!string.IsNullOrEmpty(urlNameNew))
                 {
-                    var sameUrlName = AppCore.GetModulesManager().GetModules().Where(x => x.UrlName == urlNameNew && x.IdModule != Module.IdModule).Select(x => $"'{x.Caption}' ({x.IdModule})").ToList();
+                    var sameUrlName = AppCore.
+                        GetModulesManager().
+                        GetModules().
+                        Where(x => x.UrlName.Equals(urlNameNew, StringComparison.InvariantCultureIgnoreCase) && x.IdModule != Module.IdModule).
+                        Select(x => $"'{x.Caption}' ({x.IdModule})").
+                        ToList();
+
                     if (sameUrlName.Count > 0)
                     {
                         ModelState.AddModelError(nameof(formData.UrlName), $"Такое значение URL-доступного имени используется в следующих модулях: {string.Join(", ", sameUrlName)}");
@@ -85,7 +91,8 @@ namespace OnWeb.CoreBind.Modules
                     else
                     {
                         cfg.UrlName = urlNameNew;
-                        if (urlNameSource != cfg.UrlName) outputMessage = $"Обратите внимание, что после изменения URL-доступного имени модуль станет недоступен по старому адресу. {outputMessage}".Trim();
+                        if (!string.Equals(urlNameSource, cfg.UrlName, StringComparison.InvariantCultureIgnoreCase))
+                            outputMessage = $"Обратите внимание, что после изменения URL-доступного имени модуль станет недоступен по старому адресу. {outputMessage}".Trim();
 
                         Module.GetConfigurationManipulator().ApplyConfiguration(cfg);
                         answer.FromSuccess($"{outputMessage}".Trim());

@@ -23,7 +23,7 @@ namespace OnWeb.CoreBind.Routing
 
         private Routing GetMatchedRoute(RouteValueDictionary routeValues)
         {
-            var url = UriExtensions.MakeRelativeFromUrl(routeValues.Values.Select(x => (x?.ToString() ?? "").TrimEnd('/')).First().ToString());
+            var url = UriExtensions.MakeRelativeFromUrl(routeValues.Values.Select(x => (x?.ToString() ?? "").TrimEnd('/')).First().ToString()).ToLower();
 
             if (url.Trim() == "/") return null;
 

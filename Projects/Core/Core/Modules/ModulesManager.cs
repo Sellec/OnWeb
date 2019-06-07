@@ -105,7 +105,7 @@ namespace OnWeb.Core.Modules
         {
             lock (_syncRoot)
             {
-                var module = (from p in _modules.Select(x => x.Item2).OfType<ModuleCore>() where p._moduleUrlName == urlName select p).FirstOrDefault();
+                var module = (from p in _modules.Select(x => x.Item2).OfType<ModuleCore>() where p._moduleUrlName.Equals(urlName, StringComparison.InvariantCultureIgnoreCase) select p).FirstOrDefault();
                 return module;
             }
         }
