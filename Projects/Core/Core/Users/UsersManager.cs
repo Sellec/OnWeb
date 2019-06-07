@@ -134,6 +134,8 @@ namespace OnWeb.Core.Users
                     scope.Commit();
                 }
 
+                CheckUpdateCurrentUserContext(userIdList);
+
                 return NotFound.Success;
             }
             catch (Exception ex)
@@ -171,6 +173,8 @@ namespace OnWeb.Core.Users
                     scope.Commit();
                 }
 
+                CheckUpdateCurrentUserContext(userIdList);
+
                 return NotFound.Success;
             }
             catch (Exception ex)
@@ -178,6 +182,15 @@ namespace OnWeb.Core.Users
                 Debug.Logs($"addRoleUsers: {idRole}, {userIdList}; {ex}");
                 this.RegisterEvent(Journaling.EventType.Error, "Ошибка при регистрации роли для списка пользователей.", $"Идентификатор роли: {idRole}\r\nИдентификаторы пользователей: {(userIdList?.Any() == true ? "не задано" : string.Join(", ", userIdList))}", ex);
                 return NotFound.Error;
+            }
+        }
+
+        private void CheckUpdateCurrentUserContext(IEnumerable<int> userIdList)
+        {
+            var currentContext = AppCore.GetUserContextManager().GetCurrentUserContext();
+            if (userIdList != null && userIdList.Contains(currentContext.GetIdUser()))
+            {
+                AppCore.GetUserContextManager().TryRestorePermissions(currentContext);
             }
         }
 

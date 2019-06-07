@@ -20,7 +20,7 @@ namespace OnWeb.Core.Users
         public const string RoleUserName = "RoleUser";
         public const string RoleGuestName = "RoleGuest";
 
-        private static IUserContext SystemUserContext { get; } = new UserManager(new DB.User() { id = int.MaxValue - 1, email = string.Empty, phone = string.Empty, Superuser = 1 }, true);
+        private static IUserContext SystemUserContext { get; } = new UserContext(new DB.User() { id = int.MaxValue - 1, email = string.Empty, phone = string.Empty, Superuser = 1 }, true);
 
         #region Методы
         /// <summary>
@@ -36,7 +36,7 @@ namespace OnWeb.Core.Users
         /// </summary>
         public override IUserContext CreateGuestUserContext()
         {
-            return new UserManager(new DB.User() { id = 0, email = string.Empty, phone = string.Empty, name = "Гость", Superuser = 0 }, false);
+            return new UserContext(new DB.User() { id = 0, email = string.Empty, phone = string.Empty, name = "Гость", Superuser = 0 }, false);
         }
 
         #region Login
@@ -133,15 +133,15 @@ namespace OnWeb.Core.Users
 
                     AppCore.Get<IUsersManager>().getUsers(new Dictionary<int, DB.User>() { { id, res } });
 
-                    var permissionsResult = GetPermissions(res.id);
+                    var context = new UserContext(res, true);
+                    context.Start(AppCore);
+
+                    var permissionsResult = TryRestorePermissions(context);
                     if (!permissionsResult.IsSuccess)
                     {
                         resultReason = returnNewFailedResultWithAuthAttempt(permissionsResult.Message);
                         return eAuthResult.UnknownError;
                     }
-
-                    var context = new UserManager(res, true, permissionsResult.Result);
-                    context.Start(AppCore);
 
                     var idEvent = AppCore.ConfigurationOptionGet("eventLoginSuccess", 0);
                     if (idEvent > 0) RegisterLogHistoryEvent(id, idEvent);
@@ -387,6 +387,25 @@ namespace OnWeb.Core.Users
                 this.RegisterEvent(Journaling.EventType.Error, "Ошибка при получении разрешений для пользователя.", $"IdUser={idUser}.", null, ex);
                 return new ExecutionPermissionsResult(false, "Ошибка при получении разрешений для пользователя.");
             }
+        }
+
+        /// <summary>
+        /// Пытается получить текущие разрешения для пользователя, ассоциированного с контекстом <paramref name="context"/>, и задать их контексту.
+        /// </summary>
+        /// <returns>Возвращает true, если удалось получить разрешения и установить их для переданного контекста.</returns>
+        public ExecutionResult TryRestorePermissions(IUserContext context)
+        {
+            if (context is UserContext userContext)
+            {
+                var permissionsResult = GetPermissions(userContext.IdUser);
+                if (permissionsResult.IsSuccess)
+                {
+                    userContext.ApplyPermissions(permissionsResult.Result);
+                    return new ExecutionResult(true);
+                }
+                else return new ExecutionResult(false, permissionsResult.Message);
+            }
+            else return new ExecutionResult(false, "Неподдерживаемый тип контекста.");
         }
         #endregion
     }

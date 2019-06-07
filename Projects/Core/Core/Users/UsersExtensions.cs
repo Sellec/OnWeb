@@ -14,7 +14,7 @@ namespace OnWeb
         /// </summary> 
         public static int GetIdUser(this IUserContext context)
         {
-            if (context is Core.Users.UserManager coreContext) return coreContext.IdUser;
+            if (context is Core.Users.UserContext coreContext) return coreContext.IdUser;
             throw new ArgumentException("Контекст пользователя не является контекстом, используемым в веб-ядре.", nameof(context));
         }
 
@@ -23,7 +23,7 @@ namespace OnWeb
         /// </summary>
         public static Core.DB.User GetData(this IUserContext context)
         {
-            if (context is Core.Users.UserManager coreContext) return coreContext.GetData();
+            if (context is Core.Users.UserContext coreContext) return coreContext.GetData();
             throw new ArgumentException("Контекст пользователя не является контекстом, используемым в веб-ядре.", nameof(context));
         }
 
