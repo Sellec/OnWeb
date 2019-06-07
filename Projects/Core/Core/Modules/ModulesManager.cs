@@ -98,14 +98,26 @@ namespace OnWeb.Core.Modules
 
         internal List<ModuleCore> GetModulesInternal()
         {
-            lock (_syncRoot) return _modules.Select(x => (ModuleCore)x.Item2).ToList();
+            lock (_syncRoot)
+            {
+                var module = _modules.
+                    Select(x => (ModuleCore)x.Item2).
+                    ToList();
+
+                return module;
+            }
         }
 
         internal ModuleCore GetModuleInternal(string urlName)
         {
             lock (_syncRoot)
             {
-                var module = (from p in _modules.Select(x => x.Item2).OfType<ModuleCore>() where p._moduleUrlName.Equals(urlName, StringComparison.InvariantCultureIgnoreCase) select p).FirstOrDefault();
+                var module = _modules.
+                    Select(x => x.Item2).
+                    OfType<ModuleCore>().
+                    Where(x => !string.IsNullOrEmpty(x._moduleUrlName) && x._moduleUrlName.Equals(urlName, StringComparison.InvariantCultureIgnoreCase)).
+                    FirstOrDefault();
+
                 return module;
             }
         }
@@ -114,7 +126,12 @@ namespace OnWeb.Core.Modules
         {
             lock (_syncRoot)
             {
-                var module = (from p in _modules.Select(x => x.Item2).OfType<ModuleCore>() where p.ID == moduleID select p).FirstOrDefault();
+                var module = _modules.
+                    Select(x => x.Item2).
+                    OfType<ModuleCore>().
+                    Where(x => x.IdModule == moduleID).
+                    FirstOrDefault();
+
                 return module;
             }
         }
