@@ -53,9 +53,10 @@ namespace OnWeb.Plugins.MessagingEmail.Connectors
             try
             {
                 var settings = !string.IsNullOrEmpty(connectorSettings) ? JsonConvert.DeserializeObject<SmtpServerSettings>(connectorSettings) : new SmtpServerSettings();
-                if (settings.Server == null) throw new Exception("Не указан адрес smtp-сервера.");
-                if (!settings.Server.IsAbsoluteUri) throw new Exception("Адрес smtp-сервера указан некорректно.");
-                if (settings.Server.Scheme != "http" && settings.Server.Scheme != "https") throw new Exception("Некорректно указан тип подключения - ssl/no-ssl.");
+
+                if (settings.Server == null) return false;
+                if (!settings.Server.IsAbsoluteUri) return false;
+                if (settings.Server.Scheme != "http" && settings.Server.Scheme != "https") return false;
 
                 var client = new SmtpClient()
                 {
