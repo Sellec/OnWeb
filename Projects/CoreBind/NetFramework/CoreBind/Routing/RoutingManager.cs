@@ -40,11 +40,12 @@ namespace OnWeb.CoreBind.Routing
         #endregion
 
         /// <summary>
-        /// Создает url на основе контроллера с типом <typeparamref name="TModuleController"/> и метода, вызванного в лямбда-выражении <paramref name="expression"/>.
+        /// Возвращает относительный или абсолютный url (см. <paramref name="includeAuthority"/>) на основе контроллера с типом <typeparamref name="TModuleController"/> и метода, вызванного в лямбда-выражении <paramref name="expression"/>.
         /// </summary>
         /// <typeparam name="TModule">Тип модуля.</typeparam>
         /// <typeparam name="TModuleController">Тип контроллера, относящийся к модулю <typeparamref name="TModule"/>. Проверяются зарегистрированные типы контроллеров (<see cref="ModuleCore.ControllerTypes"/>) в модуле <typeparamref name="TModule"/> и проверяется нахождение типа <typeparamref name="TModuleController"/> в цепочках наследования.</typeparam>
-        /// <param name="expression">Выражение с вызовом метода контроллера, на основе которого будет определена часть url.</param>
+        /// <param name="expression">Выражение, содержащее вызов метода контроллера, к которому следует построить маршрут. Все аргументы вызываемого метода должны быть указаны. Если аргумент указывается как null, то он игнорируется. Если аргумент задан явно, то он передается в адресе.</param>
+        /// <param name="includeAuthority">Если равно true, то формируется абсолютный url, включающий в себя адрес сервера.</param>
         /// <returns>Возвращает сформированный url или генерирует исключение.</returns>
         /// <exception cref="ArgumentException">Исключение возникает, если в выражении <paramref name="expression"/> нет вызова метода или вызван метод, не относящийся к <typeparamref name="TModuleController"/>.</exception>
         /// <exception cref="NotSupportedException">
@@ -56,7 +57,7 @@ namespace OnWeb.CoreBind.Routing
         /// <para>5) Найден подходящий тип контроллера в модуле <typeparamref name="TModule"/>, однако на данный момент тип этого контроллера не поддерживается в <see cref="ControllerTypeFactory"/>, т.е. для этого контроллера нет подходящего обработчика http-запросов.</para>
         /// </exception>
         /// <exception cref="HandledException">Исключение возникает, если было сгенерировано любое другое нештатное исключение во время работы модуля.</exception>
-        public string CreateRoute<TModule, TModuleController>(Expression<Func<TModuleController, ActionResult>> expression)
+        public Uri CreateRoute<TModule, TModuleController>(Expression<Func<TModuleController, ActionResult>> expression, bool includeAuthority = false)
             where TModule : ModuleCore<TModule>
             where TModuleController : IModuleController<TModule>
         {
@@ -100,7 +101,7 @@ namespace OnWeb.CoreBind.Routing
                 if (isDefaultMethod && arguments.Count == 0) methodName = null;
 
                 var url = controllerTypeFromFactory.CreateRelativeUrl(module.UrlName, methodName, arguments.ToArray());
-                return url;
+                return includeAuthority ? new Uri(AppCore.ServerUrl, url) : new Uri(url, UriKind.Relative);
             }
             catch (HandledException ex)
             {

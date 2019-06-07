@@ -8,7 +8,7 @@
 @if (!string.IsNullOrEmpty(Model.Comment)) { <span>@Model.Comment</span><br /><br /> }
 
 Необходимо просмотреть заявку на регистрацию и принять решение о приеме или отказе.<br />
-Прямая ссылка на просмотр заявки: <a href='@Url.ContentFullPath(Url.CreateRoute<ModuleCustomer, ModuleControllerAdminCustomer>(x => x.UserEdit(Model.id)))'>Управление сайтом</a><br /><br />
+Прямая ссылка на просмотр заявки: <a href='@(Url.CreateRoute<ModuleCustomer, ModuleControllerAdminCustomer>(x => x.UserEdit(Model.id), true))'>Управление сайтом</a><br /><br />
 
 Спасибо за внимание!<br />
 Почтовый робот сайта @Url.ContentFullPath("")

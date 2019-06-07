@@ -555,13 +555,14 @@ namespace OnWeb.CoreBind.Modules
 
         #region Переадресация на другие модули.
         /// <summary>
-        /// Выполняет переадресацию к методу в выражении <paramref name="expression"/> для контроллера <typeparamref name="TModuleController"/>. Более подробно см. описание <see cref="Routing.RoutingManager.CreateRoute{TModule, TModuleController}(Expression{Func{TModuleController, ActionResult}})"/>.
+        /// Выполняет переадресацию к методу в выражении <paramref name="expression"/> для контроллера <typeparamref name="TModuleController"/>.
         /// </summary>
+        /// <seealso cref="Routing.RoutingManager.CreateRoute{TModule, TModuleController}(Expression{Func{TModuleController, ActionResult}}, bool)"/>
         public RedirectResult Redirect<TModule, TModuleController>(Expression<Func<TModuleController, ActionResult>> expression)
             where TModule : ModuleCore<TModule>
             where TModuleController : IModuleController<TModule>
         {
-            return Redirect(AppCore.Get<Routing.RoutingManager>().CreateRoute<TModule, TModuleController>(expression));
+            return base.Redirect(AppCore.Get<Routing.RoutingManager>().CreateRoute<TModule, TModuleController>(expression, false)?.ToString());
         }
         #endregion
 

@@ -107,23 +107,30 @@ namespace System.Web.Mvc
         }
 
         /// <summary>
-        /// Формирует url к странице по-умолчанию в пользовательской части сайта для контроллера <typeparamref name="TModuleController"/>. Более подробно см. описание <see cref="RoutingManager.CreateRoute{TModule, TModuleController}(Expression{Func{TModuleController, ActionResult}})"/>.
+        /// Формирует абсолютный или относительный url (см. <paramref name="includeAuthority"/>) к разделу по-умолчанию в пользовательской части сайта для контроллера <typeparamref name="TModuleController"/>.
         /// </summary>
-        public static string CreateRoute<TModule, TModuleController>(this UrlHelper url)
+        /// <param name="helper"></param>
+        /// <param name="includeAuthority">Если равно true, то формируется абсолютный url, включающий в себя адрес сервера.</param>
+        /// <seealso cref="RoutingManager.CreateRoute{TModule, TModuleController}(Expression{Func{TModuleController, ActionResult}}, bool)"/>
+        public static Uri CreateRoute<TModule, TModuleController>(this UrlHelper helper, bool includeAuthority = false)
             where TModule : ModuleCore<TModule>
             where TModuleController : ModuleControllerUser<TModule>, IModuleController<TModule>
         {
-            return url.CreateRoute<TModule, TModuleController>(x => x.Index());
+            return helper.CreateRoute<TModule, TModuleController>(x => x.Index());
         }
 
         /// <summary>
-        /// Формирует url на основе выражения <paramref name="expression"/> для контроллера <typeparamref name="TModuleController"/>. Более подробно см. описание <see cref="RoutingManager.CreateRoute{TModule, TModuleController}(Expression{Func{TModuleController, ActionResult}})"/>.
+        /// Формирует абсолютный или относительный url (см. <paramref name="includeAuthority"/>) на основе выражения <paramref name="expression"/> для контроллера <typeparamref name="TModuleController"/>.
         /// </summary>
-        public static string CreateRoute<TModule, TModuleController>(this UrlHelper url, Expression<Func<TModuleController, ActionResult>> expression)
+        /// <param name="helper"></param>
+        /// <param name="expression">Выражение, содержащее вызов метода контроллера, к которому следует построить маршрут. Все аргументы вызываемого метода должны быть указаны. Если аргумент указывается как null, то он игнорируется. Если аргумент задан явно, то он передается в адресе.</param>
+        /// <param name="includeAuthority">Если равно true, то формируется абсолютный url, включающий в себя адрес сервера.</param>
+        /// <seealso cref="RoutingManager.CreateRoute{TModule, TModuleController}(Expression{Func{TModuleController, ActionResult}}, bool)"/>
+        public static Uri CreateRoute<TModule, TModuleController>(this UrlHelper helper, Expression<Func<TModuleController, ActionResult>> expression, bool includeAuthority = false)
             where TModule : ModuleCore<TModule>
             where TModuleController : IModuleController<TModule>
         {
-            return url.RequestContext.HttpContext.GetAppCore().Get<RoutingManager>().CreateRoute<TModule, TModuleController>(expression);
+            return helper.RequestContext.HttpContext.GetAppCore().Get<RoutingManager>().CreateRoute<TModule, TModuleController>(expression);
         }
     }
 }
