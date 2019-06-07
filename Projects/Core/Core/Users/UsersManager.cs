@@ -3,6 +3,8 @@ using OnUtils.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
+using System.Data.SqlClient;
 
 namespace OnWeb.Core.Users
 {
@@ -28,6 +30,7 @@ namespace OnWeb.Core.Users
                 if (orderBy != null) throw new ArgumentException("Параметр не поддерживается.", nameof(orderBy));
 
                 using (var db = this.CreateUnitOfWork())
+                using (var scope = db.CreateScope(TransactionScopeOption.Suppress))
                 {
                     var queryBase = db.Users.AsQueryable();
 
@@ -62,12 +65,13 @@ namespace OnWeb.Core.Users
             catch (ArgumentException) { throw; }
             catch (Exception ex)
             {
-                Debug.Logs($"user: {roleIdList}; {ex.Message}");
                 this.RegisterEvent(
-                    Journaling.EventType.Error, 
-                    "Ошибка получения списка пользователей, обладающих ролями.", 
-                    $"Идентификаторы ролей: {string.Join(", ", roleIdList)}.\r\nПо активности: {(onlyActive ? "только активных" : "всех")}.\r\nСуперпользователи: {(exceptSuperuser ? "только если роль назначена напрямую" : "добавлять всегда")}.\r\nСортировка: {orderBy?.ToString()}.", 
+                    Journaling.EventType.Error,
+                    "Ошибка получения списка пользователей, обладающих ролями.",
+                    $"Идентификаторы ролей: {string.Join(", ", roleIdList)}.\r\nПо активности: {(onlyActive ? "только активных" : "всех")}.\r\nСуперпользователи: {(exceptSuperuser ? "только если роль назначена напрямую" : "добавлять всегда")}.\r\nСортировка: {orderBy?.ToString()}.",
                     ex);
+
+                CheckBlockingException(ex);
                 throw;
             }
         }
@@ -79,6 +83,7 @@ namespace OnWeb.Core.Users
                 if (userIdList == null || userIdList.Length == 0) return new Dictionary<int, List<DB.Role>>();
 
                 using (var db = this.CreateUnitOfWork())
+                using (var scope = db.CreateScope(TransactionScopeOption.Suppress))
                 {
                     var query = from roleJoin in db.RoleUser
                                 join role in db.Role on roleJoin.IdRole equals role.IdRole
@@ -93,6 +98,8 @@ namespace OnWeb.Core.Users
             {
                 Debug.Logs($"rolesByUser: {userIdList}; {ex.Message}");
                 this.RegisterEvent(Journaling.EventType.Error, "Ошибка получения списка ролей, назначенных пользователям.", $"Идентификаторы пользователей: {(userIdList?.Any() == true ? "не задано" : string.Join(", ", userIdList))}", ex);
+
+                CheckBlockingException(ex);
                 throw;
             }
         }
@@ -102,7 +109,7 @@ namespace OnWeb.Core.Users
             try
             {
                 using (var db = this.CreateUnitOfWork())
-                using (var scope = db.CreateScope())
+                using (var scope = db.CreateScope(TransactionScopeOption.Suppress))
                 {
                     if (db.Role.Where(x => x.IdRole == idRole).Count() == 0) return NotFound.NotFound;
 
@@ -140,8 +147,8 @@ namespace OnWeb.Core.Users
             }
             catch (Exception ex)
             {
-                Debug.Logs($"setRoleUsers: {idRole}, {userIdList}; {ex}");
                 this.RegisterEvent(Journaling.EventType.Error, "Ошибка при замене пользователей роли.", $"Идентификатор роли: {idRole}\r\nИдентификаторы пользователей: {(userIdList?.Any() == true ? "не задано" : string.Join(", ", userIdList))}", ex);
+                CheckBlockingException(ex);
                 return NotFound.Error;
             }
         }
@@ -151,7 +158,7 @@ namespace OnWeb.Core.Users
             try
             {
                 using (var db = this.CreateUnitOfWork())
-                using (var scope = db.CreateScope())
+                using (var scope = new TransactionScope(TransactionScopeOption.Suppress))
                 {
                     if (db.Role.Where(x => x.IdRole == idRole).Count() == 0) return NotFound.NotFound;
 
@@ -170,7 +177,7 @@ namespace OnWeb.Core.Users
                     });
 
                     db.SaveChanges();
-                    scope.Commit();
+                    scope.Complete();
                 }
 
                 CheckUpdateCurrentUserContext(userIdList);
@@ -179,8 +186,8 @@ namespace OnWeb.Core.Users
             }
             catch (Exception ex)
             {
-                Debug.Logs($"addRoleUsers: {idRole}, {userIdList}; {ex}");
                 this.RegisterEvent(Journaling.EventType.Error, "Ошибка при регистрации роли для списка пользователей.", $"Идентификатор роли: {idRole}\r\nИдентификаторы пользователей: {(userIdList?.Any() == true ? "не задано" : string.Join(", ", userIdList))}", ex);
+                CheckBlockingException(ex);
                 return NotFound.Error;
             }
         }
@@ -210,6 +217,7 @@ namespace OnWeb.Core.Users
                 if (listIDForRequest.Count > 0)
                 {
                     using (var db = this.CreateUnitOfWork())
+                    using (var scope = db.CreateScope(TransactionScopeOption.Suppress))
                     {
                         var sql = (from p in db.Users where listIDForRequest.Contains(p.id) select p);
                         foreach (var res in sql) users[res.id] = res;
@@ -222,6 +230,8 @@ namespace OnWeb.Core.Users
             {
                 Debug.WriteLine("user: {0}; ", ex.Message);
                 this.RegisterEvent(Journaling.EventType.Error, "Ошибка при получении данных пользователей.", $"Идентификаторы пользователей: {(users?.Any() == true ? "не задано" : string.Join(", ", users.Keys))}", ex);
+
+                CheckBlockingException(ex);
                 throw ex;
             }
         }
@@ -236,6 +246,7 @@ namespace OnWeb.Core.Users
                 var dT = dateTo.Timestamp();
 
                 using (var db = this.CreateUnitOfWork())
+                using (var scope = db.CreateScope(TransactionScopeOption.Suppress))
                 {
                     var list = db.UserLogHistory
                                     .Where(x => x.DateEvent >= dF && x.DateEvent <= dT)
@@ -246,11 +257,23 @@ namespace OnWeb.Core.Users
             }
             catch (Exception ex)
             {
+                CheckBlockingException(ex);
                 // todo setError(ex.Message);
                 Debug.WriteLine(ex.Message);
                 return null;
             }
         }
 
+        private void CheckBlockingException(Exception ex)
+        {
+            var sqlException = ex as SqlException ?? ex.InnerException as SqlException;
+            if (sqlException != null)
+            {
+                if (sqlException.Number == -2)
+                {
+                    throw new InvalidOperationException("Возможно, целевые таблицы заблокированы вышестоящей транзакцией.");
+                }
+            }
+        }
     }
 }

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Transactions;
 
 namespace OnWeb.Core.Users
 {
@@ -95,12 +96,13 @@ namespace OnWeb.Core.Users
             userContext = null;
             resultReason = null;
 
-            using (var db = new UnitOfWork<DB.User>())
+            using (var db = new DB.CoreContext())
+            using (var scope = db.CreateScope(TransactionScopeOption.Suppress))
             {
                 var returnNewFailedResultWithAuthAttempt = new Func<string, string>(message =>
                 {
                     var idEvent = AppCore.ConfigurationOptionGet("eventLoginError", 0);
-                    if (idEvent > 0) RegisterLogHistoryEvent(id, idEvent, message);
+                    if (idEvent > 0) RegisterLogHistoryEvent(db, id, idEvent, message);
 
                     if (id > 0)
                     {
@@ -144,7 +146,7 @@ namespace OnWeb.Core.Users
                     }
 
                     var idEvent = AppCore.ConfigurationOptionGet("eventLoginSuccess", 0);
-                    if (idEvent > 0) RegisterLogHistoryEvent(id, idEvent);
+                    if (idEvent > 0) RegisterLogHistoryEvent(db, id, idEvent);
 
                     res.AuthorizationAttempts = 0;
                     db.SaveChanges();
@@ -169,10 +171,14 @@ namespace OnWeb.Core.Users
                     resultReason = "Неизвестная ошибка во время получения контекста пользователя.";
                     return eAuthResult.UnknownError;
                 }
+                finally
+                {
+                    scope.Commit();
+                }
             }
         }
 
-        private ExecutionAuthResult CheckLogin(int idUser, string login, string password, UnitOfWork<DB.User> db, out DB.User outData)
+        private ExecutionAuthResult CheckLogin(int idUser, string login, string password, DB.CoreContext db, out DB.User outData)
         {
             outData = null;
 
@@ -186,7 +192,7 @@ namespace OnWeb.Core.Users
                 // Если в $user передан id и $password не передан вообще.
                 if (idUser > 0)
                 {
-                    query = db.Repo1.Where(x => x.id == idUser).ToList();
+                    query = db.Users.Where(x => x.id == idUser).ToList();
                     directAuthorize = true;
                 }
 
@@ -202,11 +208,11 @@ namespace OnWeb.Core.Users
                             return new ExecutionAuthResult(eAuthResult.AuthMethodNotAllowed, "Авторизация возможна только по номеру телефона.");
 
                         case eUserAuthorizeAllowed.EmailAndPhone:
-                            query = (from p in db.Repo1 where string.Compare(p.email, login, true) == 0 select p).ToList();
+                            query = (from p in db.Users where string.Compare(p.email, login, true) == 0 select p).ToList();
                             break;
 
                         case eUserAuthorizeAllowed.OnlyEmail:
-                            query = (from p in db.Repo1 where string.Compare(p.email, login, true) == 0 select p).ToList();
+                            query = (from p in db.Users where string.Compare(p.email, login, true) == 0 select p).ToList();
                             break;
                     }
                 }
@@ -226,11 +232,11 @@ namespace OnWeb.Core.Users
                                 return new ExecutionAuthResult(eAuthResult.AuthMethodNotAllowed, "Авторизация возможна только через электронную почту.");
 
                             case eUserAuthorizeAllowed.EmailAndPhone:
-                                query = (from p in db.Repo1 where string.Compare(p.phone, phone.ParsedPhoneNumber, true) == 0 select p).ToList();
+                                query = (from p in db.Users where string.Compare(p.phone, phone.ParsedPhoneNumber, true) == 0 select p).ToList();
                                 break;
 
                             case eUserAuthorizeAllowed.OnlyPhone:
-                                query = (from p in db.Repo1 where string.Compare(p.phone, phone.ParsedPhoneNumber, true) == 0 select p).ToList();
+                                query = (from p in db.Users where string.Compare(p.phone, phone.ParsedPhoneNumber, true) == 0 select p).ToList();
                                 break;
                         }
                     }
@@ -315,27 +321,24 @@ namespace OnWeb.Core.Users
         }
         #endregion
 
-        private bool RegisterLogHistoryEvent(int IdUser, int IdEventType, string Comment = null)
+        private bool RegisterLogHistoryEvent(DB.CoreContext db, int IdUser, int IdEventType, string Comment = null)
         {
             try
             {
                 // todo setError(null);
 
-                using (var db = this.CreateUnitOfWork())
+                db.UserLogHistory.Add(new DB.UserLogHistory()
                 {
-                    db.UserLogHistory.Add(new DB.UserLogHistory()
-                    {
-                        IdUser = IdUser,
-                        IdEventType = IdEventType,
-                        DateEvent = DateTime.Now.Timestamp(),
-                        Comment = string.IsNullOrEmpty(Comment) ? "" : Comment,
-                        //IP = System.Web.HttpContext.Current.Request.UserHostAddress // todo добавить адрес
-                    });
+                    IdUser = IdUser,
+                    IdEventType = IdEventType,
+                    DateEvent = DateTime.Now.Timestamp(),
+                    Comment = string.IsNullOrEmpty(Comment) ? "" : Comment,
+                    //IP = System.Web.HttpContext.Current.Request.UserHostAddress // todo добавить адрес
+                });
 
-                    db.SaveChanges();
+                db.SaveChanges();
 
-                    return true;
-                }
+                return true;
             }
             catch (Exception ex)
             {
@@ -355,6 +358,7 @@ namespace OnWeb.Core.Users
             try
             {
                 using (var db = this.CreateUnitOfWork())
+                using (var scope = db.CreateScope(TransactionScopeOption.Suppress))
                 {
                     var authCfg = AppCore.Get<Plugins.Auth.ModuleAuth>().GetConfiguration<Plugins.Auth.ModuleConfiguration>();
                     var idRoleUser = authCfg.RoleUser;
