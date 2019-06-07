@@ -110,10 +110,7 @@ namespace OnWeb.Core.Messaging
         #region Методы
         public void Init()
         {
-            //if (initializationContext == ProviderInitializationContext.Constructor)
-            {
-                this.RegisterServiceState(ServiceStatus.RunningIdeal, "Сервис запущен.");
-            }
+            this.RegisterServiceState(ServiceStatus.RunningIdeal, "Сервис запущен.");
         }
 
         public void Dispose()
@@ -181,9 +178,7 @@ namespace OnWeb.Core.Messaging
                             }
                         }
 
-                        //if (messageBody == null) messageBody = new MessageProcessed<TMessageType>(message.Value, message.Key) { IsHandled = true, IsError = true, ErrorText = "Нет ни одного коннектора." };
-
-                        if (messageBody.IsHandled)
+                        if (messageBody != null && messageBody.IsHandled)
                         {
                             message.Key.ExternalID = messageBody.ExternalID;
                             message.Key.IsHandled = true;
