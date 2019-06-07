@@ -78,7 +78,7 @@ namespace OnWeb.Plugins.MessagingEmail
         private string GetNoReplyAddress()
         {
             var address = "no-reply@localhost";
-            if (AppCore.ServerUrl != null) address = "no-reply@" + AppCore.ServerUrl.Authority;
+            if (AppCore.ServerUrl != null) address = "no-reply@" + AppCore.ServerUrl.Host;
 
             return address;
         }

@@ -81,6 +81,7 @@ namespace OnWeb.Plugins.MessagingEmail.Connectors
         {
             try
             {
+                //todo перенести сюда все корректировки из smtpserver.
                 var mailMessage = new MailMessage
                 {
                     From = new MailAddress(message.Message.From.ContactData, string.IsNullOrEmpty(message.Message.From.Name) ? message.Message.From.ContactData : message.Message.From.Name),
@@ -160,18 +161,6 @@ namespace OnWeb.Plugins.MessagingEmail.Connectors
                         }
                     }
                 }
-
-                //if (is_array($files) && count($files) > 0)
-                //	foreach ($files as $k=>$v)
-                //	{
-                //		if (isset($v['url"]) && isset($v['name"]))
-                //			$mail->AddAttachment(SITE_PATH.$v['url"], $v['name"].'.'.pathinfo($v['url"], PATHINFO_EXTENSION));
-                //		else if (isset($v['path"]) && isset($v['name"]))	
-                //			$mail->AddAttachment($v['path"], $v['name"]);
-                //	}
-
-                //$success = $mail->send();
-
             }
             catch (HandledException ex)
             {

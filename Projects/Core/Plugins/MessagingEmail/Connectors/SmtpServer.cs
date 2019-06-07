@@ -90,7 +90,10 @@ namespace OnWeb.Plugins.MessagingEmail.Connectors
                     Body = message.Message.Body?.ToString(),
                 };
 
-                message.Message.To.ForEach(x => mailMessage.To.Add(new MailAddress(Debug.IsDeveloper ? AppCore.Config.DeveloperEmail : x.ContactData, string.IsNullOrEmpty(x.Name) ? x.ContactData : x.Name)));
+                var developerEmail = AppCore.Config.DeveloperEmail;
+                if (Debug.IsDeveloper && string.IsNullOrEmpty(developerEmail)) return;
+
+                message.Message.To.ForEach(x => mailMessage.To.Add(new MailAddress(Debug.IsDeveloper ? developerEmail : x.ContactData, string.IsNullOrEmpty(x.Name) ? x.ContactData : x.Name)));
 
                 try
                 {
@@ -137,6 +140,7 @@ namespace OnWeb.Plugins.MessagingEmail.Connectors
                     else throw;
                 }
 
+                //todo добавить прикрепление файлов в отправку писем.
                 //if (is_array($files) && count($files) > 0)
                 //	foreach ($files as $k=>$v)
                 //	{
@@ -148,14 +152,16 @@ namespace OnWeb.Plugins.MessagingEmail.Connectors
 
                 //$success = $mail->send();
             }
-            catch (HandledException ex)
+            catch(FormatException)
             {
-                message.IsError = false;
-                message.ErrorText = ex.Message;
+                message.IsHandled = true;
+                message.IsSuccess = false;
+                message.IsError = true;
+                message.ErrorText = "Некорректный Email-адрес";
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Debug.WriteLine(ex.ToString());
+                message.IsSuccess = false;
                 message.IsError = false;
                 message.ErrorText = "Необработанная ошибка во время отправки сообщения";
             }
@@ -169,7 +175,7 @@ namespace OnWeb.Plugins.MessagingEmail.Connectors
 
         string IConnectorBase<EmailMessage>.ConnectorName
         {
-            get => "Gmail";
+            get => "SMTP-сервер";
         }
         #endregion
 

@@ -71,6 +71,7 @@ namespace OnWeb.Plugins.Adminmain
                     var cfg = AppCore.GetModulesManager().GetModule<CoreModule.CoreModule>().GetConfigurationManipulator().GetEditable<CoreConfiguration>();
 
                     cfg.IdModuleDefault = model.Configuration.IdModuleDefault;
+                    cfg.DeveloperEmail = model.Configuration.DeveloperEmail;
                     cfg.index_page = model.Configuration.index_page;
                     cfg.SiteFullName = model.Configuration.SiteFullName;
                     cfg.helpform_email = model.Configuration.helpform_email;

@@ -202,6 +202,11 @@
     <Compile Include="Plugins\Admin\ModuleAdminController.cs" />
     <Compile Include="Plugins\Admin\Startup.cs" />
     <Compile Include="Plugins\FileManager\Startup.cs" />
+    <Compile Include="Plugins\MessagingEmail\EMailController.cs" />
+    <Compile Include="Plugins\MessagingEmail\EMailModule.cs" />
+    <Compile Include="Plugins\MessagingEmail\Model\Configuration.cs" />
+    <Compile Include="Plugins\MessagingEmail\Model\SmtpServerSettings.cs" />
+    <Compile Include="Plugins\MessagingEmail\Startup.cs" />
     <Compile Include="Plugins\reCAPTCHA\ModelAttribute.cs" />
     <Compile Include="Plugins\reCAPTCHA\ModelValidator.cs" />
     <Compile Include="Plugins\reCAPTCHA\ModelValidatorProvider.cs" />
@@ -2020,6 +2025,7 @@
     <Content Include="Plugins\Register\Design\RegisterNotificationEmailConfirm.cshtml" />
     <Content Include="Plugins\Register\Design\RegisterNotificationEmailModerate.cshtml" />
     <Content Include="Plugins\Adminmain\Design\SitemapXml.cshtml" />
+    <Content Include="Plugins\MessagingEmail\Design\ModuleSettings.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

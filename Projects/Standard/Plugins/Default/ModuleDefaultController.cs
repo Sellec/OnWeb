@@ -8,6 +8,7 @@ namespace OnWeb.Plugins.Default
     {
         public override ActionResult Index()
         {
+            this.RegisterEventWithCode(System.Net.HttpStatusCode.InternalServerError, "1313");
             return this.display("Index.cshtml");
         }
 

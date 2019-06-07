@@ -56,6 +56,7 @@ namespace OnWeb.Core.Messaging
                     {
                         IdMessageType = IdMessageType,
                         IsSent = false,
+                        IsHandled = false,
                         MessageInfo = Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(message)),
                         DateCreate = DateTime.Now,
                     };
@@ -82,7 +83,7 @@ namespace OnWeb.Core.Messaging
 
                 using (var db = new DB.CoreContext())
                 {
-                    var messages = db.MessageQueue.Where(x => x.IdMessageType == IdMessageType && !x.IsSent).ToList();
+                    var messages = db.MessageQueue.Where(x => x.IdMessageType == IdMessageType && !x.IsHandled).ToList();
                     var messagesUnserialized = messages.ToDictionary(x => x, x =>
                     {
                         var str = Encoding.UTF8.GetString(x.MessageInfo);
@@ -129,7 +130,7 @@ namespace OnWeb.Core.Messaging
         {
             using (var db = new UnitOfWork<DB.MessageQueue>())
             {
-                return db.Repo1.Where(x => !x.IsSent && x.IdMessageType == IdMessageType).Count();
+                return db.Repo1.Where(x => !x.IsHandled && x.IdMessageType == IdMessageType).Count();
             }
         }
         #endregion
@@ -180,15 +181,16 @@ namespace OnWeb.Core.Messaging
                             }
                         }
 
-                        if (messageBody == null) messageBody = new MessageProcessed<TMessageType>(message.Value, message.Key) { IsHandled = true, IsError = true, ErrorText = "Нет ни одного коннектора." };
+                        //if (messageBody == null) messageBody = new MessageProcessed<TMessageType>(message.Value, message.Key) { IsHandled = true, IsError = true, ErrorText = "Нет ни одного коннектора." };
 
                         if (messageBody.IsHandled)
                         {
                             message.Key.ExternalID = messageBody.ExternalID;
+                            message.Key.IsHandled = true;
+                            message.Key.IsSent = messageBody.IsSuccess;
 
                             if (messageBody.IsSuccess)
                             {
-                                message.Key.IsSent = messageBody.IsSuccess;
                                 message.Key.DateSent = DateTime.Now;
                                 messagesSent++;
                             }

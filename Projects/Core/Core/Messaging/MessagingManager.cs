@@ -40,7 +40,7 @@ namespace OnWeb.Core.Messaging
 
         }
 
-        private static MethodInfo _connectorInitCall = null;
+        private static MethodInfo _connectorCreateCall = null;
         private static ApplicationCore _appCore = null;
         private volatile bool _incomingLock = false;
         private volatile bool _outcomingLock = false;
@@ -53,8 +53,8 @@ namespace OnWeb.Core.Messaging
 
         static MessagingManager()
         {
-            _connectorInitCall = typeof(IConnectorBase<>).GetMethod(nameof(IConnectorBase<MessageFake>.Init), BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(string) }, null);
-            if (_connectorInitCall == null) throw new TypeInitializationException(typeof(MessagingManager).FullName, new Exception($"Ошибка поиска метода '{nameof(IConnectorBase<MessageFake>.Init)}'"));
+            _connectorCreateCall = typeof(MessagingManager).GetMethod(nameof(InitConnector), BindingFlags.NonPublic | BindingFlags.Instance);
+            if (_connectorCreateCall == null) throw new TypeInitializationException(typeof(MessagingManager).FullName, new Exception($"Ошибка поиска метода '{nameof(InitConnector)}'"));
         }
 
         public MessagingManager()
@@ -188,11 +188,16 @@ namespace OnWeb.Core.Messaging
                 var connectorsSettings = AppCore.Config.ConnectorsSettings;
                 if (connectorsSettings != null)
                 {
-                    var types = AppCore.GetQueryTypes().Where(x => TypeHelpers.ExtractGenericInterface(x, typeof(IConnectorBase<>)) != null).ToList();
+                    var types = AppCore.
+                        GetQueryTypes().
+                        Select(x => new { Type = x, Extracted = TypeHelpers.ExtractGenericInterface(x, typeof(IConnectorBase<>)) }).
+                        Where(x => x.Extracted != null).
+                        Select(x => new { x.Type, MessageType = x.Extracted.GetGenericArguments()[0] }).
+                        ToList();
 
                     foreach (var setting in connectorsSettings)
                     {
-                        var connectorType = types.FirstOrDefault(x => x.FullName == setting.ConnectorTypeName);
+                        var connectorType = types.FirstOrDefault(x => x.Type.FullName == setting.ConnectorTypeName);
                         if (connectorType == null)
                         {
                             this.RegisterEvent(Journaling.EventType.Error, "Ошибка при поиске коннектора", $"Не найден тип коннектора из настроек - '{setting.ConnectorTypeName}'. Для стирания старых настроек следует зайти в настройку коннекторов и сделать сохранение.");
@@ -201,8 +206,8 @@ namespace OnWeb.Core.Messaging
 
                         try
                         {
-                            var connector = AppCore.Create<IComponentTransient<ApplicationCore>>(connectorType);
-                            var initResult = (bool)_connectorInitCall.Invoke(connector, new object[] { setting.SettingsSerialized });
+                            var connector = AppCore.Create<IComponentTransient<ApplicationCore>>(connectorType.Type);
+                            var initResult = (bool)_connectorCreateCall.MakeGenericMethod(connectorType.MessageType).Invoke(this, new object[] { connector, setting.SettingsSerialized });
                             if (!initResult)
                             {
                                 this.RegisterEvent(Journaling.EventType.Error, "Отказ инициализации коннектора", $"Коннектор типа '{setting.ConnectorTypeName}' ('{connector.GetType().FullName}') вернул отказ инициализации. См. журналы ошибок для поиска возможной информации.");
@@ -213,11 +218,16 @@ namespace OnWeb.Core.Messaging
                         }
                         catch (Exception ex)
                         {
-                            this.RegisterEvent(Journaling.EventType.Error, "Ошибка создания коннектора", $"Во время создания и инициализации коннектора типа '{setting.ConnectorTypeName}' возникла неожиданная ошибка.", null, ex);
+                            this.RegisterEvent(Journaling.EventType.Error, "Ошибка создания коннектора", $"Во время создания и инициализации коннектора типа '{setting.ConnectorTypeName}' возникла неожиданная ошибка.", null, ex.InnerException);
                         }
                     }
                 }
             }
+        }
+
+        private bool InitConnector<TMessage>(IConnectorBase<TMessage> connector, string serializedSettings) where TMessage : MessageBase, new()
+        {
+            return connector.Init(serializedSettings);
         }
         #endregion
     }

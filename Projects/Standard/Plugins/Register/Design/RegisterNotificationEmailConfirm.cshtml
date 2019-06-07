@@ -2,7 +2,7 @@
 @model Register.Model.RegisterNotificationConfirm
 
 Уважаемый посетитель!<br />
-Вы успешно зарегистрировались на сайте. Для активации учетной записи вам необходимо перейти по <a href='@(Url.CreateRoute<ModuleRegister, ModuleRegisterController>(x => x.Confirm(Model.Data.id, Model.ConfirmationCode)))'>ссылке</a>.<br /><br />
+Вы успешно зарегистрировались на сайте. Для активации учетной записи вам необходимо перейти по <a href='@Url.ContentFullPath(Url.CreateRoute<ModuleRegister, ModuleRegisterController>(x => x.Confirm(Model.Data.id, Model.ConfirmationCode)))'>ссылке</a>.<br /><br />
 
 @{ var credentitals = string.Join(" или ", new string[] { !string.IsNullOrEmpty(Model.Data.email) ? "адрес электронной почты" : string.Empty, !string.IsNullOrEmpty(Model.Data.phone) ? "номер телефона" : string.Empty }.Where(x => !string.IsNullOrEmpty(x))); }
 Для авторизации Вы можете использовать @credentitals и пароль, указанные при регистрации.<br /><br />

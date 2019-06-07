@@ -71,6 +71,12 @@
                 </div>
 
                 <div>
+                    @Html.LabelFor(x => x.Configuration.DeveloperEmail):<br>
+                    @Html.TextBoxFor(x => x.Configuration.DeveloperEmail)<br />
+                    @Html.ValidationMessageFor(x => x.Configuration.DeveloperEmail)
+                </div>
+
+                <div>
                     @Html.LabelFor(x => x.Configuration.IdModuleDefault):<br>
                     @Html.DropDownListFor(x => x.Configuration.IdModuleDefault, Model.ModulesList)<br />
                     @Html.ValidationMessageFor(x => x.Configuration.IdModuleDefault)

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnWeb.Core.Messaging.Connectors
+﻿namespace OnWeb.Core.Messaging.Connectors
 {
     /// <summary>
     /// Хранит настройки определенного коннектора.

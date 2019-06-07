@@ -136,8 +136,8 @@ namespace OnWeb.Core.Configuration
         /// <seealso cref="Messaging.IMessagingManager"/>
         public List<Messaging.Connectors.ConnectorSettings> ConnectorsSettings
         {
-            get => JsonConvert.DeserializeObject<List<Messaging.Connectors.ConnectorSettings>>(Get("ConnectorsSettings", ""));
-            set => Get("ConnectorsSettings", value == null ? "" : JsonConvert.SerializeObject(value));
+            get => JsonConvert.DeserializeObject<List<Messaging.Connectors.ConnectorSettings>>(Get("ConnectorsSettings", "")) ?? new List<Messaging.Connectors.ConnectorSettings>();
+            set => Set("ConnectorsSettings", value == null ? "" : JsonConvert.SerializeObject(value));
         }
     }
 }

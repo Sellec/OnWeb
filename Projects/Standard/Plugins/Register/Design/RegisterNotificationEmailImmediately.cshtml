@@ -15,7 +15,7 @@
 { <text>Номер телефона - @Model.phone.<br /></text> }
 <br />
 
-Вы можете авторизоваться, перейдя по <a href="@(Url.CreateRoute<ModuleAuth, ModuleAuthController>())">указанной ссылке</a>.
+Вы можете авторизоваться, перейдя по <a href="@Url.ContentFullPath(Url.CreateRoute<ModuleAuth, ModuleAuthController>()))">указанной ссылке</a>.
 <br /><br />
 
 Спасибо за внимание!<br />

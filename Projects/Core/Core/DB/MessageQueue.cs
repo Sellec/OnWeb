@@ -21,6 +21,11 @@ namespace OnWeb.Core.DB
 
         public bool IsSent { get; set; }
 
+        /// <summary>
+        /// Признак того, что сообщение было обработано. Для обработанного, но не отправленного сообщения, больше не предпринимаются попытки отправки.
+        /// </summary>
+        public bool IsHandled { get; set; }
+
         public DateTime? DateSent { get; set; }
 
         [MaxLength(100)]
