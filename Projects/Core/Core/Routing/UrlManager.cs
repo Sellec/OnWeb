@@ -84,7 +84,7 @@ namespace OnWeb.Core.Routing
         protected sealed override void OnStart()
         {
             DeprecatedSingletonInstances.UrlManager = this;
-            AppCore.Get<Journaling.IJournalingManager>().RegisterJournalTyped<UrlManager>("Журнал менеджера адресов");
+            AppCore.Get<Journaling.JournalingManager>().RegisterJournalTyped<UrlManager>("Журнал менеджера адресов");
         }
 
         /// <summary>

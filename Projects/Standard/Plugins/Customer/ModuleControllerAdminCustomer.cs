@@ -55,7 +55,7 @@ namespace OnWeb.Plugins.Customer
             {
                 var data = IdUser != 0 ? db.Users.Where(x => x.id == IdUser).FirstOrDefault() : new User();
                 if (data == null) throw new KeyNotFoundException("Неправильно указан пользователь!");
-                var history = AppCore.Get<IJournalingManager>().GetJournalForItem(data);
+                var history = AppCore.Get<JournalingManager>().GetJournalForItem(data);
 
                 var model = new Model.AdminUserEdit()
                 {

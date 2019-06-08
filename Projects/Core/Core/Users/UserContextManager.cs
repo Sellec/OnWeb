@@ -47,6 +47,7 @@ namespace OnWeb.Core.Users
         /// <param name="idUser">Идентификатор пользователя.</param>
         /// <param name="userContext">Содержит контекст в случае успеха.</param>
         /// <returns>Возвращает результат создания контекста.</returns>
+        [ApiIrreversible]
         public eAuthResult CreateUserContext(int idUser, out IUserContext userContext)
         {
             return CreateUserContext(idUser, null, null, out userContext, out var resultReason);
@@ -59,6 +60,7 @@ namespace OnWeb.Core.Users
         /// <param name="userContext">Содержит контекст в случае успеха.</param>
         /// <param name="resultReason">Содержит текстовое пояснение к ответу функции.</param>
         /// <returns>Возвращает результат создания контекста.</returns>
+        [ApiIrreversible]
         public eAuthResult CreateUserContext(int idUser, out IUserContext userContext, out string resultReason)
         {
             return CreateUserContext(idUser, null, null, out userContext, out resultReason);
@@ -71,6 +73,7 @@ namespace OnWeb.Core.Users
         /// <param name="password">Пароль для авторизации. Должен передаваться в незашифрованном виде.</param>
         /// <param name="userContext">Содержит контекст в случае успеха.</param>
         /// <returns>Возвращает результат создания контекста.</returns>
+        [ApiIrreversible]
         public eAuthResult CreateUserContext(string login, string password, out IUserContext userContext)
         {
             return CreateUserContext(0, login, password, out userContext, out var resultReason);
@@ -84,6 +87,7 @@ namespace OnWeb.Core.Users
         /// <param name="userContext">Содержит контекст в случае успеха.</param>
         /// <param name="resultReason">Содержит текстовое пояснение к ответу функции.</param>
         /// <returns>Возвращает результат создания контекста.</returns>
+        [ApiIrreversible]
         public eAuthResult CreateUserContext(string login, string password, out IUserContext userContext, out string resultReason)
         {
             return CreateUserContext(0, login, password, out userContext, out resultReason);
@@ -133,7 +137,7 @@ namespace OnWeb.Core.Users
                     var attempts = AppCore.ConfigurationOptionGet("AuthorizationAttempts", 0);
                     authorizationAttemptsExceeded = attempts > 0 && (res.AuthorizationAttempts + 1) >= attempts;
 
-                    AppCore.Get<IUsersManager>().getUsers(new Dictionary<int, DB.User>() { { id, res } });
+                    AppCore.Get<UsersManager>().getUsers(new Dictionary<int, DB.User>() { { id, res } });
 
                     var context = new UserContext(res, true);
                     context.Start(AppCore);
@@ -353,6 +357,7 @@ namespace OnWeb.Core.Users
         /// Возвращает список разрешений для пользователя <paramref name="idUser"/>.
         /// </summary>
         /// <returns>Возвращает объект <see cref="ExecutionPermissionsResult"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. В случае ошибки свойство <see cref="ExecutionResult.Message"/> содержит сообщение об ошибке.</returns>
+        [ApiIrreversible]
         public ExecutionPermissionsResult GetPermissions(int idUser)
         {
             try
@@ -397,6 +402,7 @@ namespace OnWeb.Core.Users
         /// Пытается получить текущие разрешения для пользователя, ассоциированного с контекстом <paramref name="context"/>, и задать их контексту.
         /// </summary>
         /// <returns>Возвращает true, если удалось получить разрешения и установить их для переданного контекста.</returns>
+        [ApiIrreversible]
         public ExecutionResult TryRestorePermissions(IUserContext context)
         {
             if (context is UserContext userContext)

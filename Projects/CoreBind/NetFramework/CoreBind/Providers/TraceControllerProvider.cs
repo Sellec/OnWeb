@@ -13,6 +13,7 @@ using System.Web.SessionState;
 
 namespace OnWeb.CoreBind.Providers
 {
+    using Core.Journaling;
     using Core.Modules;
     using Routing;
 
@@ -103,7 +104,7 @@ namespace OnWeb.CoreBind.Providers
             }
             catch (Exception ex)
             {
-                AppCore.Get<Core.Journaling.IJournalingManager>().RegisterEvent(7, Core.Journaling.EventType.CriticalError, "123123", "12312313");
+                AppCore.Get<JournalingManager>().RegisterEvent(7, EventType.CriticalError, "123123", "12312313");
                 try
                 {
                     if (module == null)

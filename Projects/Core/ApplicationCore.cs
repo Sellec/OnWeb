@@ -71,7 +71,7 @@ namespace OnWeb
         protected override void OnBindingsRequired(IBindingsCollection<ApplicationCore> bindingsCollection)
         {
             bindingsCollection.SetSingleton<Core.Items.ItemsManager>();
-            bindingsCollection.SetSingleton<Core.Journaling.IJournalingManager, Core.Journaling.JournalingManager>();
+            bindingsCollection.SetSingleton<Core.Journaling.JournalingManager>();
             bindingsCollection.SetSingleton<Core.Messaging.IMessagingManager, Core.Messaging.MessagingManager>();
             bindingsCollection.SetSingleton<Core.Languages.Manager>();
             bindingsCollection.SetSingleton<ModulesManager<ApplicationCore>, Core.Modules.ModulesManager>();
@@ -80,7 +80,7 @@ namespace OnWeb
             bindingsCollection.SetSingleton<Core.ServiceMonitor.Monitor>();
             bindingsCollection.SetSingleton<Core.Users.IEntitiesManager, Core.Users.EntitiesManager>();
             bindingsCollection.SetSingleton<UserContextManager<ApplicationCore>, Core.Users.UserContextManager>();
-            bindingsCollection.SetSingleton<Core.Users.IUsersManager, Core.Users.UsersManager>();
+            bindingsCollection.SetSingleton<Core.Users.UsersManager>();
         }
 
         private void OnApplicationStartBase()

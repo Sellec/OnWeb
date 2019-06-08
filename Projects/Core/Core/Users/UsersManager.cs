@@ -2,26 +2,41 @@
 using OnUtils.Data;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Transactions;
-using System.Data.SqlClient;
 
 namespace OnWeb.Core.Users
 {
-    //todo привести в порядок.
-    class UsersManager : CoreComponentBase<ApplicationCore>, IUsersManager, IUnitOfWorkAccessor<DB.CoreContext>
+    /// <summary>
+    /// Представляет менеджер, позволяющий управлять данными пользователей.
+    /// </summary>
+    public sealed class UsersManager : CoreComponentBase<ApplicationCore>, IComponentSingleton<ApplicationCore>, IUnitOfWorkAccessor<DB.CoreContext>
     {
         #region CoreComponentBase
+        /// <summary>
+        /// </summary>
         protected sealed override void OnStart()
         {
         }
 
+        /// <summary>
+        /// </summary>
         protected sealed override void OnStop()
         {
         }
         #endregion
 
-        Dictionary<DB.User, int[]> IUsersManager.UsersByRoles(int[] roleIdList, bool onlyActive, bool exceptSuperuser, Dictionary<string, bool> orderBy)
+        /// <summary>
+        /// Возвращает список пользователей, у которых есть роли из переданного списка
+        /// </summary>
+        /// <param name="roleIdList">Список ролей для поиска пользователей</param>
+        /// <param name="onlyActive">Если true, то возвращает только активных пользователей.</param>
+        /// <param name="exceptSuperuser">Если false, то в список будут включены суперпользователи (у суперпользователей по-умолчанию есть все роли).</param>
+        /// <param name="orderBy">Сортировка выдачи</param>
+        /// <returns>Возвращает список пар {пользователь:список ролей из <paramref name="roleIdList"/>} для пользователей, обладающих ролями из списка.</returns>
+        [ApiReversible]
+        public Dictionary<DB.User, int[]> UsersByRoles(int[] roleIdList, bool onlyActive = true, bool exceptSuperuser = false, Dictionary<string, bool> orderBy = null)
         {
             try
             {
@@ -30,7 +45,6 @@ namespace OnWeb.Core.Users
                 if (orderBy != null) throw new ArgumentException("Параметр не поддерживается.", nameof(orderBy));
 
                 using (var db = this.CreateUnitOfWork())
-                using (var scope = db.CreateScope(TransactionScopeOption.Suppress))
                 {
                     var queryBase = db.Users.AsQueryable();
 
@@ -76,14 +90,19 @@ namespace OnWeb.Core.Users
             }
         }
 
-        Dictionary<int, List<DB.Role>> IUsersManager.RolesByUser(int[] userIdList)
+        /// <summary>
+        /// Возвращает списки ролей указанных пользователей.
+        /// </summary>
+        /// <param name="userIdList">Список ролей для поиска пользователей.</param>
+        /// <returns></returns>
+        [ApiReversible]
+        public Dictionary<int, List<DB.Role>> RolesByUser(int[] userIdList)
         {
             try
             {
                 if (userIdList == null || userIdList.Length == 0) return new Dictionary<int, List<DB.Role>>();
 
                 using (var db = this.CreateUnitOfWork())
-                using (var scope = db.CreateScope(TransactionScopeOption.Suppress))
                 {
                     var query = from roleJoin in db.RoleUser
                                 join role in db.Role on roleJoin.IdRole equals role.IdRole
@@ -104,12 +123,15 @@ namespace OnWeb.Core.Users
             }
         }
 
-        NotFound IUsersManager.SetRoleUsers(int idRole, IEnumerable<int> userIdList)
+        /// <summary>
+        /// Устанавливает новый список пользователей <paramref name="userIdList"/>, обладающих указанной ролью <paramref name="idRole"/>. С пользователей, не включенных в <paramref name="userIdList"/>, либо, если <paramref name="userIdList"/> пуст или равен null, то со всех пользователей, данная роль снимается.
+        /// </summary>
+        [ApiReversible]
+        public NotFound SetRoleUsers(int idRole, IEnumerable<int> userIdList)
         {
             try
             {
                 using (var db = this.CreateUnitOfWork())
-                using (var scope = db.CreateScope(TransactionScopeOption.Suppress))
                 {
                     if (db.Role.Where(x => x.IdRole == idRole).Count() == 0) return NotFound.NotFound;
 
@@ -138,10 +160,7 @@ namespace OnWeb.Core.Users
                     }
 
                     db.SaveChanges();
-                    scope.Commit();
                 }
-
-                CheckUpdateCurrentUserContext(userIdList);
 
                 return NotFound.Success;
             }
@@ -153,12 +172,15 @@ namespace OnWeb.Core.Users
             }
         }
 
-        NotFound IUsersManager.AddRoleUsers(int idRole, IEnumerable<int> userIdList)
+        /// <summary>
+        /// Добавляет роль <paramref name="idRole"/> пользователям из списка <paramref name="userIdList"/>.
+        /// </summary>
+        [ApiReversible]
+        public NotFound AddRoleUsers(int idRole, IEnumerable<int> userIdList)
         {
             try
             {
                 using (var db = this.CreateUnitOfWork())
-                using (var scope = new TransactionScope(TransactionScopeOption.Suppress))
                 {
                     if (db.Role.Where(x => x.IdRole == idRole).Count() == 0) return NotFound.NotFound;
 
@@ -177,10 +199,7 @@ namespace OnWeb.Core.Users
                     });
 
                     db.SaveChanges();
-                    scope.Complete();
                 }
-
-                CheckUpdateCurrentUserContext(userIdList);
 
                 return NotFound.Success;
             }
@@ -192,16 +211,9 @@ namespace OnWeb.Core.Users
             }
         }
 
-        private void CheckUpdateCurrentUserContext(IEnumerable<int> userIdList)
-        {
-            var currentContext = AppCore.GetUserContextManager().GetCurrentUserContext();
-            if (userIdList != null && userIdList.Contains(currentContext.GetIdUser()))
-            {
-                AppCore.GetUserContextManager().TryRestorePermissions(currentContext);
-            }
-        }
-
-        bool IUsersManager.getUsers(Dictionary<int, DB.User> users)
+#pragma warning disable CS1591 // todo внести комментарии.
+        [ApiReversible]
+        public bool getUsers(Dictionary<int, DB.User> users)
         {
             try
             {
@@ -217,7 +229,6 @@ namespace OnWeb.Core.Users
                 if (listIDForRequest.Count > 0)
                 {
                     using (var db = this.CreateUnitOfWork())
-                    using (var scope = db.CreateScope(TransactionScopeOption.Suppress))
                     {
                         var sql = (from p in db.Users where listIDForRequest.Contains(p.id) select p);
                         foreach (var res in sql) users[res.id] = res;
@@ -236,6 +247,7 @@ namespace OnWeb.Core.Users
             }
         }
 
+        [ApiReversible]
         public IList<DB.UserLogHistory> GetLogHistoryEvents(DateTime dateFrom, DateTime dateTo)
         {
             try
@@ -246,7 +258,6 @@ namespace OnWeb.Core.Users
                 var dT = dateTo.Timestamp();
 
                 using (var db = this.CreateUnitOfWork())
-                using (var scope = db.CreateScope(TransactionScopeOption.Suppress))
                 {
                     var list = db.UserLogHistory
                                     .Where(x => x.DateEvent >= dF && x.DateEvent <= dT)

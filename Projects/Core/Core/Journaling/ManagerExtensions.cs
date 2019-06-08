@@ -25,7 +25,7 @@ namespace OnWeb
         public static ExecutionResult RegisterJournal<TApplicationComponent>(this TApplicationComponent component, string nameJournal)
             where TApplicationComponent : class, IComponentSingleton<ApplicationCore>
         {
-            return component.GetAppCore().Get<IJournalingManager>().RegisterJournalTyped <TApplicationComponent>(nameJournal);
+            return component.GetAppCore().Get<JournalingManager>().RegisterJournalTyped <TApplicationComponent>(nameJournal);
         }
 
         #region RegisterEvent
@@ -71,7 +71,7 @@ namespace OnWeb
         public static ExecutionResult RegisterEvent<TApplicationComponent>(this TApplicationComponent component, EventType eventType, string eventInfo, string eventInfoDetailed = null, DateTime? eventTime = null, Exception exception = null)
             where TApplicationComponent : class, IComponentSingleton<ApplicationCore>
         {
-            return component.GetAppCore().Get<IJournalingManager>().RegisterEvent<TApplicationComponent>(eventType, eventInfo, eventInfoDetailed, eventTime, exception);
+            return component.GetAppCore().Get<JournalingManager>().RegisterEvent<TApplicationComponent>(eventType, eventInfo, eventInfoDetailed, eventTime, exception);
         }
         #endregion
 
@@ -121,7 +121,7 @@ namespace OnWeb
         public static ExecutionResult RegisterEventForItem<TApplicationComponent>(this TApplicationComponent component, ItemBase relatedItem, EventType eventType, string eventInfo, string eventInfoDetailed = null, DateTime? eventTime = null, Exception exception = null)
             where TApplicationComponent : class, IComponentSingleton<ApplicationCore>
         {
-            return component.GetAppCore().Get<IJournalingManager>().RegisterEventForItem<TApplicationComponent>(relatedItem, eventType, eventInfo, eventInfoDetailed, eventTime, exception);
+            return component.GetAppCore().Get<JournalingManager>().RegisterEventForItem<TApplicationComponent>(relatedItem, eventType, eventInfo, eventInfoDetailed, eventTime, exception);
         }
         #endregion
     }

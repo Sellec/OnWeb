@@ -470,7 +470,7 @@ namespace OnWeb.Plugins.Adminmain
 
                 using (var scope = TransactionsHelper.ReadUncommited())
                 {
-                    var result = AppCore.Get<IJournalingManager>().GetJournal(IdJournal.Value);
+                    var result = AppCore.Get<JournalingManager>().GetJournal(IdJournal.Value);
                     if (!result.IsSuccess) throw new Exception(result.Message);
 
                     using (var db = new UnitOfWork<Journal>())
@@ -506,7 +506,7 @@ namespace OnWeb.Plugins.Adminmain
                 using (var db = new UnitOfWork<Journal>())
                 using (var scope = db.CreateScope())
                 {
-                    var result = AppCore.Get<IJournalingManager>().GetJournal(IdJournal.Value);
+                    var result = AppCore.Get<JournalingManager>().GetJournal(IdJournal.Value);
                     if (!result.IsSuccess) throw new Exception(result.Message);
 
                     db.DataContext.ExecuteQuery("DELETE FROM Journal WHERE IdJournal=@IdJournal", new { IdJournal = result.Result.IdJournal });

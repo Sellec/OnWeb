@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Transactions;
 
 namespace OnWeb.Core.Messaging
 {
@@ -43,6 +44,7 @@ namespace OnWeb.Core.Messaging
         /// Регистрирует сообщение <paramref name="message"/> в очередь на отправку.
         /// </summary>
         /// <returns>Возвращает true в случае успеха и false в случае ошибки во время регистрации сообщения. Текст ошибки </returns>
+        [ApiReversible]
         protected bool RegisterMessage(TMessageType message)
         {
             try
@@ -50,7 +52,6 @@ namespace OnWeb.Core.Messaging
                 // todo setError(null);
 
                 using (var db = new DB.CoreContext())
-                using (var scope = db.CreateScope(System.Transactions.TransactionScopeOption.Suppress))
                 {
                     var mess = new DB.MessageQueue()
                     {
@@ -63,7 +64,6 @@ namespace OnWeb.Core.Messaging
 
                     db.MessageQueue.Add(mess);
                     db.SaveChanges();
-                    scope.Commit();
 
                     return true;
                 }
@@ -75,6 +75,7 @@ namespace OnWeb.Core.Messaging
             }
         }
 
+        [ApiReversible]
         protected Dictionary<DB.MessageQueue, TMessageType> GetUnsentMessages(int IdMessageType)
         {
             try
@@ -123,6 +124,7 @@ namespace OnWeb.Core.Messaging
             return AppCore.Get<IMessagingManager>().GetConnectorsByMessageType<TMessageType>().ToList();
         }
 
+        [ApiReversible]
         public virtual int GetOutcomingQueueLength()
         {
             using (var db = new UnitOfWork<DB.MessageQueue>())
@@ -146,6 +148,7 @@ namespace OnWeb.Core.Messaging
             try
             {
                 using (var db = new DB.CoreContext())
+                using (var scope = db.CreateScope(TransactionScopeOption.Suppress))
                 {
                     var messages = GetUnsentMessages(IdMessageType);
                     if (messages == null) throw new Exception("");// todo  getError(), getErrorException());
@@ -171,7 +174,7 @@ namespace OnWeb.Core.Messaging
                             }
                             catch (Exception ex)
                             {
-                                messageBody.IsHandled = true; 
+                                messageBody.IsHandled = true;
                                 messageBody.IsError = true;
                                 messageBody.ErrorText = $"Неожиданная ошибка во время обработки сообщения в коннекторе '{connector.ConnectorName}' (обработка прервана): {ex.Message}";
                                 break;

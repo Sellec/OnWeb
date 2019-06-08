@@ -9,6 +9,7 @@ using System.Web.Mvc;
 namespace OnWeb.Plugins.Register
 {
     using Core.DB;
+    using Core.Journaling;
     using Core.Modules;
     using Core.Types;
     using CoreBind.Types;
@@ -214,13 +215,13 @@ namespace OnWeb.Plugins.Register
             catch (HandledException ex)
             {
                 Debug.Logs("RegisterUser2: {0}", ex.Message);
-                this.RegisterEvent(Core.Journaling.EventType.Warning, "Регистрация пользователя", "Данные: " + Newtonsoft.Json.JsonConvert.SerializeObject(data), ex);
+                this.RegisterEvent(EventType.Warning, "Регистрация пользователя", "Данные: " + Newtonsoft.Json.JsonConvert.SerializeObject(data), ex);
                 answer.FromFail("Регистрация прервана из-за ошибки: " + ex.Message);
             }
             catch (Exception ex)
             {
                 Debug.Logs("RegisterUser2: {0}", ex.Message);
-                this.RegisterEvent(Core.Journaling.EventType.Error, "Регистрация пользователя - необработанная ошибка", "Данные: " + Newtonsoft.Json.JsonConvert.SerializeObject(data), ex);
+                this.RegisterEvent(EventType.Error, "Регистрация пользователя - необработанная ошибка", "Данные: " + Newtonsoft.Json.JsonConvert.SerializeObject(data), ex);
                 answer.FromFail("Регистрация прервана из-за непредвиденной ошибки");
             }
 

@@ -13,23 +13,39 @@ namespace OnWeb.Core.Journaling
     using ExecutionResultJournalForItem = ExecutionResult<List<DB.Journal>>;
     using ExecutionResultJournalName = ExecutionResult<DB.JournalName>;
 
-    class JournalingManager : CoreComponentBase<ApplicationCore>, IComponentSingleton<ApplicationCore>, IJournalingManager, IUnitOfWorkAccessor<UnitOfWork<DB.Journal, DB.JournalName>>
+    /// <summary>
+    /// Представляет менеджер системных журналов. Позволяет создавать журналы, как привязанные к определенным типам, так и вручную, и регистрировать в них события.
+    /// </summary>
+    public sealed class JournalingManager : CoreComponentBase<ApplicationCore>, IComponentSingleton<ApplicationCore>, IUnitOfWorkAccessor<UnitOfWork<DB.Journal, DB.JournalName>>
     {
         //Список журналов, основанных на определенном типе объектов.
         private ConcurrentDictionary<Type, ExecutionResultJournalName> _typedJournalsList = new ConcurrentDictionary<Type, ExecutionResultJournalName>();
 
         #region CoreComponentBase
+        /// <summary>
+        /// </summary>
         protected sealed override void OnStart()
         {
         }
 
+        /// <summary>
+        /// </summary>
         protected sealed override void OnStop()
         {
         }
         #endregion
 
         #region Регистрация журналов
-        ExecutionResultJournalName IJournalingManager.RegisterJournal(int idType, string name, string uniqueKey)
+        /// <summary>
+        /// Регистрирует новый журнал или обновляет старый по ключу <paramref name="uniqueKey"/> (если передан).
+        /// </summary>
+        /// <param name="idType">См. <see cref="DB.JournalName.IdJournalType"/>.</param>
+        /// <param name="name">См. <see cref="DB.JournalName.Name"/>.</param>
+        /// <param name="uniqueKey">См. <see cref="DB.JournalName.UniqueKey"/>.</param>
+        /// <returns>Возвращает объект <see cref="ExecutionResultJournalName"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. В случае ошибки свойство <see cref="ExecutionResult.Message"/> содержит сообщение об ошибке.</returns>
+        /// <exception cref="ArgumentNullException">Возникает, если <paramref name="name"/> представляет пустую строку или null.</exception>
+        [ApiIrreversible]
+        public ExecutionResultJournalName RegisterJournal(int idType, string name, string uniqueKey = null)
         {
             try
             {
@@ -55,19 +71,32 @@ namespace OnWeb.Core.Journaling
             catch (ArgumentNullException) { throw; }
             catch (Exception ex)
             {
-                Debug.WriteLine($"{typeof(JournalingManager).FullName}.{nameof(IJournalingManager.RegisterJournal)}: {ex.ToString()}");
+                Debug.WriteLine($"{typeof(JournalingManager).FullName}.{nameof(JournalingManager.RegisterJournal)}: {ex.ToString()}");
                 return new ExecutionResultJournalName(false, $"Возникла ошибка во время регистрации журнала с именем '{name}'. Смотрите информацию в системном текстовом журнале.");
             }
         }
 
-        ExecutionResultJournalName IJournalingManager.RegisterJournalTyped<TJournalTyped>(string name)
+        /// <summary>
+        /// Регистрирует новый журнал или обновляет старый на основе типа <typeparamref name="TJournalTyped"/>.
+        /// </summary>
+        /// <param name="name">См. <see cref="DB.JournalName.Name"/>.</param>
+        /// <returns>Возвращает объект <see cref="ExecutionResultJournalName"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. В случае ошибки свойство <see cref="ExecutionResult.Message"/> содержит сообщение об ошибке.</returns>
+        /// <exception cref="ArgumentNullException">Возникает, если <paramref name="name"/> представляет пустую строку или null.</exception>
+        [ApiIrreversible]
+        public ExecutionResultJournalName RegisterJournalTyped<TJournalTyped>(string name)
         {
-            return (this as IJournalingManager).RegisterJournal(JournalingConstants.IdSystemJournalType, name, JournalingConstants.TypedJournalsPrefix + typeof(TJournalTyped).FullName);
+            return RegisterJournal(JournalingConstants.IdSystemJournalType, name, JournalingConstants.TypedJournalsPrefix + typeof(TJournalTyped).FullName);
         }
         #endregion
 
         #region Получить журналы
-        ExecutionResultJournalName IJournalingManager.GetJournal(string uniqueKey)
+        /// <summary>
+        /// Возвращает журнал по уникальному ключу <paramref name="uniqueKey"/>.
+        /// </summary>
+        /// <returns>Возвращает объект <see cref="ExecutionResultJournalName"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. В случае ошибки свойство <see cref="ExecutionResult.Message"/> содержит сообщение об ошибке.</returns>
+        /// <exception cref="ArgumentNullException">Возникает, если <paramref name="uniqueKey"/> представляет пустую строку или null.</exception>
+        [ApiIrreversible]
+        public ExecutionResultJournalName GetJournal(string uniqueKey)
         {
             try
             {
@@ -83,16 +112,22 @@ namespace OnWeb.Core.Journaling
             catch (ArgumentNullException) { throw; }
             catch (Exception ex)
             {
-                Debug.WriteLine($"{typeof(JournalingManager).FullName}.{nameof(IJournalingManager.GetJournal)}(string): {ex.ToString()}");
+                Debug.WriteLine($"{typeof(JournalingManager).FullName}.{nameof(JournalingManager.GetJournal)}(string): {ex.ToString()}");
                 return new ExecutionResultJournalName(false, $"Возникла ошибка во время получения журнала с уникальным именем '{uniqueKey}'. Смотрите информацию в системном текстовом журнале.");
             }
         }
 
-        ExecutionResultJournalName IJournalingManager.GetJournal(int IdJournal)
+        /// <summary>
+        /// Возвращает журнал по идентификатору <paramref name="IdJournal"/>.
+        /// </summary>
+        /// <returns>Возвращает объект <see cref="ExecutionResultJournalName"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. В случае ошибки свойство <see cref="ExecutionResult.Message"/> содержит сообщение об ошибке.</returns>
+        [ApiIrreversible]
+        public ExecutionResultJournalName GetJournal(int IdJournal)
         {
             try
             {
                 using (var db = this.CreateUnitOfWork())
+                using (var scope = db.CreateScope(TransactionScopeOption.Suppress))
                 {
                     var data = db.Repo2.Where(x => x.IdJournal == IdJournal).FirstOrDefault();
                     return new ExecutionResultJournalName(data != null, data != null ? null : "Журнал с указанным уникальным идентификатором не найден.", data);
@@ -100,28 +135,40 @@ namespace OnWeb.Core.Journaling
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"{typeof(JournalingManager).FullName}.{nameof(IJournalingManager.GetJournal)}(int): {ex.ToString()}");
+                Debug.WriteLine($"{typeof(JournalingManager).FullName}.{nameof(JournalingManager.GetJournal)}(int): {ex.ToString()}");
                 return new ExecutionResultJournalName(false, $"Возникла ошибка во время получения журнала с идентификатором '{IdJournal}'. Смотрите информацию в системном текстовом журнале.");
             }
         }
 
-        ExecutionResultJournalName IJournalingManager.GetJournalTyped<TJournalTyped>()
+        /// <summary>
+        /// Возвращает журнал на основе типа <typeparamref name="TJournalTyped"/>.
+        /// </summary>
+        /// <returns>Возвращает объект <see cref="ExecutionResultJournalName"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. В случае ошибки свойство <see cref="ExecutionResult.Message"/> содержит сообщение об ошибке.</returns>
+        [ApiIrreversible]
+        public ExecutionResultJournalName GetJournalTyped<TJournalTyped>()
         {
             return _typedJournalsList.GetOrAddWithExpiration(
                 typeof(TJournalTyped),
-                (t) => (this as IJournalingManager).GetJournal(JournalingConstants.TypedJournalsPrefix + typeof(TJournalTyped).FullName),
+                (t) => GetJournal(JournalingConstants.TypedJournalsPrefix + typeof(TJournalTyped).FullName),
                 TimeSpan.FromMinutes(5));
         }
 
-        ExecutionResultJournalForItem IJournalingManager.GetJournalForItem(ItemBase relatedItem)
+        /// <summary>
+        /// Возвращает события, связанные с объектом <paramref name="relatedItem"/> во всех журналах.
+        /// </summary>
+        /// <returns>Возвращает объект <see cref="ExecutionResultJournalForItem"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. В случае ошибки свойство <see cref="ExecutionResult.Message"/> содержит сообщение об ошибке.</returns>
+        /// <exception cref="ArgumentNullException">Возникает, если <paramref name="relatedItem"/> равен null.</exception>
+        [ApiIrreversible]
+        public ExecutionResultJournalForItem GetJournalForItem(ItemBase relatedItem)
         {
             if (relatedItem == null) throw new ArgumentNullException(nameof(relatedItem));
-            var itemType = Items.ItemTypeFactory.GetItemType(relatedItem.GetType());
+            var itemType = ItemTypeFactory.GetItemType(relatedItem.GetType());
             if (itemType == null) return new ExecutionResultJournalForItem(false, "Ошибка получения данных о типе объекта.");
 
             try
             {
                 using (var db = this.CreateUnitOfWork())
+                using (var scope = db.CreateScope(TransactionScopeOption.Suppress))
                 {
                     var query = db.Repo1.Where(x => x.IdRelatedItem == relatedItem.ID && x.IdRelatedItemType == itemType.IdItemType);
                     var data = query.ToList();
@@ -131,55 +178,101 @@ namespace OnWeb.Core.Journaling
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"{typeof(JournalingManager).FullName}.{nameof(IJournalingManager.GetJournalForItem)}: {ex.ToString()}");
+                Debug.WriteLine($"{typeof(JournalingManager).FullName}.{nameof(JournalingManager.GetJournalForItem)}: {ex.ToString()}");
                 return new ExecutionResultJournalForItem(false, $"Возникла ошибка во время получения событий. Смотрите информацию в системном текстовом журнале.");
             }
         }
         #endregion
 
         #region Записать в журнал
-        ExecutionResult IJournalingManager.RegisterEvent(int IdJournal, EventType eventType, string eventInfo, string eventInfoDetailed, DateTime? eventTime, Exception exception)
+        /// <summary>
+        /// Регистрирует новое событие в журнале <paramref name="IdJournal"/>.
+        /// </summary>
+        /// <param name="IdJournal">См. <see cref="DB.Journal.IdJournal"/>.</param>
+        /// <param name="eventType">См. <see cref="DB.Journal.EventType"/>.</param>
+        /// <param name="eventInfo">См. <see cref="DB.Journal.EventInfo"/>.</param>
+        /// <param name="eventInfoDetailed">См. <see cref="DB.Journal.EventInfoDetailed"/>.</param>
+        /// <param name="eventTime">См. <see cref="DB.Journal.DateEvent"/>. Если передано значение null, то событие записывается на момент вызова метода.</param>
+        /// <param name="exception">См. <see cref="DB.Journal.ExceptionDetailed"/>.</param>
+        /// <returns>Возвращает объект <see cref="ExecutionResult"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. В случае ошибки свойство <see cref="ExecutionResult.Message"/> содержит сообщение об ошибке.</returns>
+        [ApiIrreversible]
+        public ExecutionResult RegisterEvent(int IdJournal, EventType eventType, string eventInfo, string eventInfoDetailed = null, DateTime? eventTime = null, Exception exception = null)
         {
             return RegisterEventInternal(IdJournal, eventType, eventInfo, eventInfoDetailed, eventTime, exception);
         }
 
-        ExecutionResult IJournalingManager.RegisterEvent<TJournalTyped>(EventType eventType, string eventInfo, string eventInfoDetailed, DateTime? eventTime, Exception exception)
+        /// <summary>
+        /// Регистрирует новое событие в журнале на основе типа <typeparamref name="TJournalTyped"/>.
+        /// </summary>
+        /// <param name="eventType">См. <see cref="DB.Journal.EventType"/>.</param>
+        /// <param name="eventInfo">См. <see cref="DB.Journal.EventInfo"/>.</param>
+        /// <param name="eventInfoDetailed">См. <see cref="DB.Journal.EventInfoDetailed"/>.</param>
+        /// <param name="eventTime">См. <see cref="DB.Journal.DateEvent"/>. Если передано значение null, то событие записывается на момент вызова метода.</param>
+        /// <param name="exception">См. <see cref="DB.Journal.ExceptionDetailed"/>.</param>
+        /// <returns>Возвращает объект <see cref="ExecutionResult"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. В случае ошибки свойство <see cref="ExecutionResult.Message"/> содержит сообщение об ошибке.</returns>
+        [ApiIrreversible]
+        public ExecutionResult RegisterEvent<TJournalTyped>(EventType eventType, string eventInfo, string eventInfoDetailed = null, DateTime? eventTime = null, Exception exception = null)
         {
             try
             {
-                var journalResult = (this as IJournalingManager).GetJournalTyped<TJournalTyped>();
+                var journalResult = GetJournalTyped<TJournalTyped>();
                 return !journalResult.IsSuccess ? journalResult : RegisterEventInternal(journalResult.Result.IdJournal, eventType, eventInfo, eventInfoDetailed, eventTime, exception);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"{typeof(JournalingManager).FullName}.{nameof(IJournalingManager.RegisterEvent)}: {ex.ToString()}");
+                Debug.WriteLine($"{typeof(JournalingManager).FullName}.{nameof(JournalingManager.RegisterEvent)}: {ex.ToString()}");
                 return new ExecutionResult(false, $"Возникла ошибка во время регистрации события в типизированный журнал '{typeof(TJournalTyped).FullName}'. Смотрите информацию в системном текстовом журнале.");
             }
         }
 
-        ExecutionResult IJournalingManager.RegisterEventForItem(int IdJournal, ItemBase relatedItem, EventType eventType, string eventInfo, string eventInfoDetailed, DateTime? eventTime, Exception exception)
+        /// <summary>
+        /// Регистрирует новое событие, связанное с объектом <paramref name="relatedItem"/>, в журнале <paramref name="IdJournal"/>.
+        /// </summary>
+        /// <param name="IdJournal">См. <see cref="DB.Journal.IdJournal"/>.</param>
+        /// <param name="relatedItem">См. <see cref="DB.Journal.IdJournal"/>.</param>
+        /// <param name="eventType">См. <see cref="DB.Journal.EventType"/>.</param>
+        /// <param name="eventInfo">См. <see cref="DB.Journal.EventInfo"/>.</param>
+        /// <param name="eventInfoDetailed">См. <see cref="DB.Journal.EventInfoDetailed"/>.</param>
+        /// <param name="eventTime">См. <see cref="DB.Journal.DateEvent"/>. Если передано значение null, то событие записывается на момент вызова метода.</param>
+        /// <param name="exception">См. <see cref="DB.Journal.ExceptionDetailed"/>.</param>
+        /// <returns>Возвращает объект <see cref="ExecutionResult"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. В случае ошибки свойство <see cref="ExecutionResult.Message"/> содержит сообщение об ошибке.</returns>
+        /// <exception cref="ArgumentNullException">Возникает, если <paramref name="relatedItem"/> равен null.</exception>
+        [ApiIrreversible]
+        public ExecutionResult RegisterEventForItem(int IdJournal, ItemBase relatedItem, EventType eventType, string eventInfo, string eventInfoDetailed = null, DateTime? eventTime = null, Exception exception = null)
         {
             if (relatedItem == null) throw new ArgumentNullException(nameof(relatedItem));
-            var itemType = Items.ItemTypeFactory.GetItemType(relatedItem.GetType());
+            var itemType = ItemTypeFactory.GetItemType(relatedItem.GetType());
             if (itemType == null) return new ExecutionResult(false, "Ошибка получения данных о типе объекта.");
 
             return RegisterEventInternal(IdJournal, eventType, eventInfo, eventInfoDetailed, eventTime, exception, relatedItem.ID, itemType.IdItemType);
         }
 
-        ExecutionResult IJournalingManager.RegisterEventForItem<TJournalTyped>(ItemBase relatedItem, EventType eventType, string eventInfo, string eventInfoDetailed, DateTime? eventTime, Exception exception)
+        /// <summary>
+        /// Регистрирует новое событие, связанное с объектом <paramref name="relatedItem"/>, в журнале на основе типа <typeparamref name="TJournalTyped"/>.
+        /// </summary>
+        /// <param name="relatedItem">См. <see cref="DB.Journal.IdJournal"/>.</param>
+        /// <param name="eventType">См. <see cref="DB.Journal.EventType"/>.</param>
+        /// <param name="eventInfo">См. <see cref="DB.Journal.EventInfo"/>.</param>
+        /// <param name="eventInfoDetailed">См. <see cref="DB.Journal.EventInfoDetailed"/>.</param>
+        /// <param name="eventTime">См. <see cref="DB.Journal.DateEvent"/>. Если передано значение null, то событие записывается на момент вызова метода.</param>
+        /// <param name="exception">См. <see cref="DB.Journal.ExceptionDetailed"/>.</param>
+        /// <returns>Возвращает объект <see cref="ExecutionResult"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. В случае ошибки свойство <see cref="ExecutionResult.Message"/> содержит сообщение об ошибке.</returns>
+        /// <exception cref="ArgumentNullException">Возникает, если <paramref name="relatedItem"/> равен null.</exception>
+        [ApiIrreversible]
+        public ExecutionResult RegisterEventForItem<TJournalTyped>(ItemBase relatedItem, EventType eventType, string eventInfo, string eventInfoDetailed = null, DateTime? eventTime = null, Exception exception = null)
         {
             if (relatedItem == null) throw new ArgumentNullException(nameof(relatedItem));
-            var itemType = Items.ItemTypeFactory.GetItemType(relatedItem.GetType());
+            var itemType = ItemTypeFactory.GetItemType(relatedItem.GetType());
             if (itemType == null) return new ExecutionResult(false, "Ошибка получения данных о типе объекта.");
 
             try
             {
-                var journalResult = (this as IJournalingManager).GetJournalTyped<TJournalTyped>();
+                var journalResult = GetJournalTyped<TJournalTyped>();
                 return !journalResult.IsSuccess ? journalResult : RegisterEventInternal(journalResult.Result.IdJournal, eventType, eventInfo, eventInfoDetailed, eventTime, exception, relatedItem.ID, itemType.IdItemType);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"{typeof(JournalingManager).FullName}.{nameof(IJournalingManager.RegisterEventForItem)}: {ex.ToString()}");
+                Debug.WriteLine($"{typeof(JournalingManager).FullName}.{nameof(JournalingManager.RegisterEventForItem)}: {ex.ToString()}");
                 return new ExecutionResult(false, $"Возникла ошибка во время регистрации события в типизированный журнал '{typeof(TJournalTyped).FullName}'. Смотрите информацию в системном текстовом журнале.");
             }
         }
@@ -239,12 +332,12 @@ namespace OnWeb.Core.Journaling
             }
             catch (HandledException ex)
             {
-                Debug.WriteLine($"{typeof(JournalingManager).FullName}.{nameof(IJournalingManager.RegisterEvent)}: {ex.InnerException?.ToString()}");
+                Debug.WriteLine($"{typeof(JournalingManager).FullName}.{nameof(JournalingManager.RegisterEvent)}: {ex.InnerException?.ToString()}");
                 return new ExecutionResult(false, $"Возникла ошибка во время регистрации события в журнал №{IdJournal}. {ex.Message} Смотрите информацию в системном текстовом журнале.");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"{typeof(JournalingManager).FullName}.{nameof(IJournalingManager.RegisterEvent)}: {ex.ToString()}");
+                Debug.WriteLine($"{typeof(JournalingManager).FullName}.{nameof(JournalingManager.RegisterEvent)}: {ex.ToString()}");
                 return new ExecutionResult(false, $"Возникла ошибка во время регистрации события в журнал №{IdJournal}. Смотрите информацию в системном текстовом журнале.");
             }
         }

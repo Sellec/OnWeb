@@ -33,7 +33,6 @@ namespace OnWeb.Core.Items
             var types = new ConcurrentDictionary<string, DB.ItemType>();
 
             using (var db = new UnitOfWork<DB.ItemType>())
-            using (var scope = db.CreateScope(System.Transactions.TransactionScopeOption.Suppress))
             {
                 db.Repo1.Where(x => !string.IsNullOrEmpty(x.UniqueKey)).ForEach(x => types[x.UniqueKey] = x);
             }

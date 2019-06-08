@@ -83,6 +83,7 @@ namespace OnWeb.Plugins.FileManager
         /// <param name="idFile">Идентификатор файла, который необходимо получить  (см. <see cref="DB.File.IdFile"/>).</param>
         /// <param name="result">В случае успеха содержит данные о файле.</param>
         /// <returns>Возвращает результат поиска файла.</returns>
+        [ApiReversible]
         public NotFound TryGetFile(int idFile, out DB.File result)
         {
             try
@@ -110,6 +111,7 @@ namespace OnWeb.Plugins.FileManager
         /// Возвращает null, если произошла ошибка.
         /// </returns>
         /// <exception cref="ArgumentNullException">Возникает, если <paramref name="fileList"/> равен null.</exception>
+        [ApiReversible]
         public DictionaryFiles GetList(IEnumerable<int> fileList)
         {
             if (fileList == null) throw new ArgumentNullException(nameof(fileList));
@@ -148,6 +150,7 @@ namespace OnWeb.Plugins.FileManager
         /// <exception cref="ArgumentNullException">Возникает, если <paramref name="pathFile"/> является пустой строкой или null.</exception>
         /// <exception cref="ArgumentException">Возникает, если <paramref name="nameFile"/> содержит специальные символы, не разрешенные в именах файлов (см. <see cref="Path.GetInvalidFileNameChars"/>).</exception>
         /// <exception cref="FileNotFoundException">Возникает, если файл <paramref name="pathFile"/> не найден на диске.</exception>
+        [ApiReversible]
         public RegisterResult Register(out DB.File result, string nameFile, string pathFile, string uniqueKey = null, DateTime? dateExpires = null)
         {
             if (string.IsNullOrEmpty(nameFile)) throw new ArgumentNullException(nameof(nameFile));
@@ -219,6 +222,7 @@ namespace OnWeb.Plugins.FileManager
         /// Если <paramref name="dateExpires"/> равен null, то устанавливается безлимитный срок хранения.
         /// </summary>
         /// <returns>Возвращает true, если срок обновлен, либо false, если произошла ошибка.</returns>
+        [ApiReversible]
         public bool UpdateExpiration(int idFile, DateTime? dateExpires = null)
         {
             try
@@ -253,6 +257,7 @@ namespace OnWeb.Plugins.FileManager
         /// </summary>
         /// <returns>Возвращает true, если срок обновлен, либо false, если произошла ошибка. Возвращает true, если <paramref name="fileList"/> пуст.</returns>
         /// <exception cref="ArgumentNullException">Возникает, если <paramref name="fileList"/> равен null.</exception>
+        [ApiReversible]
         public bool UpdateExpiration(int[] fileList, DateTime? dateExpires = null)
         {
             if (fileList == null) throw new ArgumentNullException(nameof(fileList));
@@ -296,6 +301,7 @@ namespace OnWeb.Plugins.FileManager
         /// Не подходит для транзакционных блоков, т.к. операцию невозможно отменить.
         /// </summary>
         /// <returns>Возвращает true, если файлы удалены, либо false, если произошла ошибка. Возвращает true, если <paramref name="fileList"/> пуст.</returns>
+        [ApiIrreversible]
         public bool RemoveCompletely(params int[] fileList)
         {
             if (fileList.IsNullOrEmpty()) return true;
@@ -338,6 +344,7 @@ namespace OnWeb.Plugins.FileManager
         /// Файлы удаляются фоновым заданием через какое-то время. Рекомендуется для транзакций.
         /// </summary>
         /// <returns>Возвращает true, если файлы помечены на удаление, либо false, если произошла ошибка. Возвращает true, если <paramref name="fileList"/> пуст.</returns>
+        [ApiReversible]
         public bool RemoveMark(params int[] fileList)
         {
             if (fileList.IsNullOrEmpty()) return true;
@@ -365,6 +372,7 @@ namespace OnWeb.Plugins.FileManager
             }
         }
 
+        [ApiReversible]
         public void ClearExpired()
         {
             try
@@ -406,6 +414,7 @@ namespace OnWeb.Plugins.FileManager
             }
         }
 
+        [ApiReversible]
         public void UpdateFileCount()
         {
             try
@@ -423,6 +432,7 @@ namespace OnWeb.Plugins.FileManager
         #endregion
 
         #region Maintenance indexes
+        [ApiReversible]
         public static void MaintenanceIndexesStatic()
         {
             var module = _thisModule;
@@ -449,6 +459,7 @@ namespace OnWeb.Plugins.FileManager
         #endregion
 
         #region Lexicon new words
+        [ApiReversible]
         public static void LexiconNewWordsStatic()
         {
             _thisModule.AppCore.Get<Lexicon.LexiconManager>().PrepareNewWords();
