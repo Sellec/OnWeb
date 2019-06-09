@@ -1,60 +1,93 @@
 @model MessagingEmail.Model.Configuration
 @{
     Layout = "AdminForModules/Design/baseModuleEdit.cshtml";
+    var amazonAttributes = new { @class = "js-amazon__block", size = 40 };
+    var smtpAttributes = new { @class = "js-smtp__block", size = 40 };
 }
 
 @section scripts {
     <script type='text/javascript'>
         $(document).ready(function () {
+            InitSettings("@(amazonAttributes.@class)");
+            InitSettings("@(smtpAttributes.@class)");
         });
 
+        function InitSettings(className) {
+            if ($("input[type=checkbox]." + className).is(":checked")) {
+                $("." + className).not("[type=checkbox]").each(function () {
+                    $(this).closest('tr').show();
+                });
+            }
+            else {
+                $("." + className).not("[type=checkbox]").each(function () {
+                    $(this).val("-");
+                    $(this).closest('tr').hide();
+                });
+            }
+            $("select." + className).attr("size", 1);
+
+            $("input[type=checkbox]." + className).change(function () {
+                if ($(this).is(":checked")) {
+                    $("." + className).not("[type=checkbox]").each(function () {
+                        $(this).val("");
+                        $(this).closest('tr').show();
+                    });
+                }
+                else {
+                    $("." + className).not("[type=checkbox]").each(function () {
+                        $(this).val("-");
+                        $(this).closest('tr').hide();
+                    });
+                }
+            });
+        }
     </script>
 }
 
 @section ModuleConfiguration {
     <tr>
-        <td colspan="2">Amazon</td>
+        <th colspan="2" align="center">@Html.CheckBoxFor(x => x.IsUseAmazonSES, amazonAttributes) @Html.LabelFor(x => x.IsUseAmazonSES)</th>
     </tr>
     <tr>
         <td>@Html.LabelFor(x => x.Amazon.Server)</td>
         <td>
-            @Html.TextBoxFor(x => x.Amazon.Server)
+            @Html.TextBoxFor(x => x.Amazon.Server, amazonAttributes)
             @Html.ValidationMessageFor(x => x.Amazon.Server)
         </td>
     </tr>
     <tr>
         <td>@Html.LabelFor(x => x.Amazon.Login)</td>
         <td>
-            @Html.TextBoxFor(x => x.Amazon.Login)
+            @Html.TextBoxFor(x => x.Amazon.Login, amazonAttributes)
             @Html.ValidationMessageFor(x => x.Amazon.Login)
         </td>
     </tr>
     <tr>
         <td>@Html.LabelFor(x => x.Amazon.Password)</td>
         <td>
-            @Html.TextBoxFor(x => x.Amazon.Password)
+            @Html.TextBoxFor(x => x.Amazon.Password, amazonAttributes)
             @Html.ValidationMessageFor(x => x.Amazon.Password)
         </td>
     </tr>
     <tr>
-        <td colspan="2">GMail</td>
+        <th colspan="2" align="center">@Html.CheckBoxFor(x => x.IsUseSmtp, smtpAttributes) @Html.LabelFor(x => x.IsUseSmtp)</th>
     </tr>
     <tr>
         <td>@Html.LabelFor(x => x.Smtp.Server)</td>
         <td>
-            @Html.TextBoxFor(x => x.Smtp.Server)
+            @Html.TextBoxFor(x => x.Smtp.Server, smtpAttributes)
             @Html.ValidationMessageFor(x => x.Smtp.Server)
         </td>
     </tr>
     <tr>
         <td>@Html.LabelFor(x => x.Smtp.Login)</td>
         <td>
-            @Html.TextBoxFor(x => x.Smtp.Login)
+            @Html.TextBoxFor(x => x.Smtp.Login, smtpAttributes)
             @Html.ValidationMessageFor(x => x.Smtp.Login)
         </td>
     </tr>
     <tr>
-        <td>@Html.LabelFor(x => x.Smtp.Password)</td>
+        <td>@Html.LabelFor(x => x.Smtp.Password, smtpAttributes)</td>
         <td>
             @Html.TextBoxFor(x => x.Smtp.Password)
             @Html.ValidationMessageFor(x => x.Smtp.Password)

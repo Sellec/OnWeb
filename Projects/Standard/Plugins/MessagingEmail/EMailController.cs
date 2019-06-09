@@ -29,26 +29,35 @@ namespace OnWeb.Plugins.MessagingEmail
             var amazonType = typeof(Connectors.SmtpServer).Namespace + ".AmazonSES";
             var connectors = AppCore.Config.ConnectorsSettings.ToDictionary(x => x.ConnectorTypeName, x => x);
 
-            connectors[amazonType] = new Core.Messaging.Connectors.ConnectorSettings()
+            connectors.Remove(amazonType);
+            if (formData.IsUseAmazonSES)
             {
-                ConnectorTypeName = amazonType,
-                SettingsSerialized = JsonConvert.SerializeObject(new Connectors.SmtpServerSettings()
+                connectors[amazonType] = new Core.Messaging.Connectors.ConnectorSettings()
                 {
-                    Server = Uri.TryCreate(formData?.Amazon?.Server, UriKind.Absolute, out var uri) ? uri : null,
-                    Login = formData?.Amazon?.Login,
-                    Password = formData?.Amazon?.Password
-                })
-            };
-            connectors[typeof(Connectors.SmtpServer).FullName] = new Core.Messaging.Connectors.ConnectorSettings()
+                    ConnectorTypeName = amazonType,
+                    SettingsSerialized = JsonConvert.SerializeObject(new Connectors.SmtpServerSettings()
+                    {
+                        Server = Uri.TryCreate(formData?.Amazon?.Server, UriKind.Absolute, out var uri) ? uri : null,
+                        Login = formData?.Amazon?.Login,
+                        Password = formData?.Amazon?.Password
+                    })
+                };
+            }
+
+            connectors.Remove(typeof(Connectors.SmtpServer).FullName);
+            if (formData.IsUseSmtp)
             {
-                ConnectorTypeName = typeof(Connectors.SmtpServer).FullName,
-                SettingsSerialized = JsonConvert.SerializeObject(new Connectors.SmtpServerSettings()
+                connectors[typeof(Connectors.SmtpServer).FullName] = new Core.Messaging.Connectors.ConnectorSettings()
                 {
-                    Server = Uri.TryCreate(formData?.Smtp?.Server, UriKind.Absolute, out var uri2) ? uri2 : null,
-                    Login = formData?.Smtp?.Login,
-                    Password = formData?.Smtp?.Password
-                })
-            };
+                    ConnectorTypeName = typeof(Connectors.SmtpServer).FullName,
+                    SettingsSerialized = JsonConvert.SerializeObject(new Connectors.SmtpServerSettings()
+                    {
+                        Server = Uri.TryCreate(formData?.Smtp?.Server, UriKind.Absolute, out var uri2) ? uri2 : null,
+                        Login = formData?.Smtp?.Login,
+                        Password = formData?.Smtp?.Password
+                    })
+                };
+            }
 
             var cfg = AppCore.GetModulesManager().GetModule<CoreModule.CoreModule>().GetConfigurationManipulator().GetEditable<CoreConfiguration>();
 
