@@ -109,6 +109,7 @@ namespace OnWeb.Core.Routing
         /// <exception cref="ArgumentNullException">Возникает, если параметр <paramref name="module"/> равен null.</exception>
         /// <exception cref="ArgumentNullException">Возникает, если <paramref name="action"/> содержит пустое значение (пустая строка или null).</exception>
         /// <exception cref="ArgumentNullException">Возникает, если <paramref name="Url"/> содержит пустое значение (пустая строка или null).</exception>
+        [ApiReversible]
         public ExecutionResult Register(Modules.ModuleCore module, int IdItem, int IdItemType, string action, IEnumerable<ActionArgument> Arguments, string Url, string UniqueKey = null)
         {
             return Register(module, new RegisterItem()
@@ -132,6 +133,7 @@ namespace OnWeb.Core.Routing
         /// <exception cref="ArgumentNullException">Возникает, если в одном из элементов последовательности <paramref name="items"/> свойство <see cref="RegisterItem.action"/> содержит пустое значение (пустая строка или null).</exception>
         /// <exception cref="ArgumentNullException">Возникает, если в одном из элементов последовательности <paramref name="items"/> свойство <see cref="RegisterItem.Url"/> содержит пустое значение (пустая строка или null).</exception>
         /// <exception cref="ArgumentException">Возникает, если комбинация {IdItem/IdItemType/action/UniqueKey} в последовательности повторяется несколько раз.</exception>
+        [ApiReversible]
         public ExecutionResult Register(Modules.ModuleCore module, IEnumerable<RegisterItem> items)
         {
             try
@@ -241,16 +243,20 @@ namespace OnWeb.Core.Routing
         /// <param name="action">См. описание <see cref="RegisterItem.action"/>.</param>
         /// <param name="UniqueKey">См. описание <see cref="RegisterItem.UniqueKey"/>.</param>
         /// <returns>Возвращает объект <see cref="ExecutionResult"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. В случае ошибки свойство <see cref="ExecutionResult.Message"/> содержит сообщение об ошибке.</returns>
+        [ApiReversible]
         public ExecutionResult Unregister(Modules.ModuleCore module, string action, int IdItem, int IdItemType = 1, string UniqueKey = null)
         {
             try
             {
                 using (var db = this.CreateUnitOfWork())
+                using (var scope = db.CreateScope())
                 {
                     if (string.IsNullOrEmpty(UniqueKey))
                         db.Repo1.Where(x => x.IdModule == module.ID && x.IdItem == IdItem && x.IdItemType == IdItemType && x.Action == action).Delete();
                     else
                         db.Repo1.Where(x => x.IdModule == module.ID && x.IdItem == IdItem && x.IdItemType == IdItemType && x.Action == action && x.UniqueKey == UniqueKey).Delete();
+
+                    scope.Commit();
                 }
 
                 return new ExecutionResult(true);
@@ -282,6 +288,7 @@ namespace OnWeb.Core.Routing
         /// </returns>
         /// <exception cref="ArgumentNullException">Возникает, если параметр <paramref name="module"/> равен null.</exception>
         /// <exception cref="ArgumentNullException">Возникает, если параметр <paramref name="IdItemList"/> равен null.</exception>
+        [ApiReversible]
         public ExecutionResultUrlList GetUrl(Modules.ModuleCore module, IEnumerable<int> IdItemList, int IdItemType, string UniqueKey = null)
         {
             try
@@ -334,6 +341,7 @@ namespace OnWeb.Core.Routing
         /// В случае успеха свойство <see cref="ExecutionResultUrlList.Result"/> содержит url сущности. Если url не был найден, то <see cref="ExecutionResultUrl.Result"/> равно null.
         /// </returns>
         /// <exception cref="ArgumentNullException">Возникает, если параметр <paramref name="module"/> равен null.</exception>
+        [ApiReversible]
         public ExecutionResultUrl GetUrl(Modules.ModuleCore module, int IdItem, int IdItemType, string UniqueKey = null)
         {
             var result = GetUrl(module, new int[] { IdItem }, IdItemType, UniqueKey);

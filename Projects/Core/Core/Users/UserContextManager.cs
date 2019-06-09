@@ -101,7 +101,7 @@ namespace OnWeb.Core.Users
             resultReason = null;
 
             using (var db = new DB.CoreContext())
-            using (var scope = db.CreateScope(TransactionScopeOption.Suppress))
+            using (var scope = db.CreateScope(TransactionScopeOption.RequiresNew))
             {
                 var returnNewFailedResultWithAuthAttempt = new Func<string, string>(message =>
                 {

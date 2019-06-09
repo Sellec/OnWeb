@@ -4,26 +4,48 @@ namespace OnWeb.Core.Messaging
 {
     class IntermediateStateMessage<TMessageType> where TMessageType : MessageBase
     {
-        internal IntermediateStateMessage(TMessageType message, DB.MessageQueue db)
+        internal IntermediateStateMessage(TMessageType message, DB.MessageQueue messageSource)
         {
             Message = message;
-            IdQueue = db.IdQueue;
-            StateType = db.StateType;
-            State = db.State;
+            MessageSource = messageSource;
         }
 
-        public int IdQueue { get; }
+        public DB.MessageQueue MessageSource
+        {
+            get;
+        }
 
-        public TMessageType Message { get; }
+        public int IdQueue
+        {
+            get => MessageSource.IdQueue;
+        }
 
-        public MessageStateType StateType { get; set; }
+        public TMessageType Message
+        {
+            get;
+        }
 
-        public string State { get; set; }
+        public MessageStateType StateType
+        {
+            get => MessageSource.StateType;
+            set => MessageSource.StateType = value;
+        }
 
-        public int? IdTypeConnector { get; set; }
+        public string State
+        {
+            get => MessageSource.State;
+            set => MessageSource.State = value;
+        }
 
-        public DateTime DateChange { get; set; }
+        public int? IdTypeConnector
+        {
+            get => MessageSource.IdTypeConnector;
+            set => MessageSource.IdTypeConnector = value;
+        }
+
+        public DateTime DateChange
+        {
+            set => MessageSource.DateChange = value;
+        }
     }
-
-
 }

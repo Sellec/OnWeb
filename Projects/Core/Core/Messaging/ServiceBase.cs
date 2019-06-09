@@ -75,41 +75,26 @@ namespace OnWeb.Core.Messaging
             }
         }
 
-        [ApiReversible]
-        private List<IntermediateStateMessage<TMessageType>> GetUnsentMessages()
+        private List<IntermediateStateMessage<TMessageType>> GetUnsentMessages(UnitOfWork<DB.MessageQueue, DB.MessageQueueHistory> db)
         {
-            try
-            {
-                // todo setError(null);
+            var messages = db.Repo1.
+                Where(x => x.IdMessageType == IdMessageType && (x.StateType == MessageStateType.NotProcessed || x.StateType == MessageStateType.RepeatWithControllerType)).
+                ToList();
 
-                using (var db = this.CreateUnitOfWork())
-                using (var scope = db.CreateScope())
+            var messagesUnserialized = messages.Select(x =>
+            {
+                try
                 {
-                    var messages = db.Repo1.
-                        Where(x => x.IdMessageType == IdMessageType && (x.StateType == MessageStateType.NotProcessed || x.StateType == MessageStateType.RepeatWithControllerType)).
-                        ToList();
-
-                    var messagesUnserialized = messages.Select(x =>
-                    {
-                        try
-                        {
-                            var str = Encoding.UTF8.GetString(x.MessageInfo);
-                            return new IntermediateStateMessage<TMessageType>(Newtonsoft.Json.JsonConvert.DeserializeObject<TMessageType>(str), x);
-                        }
-                        catch (Exception ex)
-                        {
-                            return new IntermediateStateMessage<TMessageType>(null, x) { StateType = MessageStateType.Error, State = ex.Message, DateChange = DateTime.Now };
-                        }
-                    }).ToList();
-
-                    return messagesUnserialized;
+                    var str = Encoding.UTF8.GetString(x.MessageInfo);
+                    return new IntermediateStateMessage<TMessageType>(Newtonsoft.Json.JsonConvert.DeserializeObject<TMessageType>(str), x);
                 }
-            }
-            catch (Exception ex)
-            {
-                // todo setError("Ошибка во время загрузки неотправленных сообщений.", ex);
-                return null;
-            }
+                catch (Exception ex)
+                {
+                    return new IntermediateStateMessage<TMessageType>(null, x) { StateType = MessageStateType.Error, State = ex.Message, DateChange = DateTime.Now };
+                }
+            }).ToList();
+
+            return messagesUnserialized;
         }
         #endregion
 
@@ -153,9 +138,9 @@ namespace OnWeb.Core.Messaging
             try
             {
                 using (var db = this.CreateUnitOfWork())
-                using (var scope = db.CreateScope(TransactionScopeOption.Suppress))
+                using (var scope = db.CreateScope(TransactionScopeOption.RequiresNew))
                 {
-                    var messages = GetUnsentMessages();
+                    var messages = GetUnsentMessages(db);
                     if (messages == null) return;
 
                     messagesAll = messages.Count;
@@ -212,21 +197,7 @@ namespace OnWeb.Core.Messaging
 
                     if (processedMessages.Count > 0)
                     {
-                        db.Repo1.InsertOrDuplicateUpdate(
-                            processedMessages.Select(x => new DB.MessageQueue()
-                            {
-                                IdQueue = x.IdQueue,
-                                StateType = x.StateType,
-                                State = x.State,
-                                IdTypeConnector = x.IdTypeConnector,
-                                DateChange = x.DateChange,
-                                DateCreate = DateTime.Now,
-                            }),
-                            new UpsertField(nameof(DB.MessageQueue.StateType)),
-                            new UpsertField(nameof(DB.MessageQueue.State)),
-                            new UpsertField(nameof(DB.MessageQueue.IdTypeConnector)),
-                            new UpsertField(nameof(DB.MessageQueue.DateChange))
-                        );
+                        db.SaveChanges();
 
                         //if (messageBody != null && messageBody.IsHandled)
                         //{
@@ -261,6 +232,7 @@ namespace OnWeb.Core.Messaging
                     }
 
                     db.SaveChanges();
+                    scope.Commit();
                 }
 
                 if (messagesAll > 0)

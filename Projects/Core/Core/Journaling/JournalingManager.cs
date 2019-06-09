@@ -59,7 +59,7 @@ namespace OnWeb.Core.Journaling
                 };
 
                 using (var db = this.CreateUnitOfWork())
-                using (var scope = db.CreateScope(TransactionScopeOption.Suppress))
+                using (var scope = db.CreateScope(TransactionScopeOption.RequiresNew))
                 {
                     db.Repo2.AddOrUpdate(x => x.UniqueKey, data);
                     db.SaveChanges();
@@ -305,7 +305,7 @@ namespace OnWeb.Core.Journaling
                 {
                     DB.JournalName journalForCritical = null;
 
-                    using (var scope = db.CreateScope(TransactionScopeOption.Suppress))
+                    using (var scope = db.CreateScope(TransactionScopeOption.RequiresNew))
                     {
                         db.Repo1.Add(data);
                         db.SaveChanges();

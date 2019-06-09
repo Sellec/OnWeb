@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Transactions;
 using System.Web.Mvc;
 
 namespace OnWeb.Plugins.FileManager
@@ -311,7 +312,7 @@ namespace OnWeb.Plugins.FileManager
                 var rootDirectory = AppCore.ApplicationWorkingFolder;
 
                 using (var db = this.CreateUnitOfWork())
-                using (var scope = db.CreateScope(System.Transactions.TransactionScopeOption.Suppress))
+                using (var scope = db.CreateScope(TransactionScopeOption.RequiresNew))
                 {
                     if (db.Repo1.Where(x => fileList.Contains(x.IdFile)).ForEach(file =>
                     {
@@ -327,6 +328,7 @@ namespace OnWeb.Plugins.FileManager
                     }) > 0)
                     {
                         db.SaveChanges();
+                        scope.Commit();
                     }
                 }
 
@@ -352,6 +354,7 @@ namespace OnWeb.Plugins.FileManager
             try
             {
                 using (var db = this.CreateUnitOfWork())
+                using (var scope = db.CreateScope(TransactionScopeOption.Required))
                 {
                     if (db.Repo1.Where(x => fileList.Contains(x.IdFile)).ForEach(file =>
                     {
@@ -360,6 +363,7 @@ namespace OnWeb.Plugins.FileManager
                     }) > 0)
                     {
                         db.SaveChanges();
+                        scope.Commit();
                     }
                 }
 
@@ -372,7 +376,7 @@ namespace OnWeb.Plugins.FileManager
             }
         }
 
-        [ApiReversible]
+        [ApiIrreversible]
         public void ClearExpired()
         {
             try
@@ -380,7 +384,7 @@ namespace OnWeb.Plugins.FileManager
                 int countCleared = 0;
 
                 using (var db = this.CreateUnitOfWork())
-                using (var scope = db.CreateScope())
+                using (var scope = db.CreateScope(TransactionScopeOption.RequiresNew))
                 {
                     var rootDirectory = AppCore.ApplicationWorkingFolder;
 
@@ -399,7 +403,6 @@ namespace OnWeb.Plugins.FileManager
                     });
 
                     countCleared = db.SaveChanges();
-
                     scope.Commit();
                 }
 
@@ -432,7 +435,7 @@ namespace OnWeb.Plugins.FileManager
         #endregion
 
         #region Maintenance indexes
-        [ApiReversible]
+        [ApiIrreversible]
         public static void MaintenanceIndexesStatic()
         {
             var module = _thisModule;

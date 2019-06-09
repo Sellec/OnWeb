@@ -132,6 +132,7 @@ namespace OnWeb.Core.Users
             try
             {
                 using (var db = this.CreateUnitOfWork())
+                using (var scope = db.CreateScope(TransactionScopeOption.Required))
                 {
                     if (db.Role.Where(x => x.IdRole == idRole).Count() == 0) return NotFound.NotFound;
 
@@ -160,6 +161,7 @@ namespace OnWeb.Core.Users
                     }
 
                     db.SaveChanges();
+                    scope.Commit();
                 }
 
                 return NotFound.Success;
@@ -181,6 +183,7 @@ namespace OnWeb.Core.Users
             try
             {
                 using (var db = this.CreateUnitOfWork())
+                using (var scope = db.CreateScope(TransactionScopeOption.Required))
                 {
                     if (db.Role.Where(x => x.IdRole == idRole).Count() == 0) return NotFound.NotFound;
 
@@ -199,6 +202,7 @@ namespace OnWeb.Core.Users
                     });
 
                     db.SaveChanges();
+                    scope.Commit();
                 }
 
                 return NotFound.Success;
