@@ -6,10 +6,11 @@ using System.Linq;
 
 namespace OnWeb.Core.Messaging
 {
+    using Core.DB;
     using Plugins.MessagingEmail;
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Compiler", "CS0618")]
-    class SubscriptionsManager : CoreComponentBase<ApplicationCore>, ISubscriptionsManager, IUnitOfWorkAccessor<DB.CoreContext>
+    class SubscriptionsManager : CoreComponentBase<ApplicationCore>, ISubscriptionsManager, IUnitOfWorkAccessor<CoreContext>
     {
         #region CoreComponentBase
         protected sealed override void OnStart()
@@ -21,7 +22,7 @@ namespace OnWeb.Core.Messaging
         }
         #endregion
 
-        List<DB.Subscription> ISubscriptionsManager.getList(bool? isEnabled, bool? isSubscriptionAllowed)
+        List<Subscription> ISubscriptionsManager.getList(bool? isEnabled, bool? isSubscriptionAllowed)
         {
             using (var db = this.CreateUnitOfWork())
             {
@@ -35,7 +36,7 @@ namespace OnWeb.Core.Messaging
             }
         }
 
-        DB.Subscription ISubscriptionsManager.create(string name, bool allowSubscribe)
+        Subscription ISubscriptionsManager.create(string name, bool allowSubscribe)
         {
             try
             {
@@ -43,7 +44,7 @@ namespace OnWeb.Core.Messaging
 
                 using (var db = this.CreateUnitOfWork())
                 {
-                    var subscription = new DB.Subscription() { name = name, AllowSubscribe = (byte)(allowSubscribe ? 1 : 0), description = "", status = 1 };
+                    var subscription = new Subscription() { name = name, AllowSubscribe = (byte)(allowSubscribe ? 1 : 0), description = "", status = 1 };
                     db.Subscription.Add(subscription);
 
                     if (db.SaveChanges() == 0) throw new Exception("Не удалось добавить лист рассылки.");
@@ -131,7 +132,7 @@ namespace OnWeb.Core.Messaging
 
                     using (var scope = db.CreateScope())
                     {
-                        db.SubscriptionEmail.AddOrUpdate(new DB.SubscriptionEmail()
+                        db.SubscriptionEmail.AddOrUpdate(new SubscriptionEmail()
                         {
                             subscr_id = IdSubscription,
                             email = email,
@@ -141,7 +142,7 @@ namespace OnWeb.Core.Messaging
 
                         if (db.SaveChanges() == 0) throw new Exception("Не удалось добавить подписчика в лист рассылки.");
 
-                        db.SubscriptionHistory.AddOrUpdate(new DB.SubscriptionHistory() { email = email, subscr_id = IdSubscription });
+                        db.SubscriptionHistory.AddOrUpdate(new SubscriptionHistory() { email = email, subscr_id = IdSubscription });
                         db.SaveChanges();
 
                         scope.Commit();
@@ -175,7 +176,7 @@ namespace OnWeb.Core.Messaging
 
                     using (var scope = db.CreateScope())
                     {
-                        db.SubscriptionRole.AddOrUpdate(new DB.SubscriptionRole()
+                        db.SubscriptionRole.AddOrUpdate(new SubscriptionRole()
                         {
                             IdSubscription = IdSubscription,
                             IdRole = IdRole,

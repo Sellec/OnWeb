@@ -324,7 +324,7 @@ namespace OnWeb.Core.Journaling
                         if (!string.IsNullOrEmpty(data.EventInfoDetailed)) body += $"Подробная информация: {data.EventInfoDetailed}\r\n";
                         if (!string.IsNullOrEmpty(data.ExceptionDetailed)) body += $"Исключение: {data.ExceptionDetailed}\r\n";
 
-                        AppCore.Get<Messaging.IMessagingManager>().GetCriticalMessagesReceivers().ForEach(x => x.SendToAdmin(journalForCritical != null ? $"Критическая ошибка в журнале '{journalForCritical.Name}'" : "Критическая ошибка", body));
+                        AppCore.Get<Messaging.MessagingManager>().GetCriticalMessagesReceivers().ForEach(x => x.SendToAdmin(journalForCritical != null ? $"Критическая ошибка в журнале '{journalForCritical.Name}'" : "Критическая ошибка", body));
                     }
                 }
 

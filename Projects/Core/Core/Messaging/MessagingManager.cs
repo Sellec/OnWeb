@@ -10,12 +10,11 @@ using System.Reflection;
 namespace OnWeb.Core.Messaging
 {
     using Connectors;
-    using Plugins.MessagingEmail;
 
     /// <summary>
-    /// Предоставляет доступ к сервисам отправки/приема сообщений.
+    /// Представляет менеджер, управляющий обменом сообщениями - уведомления, электронная почта, смс и прочее.
     /// </summary>
-    class MessagingManager : CoreComponentBase<ApplicationCore>, IMessagingManager
+    public class MessagingManager : CoreComponentBase<ApplicationCore>, IComponentSingleton<ApplicationCore>, IAutoStart
     {
         class InstanceActivatedHandlerImpl : IInstanceActivatedHandler
         {
@@ -92,9 +91,10 @@ namespace OnWeb.Core.Messaging
         #endregion
 
         #region Методы
+        #region Отправка/получение
         public static void PrepareIncomingTasks()
         {
-            if (_appCore != null && _appCore.Get<IMessagingManager>() is MessagingManager manager) manager.PrepareIncoming();
+            _appCore?.Get<MessagingManager>()?.PrepareIncoming();
         }
 
         public void PrepareIncoming()
@@ -121,7 +121,7 @@ namespace OnWeb.Core.Messaging
 
         public static void PrepareOutcomingTasks()
         {
-            if (_appCore != null && _appCore.Get<IMessagingManager>() is MessagingManager manager) manager.PrepareOutcoming();
+            _appCore?.Get<MessagingManager>()?.PrepareOutcoming();
         }
 
         public void PrepareOutcoming()
@@ -146,27 +146,38 @@ namespace OnWeb.Core.Messaging
         }
         #endregion
 
-        #region IMessagingManager
-        IEnumerable<IConnectorBase<TMessage>> IMessagingManager.GetConnectorsByMessageType<TMessage>()
+        /// <summary>
+        /// Возвращает список коннекторов, поддерживающих обмен сообщениями указанного типа <typeparamref name="TMessage"/>.
+        /// </summary>
+        public IEnumerable<IConnectorBase<TMessage>> GetConnectorsByMessageType<TMessage>() where TMessage : MessageBase, new()
         {
             lock (_activeConnectorsSyncRoot)
                 if (_activeConnectors == null)
-                    ((IMessagingManager)this).UpdateConnectorsFromSettings();
+                    UpdateConnectorsFromSettings();
 
             return _activeConnectors.OfType<IConnectorBase<TMessage>>();
         }
 
-        IEnumerable<ICriticalMessagesReceiver> IMessagingManager.GetCriticalMessagesReceivers()
+        /// <summary>
+        /// Возвращает список сервисов-получателей критических сообщений.
+        /// </summary>
+        public IEnumerable<ICriticalMessagesReceiver> GetCriticalMessagesReceivers()
         {
             return _services.OfType<ICriticalMessagesReceiver>();
         }
 
-        IEnumerable<IMessagingService> IMessagingManager.GetMessagingServices()
+        /// <summary>
+        /// Возвращает список сервисов обмена сообщениями.
+        /// </summary>
+        public IEnumerable<IMessagingService> GetMessagingServices()
         {
             return _services.ToList();
         }
 
-        void IMessagingManager.UpdateConnectorsFromSettings()
+        /// <summary>
+        /// Пересоздает текущий используемый список коннекторов с учетом настроек коннекторов. Рекомендуется к использованию в случае изменения настроек коннекторов.
+        /// </summary>
+        public void UpdateConnectorsFromSettings()
         {
             lock (_activeConnectorsSyncRoot)
             {

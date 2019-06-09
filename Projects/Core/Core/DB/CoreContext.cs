@@ -13,9 +13,6 @@ namespace OnWeb.Core.DB
         public IRepository<Language> Language { get; }
         public IRepository<Sessions> Sessions { get; }
 
-        public IRepository<MessageQueue> MessageQueue { get; }
-        public IRepository<MessageQueueHistory> MessageQueueHistory { get; }
-
         public IRepository<PasswordRemember> PasswordRemember { get; }
 
         public IRepository<UserEntity> UserEntity { get; }

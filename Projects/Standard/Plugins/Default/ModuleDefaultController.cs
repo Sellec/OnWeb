@@ -39,7 +39,7 @@ namespace OnWeb.Plugins.Default
 
             //var perm = Module.CheckPermission("asdasd");
 
-            //this.RegisterEventWithCode(System.Net.HttpStatusCode.InternalServerError, "1313");
+            this.RegisterEventWithCode(System.Net.HttpStatusCode.InternalServerError, "1313");
 
             return this.display("Index.cshtml");
         }

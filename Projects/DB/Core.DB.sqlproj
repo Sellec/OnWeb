@@ -186,19 +186,11 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="dbo\Tables\dbo.news_category.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
     <Build Include="dbo\Tables\dbo.CustomFieldsField.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
     <Build Include="dbo\Tables\dbo.Language.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
-    <Build Include="dbo\Tables\dbo.AddressSearchHistory.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
@@ -223,10 +215,6 @@
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
     <Build Include="dbo\Tables\dbo.Role.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
-    <Build Include="dbo\Tables\dbo.Address.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
@@ -290,68 +278,42 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="dbo\User Defined Types\dbo.TVP_config.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_CustomFieldsField.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_CustomFieldsValue.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_Currency.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_CurrencyCoefficient.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_ModuleSearchSet.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_config_menus.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_Role.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_ItemType.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_Sessions.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_AddressSearchHistory.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_File.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_Address.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_articles.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_articles_category.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_banners.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_banners_category.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_calendar_data.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_captcha.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_config_extensions.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_config_modules.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_config_modules_extensions.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_CurrencyToday.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_customer_modules.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_CustomFieldsData.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_CustomFieldsScheme.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_CustomFieldsSchemeData.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_CustomFieldsValueType.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_customs_comments_data.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_customs_files_data.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_customs_photo_data.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_ItemParent.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_itemsextensionsdata.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_Language.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_Menu.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_MenuItem.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_menus.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_metadatas_uri.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_ModuleSearchSetParameter.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_ModuleSearchSetResult.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_news.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_news_category.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_Page.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_PageCategory.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_passwords_remember.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_RolePermission.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_RoleUser.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_search_engines.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_Subscription.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_SubscriptionEmail.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_SubscriptionHistory.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_SubscriptionRole.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_SystemHistoryRecord.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_Theme.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_UrlsChange.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_UrlTranslation.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_UrlTranslationType.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_UserEntity.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_UserLogHistory.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_UserLogHistoryEventType.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_users.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_users_entities.sql" />
     <Build Include="Security\HangFire.sql" />
     <Build Include="dbo\Tables\dbo.UserHistory.sql">
       <AnsiNulls>On</AnsiNulls>
@@ -374,10 +336,6 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="dbo\Tables\dbo.TelegramContacts.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
     <Build Include="dbo\Tables\dbo.RoleUserHistory.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
@@ -387,10 +345,6 @@
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
     <Build Include="dbo\Tables\dbo.MessageQueue.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
-    <Build Include="dbo\Tables\dbo.JournalType.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
@@ -411,13 +365,10 @@
       <QuotedIdentifier>On</QuotedIdentifier>
       <SuppressTSqlWarnings>71501</SuppressTSqlWarnings>
     </Build>
-    <Build Include="dbo\User Defined Types\dbo.TVP_TelegramContacts.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_RoleUserHistory.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_MessageType.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_MessagesQueue.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_MessageQueueHistory.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_MessageQueue.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_JournalType.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_JournalName.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_Journal.sql" />
     <Build Include="dbo\Tables\dbo.WordCase.sql">
@@ -447,6 +398,10 @@
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
     <Build Include="dbo\User Defined Types\dbo.TVP_ModuleConfig.sql" />
+    <Build Include="Database Triggers\DB_InsertOnDuplicate_TableUDT_Remove.sql">
+      <AnsiNulls>On</AnsiNulls>
+      <QuotedIdentifier>On</QuotedIdentifier>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <ArtifactReference Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\120\SqlSchemas\master.dacpac">

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 namespace OnWeb.Core.Messaging
 {
+    using Core.DB;
+
     /// <summary>
     /// Представляет менеджер, управляющий подписками и рассылками сообщений.
     /// </summary>
@@ -14,7 +16,7 @@ namespace OnWeb.Core.Messaging
         /// <param name="isEnabled">Если параметр равен null, то возврашаются выключенные и включенные подписки, в противном случае - только включенные либо выключенные.</param>
         /// <param name="isSubscriptionAllowed">Указывает возможность самостоятельной подписи для подписок, которые следует вернуть. Если равен null, то статус не фильтруется.</param>
         /// <returns></returns>
-        List<DB.Subscription> getList(bool? isEnabled = null, bool? isSubscriptionAllowed = null);
+        List<Subscription> getList(bool? isEnabled = null, bool? isSubscriptionAllowed = null);
 
         /// <summary>
         /// Создание нового листа рассылки.
@@ -22,7 +24,7 @@ namespace OnWeb.Core.Messaging
         /// <param name="name">Название листа рассылки.</param>
         /// <param name="allowSubscribe">Указывает возможность самостоятельного подписывания пользователем.</param>
         /// <returns></returns>
-        DB.Subscription create(string name, bool allowSubscribe);
+        Subscription create(string name, bool allowSubscribe);
 
         /// <summary>
         /// Рассылка писем по рассылке номер <paramref name="IdSubscription"/> с темой <paramref name="subject"/> с текстом <paramref name="body"/>.

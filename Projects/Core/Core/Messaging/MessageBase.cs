@@ -20,10 +20,5 @@ namespace OnWeb.Core.Messaging
         /// Тело сообщения.
         /// </summary>
         public object Body { get; set; }
-
-        /// <summary>
-        /// Тип сообщения.
-        /// </summary>
-        public byte IdMessageType { get; set; }
     }
 }

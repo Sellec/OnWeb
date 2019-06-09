@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System;
 using System.Linq;
-using System.Web;
-using Newtonsoft.Json;
 
 namespace OnWeb.Plugins.MessagingEmail
 {
@@ -57,7 +55,7 @@ namespace OnWeb.Plugins.MessagingEmail
             cfg.ConnectorsSettings = connectors.Values.ToList();
 
             AppCore.GetModulesManager().GetModule<CoreModule.CoreModule>().GetConfigurationManipulator().ApplyConfiguration(cfg);
-            AppCore.Get<Core.Messaging.IMessagingManager>().UpdateConnectorsFromSettings();
+            AppCore.Get<Core.Messaging.MessagingManager>().UpdateConnectorsFromSettings();
 
             return base.ConfigurationSaveCustom(formData, out outputMessage);
         }

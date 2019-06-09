@@ -72,19 +72,19 @@
     </Content>
     <Content Include="..\..\Projects\Standard\Data\**\*" Exclude="..\..\Projects\Standard\**\*.cs">
       <Link>content\Data\%(RecursiveDir)%(Filename)%(Extension)</Link>
-      <Visible>false</Visible>
+      <Visible>true</Visible>
     </Content>
     <Content Include="..\..\Projects\Standard\Design\**\*" Exclude="..\..\Projects\Standard\**\*.cs">
       <Link>content\Design\%(RecursiveDir)%(Filename)%(Extension)</Link>
-      <Visible>false</Visible>
+      <Visible>true</Visible>
     </Content>
     <Content Include="..\..\Projects\Standard\ModuleExtensions\**\*" Exclude="..\..\Projects\Standard\**\*.cs">
       <Link>content\ModuleExtensions\%(RecursiveDir)%(Filename)%(Extension)</Link>
-      <Visible>false</Visible>
+      <Visible>true</Visible>
     </Content>
     <Content Include="..\..\Projects\Standard\Plugins\**\*" Exclude="..\..\Projects\Standard\**\*.cs">
       <Link>content\Plugins\%(RecursiveDir)%(Filename)%(Extension)</Link>
-      <Visible>false</Visible>
+      <Visible>true</Visible>
     </Content>
     <Content Include="NuGetKeys.txt" />
     <Compile Include="Properties\AssemblyInfo.cs" />

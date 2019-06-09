@@ -8,10 +8,11 @@ using System.Transactions;
 
 namespace OnWeb.Core.Messaging
 {
+    using Items;
     using ServiceMonitor;
 
 #pragma warning disable CS1591 // todo внести комментарии.
-    public abstract class ServiceBase<TMessageType> : CoreComponentBase<ApplicationCore>, IMonitoredService, IMessagingServiceBackgroundOperations
+    public abstract class ServiceBase<TMessageType> : CoreComponentBase<ApplicationCore>, IMonitoredService, IMessagingServiceBackgroundOperations, IUnitOfWorkAccessor<UnitOfWork<DB.MessageQueue, DB.MessageQueueHistory>>
         where TMessageType : MessageBase, new()
     {
         protected ServiceBase(string serviceName, Guid serviceID, int? idMessageType = null)
@@ -22,7 +23,7 @@ namespace OnWeb.Core.Messaging
             ServiceID = serviceID;
             ServiceName = serviceName;
 
-            if (!idMessageType.HasValue) IdMessageType = (byte)Items.ItemTypeFactory.GetItemType(typeof(TMessageType)).IdItemType;
+            if (!idMessageType.HasValue) IdMessageType = Items.ItemTypeFactory.GetItemType(typeof(TMessageType)).IdItemType;
         }
 
         #region CoreComponentBase
@@ -51,18 +52,17 @@ namespace OnWeb.Core.Messaging
             {
                 // todo setError(null);
 
-                using (var db = new DB.CoreContext())
+                using (var db = this.CreateUnitOfWork())
                 {
                     var mess = new DB.MessageQueue()
                     {
                         IdMessageType = IdMessageType,
-                        IsSent = false,
-                        IsHandled = false,
-                        MessageInfo = Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(message)),
+                        StateType = MessageStateType.NotProcessed,
                         DateCreate = DateTime.Now,
+                        MessageInfo = Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(message)),
                     };
 
-                    db.MessageQueue.Add(mess);
+                    db.Repo1.Add(mess);
                     db.SaveChanges();
 
                     return true;
@@ -76,27 +76,32 @@ namespace OnWeb.Core.Messaging
         }
 
         [ApiReversible]
-        protected Dictionary<DB.MessageQueue, TMessageType> GetUnsentMessages(int IdMessageType)
+        private List<IntermediateStateMessage<TMessageType>> GetUnsentMessages()
         {
             try
             {
                 // todo setError(null);
 
-                using (var db = new DB.CoreContext())
+                using (var db = this.CreateUnitOfWork())
+                using (var scope = db.CreateScope())
                 {
-                    var messages = db.MessageQueue.Where(x => x.IdMessageType == IdMessageType && !x.IsHandled).ToList();
-                    var messagesUnserialized = messages.ToDictionary(x => x, x =>
+                    var messages = db.Repo1.
+                        Where(x => x.IdMessageType == IdMessageType && (x.StateType == MessageStateType.NotProcessed || x.StateType == MessageStateType.RepeatWithControllerType)).
+                        ToList();
+
+                    var messagesUnserialized = messages.Select(x =>
                     {
-                        var str = Encoding.UTF8.GetString(x.MessageInfo);
                         try
                         {
-                            return Newtonsoft.Json.JsonConvert.DeserializeObject<TMessageType>(str);
+                            var str = Encoding.UTF8.GetString(x.MessageInfo);
+                            return new IntermediateStateMessage<TMessageType>(Newtonsoft.Json.JsonConvert.DeserializeObject<TMessageType>(str), x);
                         }
-                        catch
+                        catch (Exception ex)
                         {
-                            return null;
+                            return new IntermediateStateMessage<TMessageType>(null, x) { StateType = MessageStateType.Error, State = ex.Message, DateChange = DateTime.Now };
                         }
-                    });
+                    }).ToList();
+
                     return messagesUnserialized;
                 }
             }
@@ -121,7 +126,7 @@ namespace OnWeb.Core.Messaging
 
         protected List<Connectors.IConnectorBase<TMessageType>> GetConnectors()
         {
-            return AppCore.Get<IMessagingManager>().GetConnectorsByMessageType<TMessageType>().ToList();
+            return AppCore.Get<MessagingManager>().GetConnectorsByMessageType<TMessageType>().ToList();
         }
 
         [ApiReversible]
@@ -129,7 +134,7 @@ namespace OnWeb.Core.Messaging
         {
             using (var db = new UnitOfWork<DB.MessageQueue>())
             {
-                return db.Repo1.Where(x => !x.IsHandled && x.IdMessageType == IdMessageType).Count();
+                return db.Repo1.Where(x => x.IdMessageType == IdMessageType && (x.StateType == MessageStateType.NotProcessed || x.StateType == MessageStateType.RepeatWithControllerType)).Count();
             }
         }
         #endregion
@@ -147,64 +152,106 @@ namespace OnWeb.Core.Messaging
 
             try
             {
-                using (var db = new DB.CoreContext())
+                using (var db = this.CreateUnitOfWork())
                 using (var scope = db.CreateScope(TransactionScopeOption.Suppress))
                 {
-                    var messages = GetUnsentMessages(IdMessageType);
-                    if (messages == null) throw new Exception("");// todo  getError(), getErrorException());
+                    var messages = GetUnsentMessages();
+                    if (messages == null) return;
 
                     messagesAll = messages.Count;
 
                     OnBeforeExecuteOutcoming(messagesAll);
 
-                    var time = new MeasureTime();
-                    foreach (var message in messages)
-                    {
-                        if (message.Value == null) continue;
+                    var processedMessages = new List<IntermediateStateMessage<TMessageType>>();
 
-                        MessageProcessed<TMessageType> messageBody = null;
+                    var time = new MeasureTime();
+                    foreach (var intermediateMessage in messages)
+                    {
+                        if (intermediateMessage.StateType == MessageStateType.Error)
+                        {
+                            processedMessages.Add(intermediateMessage);
+                            continue;
+                        }
 
                         foreach (var connector in GetConnectors())
                         {
                             try
                             {
-                                messageBody = new MessageProcessed<TMessageType>(message.Value, message.Key);
-                                connector.Send(messageBody, this);
-                                if (messageBody.IsHandled) break;
+                                var idTypeConnector = ItemTypeFactory.GetItemType(connector.GetType())?.IdItemType;
+                                var connectorMessage = new ConnectorMessage<TMessageType>(intermediateMessage);
+                                connector.Send(connectorMessage, this);
+                                if (connectorMessage.HandledState != ConnectorMessageStateType.NotHandled)
+                                {
+                                    intermediateMessage.DateChange = DateTime.Now;
+                                    switch (connectorMessage.HandledState)
+                                    {
+                                        case ConnectorMessageStateType.Error:
+                                            intermediateMessage.StateType = MessageStateType.Error;
+                                            break;
+
+                                        case ConnectorMessageStateType.RepeatWithControllerType:
+                                            intermediateMessage.StateType = MessageStateType.RepeatWithControllerType;
+                                            break;
+
+                                        case ConnectorMessageStateType.Sent:
+                                            intermediateMessage.StateType = MessageStateType.Sent;
+                                            break;
+                                    }
+                                    intermediateMessage.State = connectorMessage.State;
+                                    intermediateMessage.IdTypeConnector = intermediateMessage.StateType == MessageStateType.RepeatWithControllerType ? idTypeConnector : null;
+                                    processedMessages.Add(intermediateMessage);
+                                    break;
+                                }
                             }
-                            catch (Exception ex)
+                            catch
                             {
-                                messageBody.IsHandled = true;
-                                messageBody.IsError = true;
-                                messageBody.ErrorText = $"Неожиданная ошибка во время обработки сообщения в коннекторе '{connector.ConnectorName}' (обработка прервана): {ex.Message}";
-                                break;
+                                continue;
                             }
                         }
+                    }
 
-                        if (messageBody != null && messageBody.IsHandled)
-                        {
-                            message.Key.ExternalID = messageBody.ExternalID;
-                            message.Key.IsHandled = true;
-                            message.Key.IsSent = messageBody.IsSuccess;
-
-                            if (messageBody.IsSuccess)
+                    if (processedMessages.Count > 0)
+                    {
+                        db.Repo1.InsertOrDuplicateUpdate(
+                            processedMessages.Select(x => new DB.MessageQueue()
                             {
-                                message.Key.DateSent = DateTime.Now;
-                                messagesSent++;
-                            }
-                            else if (messageBody.IsError) messagesErrors++;
+                                IdQueue = x.IdQueue,
+                                StateType = x.StateType,
+                                State = x.State,
+                                IdTypeConnector = x.IdTypeConnector,
+                                DateChange = x.DateChange,
+                                DateCreate = DateTime.Now,
+                            }),
+                            new UpsertField(nameof(DB.MessageQueue.StateType)),
+                            new UpsertField(nameof(DB.MessageQueue.State)),
+                            new UpsertField(nameof(DB.MessageQueue.IdTypeConnector)),
+                            new UpsertField(nameof(DB.MessageQueue.DateChange))
+                        );
 
-                            db.MessageQueueHistory.Add(new DB.MessageQueueHistory()
-                            {
-                                IdQueue = message.Key.IdQueue,
-                                DateEvent = DateTime.Now,
-                                EventText = messageBody.IsError ? "Зафиксированы ошибки при отправке: " + (string.IsNullOrEmpty(messageBody.ErrorText) ? "Неизвестная ошибка во время отправки" : messageBody.ErrorText) : "Сообщение обработано",
-                                IsSuccess = messageBody.IsSuccess,
-                            });
+                        //if (messageBody != null && messageBody.IsHandled)
+                        //{
+                        //    messageSource.Key.ExternalID = messageBody.ExternalID;
+                        //    messageSource.Key.IsHandled = true;
+                        //    messageSource.Key.IsSent = messageBody.IsSuccess;
 
-                            db.MessageQueue.AddOrUpdate(x => x.IdQueue, message.Key);
+                        //    if (messageBody.IsSuccess)
+                        //    {
+                        //        messageSource.Key.DateSent = DateTime.Now;
+                        //        messagesSent++;
+                        //    }
+                        //    else if (messageBody.IsError) messagesErrors++;
 
-                        }
+                        //    db.MessageQueueHistory.Add(new DB.MessageQueueHistory()
+                        //    {
+                        //        IdQueue = messageSource.Key.IdQueue,
+                        //        DateEvent = DateTime.Now,
+                        //        EventText = messageBody.IsError ? "Зафиксированы ошибки при отправке: " + (string.IsNullOrEmpty(messageBody.ErrorText) ? "Неизвестная ошибка во время отправки" : messageBody.ErrorText) : "Сообщение обработано",
+                        //        IsSuccess = messageBody.IsSuccess,
+                        //    });
+
+                        //    db.MessageQueue.AddOrUpdate(x => x.IdQueue, messageSource.Key);
+
+                        //}
 
                         if (time.Calculate(false).TotalSeconds >= 3)
                         {
@@ -239,14 +286,14 @@ namespace OnWeb.Core.Messaging
 
         }
 
-        private void TryToSendThrougnConnectors(MessageProcessed<TMessageType> messageBody)
+        private void TryToSendThrougnConnectors(IntermediateStateMessage<TMessageType> messageBody)
         {
         }
 
         #endregion
 
         #region Свойства
-        public virtual byte IdMessageType { get; set; }
+        public virtual int IdMessageType { get; set; }
 
         public Guid ServiceID
         {

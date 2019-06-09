@@ -77,30 +77,29 @@ namespace OnWeb.Plugins.MessagingEmail.Connectors
             }
         }
 
-        void IConnectorBase<EmailMessage>.Send(MessageProcessed<EmailMessage> message, IMessagingService service)
+        void IConnectorBase<EmailMessage>.Send(ConnectorMessage<EmailMessage> message, IMessagingService service)
         {
             try
             {
                 var mailMessage = new MailMessage()
                 {
-                    From = new MailAddress(message.Message.From.ContactData, string.IsNullOrEmpty(message.Message.From.Name) ? message.Message.From.ContactData : message.Message.From.Name),
+                    From = new MailAddress(message.MessageBody.From.ContactData, string.IsNullOrEmpty(message.MessageBody.From.Name) ? message.MessageBody.From.ContactData : message.MessageBody.From.Name),
                     SubjectEncoding = Encoding.UTF8,
-                    Subject = message.Message.Subject,
+                    Subject = message.MessageBody.Subject,
                     IsBodyHtml = true,
                     BodyEncoding = Encoding.UTF8,
-                    Body = message.Message.Body?.ToString(),
+                    Body = message.MessageBody.Body?.ToString(),
                 };
 
                 var developerEmail = AppCore.Config.DeveloperEmail;
                 if (Debug.IsDeveloper && string.IsNullOrEmpty(developerEmail)) return;
 
-                message.Message.To.ForEach(x => mailMessage.To.Add(new MailAddress(Debug.IsDeveloper ? developerEmail : x.ContactData, string.IsNullOrEmpty(x.Name) ? x.ContactData : x.Name)));
+                message.MessageBody.To.ForEach(x => mailMessage.To.Add(new MailAddress(Debug.IsDeveloper ? developerEmail : x.ContactData, string.IsNullOrEmpty(x.Name) ? x.ContactData : x.Name)));
 
                 try
                 {
                     getClient().Send(mailMessage);
-                    message.IsHandled = true;
-                    message.IsSuccess = true;
+                    message.HandledState = ConnectorMessageStateType.Sent;
                 }
                 catch (SmtpException ex)
                 {
@@ -132,6 +131,7 @@ namespace OnWeb.Plugins.MessagingEmail.Connectors
                                 catch { }
 
                                 getClient().Send(mailMessage);
+                                message.HandledState = ConnectorMessageStateType.Sent;
                                 break;
 
                             default:
@@ -155,16 +155,13 @@ namespace OnWeb.Plugins.MessagingEmail.Connectors
             }
             catch(FormatException)
             {
-                message.IsHandled = true;
-                message.IsSuccess = false;
-                message.IsError = true;
-                message.ErrorText = "Некорректный Email-адрес";
+                message.HandledState = ConnectorMessageStateType.Error;
+                message.State = "Некорректный Email-адрес";
             }
             catch (Exception)
             {
-                message.IsSuccess = false;
-                message.IsError = false;
-                message.ErrorText = "Необработанная ошибка во время отправки сообщения";
+                message.HandledState = ConnectorMessageStateType.Error;
+                message.State = "Необработанная ошибка во время отправки сообщения";
             }
         }
 

@@ -1,4 +1,4 @@
-namespace OnWeb.Core.DB
+namespace OnWeb.Core.Messaging.DB
 {
     using System;
     using System.Collections.Generic;
@@ -7,7 +7,7 @@ namespace OnWeb.Core.DB
 
 #pragma warning disable CS1591 // todo внести комментарии.
     [Table("MessageQueueHistory")]
-    public partial class MessageQueueHistory
+    partial class MessageQueueHistory
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]

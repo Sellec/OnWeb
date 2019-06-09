@@ -72,7 +72,7 @@ namespace OnWeb
         {
             bindingsCollection.SetSingleton<Core.Items.ItemsManager>();
             bindingsCollection.SetSingleton<Core.Journaling.JournalingManager>();
-            bindingsCollection.SetSingleton<Core.Messaging.IMessagingManager, Core.Messaging.MessagingManager>();
+            bindingsCollection.SetSingleton<Core.Messaging.MessagingManager>();
             bindingsCollection.SetSingleton<Core.Languages.Manager>();
             bindingsCollection.SetSingleton<ModulesManager<ApplicationCore>, Core.Modules.ModulesManager>();
             bindingsCollection.SetSingleton<Core.Modules.ModulesLoadStarter>();

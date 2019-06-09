@@ -78,30 +78,29 @@ namespace OnWeb.Plugins.MessagingEmail.Connectors
             }
         }
 
-        void IConnectorBase<EmailMessage>.Send(MessageProcessed<EmailMessage> message, IMessagingService service)
+        void IConnectorBase<EmailMessage>.Send(ConnectorMessage<EmailMessage> message, IMessagingService service)
         {
             try
             {
                 //todo перенести сюда все корректировки из smtpserver.
                 var mailMessage = new MailMessage
                 {
-                    From = new MailAddress(message.Message.From.ContactData, string.IsNullOrEmpty(message.Message.From.Name) ? message.Message.From.ContactData : message.Message.From.Name),
+                    From = new MailAddress(message.MessageBody.From.ContactData, string.IsNullOrEmpty(message.MessageBody.From.Name) ? message.MessageBody.From.ContactData : message.MessageBody.From.Name),
                     SubjectEncoding = Encoding.UTF8,
-                    Subject = message.Message.Subject,
+                    Subject = message.MessageBody.Subject,
                     IsBodyHtml = true,
                     BodyEncoding = Encoding.UTF8,
-                    Body = message.Message.Body?.ToString()
+                    Body = message.MessageBody.Body?.ToString()
                 };
 
-                message.Message.To.ForEach(x => mailMessage.To.Add(new MailAddress(Debug.IsDeveloper ? AppCore.Config.DeveloperEmail : x.ContactData, string.IsNullOrEmpty(x.Name) ? x.ContactData : x.Name)));
+                message.MessageBody.To.ForEach(x => mailMessage.To.Add(new MailAddress(Debug.IsDeveloper ? AppCore.Config.DeveloperEmail : x.ContactData, string.IsNullOrEmpty(x.Name) ? x.ContactData : x.Name)));
 
                 //mailMessage.Headers.Add("MessageFeedback-ID", "ses-" + IdMessage);
 
                 try
                 {
                     getClient().Send(mailMessage);
-                    message.IsHandled = true;
-                    message.IsSuccess = true;
+                    message.HandledState = ConnectorMessageStateType.Sent;
                 }
                 catch (SmtpException ex)
                 {
@@ -155,6 +154,7 @@ namespace OnWeb.Plugins.MessagingEmail.Connectors
                                 catch { }
 
                                 getClient().Send(mailMessage);
+                                message.HandledState = ConnectorMessageStateType.Sent;
                                 break;
 
                             default:
@@ -165,14 +165,14 @@ namespace OnWeb.Plugins.MessagingEmail.Connectors
             }
             catch (HandledException ex)
             {
-                message.IsError = false;
-                message.ErrorText = ex.Message;
+                message.HandledState = ConnectorMessageStateType.Error;
+                message.State = ex.Message;
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.ToString());
-                message.IsError = false;
-                message.ErrorText = "Необработанная ошибка во время отправки сообщения";
+                message.HandledState = ConnectorMessageStateType.Error;
+                message.State = "Необработанная ошибка во время отправки сообщения";
             }
         }
 

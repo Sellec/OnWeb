@@ -23,7 +23,7 @@ namespace OnWeb.Core.Messaging.Connectors
         /// <param name="service">Сервис отправки сообщений, которому принадлежит отправляемое сообщение <paramref name="message"/>.</param>
         /// <remarks>Дополнительные типы исключений, которые могут возникнуть во время отправки сообщения, могут быть описаны в документации коннектора.</remarks>
         [ApiIrreversible]
-        void Send(MessageProcessed<TMessage> message, IMessagingService service);
+        void Send(ConnectorMessage<TMessage> message, IMessagingService service);
         #endregion
 
         #region Свойства
