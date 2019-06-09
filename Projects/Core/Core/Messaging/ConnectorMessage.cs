@@ -34,7 +34,8 @@ namespace OnWeb.Core.Messaging
         /// <summary>
         /// Дополнительное состояние сообщения. 
         /// Может использоваться в коннекторах вместе с <see cref="MessageStateType.RepeatWithControllerType"/> для отслеживания состояния отправки во внешних сервисах.
-        /// После обработки сообщения коннектором значение свойства записывается для дальнейшего использования, если <see cref="HandledState"/> установлено в соответствующее состояние.
+        /// Если <see cref="HandledState"/> равно <see cref="ConnectorMessageStateType.RepeatWithControllerType"/> или <see cref="ConnectorMessageStateType.Error"/>, то значение свойства записывается для дальнейшего использования.
+        /// Если <see cref="HandledState"/> равно <see cref="ConnectorMessageStateType.Sent"/>, то значение свойства сбрасывается, так как оно больше не несет пользы.
         /// </summary>
         public string State
         {

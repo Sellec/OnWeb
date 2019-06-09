@@ -166,7 +166,7 @@ namespace OnWeb.Core.Messaging
                         {
                             try
                             {
-                                    var connector = connectorInfo.Connector;
+                                var connector = connectorInfo.Connector;
                                 var connectorMessage = new ConnectorMessage<TMessageType>(intermediateMessage);
                                 connector.Send(connectorMessage, this);
                                 if (connectorMessage.HandledState != ConnectorMessageStateType.NotHandled)
@@ -176,18 +176,22 @@ namespace OnWeb.Core.Messaging
                                     {
                                         case ConnectorMessageStateType.Error:
                                             intermediateMessage.StateType = MessageStateType.Error;
+                                            intermediateMessage.State = connectorMessage.State;
+                                            intermediateMessage.IdTypeConnector = null;
                                             break;
 
                                         case ConnectorMessageStateType.RepeatWithControllerType:
                                             intermediateMessage.StateType = MessageStateType.RepeatWithControllerType;
+                                            intermediateMessage.State = connectorMessage.State;
+                                            intermediateMessage.IdTypeConnector = connectorInfo.IdTypeConnector;
                                             break;
 
                                         case ConnectorMessageStateType.Sent:
                                             intermediateMessage.StateType = MessageStateType.Sent;
+                                            intermediateMessage.State = null;
+                                            intermediateMessage.IdTypeConnector = null;
                                             break;
                                     }
-                                    intermediateMessage.State = connectorMessage.State;
-                                    intermediateMessage.IdTypeConnector = intermediateMessage.StateType == MessageStateType.RepeatWithControllerType ? connectorInfo.IdTypeConnector : null;
                                     processedMessages.Add(intermediateMessage);
                                     break;
                                 }
