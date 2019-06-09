@@ -25,7 +25,7 @@ namespace OnWeb.Plugins.Register
         {
             var d = AppCore.Get<UsersManagement.ModuleUsersManagement>().GetUsersByRolePermission<UsersManagement.ModuleUsersManagement>(UsersManagement.ModuleUsersManagement.PermissionReceiveRegisterModeratorNotifications);
 
-            return display("register.cshtml", new Model.Register());
+            return display("Register.cshtml", new Model.Register());
         }
 
         [ModuleAction("reg2")]

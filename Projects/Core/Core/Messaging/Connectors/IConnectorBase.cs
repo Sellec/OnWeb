@@ -1,5 +1,6 @@
 ﻿using OnUtils.Architecture.AppCore;
 using OnUtils.Architecture.ObjectPool;
+using System;
 
 namespace OnWeb.Core.Messaging.Connectors
 {
@@ -21,6 +22,7 @@ namespace OnWeb.Core.Messaging.Connectors
         /// <param name="message">Информация о сообщении, которое необходимо отправить</param>
         /// <param name="service">Сервис отправки сообщений, которому принадлежит отправляемое сообщение <paramref name="message"/>.</param>
         /// <remarks>Дополнительные типы исключений, которые могут возникнуть во время отправки сообщения, могут быть описаны в документации коннектора.</remarks>
+        [ApiIrreversible]
         void Send(MessageProcessed<TMessage> message, IMessagingService service);
         #endregion
 

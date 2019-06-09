@@ -15,10 +15,6 @@ namespace OnWeb.Plugins.Adminmain
 
         /// <summary>
         /// </summary>
-        public IRepository<menus> EditableMenu { get; }
-
-        /// <summary>
-        /// </summary>
         public IRepository<Routing> Routes { get; }
 
         /// <summary>

@@ -70,6 +70,8 @@
     if (this.Module != null) { uploadOptions["formData"] = new { moduleName = this.Module.UrlName }; }
     uploadOptions["multiple"] = isMultiple;
 
+    var fileManagerPath = Url.CreateRoute<FileManager.FileManager, FileManager.FileManagerController>(x => x.FileImage(null, null, null))?.ToString() ?? "";
+
     FileManager.MVC.FileRenderOptions options = null;
     switch ((FileType)(ViewData.ModelMetadata.AdditionalValues.GetValueOrDefault(nameof(FileDataTypeAttribute.FileType)) ?? FileType.File))
     {
@@ -81,10 +83,10 @@
             var htmlSizesAttrs = "style='" + string.Join("; ", htmlSizes) + "'";
             options = new FileManager.MVC.FileRenderOptions()
             {
-                UploadedFileInfoJS = " \"<img alt='файл №\" + data + \"' src='/fm/image/\" + data + \"' " + htmlSizesAttrs + ">\" ",
-                UploadedFileInfo = new Func<int, string>(IdFile => $"<img alt='файл №{IdFile}' src='/fm/image/{IdFile}' {htmlSizesAttrs}>")
+                UploadedFileInfoJS = " \"<img alt='файл №\" + data + \"' src='" + fileManagerPath + "/\" + data + \"' " + htmlSizesAttrs + ">\" ",
+                UploadedFileInfo = new Func<int, string>(IdFile => $"<img alt='файл №{IdFile}' src='{fileManagerPath}/{IdFile}' {htmlSizesAttrs}>")
             };
-            break;
+        break;
 
         case FileType.File:
         default:
@@ -93,7 +95,7 @@
                 UploadedFileInfoJS = " \"<label>файл №\" + data + \"</label>\" ",
                 UploadedFileInfo = new Func<int, string>(IdFile => $"<label>файл №{IdFile}</label>")
             };
-            break;
+        break;
     }
 }
 

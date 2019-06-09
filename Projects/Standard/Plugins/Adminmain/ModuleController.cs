@@ -1,20 +1,19 @@
-﻿using System;
+﻿using OnUtils.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using OnUtils.Data;
-using System.Reflection;
 
 namespace OnWeb.Plugins.Adminmain
 {
     using AdminForModules.Menu;
     using Core.Configuration;
+    using Core.DB;
+    using Core.Items;
+    using Core.Journaling;
     using Core.Modules;
     using CoreBind.Modules;
     using CoreBind.Routing;
-    using Core.Journaling;
-    using Core.DB;
-    using Core.Items;
     using Services;
 
     /// <summary>
@@ -56,7 +55,7 @@ namespace OnWeb.Plugins.Adminmain
                 Selected = AppCore.Config.index_page == 0
             });
 
-            return this.display("admin_adminmain_info.tpl", model);
+            return this.display("CoreSettings.tpl", model);
         }
 
         [ModuleAction("info_save", Module.PERM_CONFIGMAIN)]
@@ -130,132 +129,6 @@ namespace OnWeb.Plugins.Adminmain
             return this.display("Modules.cshtml", model);
         }
             
-        [MenuAction("Редактируемое меню", "editablemenu", Module.PERM_EDITABLEMENU)]
-        public ActionResult EditableMenu()
-        {
-            using (var db = Module.CreateUnitOfWork())
-            {
-                var model = db.EditableMenu.OrderBy(x => x.id).ToList();
-                return this.display("EditableMenuEdit.cshtml", model);
-            }
-        }
-
-        [ModuleAction("editablemenu_edit", Module.PERM_EDITABLEMENU)]
-        public ActionResult EditableMenuEdit(int IdMenu = 0)
-        {
-            using (var db = Module.CreateUnitOfWork())
-            {
-                var menu = IdMenu == 0 ? new menus() : db.EditableMenu.Where(x => x.id == IdMenu).FirstOrDefault();
-                if (menu == null) throw new Exception(string.Format("Меню с id={0} не найдено.", IdMenu));
-
-                return this.display("EditableMenuEdit.cshtml", new Model.EditableMenu()
-                {
-                    Menu = menu,
-                    Modules = (from p in AppCore.GetModulesManager().GetModules() orderby p.Caption select p).ToList()
-                });
-            }
-        }
-
-        [ModuleAction("editablemenu_getmenu", Module.PERM_EDITABLEMENU)]
-        public JsonResult EditableMenuLinks(int IdModule = 0)
-        {
-            var success = false;
-            var result = "";
-            object data = null;
-
-            try
-            {
-                if (IdModule == 0) throw new Exception("Не указан модуль, для которого необходимо получить список ссылок.");
-
-                var module = AppCore.GetModulesManager().GetModule(IdModule);
-                if (module == null) throw new Exception("Не удалось найти указанный модуль.");
-
-                var itemsAll = module.GetItemTypes().
-                                SelectMany(x => module.GetItems(x.IdItemType)).
-                                OrderBy(x => x.Caption).
-                                ToDictionary(x => (x as ItemBase).Url.ToString(), x => x.Caption);
-
-
-                data = itemsAll;
-
-                success = true;
-            }
-            catch (Exception ex)
-            {
-                success = false;
-                result = ex.Message;
-            }
-
-            return ReturnJson(success, result, data);
-        }
-
-        [ModuleAction("editablemenu_edit_save", Module.PERM_EDITABLEMENU)]
-        public JsonResult EditableMenuSave(menus menu)
-        {
-            var success = false;
-            var result = "";
-
-            try
-            {
-                using (var db = Module.CreateUnitOfWork())
-                {
-                    if (menu == null) throw new Exception("Не удалось получить данные из формы.");
-
-                    var dbmenu = menu.id > 0 ? db.EditableMenu.Where(x => x.id == menu.id).FirstOrDefault() : menu;
-                    if (dbmenu == null) throw new Exception(string.Format("Не удалось найти меню с id={0}", menu.id));
-
-                    if (string.IsNullOrEmpty(menu.name)) throw new Exception("Название меню не может быть пустым.");
-
-                    if (dbmenu.id == 0) db.EditableMenu.Add(menu);
-                    else
-                    {
-                        dbmenu.name = menu.name;
-                        dbmenu.code = menu.code;
-                    }
-
-                    db.SaveChanges();
-                }
-                success = true;
-                result = "Изменения в свойствах меню успешно сохранены.";
-            }
-            catch (Exception ex)
-            {
-                success = false;
-                result = ex.Message;
-            }
-
-            return ReturnJson(success, result);
-        }
-
-        [ModuleAction("editablemenu_delete", Module.PERM_EDITABLEMENU)]
-        public ActionResult EditableMenuDelete(int IdMenu = 0)
-        {
-            var success = false;
-            var result = "";
-
-            try
-            {
-                if (IdMenu == 0) throw new Exception("Следует указать номер существующего меню.");
-                using (var db = Module.CreateUnitOfWork())
-                {
-                    var menu = db.EditableMenu.Where(x => x.id == IdMenu).FirstOrDefault();
-                    if (menu == null) throw new Exception(string.Format("Меню с id={0} не найдено.", IdMenu));
-
-                    db.EditableMenu.Delete(menu);
-                    db.SaveChanges();
-                }
-                success = true;
-                //result = "Меню было успешно удалено.";
-            }
-            catch (Exception ex)
-            {
-                success = false;
-                result = ex.Message;
-            }
-
-            return ReturnJson(success, result);
-        }
-
         [MenuAction("Sitemap", "sitemap", Module.PERM_SITEMAP)]
         public ActionResult Sitemap()
         {

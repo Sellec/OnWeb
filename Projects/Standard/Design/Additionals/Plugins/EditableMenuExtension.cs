@@ -3,7 +3,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 
 using OnUtils.Data;
-using OnWeb.Core.DB;
+using OnWeb.Plugins.EditableMenu.DB;
 using OnWeb.CoreBind.Modules;
 using OnWeb.Design.Additionals.Plugins.Model;
 
@@ -12,18 +12,18 @@ namespace System.Web.Mvc
     public static class EditableMenuExtension
     {
         [ThreadStatic]
-        private static Dictionary<int, menus> _dbCache;
+        private static Dictionary<int, Menu> _dbCache;
 
         public static IHtmlString EditableMenu(this HtmlHelper url, int IdMenu, bool WrapText = false, string Class = null)
         {
 
             var code = "";
 
-            if (_dbCache == null) _dbCache = new Dictionary<int, menus>();
+            if (_dbCache == null) _dbCache = new Dictionary<int, Menu>();
             var data = _dbCache.GetValueOrDefault(IdMenu);
 
             if (data == null)
-                using (var db = new UnitOfWork<menus>())
+                using (var db = new UnitOfWork<Menu>())
                 {
                     data = db.Repo1.Where(x => x.id == IdMenu).FirstOrDefault();
                     if (data != null) _dbCache.SetWithExpiration(IdMenu, data, TimeSpan.FromMinutes(5));

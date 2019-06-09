@@ -1,5 +1,5 @@
-@model List<Core.DB.menus>
-@{ var moduleAdmin = AppCore.Get<Admin.ModuleAdmin>(); }
+@using EditableMenu
+@model List<EditableMenu.DB.Menu>
 
 <script type='text/javascript'>
     $(document).ready(function () {
@@ -49,8 +49,8 @@
                         <td>@menu.id</td>
                         <td>@menu.name</td>
                         <td>
-                            <a href="/@moduleAdmin.UrlName/mnadmin/@Module.UrlName/editablemenu_edit/@menu.id" class="link_ext">Редактировать</a><br />
-                            <a href="/@moduleAdmin.UrlName/madmin/@Module.UrlName/editablemenu_delete/@menu.id" class="link_delete">Удалить</a>
+                            <a href="@(Url.CreateRoute<Module, ModuleController>(x => x.EditableMenuEdit(menu.id)))" class="link_ext">Редактировать</a><br />
+                            <a href="@(Url.CreateRoute<Module, ModuleController>(x => x.EditableMenuDelete(menu.id)))" class="link_delete">Удалить</a>
                         </td>
                     </tr>
                 }

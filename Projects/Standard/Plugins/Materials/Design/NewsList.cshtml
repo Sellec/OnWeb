@@ -1,3 +1,4 @@
+@using Materials
 @model List<Materials.DB.News>
 @{ 
     Layout = "baseMaterial.cshtml";
@@ -109,7 +110,7 @@
                     <h3 class="category-nav__title">Меню по разделам</h3>
                     <ul class="category-nav__list">
                         <li class="category-nav__item active">
-                            <a href="/news" class="category-nav__link">Новости недвижимости</a>
+                            <a href="@(Url.CreateRoute<ModuleMaterials, ModuleController>(x => x.ViewNewsAll()))" class="category-nav__link">Новости недвижимости</a>
                         </li>
                     </ul>
                 </div>

@@ -157,6 +157,10 @@
     <Compile Include="Plugins\Default\Startup.cs" />
     <Compile Include="Plugins\Developing\ModuleDevelopingController.cs" />
     <Compile Include="Plugins\Developing\ModuleDeveloping.cs" />
+    <Compile Include="Plugins\EditableMenu\DB\Menu.cs" />
+    <Compile Include="Plugins\EditableMenu\Module.cs" />
+    <Compile Include="Plugins\EditableMenu\ModuleController.cs" />
+    <Compile Include="Plugins\EditableMenu\Startup.cs" />
     <Compile Include="Plugins\FileManager\FileManagerController.cs" />
     <Compile Include="Plugins\FileManager\Conversations\ConversationBase.cs" />
     <Compile Include="Plugins\FileManager\CustomFieldsFileTypes\FileImageFieldTypeRender.cs" />
@@ -189,7 +193,7 @@
     <Compile Include="Plugins\Adminmain\Design\Model\JournalDetails.cs" />
     <Compile Include="Plugins\Adminmain\Design\Model\JournalsList.cs" />
     <Compile Include="Plugins\Adminmain\Model\AdminMainModelInfoPage.cs" />
-    <Compile Include="Plugins\Adminmain\Model\EditableMenu.cs" />
+    <Compile Include="Plugins\EditableMenu\Design\Model\EditableMenu.cs" />
     <Compile Include="Plugins\Adminmain\Model\Modules.cs" />
     <Compile Include="Plugins\Adminmain\Model\RouteInfo.cs" />
     <Compile Include="Plugins\Adminmain\Model\Routing.cs" />
@@ -227,7 +231,9 @@
     <Compile Include="Plugins\Universal\Pagination\PaginationViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Plugins\EditableMenu\Model\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="Data\css\Auth\modules.auth.css">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
@@ -1946,13 +1952,6 @@
     <Content Include="Data\img\flick\images\ui-icons_ff0084_256x240.png" />
     <Content Include="Data\img\flick\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Data\img\flick\jquery-ui-1.8.custom.css" />
-    <Content Include="Plugins\Adminmain\Design\admin_adminmain_comments_view.tpl" />
-    <Content Include="Plugins\Adminmain\Design\admin_adminmain_editablemenu_moduleurls.tpl" />
-    <Content Include="Plugins\Adminmain\Design\admin_adminmain_languages.tpl" />
-    <Content Include="Plugins\Adminmain\Design\admin_adminmain_rss_templ.tpl" />
-    <Content Include="Plugins\Adminmain\Design\admin_adminmain_zones.tpl" />
-    <Content Include="Plugins\Adminmain\Design\admin_adminmain_zones_ae.tpl" />
-    <Content Include="Plugins\Adminmain\Design\admin_adminmain_zones_moduleurls.tpl" />
     <Content Include="Plugins\Customer\Design\customer_external.tpl" />
     <Content Include="Plugins\Customer\Design\customer_finduser_results.tpl" />
     <Content Include="Plugins\Customer\Design\customer_subscriptions.tpl" />
@@ -1967,15 +1966,11 @@
     <Content Include="Plugins\Admin\Design\baseAdmin.cshtml" />
     <Content Include="Plugins\Admin\Design\error404NotFound.cshtml" />
     <Content Include="Plugins\Admin\Design\errorHandled.cshtml" />
-    <Content Include="Plugins\Adminmain\Design\admin_adminmain_addresses.cshtml" />
-    <Content Include="Plugins\Adminmain\Design\EditableMenu.cshtml" />
-    <Content Include="Plugins\Adminmain\Design\EditableMenuEdit.cshtml" />
-    <Content Include="Plugins\Adminmain\Design\admin_adminmain_info.cshtml" />
+    <Content Include="Plugins\EditableMenu\Design\EditableMenu.cshtml" />
+    <Content Include="Plugins\EditableMenu\Design\EditableMenuEdit.cshtml" />
+    <Content Include="Plugins\Adminmain\Design\CoreSettings.cshtml" />
     <Content Include="Plugins\Adminmain\Design\Modules.cshtml" />
-    <Content Include="Plugins\Adminmain\Design\admin_adminmain_modules_extensions.cshtml" />
-    <Content Include="Plugins\Adminmain\Design\admin_adminmain_rss.cshtml" />
     <Content Include="Plugins\Adminmain\Design\Sitemap.cshtml" />
-    <Content Include="Plugins\Adminmain\Design\admin_adminmain_sitemap_templ.cshtml" />
     <Content Include="Plugins\Adminmain\Design\JournalDetails.cshtml" />
     <Content Include="Plugins\Adminmain\Design\Journals.cshtml" />
     <Content Include="Plugins\Adminmain\Design\Messaging.cshtml" />
@@ -1985,17 +1980,15 @@
     <Content Include="Plugins\Adminmain\Design\routing.cshtml" />
     <Content Include="Plugins\Adminmain\Design\routing_module.cshtml" />
     <Content Include="Plugins\Universal\Design\PaginationBlock.cshtml" />
-    <Content Include="Plugins\Register\Design\register.cshtml" />
+    <Content Include="Plugins\Register\Design\Register.cshtml" />
     <Content Include="Plugins\Register\Design\registerInner.cshtml" />
     <Content Include="Plugins\Register\Design\RegisterNotificationEmailImmediately.cshtml" />
-    <Content Include="Plugins\Register\Design\register_del.cshtml" />
+    <Content Include="Plugins\Register\Design\AccountDelete.cshtml" />
     <Content Include="Plugins\Register\Design\register_mail2.cshtml" />
     <Content Include="Plugins\Register\Design\RegisterNotificationEmailAdmin.cshtml" />
     <Content Include="Plugins\Register\Design\register_mail_ban.cshtml" />
     <Content Include="Plugins\Register\Design\register_mail_decline.cshtml" />
     <Content Include="Plugins\Register\Design\register_mail_decline_admin.cshtml" />
-    <Content Include="Plugins\Register\Design\register_result.cshtml" />
-    <Content Include="Plugins\Register\Design\register_success.cshtml" />
     <Content Include="Plugins\Design\EditorTemplates\FileUpload.cshtml" />
     <Content Include="Plugins\Materials\Design\Admin\NewsEdit.cshtml" />
     <Content Include="Plugins\Materials\Design\Admin\NewsList.cshtml" />

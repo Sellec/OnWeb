@@ -14,7 +14,6 @@ namespace OnWeb.Plugins.Adminmain
     {
         public const string PERM_CONFIGMAIN = "configuration_main";
         public const string PERM_MODULES = "modules";
-        public const string PERM_EDITABLEMENU = "editablemenu";
         public const string PERM_SITEMAP = "sitemap";
         public const string PERM_RSS = "rss";
         public const string PERM_ADDRESS = "address_system";
@@ -27,7 +26,6 @@ namespace OnWeb.Plugins.Adminmain
         {
             RegisterPermission(PERM_CONFIGMAIN, "Управление настройками");
             RegisterPermission(PERM_MODULES, "Управление модулями");
-            RegisterPermission(PERM_EDITABLEMENU, "Управление настраиваемыми меню");
             RegisterPermission(PERM_SITEMAP, "Управление картой сайта");
             RegisterPermission(PERM_RSS, "Управление фидом RSS");
             RegisterPermission(PERM_ADDRESS, "Система адресов (КЛАДР)");

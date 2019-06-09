@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 
-namespace OnWeb.Plugins.Adminmain.Model
+namespace OnWeb.Plugins.EditableMenu.Design.Model
 {
-    using Core.DB;
     using Core.Modules;
 
     public class EditableMenu
     {
-        public menus Menu;
+        public DB.Menu Menu;
         public List<ModuleCore> Modules;
     }
 }
