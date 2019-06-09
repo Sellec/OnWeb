@@ -158,11 +158,15 @@ namespace OnWeb.Core.Messaging
                             continue;
                         }
 
-                        foreach (var connector in GetConnectors())
+                        var connectors = GetConnectors().Select(x => new { Connector = x, IdTypeConnector = ItemTypeFactory.GetItemType(x.GetType())?.IdItemType }).ToList();
+                        if (intermediateMessage.IdTypeConnector.HasValue)
+                            connectors = connectors.Where(x => x.IdTypeConnector.HasValue && x.IdTypeConnector == intermediateMessage.IdTypeConnector).ToList();
+
+                        foreach (var connectorInfo in connectors)
                         {
                             try
                             {
-                                var idTypeConnector = ItemTypeFactory.GetItemType(connector.GetType())?.IdItemType;
+                                    var connector = connectorInfo.Connector;
                                 var connectorMessage = new ConnectorMessage<TMessageType>(intermediateMessage);
                                 connector.Send(connectorMessage, this);
                                 if (connectorMessage.HandledState != ConnectorMessageStateType.NotHandled)
@@ -183,7 +187,7 @@ namespace OnWeb.Core.Messaging
                                             break;
                                     }
                                     intermediateMessage.State = connectorMessage.State;
-                                    intermediateMessage.IdTypeConnector = intermediateMessage.StateType == MessageStateType.RepeatWithControllerType ? idTypeConnector : null;
+                                    intermediateMessage.IdTypeConnector = intermediateMessage.StateType == MessageStateType.RepeatWithControllerType ? connectorInfo.IdTypeConnector : null;
                                     processedMessages.Add(intermediateMessage);
                                     break;
                                 }
