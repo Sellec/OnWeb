@@ -17,7 +17,6 @@ namespace OnWeb.Plugins.Adminmain.Model
         }
 
         public List<SelectListItem> ModulesList { get; set; } = new List<SelectListItem>();
-        public List<SelectListItem> PagesList { get; set; } = new List<SelectListItem>();
 
         public Core.Configuration.CoreConfiguration Configuration { get; }
     }

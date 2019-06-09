@@ -37,24 +37,6 @@ namespace OnWeb.Plugins.Adminmain
                                }).ToList()
             };
 
-            //var materials = AppCore.Get<ModulesManager>().GetModule<Materials.ModuleMaterials>();
-            //if (materials != null)
-            //    model.PagesList = (from p in materials.getPagesList()
-            //                       orderby p.name ascending
-            //                       select new SelectListItem()
-            //                       {
-            //                           Value = p.id.ToString(),
-            //                           Text = p.name,
-            //                           Selected = AppCore.Config.index_page == p.id
-            //                       }).ToList();
-
-            model.PagesList.Insert(0, new SelectListItem()
-            {
-                Value = "0",
-                Text = "Не выбрано",
-                Selected = AppCore.Config.index_page == 0
-            });
-
             return this.display("CoreSettings.tpl", model);
         }
 
@@ -71,7 +53,6 @@ namespace OnWeb.Plugins.Adminmain
 
                     cfg.IdModuleDefault = model.Configuration.IdModuleDefault;
                     cfg.DeveloperEmail = model.Configuration.DeveloperEmail;
-                    cfg.index_page = model.Configuration.index_page;
                     cfg.SiteFullName = model.Configuration.SiteFullName;
                     cfg.helpform_email = model.Configuration.helpform_email;
                     cfg.register_mode = model.Configuration.register_mode;

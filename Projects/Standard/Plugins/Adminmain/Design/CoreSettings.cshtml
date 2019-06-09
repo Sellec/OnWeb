@@ -40,7 +40,6 @@
         });
 
         $("select[name=register_mode]").val('@Config.register_mode');
-        $("select[name=index_page]").val('@Config.index_page');
         $("select[name=userAuthorizeAllowed]").val('@Config.userAuthorizeAllowed');
     });
 </script>
@@ -65,12 +64,6 @@
                 </div>
 
                 <div>
-                    @Html.LabelFor(x => x.Configuration.SiteShortName):<br />
-                    @Html.EditorFor(x => x.Configuration.SiteShortName, new { htmlAttributes = new { size = 50 } })<br />
-                    @Html.ValidationMessageFor(x => x.Configuration.SiteShortName)
-                </div>
-
-                <div>
                     @Html.LabelFor(x => x.Configuration.DeveloperEmail):<br>
                     @Html.TextBoxFor(x => x.Configuration.DeveloperEmail)<br />
                     @Html.ValidationMessageFor(x => x.Configuration.DeveloperEmail)
@@ -80,12 +73,6 @@
                     @Html.LabelFor(x => x.Configuration.IdModuleDefault):<br>
                     @Html.DropDownListFor(x => x.Configuration.IdModuleDefault, Model.ModulesList)<br />
                     @Html.ValidationMessageFor(x => x.Configuration.IdModuleDefault)
-                </div>
-
-                <div>
-                    @Html.LabelFor(x => x.Configuration.index_page):<br>
-                    @Html.DropDownListFor(x => x.Configuration.index_page, Model.PagesList)<br />
-                    @Html.ValidationMessageFor(x => x.Configuration.index_page)
                 </div>
 
                 <div>

@@ -10,13 +10,6 @@ namespace OnWeb.Core.Configuration
 #pragma warning disable CS1591 // todo внести комментарии.
     public class CoreConfiguration : ModuleConfiguration<Plugins.CoreModule.CoreModule>
     {
-        [Display(Name = "Краткое название сайта"), Required(ErrorMessage = "Краткое название сайта не может быть пустым"), MaxLength(50)]
-        public string SiteShortName
-        {
-            get => Get("SiteShortName", "");
-            set => Set("SiteShortName", value);
-        }
-
         [Display(Name = "Название сайта"), Required(ErrorMessage = "Название сайта не может быть пустым"), MaxLength(200)]
         public string SiteFullName
         {
@@ -29,13 +22,6 @@ namespace OnWeb.Core.Configuration
         {
             get => Get("index_module", 0);
             set => Set("index_module", value);
-        }
-
-        [Display(Name = "Основная страница")]
-        public int index_page
-        {
-            get => Get("index_page", 0);
-            set => Set("index_page", value);
         }
 
         [Display(Name = "Основной контактный email сайта"), Required(ErrorMessage = "Основной контактный email не может быть пустым")]
