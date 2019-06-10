@@ -107,7 +107,7 @@ namespace OnWeb.Core.Languages
                 var cfg = module.GetConfigurationManipulator().GetEditable<Configuration.CoreConfiguration>();
                 cfg.IdSystemLanguage = language.IdLanguage;
 
-                switch (module.GetConfigurationManipulator().ApplyConfiguration(cfg))
+                switch (module.GetConfigurationManipulator().ApplyConfiguration(cfg).Item1)
                 {
                     case Configuration.ApplyConfigurationResult.PermissionDenied:
                         return Types.ConfigurationSaveResult.PermissionsDenied;

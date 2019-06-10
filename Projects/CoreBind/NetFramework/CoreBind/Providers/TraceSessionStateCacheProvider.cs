@@ -371,7 +371,6 @@
 //                                });
 
 //                                int updated = _dbContext.SaveChanges();
-//                                Debug.WriteLineNoLog($"SessionStateProvider: Update complete with {updated} items, aupd={addedUpdated}");
 //                            }
 //                            catch (Data.Errors.UpdateConcurrencyException ex)
 //                            {

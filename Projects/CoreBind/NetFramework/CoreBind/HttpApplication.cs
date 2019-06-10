@@ -143,10 +143,6 @@ namespace OnWeb.CoreBind
             _applicationCore.GetUserContextManager().SetCurrentUserContext(_applicationCore.GetUserContextManager().CreateGuestUserContext());
 
             var isFirstRequest = (bool?)this.Context.GetType().GetProperty("FirstRequest", BindingFlags.Instance | BindingFlags.GetProperty | BindingFlags.NonPublic)?.GetValue(this.Context);
-            if (isFirstRequest.HasValue && isFirstRequest.Value == true)
-            {
-                Debug.WriteLine($"RequestUrl='{this.Request.Url?.ToString()}', serverUrl='{_applicationCore.ServerUrl?.ToString()}'");
-            }
             if (!_applicationCore.IsServerUrlHasBeenSet  && isFirstRequest.HasValue && isFirstRequest.Value)
                 _applicationCore.ServerUrl = new UriBuilder(Request.Url.Scheme, Request.Url.Host, Request.Url.Port).Uri;
 

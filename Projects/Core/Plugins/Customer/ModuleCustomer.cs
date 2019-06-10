@@ -26,8 +26,8 @@ namespace OnWeb.Plugins.Customer
             base.InitModuleCustom();
 
             //registerExtensionNeeded<Core.ModuleExtensions.CustomFields.ExtensionCustomsFields>();
-            registerExtensionNeeded<Core.ModuleExtensions.CustomFields.ExtensionCustomsFieldsBase>();
-            registerExtensionNeeded<Core.ModuleExtensions.ExtensionUrl.ExtensionUrl>();
+            RegisterExtension<Core.ModuleExtensions.CustomFields.ExtensionCustomsFieldsBase>();
+            RegisterExtension<Core.ModuleExtensions.ExtensionUrl.ExtensionUrl>();
 
             RegisterPermission(PERM_MANAGEUSERS, "Управление пользователями");
             RegisterPermission(PERM_MANAGEROLES, "Управление ролями");

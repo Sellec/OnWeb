@@ -216,9 +216,9 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
             }
             finally
             {
-                if (exception == null)
+                if (exception == null && measure.Calculate(false).TotalMilliseconds >= 50)
                     Debug.WriteLineNoLog("CreateCache: {0} items, {1}ms", _cache != null ? _cache.Count : 0, measure);
-                else
+                else if (exception != null)
                     Debug.WriteLine("CreateCacheFailed: {0}", exception.GetLowLevelException().Message);
             }
         }
@@ -350,11 +350,6 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
                 if (type != null & pair.Key != type) continue;
 
                 var items = pair.Value.ToList();
-
-                //Debug.WriteLine("{0}: {1}", pair.Key.Name, string.Join(", ", (from p in items orderby p.ID ascending select string.Format("{0} ({1})", p.ID, p.GuidTemp))));
-
-                //if (items.First().ID == 22 && items.Count == 1)
-                //{ }
 
                 int start = 0;
                 List<Items.ItemBase> subItems = null;

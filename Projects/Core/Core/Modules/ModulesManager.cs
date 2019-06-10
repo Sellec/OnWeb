@@ -86,8 +86,6 @@ namespace OnWeb.Core.Modules
                 LoadModuleCallModuleStart(module);
                 _modules.Add(new Tuple<Type, ModuleBase<ApplicationCore>>(typeof(TModuleType), module));
 
-                Debug.WriteLineNoLog($"LoadModuleCustom -> {module.UrlName}");
-
                 this.RegisterEvent(
                      Journaling.EventType.Error,
                     $"Загрузка модуля '{moduleType.FullName}'",

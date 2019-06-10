@@ -6,7 +6,7 @@
     public class ConnectorSettings
     {
         /// <summary>
-        /// Полное имя типа коннектора. Используется в <see cref="IMessagingManager.GetConnectorsByMessageType{TMessage}"/> для поиска настроек коннекторов.
+        /// Полное имя типа коннектора. Используется в <see cref="MessagingManager.GetConnectorsByMessageType{TMessage}"/> для поиска настроек коннекторов.
         /// </summary>
         public string ConnectorTypeName { get; set; }
 

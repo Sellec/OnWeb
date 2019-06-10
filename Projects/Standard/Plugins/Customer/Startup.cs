@@ -15,7 +15,7 @@ namespace OnWeb.Plugins.Customer
 
         void IExecuteStart<ApplicationCore>.ExecuteStart(ApplicationCore core)
         {
-            core.Get<ModuleCustomer>().registerExtensionNeeded<Core.ModuleExtensions.CustomFields.ExtensionCustomsFieldsAdmin>();
+            core.Get<ModuleCustomer>().RegisterExtension<Core.ModuleExtensions.CustomFields.ExtensionCustomsFieldsAdmin>();
         }
     }
 }

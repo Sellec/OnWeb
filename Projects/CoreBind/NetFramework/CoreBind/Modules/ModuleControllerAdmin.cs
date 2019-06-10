@@ -94,8 +94,23 @@ namespace OnWeb.CoreBind.Modules
                         if (!string.Equals(urlNameSource, cfg.UrlName, StringComparison.InvariantCultureIgnoreCase))
                             outputMessage = $"Обратите внимание, что после изменения URL-доступного имени модуль станет недоступен по старому адресу. {outputMessage}".Trim();
 
-                        Module.GetConfigurationManipulator().ApplyConfiguration(cfg);
-                        answer.FromSuccess($"{outputMessage}".Trim());
+                        var result = Module.GetConfigurationManipulator().ApplyConfiguration(cfg);
+                        switch (result.Item1)
+                        {
+                            case ApplyConfigurationResult.PermissionDenied:
+                                answer.FromFail($"Недостаточно прав для сохранения настроек. {outputMessage}".Trim());
+                                break;
+
+                            case ApplyConfigurationResult.Failed:
+                                var journalData = AppCore.Get<Core.Journaling.JournalingManager>().GetJournalData(result.Item2.Value);
+                                answer.FromFail($"Возникла ошибка при сохранении настроек: {(journalData?.Message ?? "текст ошибки не найден")}. {outputMessage}".Trim());
+                                break;
+
+                            case ApplyConfigurationResult.Success:
+                                answer.FromSuccess($"{outputMessage}".Trim());
+                                break;
+
+                        }
                     }
                 }
             }

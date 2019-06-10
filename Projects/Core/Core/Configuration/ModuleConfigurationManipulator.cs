@@ -66,15 +66,36 @@ namespace OnWeb.Core.Configuration
         }
 
         /// <summary>
-        /// 
+        /// Сохраняет настройки из объекта настроек <paramref name="configuration"/> и немедленно применяет их к модулю.
         /// </summary>
-        /// <typeparam name="TConfiguration"></typeparam>
-        /// <param name="configuration"></param>
-        /// <returns></returns>
-        public ApplyConfigurationResult ApplyConfiguration<TConfiguration>(TConfiguration configuration) 
+        /// <returns>Возвращает кортеж из двух значений - результат сохранения и идентификатор записи журнала в случае ошибки.</returns>
+        /// <seealso cref="Journaling.JournalingManager.GetJournalData(int)"/>
+        public (ApplyConfigurationResult, int?) ApplyConfiguration<TConfiguration>(TConfiguration configuration)
             where TConfiguration : ModuleConfiguration<TModule>, new()
         {
-            return ((ModulesManager)AppCore.GetModulesManager()).ApplyModuleConfiguration<TModule, TConfiguration>(configuration, this, _module);
+            try
+            {
+                var eventArgs = new ConfigurationApplyEventArgs<TModule>(configuration);
+                _module.OnConfigurationApply(eventArgs);
+
+                if (eventArgs.IsSuccess)
+                {
+                    var result = ((ModulesManager)AppCore.GetModulesManager()).ApplyModuleConfiguration(configuration, this, _module);
+                    if (result == ApplyConfigurationResult.Success)
+                    {
+                        try { _module.OnConfigurationApplied(); } catch { }
+                    }
+                    return (result, null);
+                }
+                else
+                {
+                    return (ApplyConfigurationResult.Failed, eventArgs.IdJournalData);
+                }
+            }
+            catch (Exception ex)
+            {
+                return (ApplyConfigurationResult.Failed, _module.RegisterEvent(Journaling.EventType.Error, "Ошибка сохранения настроек", null, ex).Result);
+            }
         }
     }
 }
