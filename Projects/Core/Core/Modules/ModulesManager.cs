@@ -87,7 +87,7 @@ namespace OnWeb.Core.Modules
                 _modules.Add(new Tuple<Type, ModuleBase<ApplicationCore>>(typeof(TModuleType), module));
 
                 this.RegisterEvent(
-                     Journaling.EventType.Error,
+                     Journaling.EventType.Info,
                     $"Загрузка модуля '{moduleType.FullName}'",
                     $"Модуль загружен на основе типа '{module.GetType().FullName}' с Id={config.IdModule}."
                 );

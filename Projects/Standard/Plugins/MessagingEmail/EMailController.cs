@@ -18,31 +18,14 @@ namespace OnWeb.Plugins.MessagingEmail
                 Select(x => new { x.ConnectorTypeName, Settings = JsonConvert.DeserializeObject<Connectors.SmtpServerSettings>(x.SettingsSerialized) }).
                 ToList();
 
-            var amazonSES = connectors.Where(x => x.ConnectorTypeName.EndsWith(".AmazonSES")).Select(x => x.Settings).FirstOrDefault();
             var smtp = connectors.Where(x => x.ConnectorTypeName.EndsWith("." + nameof(Connectors.SmtpServer))).Select(x => x.Settings).FirstOrDefault();
 
-            viewModelForFill.ApplyConfiguration(amazonSES, smtp);
+            viewModelForFill.ApplyConfiguration(smtp);
         }
 
         protected override ModuleConfiguration<EMailModule> ConfigurationSaveCustom(Configuration formData, out string outputMessage)
         {
-            var amazonType = typeof(Connectors.SmtpServer).Namespace + ".AmazonSES";
             var connectors = AppCore.Config.ConnectorsSettings.ToDictionary(x => x.ConnectorTypeName, x => x);
-
-            connectors.Remove(amazonType);
-            if (formData.IsUseAmazonSES)
-            {
-                connectors[amazonType] = new Core.Messaging.Connectors.ConnectorSettings()
-                {
-                    ConnectorTypeName = amazonType,
-                    SettingsSerialized = JsonConvert.SerializeObject(new Connectors.SmtpServerSettings()
-                    {
-                        Server = Uri.TryCreate(formData?.Amazon?.Server, UriKind.Absolute, out var uri) ? uri : null,
-                        Login = formData?.Amazon?.Login,
-                        Password = formData?.Amazon?.Password
-                    })
-                };
-            }
 
             connectors.Remove(typeof(Connectors.SmtpServer).FullName);
             if (formData.IsUseSmtp)
