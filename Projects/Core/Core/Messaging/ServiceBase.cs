@@ -158,7 +158,7 @@ namespace OnWeb.Core.Messaging
                             continue;
                         }
 
-                        var connectors = GetConnectors().Select(x => new { Connector = x, IdTypeConnector = ItemTypeFactory.GetItemType(x.GetType())?.IdItemType }).ToList();
+                        var connectors = GetConnectors().Select(x => new { Connector = x, IdTypeConnector = ItemTypeFactory.GetItemType(x.GetType())?.IdItemType }).OrderBy(x => x.Connector.OrderInPool).ToList();
                         if (intermediateMessage.IdTypeConnector.HasValue)
                             connectors = connectors.Where(x => x.IdTypeConnector.HasValue && x.IdTypeConnector == intermediateMessage.IdTypeConnector).ToList();
 
