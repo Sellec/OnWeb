@@ -89,7 +89,7 @@
       <Version>3.2.7</Version>
     </PackageReference>
     <PackageReference Include="OnUtils.Application">
-      <Version>0.1.1.5</Version>
+      <Version>0.1.1.6</Version>
     </PackageReference>
     <PackageReference Include="OnUtils">
       <Version>0.1.1.11</Version>
@@ -179,6 +179,7 @@
     <Compile Include="Plugins\Materials\DB\News.cs" />
     <Compile Include="Plugins\Materials\DB\Page.cs" />
     <Compile Include="Plugins\Materials\DB\PageCategory.cs" />
+    <Compile Include="Plugins\Materials\MaterialsSitemapProvider.cs" />
     <Compile Include="Plugins\Materials\ModuleAdminController.cs" />
     <Compile Include="Plugins\Materials\ModuleController.cs" />
     <Compile Include="Plugins\Materials\ModuleMaterials.cs" />

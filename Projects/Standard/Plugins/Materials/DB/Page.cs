@@ -6,7 +6,7 @@ namespace OnWeb.Plugins.Materials.DB
     using System.ComponentModel.DataAnnotations.Schema;
 
     [Table("Page")]
-    public partial class Page : ItemBase
+    public partial class Page : ItemBase<ModuleMaterials>
     {
         public override int ID
         {

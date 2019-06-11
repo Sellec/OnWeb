@@ -8,6 +8,7 @@ namespace OnWeb.Plugins.Materials
         void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
         {
             bindingsCollection.SetSingleton<ModuleMaterials>();
+            bindingsCollection.SetTransient<MaterialsSitemapProvider>();
         }
     }
 }

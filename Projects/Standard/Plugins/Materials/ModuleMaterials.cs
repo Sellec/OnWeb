@@ -12,6 +12,12 @@ namespace OnWeb.Plugins.Materials
     [ModuleCore("Контент", DefaultUrlName = "Content")]
     public class ModuleMaterials : ModuleCore<ModuleMaterials>, IUnitOfWorkAccessor<DB.DataLayerContext>
     {
+        protected override void InitModuleCustom()
+        {
+            RegisterExtension<Core.ModuleExtensions.ExtensionUrl.ExtensionUrl>();
+            RegisterExtension<Core.ModuleExtensions.CustomFields.ExtensionCustomsFieldsBase>();
+        }
+
         public override IReadOnlyDictionary<ItemBase, Uri> GenerateLinks(IEnumerable<ItemBase> items)
         {
             return items.Where(x => x is DB.News).ToDictionary(x => x, x => new Uri("/" + UrlName + "/news/" + x.ID, UriKind.Relative));
