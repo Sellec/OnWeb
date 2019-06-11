@@ -110,10 +110,17 @@ namespace OnWeb.Core.Modules
         {
             lock (_syncRoot)
             {
-                var module = _modules.
+                // Сначала ищем имя модуля среди сохраненных имен модулей. Если совсем ничего нет - то по UrlName, который в случае пустого сохраненного имени хранит гуид.
+                var module = 
+                    _modules.
                     Select(x => x.Item2).
                     OfType<ModuleCore>().
                     Where(x => !string.IsNullOrEmpty(x._moduleUrlName) && x._moduleUrlName.Equals(urlName, StringComparison.InvariantCultureIgnoreCase)).
+                    FirstOrDefault() ?? 
+                    _modules.
+                    Select(x => x.Item2).
+                    OfType<ModuleCore>().
+                    Where(x => !string.IsNullOrEmpty(x.UrlName) && x.UrlName.Equals(urlName, StringComparison.InvariantCultureIgnoreCase)).
                     FirstOrDefault();
 
                 return module;
