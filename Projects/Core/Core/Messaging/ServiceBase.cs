@@ -138,7 +138,7 @@ namespace OnWeb.Core.Messaging
             try
             {
                 using (var db = this.CreateUnitOfWork())
-                using (var scope = db.CreateScope(TransactionScopeOption.RequiresNew))
+                using (var scope = db.CreateScope(TransactionScopeOption.Suppress))
                 {
                     var messages = GetUnsentMessages(db);
                     if (messages == null) return;
