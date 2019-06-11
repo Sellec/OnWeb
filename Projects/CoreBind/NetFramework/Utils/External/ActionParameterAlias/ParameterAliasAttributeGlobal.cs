@@ -21,8 +21,8 @@ namespace External.ActionParameterAlias
                 var valueProviderSource = filterContext.Controller.ValueProvider;
                 var valueProviderNew = new ValueProviderCollection
                 {
-                    valueProviderSource,
-                    new ParameterAliasValueProvider(valueProviderSource, new ActionParameterAlias(attribute.ParameterName, attribute.AliasName))
+                    new ParameterAliasValueProvider(valueProviderSource, new ActionParameterAlias(attribute.ParameterName, attribute.AliasName)),
+                    valueProviderSource
                 };
                 filterContext.Controller.ValueProvider = valueProviderNew;
             }
