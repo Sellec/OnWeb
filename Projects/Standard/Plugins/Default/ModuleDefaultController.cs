@@ -43,6 +43,5 @@ namespace OnWeb.Plugins.Default
 
             return this.display("Index.cshtml");
         }
-
     }
 }
