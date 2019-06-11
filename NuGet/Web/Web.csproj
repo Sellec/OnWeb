@@ -121,7 +121,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="CopyLinkedContentFiles" BeforeTargets="AfterBuild">
+    <Message Text="1" Importance="High" />
+    <RemoveDir Directories="src;content;libs" />
+    <Message Text="2" Importance="High" />
     <Copy SourceFiles="%(Content.Identity)" DestinationFiles="%(Content.Link)" SkipUnchangedFiles="true" OverwriteReadOnlyFiles="true" Condition="'%(Content.Link)' != ''" />
+    <Message Text="3" Importance="High" />
   </Target>
   <Target Name="AfterBuild">
     <Delete Files=".\NuGet.log" />
