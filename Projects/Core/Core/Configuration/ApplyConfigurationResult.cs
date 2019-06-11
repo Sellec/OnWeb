@@ -18,5 +18,10 @@ namespace OnWeb.Core.Configuration
         /// Сохранение прошло успешно.
         /// </summary>
         Success,
+
+        /// <summary>
+        /// Ошибка сохранения. 
+        /// </summary>
+        Failed,
     }
 }

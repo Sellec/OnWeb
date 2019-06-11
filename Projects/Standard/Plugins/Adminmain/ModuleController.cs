@@ -67,15 +67,21 @@ namespace OnWeb.Plugins.Adminmain
 
                     cfg.userAuthorizeAllowed = model.Configuration.userAuthorizeAllowed;
 
-                    switch (AppCore.GetModulesManager().GetModule<CoreModule.CoreModule>().GetConfigurationManipulator().ApplyConfiguration(cfg))
+                    var applyResult = AppCore.GetModulesManager().GetModule<CoreModule.CoreModule>().GetConfigurationManipulator().ApplyConfiguration(cfg);
+                    switch (applyResult.Item1)
                     {
                         case ApplyConfigurationResult.PermissionDenied:
                             result.Message = "Недостаточно прав для сохранения конфигурации системы.";
                             result.Success = false;
                             break;
 
+                        case ApplyConfigurationResult.Failed:
+                            var journalData = AppCore.Get<JournalingManager>().GetJournalData(applyResult.Item2.Value);
+                            result.Message = $"Возникла ошибка при сохранении настроек: {(journalData?.Message ?? "текст ошибки не найден")}.";
+                            result.Success = false;
+                            break;
+
                         case ApplyConfigurationResult.Success:
-                        default:
                             System.Web.Routing.RouteTable.Routes.Where(x => x is RouteWithDefaults).Select(x => x as RouteWithDefaults).ForEach(x => x.UpdateDefaults());
 
                             result.Message = "Сохранено успешно!";

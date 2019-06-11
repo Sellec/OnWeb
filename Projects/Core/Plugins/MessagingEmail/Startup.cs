@@ -8,7 +8,6 @@ namespace OnWeb.Plugins.MessagingEmail
         void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
         {
             bindingsCollection.SetSingleton<IEmailService, EmailService>();
-            bindingsCollection.SetTransient<Connectors.AmazonSES>();
             bindingsCollection.SetTransient<Connectors.SmtpServer>();
         }
     }

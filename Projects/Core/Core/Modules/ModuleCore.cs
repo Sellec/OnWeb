@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections;
+﻿using OnUtils;
+using OnUtils.Application.Modules;
+using OnUtils.Application.Users;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-using OnUtils;
-using OnUtils.Application;
-using OnUtils.Application.Modules;
-using OnUtils.Data;
-using OnUtils.Utils;
-using OnUtils.Architecture.AppCore;
-using OnUtils.Architecture.AppCore.DI;
-using OnUtils.Application.Users;
-
 namespace OnWeb.Core.Modules
 {
+    using Configuration;
+    using Journaling;
+    using ExecutionRegisterResult = ExecutionResult<int?>;
+
     /// <summary>
     /// Базовый класс для всех модулей. Обязателен при реализации любых модулей, т.к. при задании привязок в DI проверяется наследование именно от этого класса.
     /// </summary>
@@ -24,9 +21,6 @@ namespace OnWeb.Core.Modules
         #region Константы
         public const int CategoryType = 1;
         public const int ItemType = 2;
-
-        public const int ItemsTypeCategory = 1;
-        public const int ItemsTypeItem = 2;
 
         /// <summary>
         /// Обозначает ключ разрешения для сохранения настроек модуля.
@@ -130,11 +124,11 @@ namespace OnWeb.Core.Modules
         /// Возвращает url-доступное название модуля. Не может быть пустым.
         /// Порядок определения значения свойства следующий:
         /// 1) Если задано - <see cref="ModuleCoreAttribute.DefaultUrlName"/>;
-        /// 2) Если задано - <see cref="Configuration.ModuleConfiguration{TModule}.UrlName"/>;
+        /// 2) Если задано - <see cref="ModuleConfiguration{TModule}.UrlName"/>;
         /// 3) Если предыдущие пункты не вернули значения - используется результат выполнения <see cref="StringExtension.GenerateGuid(string)"/> на основе полного имени (<see cref="Type.FullName"/>) query-типа модуля.
         /// </summary>
         /// <seealso cref="ModuleCoreAttribute.DefaultUrlName"/>
-        /// <seealso cref="Configuration.ModuleConfiguration{TModule}.UrlName"/>
+        /// <seealso cref="ModuleConfiguration{TModule}.UrlName"/>
         public virtual string UrlName
         {
             get => _moduleUrlName;
@@ -176,9 +170,13 @@ namespace OnWeb.Core.Modules
         #endregion
 
         #region Блок расширений
-        public void registerExtensionNeeded<T>() where T : Extensions.ModuleExtension
+        /// <summary>
+        /// Указывает, что в модуле должно быть доступно расширение <typeparamref name="TExtension"/>.
+        /// </summary>
+        /// <typeparam name="TExtension"></typeparam>
+        public void RegisterExtension<TExtension>() where TExtension : Extensions.ModuleExtension
         {
-            if (!hasExtension<T>())
+            if (!HasExtension<TExtension>())
             {
                 Type _type = null;
 
@@ -186,7 +184,7 @@ namespace OnWeb.Core.Modules
                 {
                     if (_type == null)
                     {
-                        var t = assembly.GetType(typeof(T).FullName, false);
+                        var t = assembly.GetType(typeof(TExtension).FullName, false);
                         if (t != null) _type = t;
                     }
                 });
@@ -199,25 +197,25 @@ namespace OnWeb.Core.Modules
             }
         }
 
-        public bool hasExtension<T>(bool IsForAdmin = false) where T : Extensions.ModuleExtension
+        private bool HasExtension<TExtension>(bool IsForAdmin = false) where TExtension : Extensions.ModuleExtension
         {
-            var tt = typeof(T);
+            var tt = typeof(TExtension);
             var extension = (from p in _extensions
-                             where (p as T) != null && p.Attributes.IsAdminPart == IsForAdmin
+                             where (p as TExtension) != null && p.Attributes.IsAdminPart == IsForAdmin
                              select p).FirstOrDefault();
 
             return (extension != null);
         }
 
 
-        public T getExtension<T>(bool IsForAdmin = false) where T : Extensions.ModuleExtension
+        private TExtension GetExtension<TExtension>(bool IsForAdmin = false) where TExtension : Extensions.ModuleExtension
         {
-            var tt = typeof(T);
+            var tt = typeof(TExtension);
             var extension = (from p in _extensions
-                             where (p as T) != null && p.Attributes.IsAdminPart == IsForAdmin
+                             where (p as TExtension) != null && p.Attributes.IsAdminPart == IsForAdmin
                              select p).FirstOrDefault();
 
-            return (T)extension;
+            return (TExtension)extension;
         }
 
         /// <summary>
@@ -304,7 +302,7 @@ namespace OnWeb.Core.Modules
         /// </summary>
         public ModuleExtensions.CustomFields.ExtensionCustomsFieldsBase Fields
         {
-            get => getExtension<ModuleExtensions.CustomFields.ExtensionCustomsFieldsBase>();
+            get => GetExtension<ModuleExtensions.CustomFields.ExtensionCustomsFieldsBase>();
         }
 
         /// <summary>
@@ -312,14 +310,14 @@ namespace OnWeb.Core.Modules
         /// </summary>
         internal ModuleExtensions.ExtensionUrl.ExtensionUrl Urls
         {
-            get => getExtension<ModuleExtensions.ExtensionUrl.ExtensionUrl>();
+            get => GetExtension<ModuleExtensions.ExtensionUrl.ExtensionUrl>();
         }
         #endregion
 
         #region Ошибки 
         private int GetJournalForErrors()
         {
-            var result = AppCore.Get<Journaling.JournalingManager>().RegisterJournal(Journaling.JournalingConstants.IdSystemJournalType, "Журнал событий модуля '" + this.Caption + "'", "ModuleErrors_" + ID);
+            var result = AppCore.Get<JournalingManager>().RegisterJournal(JournalingConstants.IdSystemJournalType, "Журнал событий модуля '" + this.Caption + "'", "ModuleErrors_" + ID);
             if (!result.IsSuccess) Debug.WriteLine("Ошибка получения журнала событий модуля '{0}': {1}", this.Caption, result.Message);
             return result.Result?.IdJournal ?? -1;
         }
@@ -327,11 +325,16 @@ namespace OnWeb.Core.Modules
         /// <summary>
         /// Регистрирует событие в журнал модуля.
         /// </summary>
-        /// <param name="eventType">См. <see cref="Journaling.JournalingManager.RegisterEvent(int, Journaling.EventType, string, string, DateTime?, Exception)"/>.</param>
-        /// <param name="message">См. <see cref="Journaling.JournalingManager.RegisterEvent(int, Journaling.EventType, string, string, DateTime?, Exception)"/>.</param>
-        /// <param name="messageDetailed">См. <see cref="Journaling.JournalingManager.RegisterEvent(int, Journaling.EventType, string, string, DateTime?, Exception)"/>.</param>
-        /// <param name="ex">См. <see cref="Journaling.JournalingManager.RegisterEvent(int, Journaling.EventType, string, string, DateTime?, Exception)"/>.</param>
-        protected internal void RegisterEvent(Journaling.EventType eventType, string message, string messageDetailed = null, Exception ex = null)
+        /// <param name="eventType">См. <see cref="JournalingManager.RegisterEvent(int, EventType, string, string, DateTime?, Exception)"/>.</param>
+        /// <param name="message">См. <see cref="JournalingManager.RegisterEvent(int, EventType, string, string, DateTime?, Exception)"/>.</param>
+        /// <param name="messageDetailed">См. <see cref="JournalingManager.RegisterEvent(int, EventType, string, string, DateTime?, Exception)"/>.</param>
+        /// <param name="ex">См. <see cref="JournalingManager.RegisterEvent(int, EventType, string, string, DateTime?, Exception)"/>.</param>
+        /// <returns>
+        /// Возвращает объект <see cref="ExecutionRegisterResult"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. 
+        /// В случае успеха свойство <see cref="ExecutionRegisterResult.Result"/> содержит идентификатор записи журнала (см. также <see cref="JournalingManager.GetJournalData(int)"/>).
+        /// В случае ошибки свойство <see cref="ExecutionResult.Message"/> содержит сообщение об ошибке.
+        /// </returns>
+        protected internal ExecutionRegisterResult RegisterEvent(EventType eventType, string message, string messageDetailed = null, Exception ex = null)
         {
             var idJournal = _journalForCurrentModule.GetOrAddWithExpiration(0, c => GetJournalForErrors(), TimeSpan.FromMinutes(5));
 
@@ -360,7 +363,7 @@ namespace OnWeb.Core.Modules
 
             msg += messageDetailed;
 
-            AppCore.Get<Journaling.JournalingManager>().RegisterEvent(idJournal, eventType, message, msg, null, ex);
+            return AppCore.Get<JournalingManager>().RegisterEvent(idJournal, eventType, message, msg, null, ex);
         }
 
         #endregion
@@ -374,7 +377,7 @@ namespace OnWeb.Core.Modules
     public abstract class ModuleCore<TSelfReference> : ModuleCore
         where TSelfReference : ModuleCore<TSelfReference>
     {
-        internal Configuration.ModuleConfigurationManipulator<TSelfReference> _configurationManipulator = null;
+        internal ModuleConfigurationManipulator<TSelfReference> _configurationManipulator = null;
 
         /// <summary>
         /// Создает новый объект модуля. 
@@ -386,16 +389,17 @@ namespace OnWeb.Core.Modules
             if (!typeof(TSelfReference).IsAssignableFrom(this.GetType())) throw new TypeAccessException($"Параметр-тип {nameof(TSelfReference)} должен находиться в цепочке наследования текущего типа.");
         }
 
+        #region Настройки
         /// <summary>
         /// Возвращает объект типа <typeparamref name="TConfiguration"/>, содержащий параметры модуля.
         /// Возвращенный объект находится в режиме "только для чтения" - изменение параметров невозможно, попытка выполнить set вызовет <see cref="InvalidOperationException"/>.
         /// Все объекты конфигурации, созданные путем вызова этого метода, манипулируют одним набором значений. 
         /// </summary>
         /// <exception cref="InvalidOperationException">Возникает, если модуль не зарегистрирован.</exception>
-        /// <seealso cref="Configuration.ModuleConfigurationManipulator{TModule}"/>
+        /// <seealso cref="ModuleConfigurationManipulator{TModule}"/>
         /// <seealso cref="GetConfigurationManipulator"/>
         public TConfiguration GetConfiguration<TConfiguration>()
-            where TConfiguration : Configuration.ModuleConfiguration<TSelfReference>, new()
+            where TConfiguration : ModuleConfiguration<TSelfReference>, new()
         {
             return _configurationManipulator.GetUsable<TConfiguration>();
         }
@@ -403,10 +407,32 @@ namespace OnWeb.Core.Modules
         /// <summary>
         /// Возвращает манипулятор конфигурацией, предоставляющий возможности получения и редактирования конфигурации.
         /// </summary>
-        public Configuration.ModuleConfigurationManipulator<TSelfReference> GetConfigurationManipulator()
+        public ModuleConfigurationManipulator<TSelfReference> GetConfigurationManipulator()
         {
             return _configurationManipulator;
         }
+
+        /// <summary>
+        /// Вызывается при сохранении настроек модуля. Если для <paramref name="args"/> был вызван <see cref="ConfigurationApplyEventArgs{TModule}.SetFailed(int)"/>, то <see cref="ModuleConfigurationManipulator{TModule}.ApplyConfiguration{TConfiguration}(TConfiguration)"/> вернет <see cref="ApplyConfigurationResult.Failed"/>.
+        /// </summary>
+        /// <param name="args">Содержит применяемые настройки модуля.</param>
+        /// <seealso cref="GetConfigurationManipulator"/>
+        /// <seealso cref="ModuleConfigurationManipulator{TModule}.ApplyConfiguration{TConfiguration}(TConfiguration)"/>
+        internal protected virtual void OnConfigurationApply(ConfigurationApplyEventArgs<TSelfReference> args)
+        {
+
+        }
+
+        /// <summary>
+        /// Вызывается после успешного сохранения и применения настроек модуля.
+        /// </summary>
+        /// <seealso cref="GetConfigurationManipulator"/>
+        /// <seealso cref="ModuleConfigurationManipulator{TModule}.ApplyConfiguration{TConfiguration}(TConfiguration)"/>
+        internal protected virtual void OnConfigurationApplied()
+        {
+
+        }
+        #endregion
 
         internal override void InitModule(IEnumerable<Type> controllerTypes)
         {
@@ -437,11 +463,11 @@ namespace OnWeb.Core.Modules
         /// Возвращает url-доступное название модуля. Не может быть пустым.
         /// Порядок определения значения свойства следующий:
         /// 1) Если задано - <see cref="ModuleCoreAttribute.DefaultUrlName"/>;
-        /// 2) Если задано - <see cref="Configuration.ModuleConfiguration{TModule}.UrlName"/>;
+        /// 2) Если задано - <see cref="ModuleConfiguration{TModule}.UrlName"/>;
         /// 3) Если предыдущие пункты не вернули значения - используется результат выполнения <see cref="StringExtension.GenerateGuid(string)"/> на основе полного имени (<see cref="Type.FullName"/>) query-типа модуля.
         /// </summary>
         /// <seealso cref="ModuleCoreAttribute.DefaultUrlName"/>
-        /// <seealso cref="Configuration.ModuleConfiguration{TModule}.UrlName"/>
+        /// <seealso cref="ModuleConfiguration{TModule}.UrlName"/>
         public override string UrlName
         {
             get

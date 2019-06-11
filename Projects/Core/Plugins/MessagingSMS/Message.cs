@@ -1,4 +1,4 @@
-﻿namespace OnWeb.Core.Messaging.SMS
+﻿namespace OnWeb.Plugins.MessagingSMS
 {
     using Core.Messaging;
 

@@ -156,7 +156,7 @@ namespace OnWeb.Plugins.Register
                                     );
 
                                 if (hasPhone)
-                                    AppCore.Get<Core.Messaging.SMS.IService>()?.SendMessage(data.phone, "Регистрация на сайте прошла успешно.");
+                                    AppCore.Get<MessagingSMS.IService>()?.SendMessage(data.phone, "Регистрация на сайте прошла успешно.");
 
                                 answer.FromSuccess($"Вы успешно зарегистрировались на сайте и можете зайти, используя {credentitals}.");
                             }

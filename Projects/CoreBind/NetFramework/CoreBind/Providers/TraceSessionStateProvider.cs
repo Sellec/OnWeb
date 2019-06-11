@@ -353,7 +353,6 @@ namespace OnWeb.CoreBind.Providers
                         {
                             try
                             {
-                                int addedUpdated = 0;
                                 _cache.ToList().ForEach(p =>
                                 {
                                     lock (p.Value.SyncRoot)
@@ -366,7 +365,6 @@ namespace OnWeb.CoreBind.Providers
                                                 if (entityState == ItemState.Detached)
                                                 {
                                                     _dbContext.Sessions.AddOrUpdate(p.Value);
-                                                    addedUpdated++;
                                                     p.Value.DateLastSaved = DateTime.Now;
                                                 }
                                             }
@@ -384,8 +382,7 @@ namespace OnWeb.CoreBind.Providers
                                     }
                                 });
 
-                                int updated = _dbContext.SaveChanges();
-                                if (updated > 0 || addedUpdated > 0) Debug.WriteLineNoLog($"SessionStateProvider: Update complete with {updated} items, aupd={addedUpdated}");
+                                _dbContext.SaveChanges();
                             }
                             catch (UpdateConcurrencyException ex)
                             {

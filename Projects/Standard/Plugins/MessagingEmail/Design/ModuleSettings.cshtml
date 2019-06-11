@@ -1,14 +1,12 @@
 @model MessagingEmail.Model.Configuration
 @{
     Layout = "AdminForModules/Design/baseModuleEdit.cshtml";
-    var amazonAttributes = new { @class = "js-amazon__block", size = 40 };
     var smtpAttributes = new { @class = "js-smtp__block", size = 40 };
 }
 
 @section scripts {
     <script type='text/javascript'>
         $(document).ready(function () {
-            InitSettings("@(amazonAttributes.@class)");
             InitSettings("@(smtpAttributes.@class)");
         });
 
@@ -45,30 +43,6 @@
 }
 
 @section ModuleConfiguration {
-    <tr>
-        <th colspan="2" align="center">@Html.CheckBoxFor(x => x.IsUseAmazonSES, amazonAttributes) @Html.LabelFor(x => x.IsUseAmazonSES)</th>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(x => x.Amazon.Server)</td>
-        <td>
-            @Html.TextBoxFor(x => x.Amazon.Server, amazonAttributes)
-            @Html.ValidationMessageFor(x => x.Amazon.Server)
-        </td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(x => x.Amazon.Login)</td>
-        <td>
-            @Html.TextBoxFor(x => x.Amazon.Login, amazonAttributes)
-            @Html.ValidationMessageFor(x => x.Amazon.Login)
-        </td>
-    </tr>
-    <tr>
-        <td>@Html.LabelFor(x => x.Amazon.Password)</td>
-        <td>
-            @Html.TextBoxFor(x => x.Amazon.Password, amazonAttributes)
-            @Html.ValidationMessageFor(x => x.Amazon.Password)
-        </td>
-    </tr>
     <tr>
         <th colspan="2" align="center">@Html.CheckBoxFor(x => x.IsUseSmtp, smtpAttributes) @Html.LabelFor(x => x.IsUseSmtp)</th>
     </tr>
