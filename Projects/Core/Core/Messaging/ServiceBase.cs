@@ -138,7 +138,7 @@ namespace OnWeb.Core.Messaging
             try
             {
                 using (var db = this.CreateUnitOfWork())
-                using (var scope = db.CreateScope(TransactionScopeOption.Suppress))
+                using (var scope = db.CreateScope(TransactionScopeOption.Suppress)) // Здесь Suppress вместо RequiresNew, т.к. весь процесс отправки занимает много времени и блокировать таблицу нельзя.
                 {
                     var messages = GetUnsentMessages(db);
                     if (messages == null) return;

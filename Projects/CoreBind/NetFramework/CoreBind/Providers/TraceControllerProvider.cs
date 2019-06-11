@@ -104,7 +104,6 @@ namespace OnWeb.CoreBind.Providers
             }
             catch (Exception ex)
             {
-                AppCore.Get<JournalingManager>().RegisterEvent(7, EventType.CriticalError, "123123", "12312313");
                 try
                 {
                     if (module == null)
