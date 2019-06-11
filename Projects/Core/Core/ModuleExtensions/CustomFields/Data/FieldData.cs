@@ -187,24 +187,87 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
             if (_values == null) _values = new HashSet<object>();
 
             if (_field.IdValueType == Field.FieldValueType.KeyFromSource)
+            {
                 _values.Add(value.IdFieldValue);
+            }
             else
             {
-                object val = value.FieldValue;
                 var typeToConvert = GetValueType();
                 if (typeToConvert == typeof(bool))
                 {
                     bool valueParsed;
-                    if (bool.TryParse(value.FieldValue, out valueParsed)) val = valueParsed;
+                    if (bool.TryParse(value.FieldValue, out valueParsed)) _values.Add(valueParsed);
                     else
                     {
-                        int valueParsed2;
-                        if (int.TryParse(value.FieldValue, out valueParsed2)) val = valueParsed2 != 0;
+                        decimal valueParsed2;
+                        if (decimal.TryParse(value.FieldValue, out valueParsed2)) _values.Add(valueParsed2 != 0);
                     }
+
+                    return;
+                }
+
+                switch (Type.GetTypeCode(typeToConvert.GetType()))
+                {
+                    case TypeCode.Byte:
+                    case TypeCode.SByte:
+                    case TypeCode.UInt16:
+                    case TypeCode.UInt32:
+                    case TypeCode.UInt64:
+                    case TypeCode.Int16:
+                    case TypeCode.Int32:
+                    case TypeCode.Int64:
+                    case TypeCode.Decimal:
+                    case TypeCode.Double:
+                    case TypeCode.Single:
+                        if (string.IsNullOrEmpty(value.FieldValue))
+                        {
+                            _values.Add(Convert.ChangeType(0, typeToConvert));
+                        }
+                        else
+                        {
+                            if (decimal.TryParse(value.FieldValue, out var val))
+                            {
+                                switch (Type.GetTypeCode(typeToConvert.GetType()))
+                                {
+                                    case TypeCode.Byte:
+                                        val = Math.Min(255, Math.Max(0, val));
+                                        break;
+                                    case TypeCode.SByte:
+                                        val = Math.Min(127, Math.Max(-128, val));
+                                        break;
+                                    case TypeCode.UInt16:
+                                        val = Math.Min(65535, Math.Max(0, val));
+                                        break;
+                                    case TypeCode.UInt32:
+                                        val = Math.Min(4294967295, Math.Max(0, val));
+                                        break;
+                                    case TypeCode.UInt64:
+                                        val = Math.Min(18446744073709551615, Math.Max(0, val));
+                                        break;
+                                    case TypeCode.Int16:
+                                        val = Math.Min(32767, Math.Max(-32768, val));
+                                        break;
+                                    case TypeCode.Int32:
+                                        val = Math.Min(2147483647, Math.Max(-2147483648, val));
+                                        break;
+                                    case TypeCode.Int64:
+                                        val = Math.Min(9223372036854775807, Math.Max(-9223372036854775808, val));
+                                        break;
+                                }
+                                _values.Add(Convert.ChangeType(val, typeToConvert));
+                            }
+                            else
+                            {
+                                _values.Add(Convert.ChangeType(0, typeToConvert));
+                            }
+                        }
+
+                        return;
                 }
 
                 try
                 {
+                    object val = value.FieldValue;
                     _values.Add(Convert.ChangeType(val, typeToConvert));
                 }
                 catch (FormatException) { }
