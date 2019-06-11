@@ -206,7 +206,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
                     return;
                 }
 
-                switch (Type.GetTypeCode(typeToConvert.GetType()))
+                switch (Type.GetTypeCode(typeToConvert))
                 {
                     case TypeCode.Byte:
                     case TypeCode.SByte:
@@ -227,7 +227,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Data
                         {
                             if (decimal.TryParse(value.FieldValue, out var val))
                             {
-                                switch (Type.GetTypeCode(typeToConvert.GetType()))
+                                switch (Type.GetTypeCode(typeToConvert))
                                 {
                                     case TypeCode.Byte:
                                         val = Math.Min(255, Math.Max(0, val));
