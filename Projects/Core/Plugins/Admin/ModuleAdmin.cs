@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OnUtils.Application.Users;
 
 namespace OnWeb.Plugins.Admin
 {
@@ -13,9 +14,17 @@ namespace OnWeb.Plugins.Admin
     public class ModuleAdmin : ModuleCore<ModuleAdmin>
     {
         /// <summary>
-        /// Возвращает список меню для всех модулей системы.
+        /// Возвращает список меню для всех модулей системы с проверкой прав для текущего пользователя.
         /// </summary>
-        public virtual Dictionary<ModuleCore, List<ItemBase>> GetAdminMenuList()
+        public Dictionary<ModuleCore, List<ItemBase>> GetAdminMenuList()
+        {
+            return GetAdminMenuList(AppCore.GetUserContextManager().GetCurrentUserContext());
+        }
+
+        /// <summary>
+        /// Возвращает список меню для всех модулей системы с проверкой прав для пользователя, ассоциированного с указанным контекстом.
+        /// </summary>
+        public virtual Dictionary<ModuleCore, List<ItemBase>> GetAdminMenuList(IUserContext userContext)
         {
             throw new NotImplementedException();
         }

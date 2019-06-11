@@ -212,7 +212,7 @@ else
             <ul>
                 @{
                     var moduleAdmin = AppCore.GetModulesManager().GetModule<Admin.ModuleAdmin>();
-                    var menu = moduleAdmin.GetAdminMenuList();
+                    var menu = moduleAdmin.GetAdminMenuList(CurrentUserContext);
                 }
                 @if (menu != null)
                 {

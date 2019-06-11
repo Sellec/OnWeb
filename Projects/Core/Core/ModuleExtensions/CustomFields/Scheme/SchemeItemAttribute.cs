@@ -54,31 +54,24 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Scheme
 
         private static Tuple<MemberInfo, int> KnownTypePrepare(Type type)
         {
-            try
+            var ms = type.GetMembers(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.GetProperty)
+                        .Select(x => new { Member = x, Attribute = x.GetCustomAttribute<SchemeItemAttribute>(true) })
+                        .Where(x => x.Attribute != null);
+
+            if (ms.Count() == 0) return null;
+            else if (ms.Count() > 1)
             {
-                var ms = type.GetMembers(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.GetProperty)
-                            .Select(x => new { Member = x, Attribute = x.GetCustomAttribute<SchemeItemAttribute>(true) })
-                            .Where(x => x.Attribute != null);
-
-                if (ms.Count() == 0) return null;
-                else if (ms.Count() > 1)
-                {
-                    throw new AmbiguousMatchException(string.Format("Для типа '{0}' объявлено несколько свойств или полей с атрибутом '{1}'. Только один член класса может быть помечен этим атрибутом.", type.FullName, typeof(SchemeItem).FullName));
-                }
-                else
-                {
-                    var member = ms.First();
-                    var typeError = false;
-                    if (member.Member.MemberType == MemberTypes.Property && (member.Member as PropertyInfo).PropertyType != typeof(int)) typeError = true;
-                    if (member.Member.MemberType == MemberTypes.Field && (member.Member as FieldInfo).FieldType != typeof(int)) typeError = true;
-                    if (typeError) throw new AmbiguousMatchException(string.Format("Поле или свойство, помеченное атрибутом '{0}', должно иметь возвращаемый тип int.", typeof(SchemeItem).FullName));
-
-                    return new Tuple<MemberInfo, int>(member.Member, member.Attribute.IdItemType);
-                }
+                throw new AmbiguousMatchException(string.Format("Для типа '{0}' объявлено несколько свойств или полей с атрибутом '{1}'. Только один член класса может быть помечен этим атрибутом.", type.FullName, typeof(SchemeItem).FullName));
             }
-            finally
+            else
             {
-                Debug.WriteLineNoLog("SchemeItemAttribute: type '{0}' cached.", type.FullName);
+                var member = ms.First();
+                var typeError = false;
+                if (member.Member.MemberType == MemberTypes.Property && (member.Member as PropertyInfo).PropertyType != typeof(int)) typeError = true;
+                if (member.Member.MemberType == MemberTypes.Field && (member.Member as FieldInfo).FieldType != typeof(int)) typeError = true;
+                if (typeError) throw new AmbiguousMatchException(string.Format("Поле или свойство, помеченное атрибутом '{0}', должно иметь возвращаемый тип int.", typeof(SchemeItem).FullName));
+
+                return new Tuple<MemberInfo, int>(member.Member, member.Attribute.IdItemType);
             }
         }
     }

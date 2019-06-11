@@ -7,6 +7,7 @@ namespace OnWeb.Plugins.Admin
     using Core.Items;
     using Core.Modules;
     using Core.Types;
+    using OnUtils.Application.Users;
 
     /// <summary>
     /// См. <see cref="ModuleAdmin"/>.
@@ -14,9 +15,9 @@ namespace OnWeb.Plugins.Admin
     class ModuleStandard : ModuleAdmin
     {
         /// <summary>
-        /// См. <see cref="ModuleAdmin.GetAdminMenuList"/>.
+        /// См. <see cref="ModuleAdmin.GetAdminMenuList(IUserContext)"/>.
         /// </summary>
-        public override Dictionary<ModuleCore, List<ItemBase>> GetAdminMenuList()
+        public override Dictionary<ModuleCore, List<ItemBase>> GetAdminMenuList(IUserContext userContext)
         {
             var modulesList = AppCore.GetModulesManager().GetModules();
             var mods = new Dictionary<ModuleCore, List<ItemBase>>();
@@ -24,7 +25,7 @@ namespace OnWeb.Plugins.Admin
 
             foreach (var module in modulesList)
             {
-                if (module.CheckPermission(ModulesConstants.PermissionManage) != CheckPermissionResult.Allowed)
+                if (module.CheckPermission(userContext, ModulesConstants.PermissionManage) != CheckPermissionResult.Allowed)
                 {
                     mods_errors.Add(module, new List<ItemBase>() { new NestedLinkSimple("Недостаточно прав") });
                 }
@@ -35,7 +36,7 @@ namespace OnWeb.Plugins.Admin
 
                     if (links.Count > 0)
                     {
-                        if (module.CheckPermission(ModulesConstants.PermissionManage) == CheckPermissionResult.Allowed)
+                        if (module.CheckPermission(userContext, ModulesConstants.PermissionManage) == CheckPermissionResult.Allowed)
                         {
                             mods.Add(module, links);
                         }
