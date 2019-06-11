@@ -134,6 +134,9 @@
     <Compile Include="CoreBind\WebCore\Types\RequestSpecificItem.cs" />
     <Compile Include="CoreBind\WebUtils\RazorRenderHelper.cs" />
     <Compile Include="CoreBind\WebUtils\TypeHelper.cs" />
+    <Compile Include="Utils\External\ActionParameterAlias\ActionParameterAlias.cs" />
+    <Compile Include="Utils\External\ActionParameterAlias\ParameterAliasAttributeGlobal.cs" />
+    <Compile Include="Utils\External\ActionParameterAlias\ParameterAliasValueProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\External Libraries\Madaa.Lib.Win.Services\Madaa.Lib.Win.Services.csproj">

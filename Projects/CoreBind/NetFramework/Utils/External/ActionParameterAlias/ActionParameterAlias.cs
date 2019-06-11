@@ -1,7 +1,6 @@
-#pragma warning disable CS1591
-namespace OnWeb.Core.CoreUtils.External.ActionParameterAlias
+namespace External.ActionParameterAlias
 {
-	public class ActionParameterAlias
+    class ActionParameterAlias
 	{
 		public string ActionParameter
 		{

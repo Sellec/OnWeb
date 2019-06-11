@@ -66,6 +66,7 @@ namespace OnWeb.CoreBind
             HtmlHelper.ClientValidationEnabled = true;
 
             GlobalFilters.Filters.Add(new HandleErrorAttribute());
+            GlobalFilters.Filters.Add(new External.ActionParameterAlias.ParameterAliasAttributeGlobal());
 
             ModelBinders.Binders.Add(typeof(Binders.JsonDictionary), new Binders.JsonDictionaryModelBinder());
             ModelBinders.Binders.DefaultBinder = new Binders.TraceModelBinder();
