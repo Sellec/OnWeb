@@ -35,11 +35,12 @@ namespace External.ActionParameterAlias
                 var parameters = filterContext.ActionDescriptor.GetParameters();
                 AddAliases(list, parameters);
                 var valueProviderSource = filterContext.Controller.ValueProvider;
-                var valueProviderNew = new ValueProviderCollection() { valueProviderSource };
+                var valueProviderNew = new ValueProviderCollection();
                 foreach (var item in list)
                 {
                     valueProviderNew.Add(new ParameterAliasValueProvider(valueProviderSource, item));
                 }
+                valueProviderNew.Add(valueProviderSource);
                 filterContext.Controller.ValueProvider = valueProviderNew;
             }
         }
