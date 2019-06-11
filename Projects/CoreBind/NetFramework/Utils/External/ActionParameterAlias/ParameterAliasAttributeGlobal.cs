@@ -16,13 +16,16 @@ namespace External.ActionParameterAlias
                 OfType<ParameterAliasAttribute>().
                 FirstOrDefault();
 
-            var valueProviderSource = filterContext.Controller.ValueProvider;
-            var valueProviderNew = new ValueProviderCollection
+            if (attribute != null)
             {
-                valueProviderSource,
-                new ParameterAliasValueProvider(valueProviderSource, new ActionParameterAlias(attribute.ParameterName, attribute.AliasName))
-            };
-            filterContext.Controller.ValueProvider = valueProviderNew;
+                var valueProviderSource = filterContext.Controller.ValueProvider;
+                var valueProviderNew = new ValueProviderCollection
+                {
+                    valueProviderSource,
+                    new ParameterAliasValueProvider(valueProviderSource, new ActionParameterAlias(attribute.ParameterName, attribute.AliasName))
+                };
+                filterContext.Controller.ValueProvider = valueProviderNew;
+            }
         }
     }
 }
