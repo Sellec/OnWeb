@@ -32,7 +32,7 @@ namespace External.ActionParameterAlias
 
             {
                 var list = new List<ActionParameterAlias>();
-                var parameters = filterContext.ActionDescriptor.GetParameters();
+                var parameters = filterContext.ActionDescriptor.GetParameters().Where(x=>x.GetCustomAttributes(typeof(AliasAttribute), false).Count() > 0).ToList();
                 AddAliases(list, parameters);
                 var valueProviderSource = filterContext.Controller.ValueProvider;
                 var valueProviderNew = new ValueProviderCollection();
