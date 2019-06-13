@@ -22,10 +22,10 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
 
         void IExecuteStart<ApplicationCore>.ExecuteStart(ApplicationCore core)
         {
-            //if (!ValueProviderFactories.Factories.Any(x => x is MetadataAndValues.FieldValueProviderFactory))
-            //{
-            //    ValueProviderFactories.Factories.Add(new MetadataAndValues.FieldValueProviderFactory());
-            //}
+            if (!ValueProviderFactories.Factories.Any(x => x is MetadataAndValues.FieldValueProviderFactory))
+            {
+                ValueProviderFactories.Factories.Add(new MetadataAndValues.FieldValueProviderFactory());
+            }
         }
     }
 }
