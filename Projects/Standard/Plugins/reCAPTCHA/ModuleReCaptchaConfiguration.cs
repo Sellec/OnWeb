@@ -17,6 +17,15 @@
         }
 
         /// <summary>
+        /// Публичный ключ для проверки пользователя сервисом.
+        /// </summary>
+        public string PublicKey
+        {
+            get => Get("PublicKey", "");
+            set => Set("PublicKey", value);
+        }
+
+        /// <summary>
         /// Приватный ключ для проверки кода, отправленного из формы после проверки пользователя сервисом.
         /// </summary>
         public string PrivateKey

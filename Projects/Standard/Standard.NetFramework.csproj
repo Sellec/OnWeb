@@ -122,7 +122,7 @@
     <Compile Include="Design\Additionals\Helpers\PHPHelpers.cs" />
     <Compile Include="Design\Additionals\Helpers\UrlHelpers.cs" />
     <Compile Include="Design\Additionals\IntExtensions.cs" />
-    <Compile Include="Design\Additionals\Plugins\CaptchaExtension.cs" />
+    <Compile Include="Plugins\reCAPTCHA\CaptchaExtension.cs" />
     <Compile Include="Design\Additionals\Plugins\EditableMenuExtension.cs" />
     <Compile Include="Design\Additionals\Plugins\Model\EditableMenu.cs" />
     <Compile Include="Plugins\AdminForModules\Menu\IAdminMenuProvider.cs" />
@@ -212,9 +212,11 @@
     <Compile Include="Plugins\MessagingEmail\Model\Configuration.cs" />
     <Compile Include="Plugins\MessagingEmail\Model\SmtpServerSettings.cs" />
     <Compile Include="Plugins\MessagingEmail\Startup.cs" />
+    <Compile Include="Plugins\reCAPTCHA\ModuleReCaptchaController.cs" />
     <Compile Include="Plugins\reCAPTCHA\ModelAttribute.cs" />
     <Compile Include="Plugins\reCAPTCHA\ModelValidator.cs" />
     <Compile Include="Plugins\reCAPTCHA\ModelValidatorProvider.cs" />
+    <Compile Include="Plugins\reCAPTCHA\Model\Configuration.cs" />
     <Compile Include="Plugins\reCAPTCHA\ModuleReCaptcha.cs" />
     <Compile Include="Plugins\reCAPTCHA\ModuleReCaptchaConfiguration.cs" />
     <Compile Include="Plugins\reCAPTCHA\ReCaptcha2Answer.cs" />
@@ -2020,6 +2022,7 @@
     <Content Include="Plugins\Register\Design\RegisterNotificationEmailModerate.cshtml" />
     <Content Include="Plugins\Adminmain\Design\SitemapXml.cshtml" />
     <Content Include="Plugins\MessagingEmail\Design\ModuleSettings.cshtml" />
+    <Content Include="Plugins\reCAPTCHA\Design\ModuleSettings.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

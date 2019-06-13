@@ -29,19 +29,6 @@ namespace OnWeb.Plugins.MessagingEmail
             RegisterMessage(message);
         }
 
-        void IEmailService.SendToAdmin(string subject, string body)
-        {
-            ((IEmailService)this).SendMail(
-                "Почтовый робот сайта",
-                GetNoReplyAddress(),
-                "admin",
-                AppCore.Config.Get("helpform_email", ""),
-                null, null,
-                subject,
-                body
-            );
-        }
-
         void IEmailService.SendMailFromSite(string nameTo, string emailTo, string subject, string body, List<int> files)
         {
             ((IEmailService)this).SendMail("Почтовый робот сайта", GetNoReplyAddress(), nameTo, emailTo, null, null, subject, body, files);
@@ -85,7 +72,15 @@ namespace OnWeb.Plugins.MessagingEmail
 
         void ICriticalMessagesReceiver.SendToAdmin(string subject, string body)
         {
-            ((IEmailService)this).SendToAdmin(subject, body);
+            ((IEmailService)this).SendMail(
+                "Почтовый робот сайта",
+                GetNoReplyAddress(),
+                "admin",
+                AppCore.Config.Get("helpform_email", ""),
+                null, null,
+                subject,
+                body
+            );
         }
 
         #endregion

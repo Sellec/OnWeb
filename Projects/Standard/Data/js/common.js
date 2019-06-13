@@ -57,18 +57,17 @@ $(function ()
                     if ($.isArray(answer['modelState']) || $.isPlainObject(answer['modelState']))
                     {
                         var scrolled = false;
-                        $.each(answer['modelState'], function (index, value)
-                        {
+                        $.each(answer['modelState'], function (index, value) {
+                            if (index == "") index = "__entire_model__";
+
                             var validationMessageContainer = $("[data-valmsg-for='" + index + "'");
-                            if (validationMessageContainer.length > 0)
-                            {
+                            if (validationMessageContainer.length > 0) {
                                 validationMessageContainer.removeClass('field-validation-valid field-validation-error').addClass('field-validation-error');
                                 var validationMessage = value.join("\r\n").replace(/([^>])\n/g, '$1<br/>');
                                 validationMessageContainer.html(validationMessage);
                                 validationMessageContainer.show();
 
-                                if (!scrolled)
-                                {
+                                if (!scrolled) {
                                     jQuery("html:not(:animated),body:not(:animated)").animate({ scrollTop: validationMessageContainer.offset().top - 20 }, 800);
                                     scrolled = true;
                                 }
@@ -76,21 +75,18 @@ $(function ()
                             else validationMessageContainer.removeClass('field-validation-valid field-validation-error').addClass('field-validation-valid');
 
                             var validationMessageContainer = $("span#" + index + "_validationMessage");
-                            if (validationMessageContainer.length > 0)
-                            {
+                            if (validationMessageContainer.length > 0) {
                                 validationMessageContainer.removeClass('field-validation-valid field-validation-error').addClass('field-validation-error');
                                 var validationMessage = value.join("\r\n").replace(/([^>])\n/g, '$1<br/>');
                                 validationMessageContainer.html(validationMessage);
                                 validationMessageContainer.show();
 
-                                if (!scrolled)
-                                {
+                                if (!scrolled) {
                                     jQuery("html:not(:animated),body:not(:animated)").animate({ scrollTop: validationMessageContainer.offset().top - 20 }, 800);
                                     scrolled = true;
                                 }
                             }
                             else validationMessageContainer.removeClass('field-validation-valid field-validation-error').addClass('field-validation-valid');
-
                         });
                     }
                 }

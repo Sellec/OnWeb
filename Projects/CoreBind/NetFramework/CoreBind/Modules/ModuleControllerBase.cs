@@ -498,7 +498,7 @@ namespace OnWeb.CoreBind.Modules
         /// <returns></returns>
         protected internal JsonResult ReturnJson<TData>(Types.ResultWData<TData> result)
         {
-            return ReturnJson(result.Success, result.Message, result.Data, result.ModelState != null && !result.ModelState.IsValid ? result.ModelState : null);
+            return ReturnJsonInternal(result.Success, result.Message, result.Data, result.ModelState != null && !result.ModelState.IsValid ? result.ModelState : null);
         }
 
         /// <summary>
@@ -509,7 +509,12 @@ namespace OnWeb.CoreBind.Modules
         /// <param name="data">Дополнительные возвращаемые данные.</param>
         /// <param name="modelState">Результат проверки модели данных.</param>
         /// <returns></returns>
-        protected internal JsonResult ReturnJson(bool success, string message, object data = null, ModelStateDictionary modelState = null)
+        protected internal JsonResult ReturnJson(bool success, string message, object data = null)
+        {
+            return ReturnJsonInternal(success, message, data, ModelState);
+        }
+
+        private JsonResult ReturnJsonInternal(bool success, string message, object data, ModelStateDictionary modelState)
         {
             object modelStateObject = null;
             if (modelState != null && !modelState.IsValid)

@@ -125,19 +125,6 @@
                     @Html.ValidationMessageFor(x => x.Configuration.site_keys)
                 </div>
 
-                <hr /><br />
-
-                Recaptcha ключи:<br>
-                <div>
-                    @Html.LabelFor(x => x.Configuration.reCaptchaSecretKey):<br />
-                    @Html.EditorFor(x => x.Configuration.reCaptchaSecretKey, new { htmlAttributes = new { size = 30 } })<br />
-                    @Html.ValidationMessageFor(x => x.Configuration.reCaptchaSecretKey)<br /><br />
-
-                    @Html.LabelFor(x => x.Configuration.reCaptchaSiteKey):<br />
-                    @Html.EditorFor(x => x.Configuration.reCaptchaSiteKey, new { htmlAttributes = new { size = 30 } })<br />
-                    @Html.ValidationMessageFor(x => x.Configuration.reCaptchaSiteKey)
-                </div>
-
                 <input type='submit' id='save_func' value='&nbsp;Сохранить&nbsp;'> <img src="/data/img/loading.gif" alt="" id="loading_img" style="display:none">
             </form>
             <div id='info_save' style="margin:5px 10px;padding:5px;"></div>

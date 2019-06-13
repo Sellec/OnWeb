@@ -2,6 +2,7 @@
 
 namespace OnWeb.Plugins.Auth.Model
 {
+    [reCAPTCHA.Model]
     public class PasswordRestore
     {
         [StringLength(128)]

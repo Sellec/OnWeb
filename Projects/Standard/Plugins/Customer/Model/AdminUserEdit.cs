@@ -5,6 +5,7 @@ using System.Web.Mvc;
 namespace OnWeb.Plugins.Customer.Model
 {
     using Core.DB;
+    using Core.Journaling.DB;
 
     public class AdminUserEdit
     {

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Text;
 using System.Web.Mvc;
+using System.Web.Mvc.Html;
+using System.Collections.Generic;
 
 namespace System.Web.Mvc
 {
@@ -147,5 +149,35 @@ namespace System.Web.Mvc
         {
             return new MvcHtmlString(objectValue.ToStringFriendly());
         }
+
+        /// <summary>
+        /// Отображает сообщение об ошибке для всей модели.
+        /// </summary>
+        public static MvcHtmlString ValidationMessageForModel<TModel>(this HtmlHelper<TModel> htmlHelper)
+        {
+            return ValidationMessageForModel<TModel>(htmlHelper, null);
+        }
+
+        /// <summary>
+        /// Отображает сообщение об ошибке для всей модели.
+        /// </summary>
+        public static MvcHtmlString ValidationMessageForModel<TModel>(this HtmlHelper<TModel> htmlHelper, object htmlAttributes)
+        {
+            var attributes = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
+            return ValidationMessageForModel<TModel>(htmlHelper, attributes);
+        }
+
+        /// <summary>
+        /// Отображает сообщение об ошибке для всей модели.
+        /// </summary>
+        public static MvcHtmlString ValidationMessageForModel<TModel>(this HtmlHelper<TModel> htmlHelper, IDictionary<string, object> htmlAttributes)
+        {
+            htmlHelper.ViewData.ModelState["__entire_model__"] = new ModelState();
+
+            var attributes = htmlAttributes == null ? new Dictionary<string, object>() : new Dictionary<string, object>(htmlAttributes);
+            attributes["id"] = "__entire_model__" + "_validationMessage";
+            return htmlHelper.ValidationMessage("__entire_model__", attributes);
+        }
+
     }
 }

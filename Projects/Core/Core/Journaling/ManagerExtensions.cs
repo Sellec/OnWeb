@@ -4,11 +4,10 @@ using System;
 
 namespace OnWeb
 {
-    using Core;
     using Core.Items;
-    using Core.DB;
     using Core.Journaling;
-    using ExecutionResultJournalName = ExecutionResult<Core.DB.JournalName>;
+    using Core.Journaling.DB;
+    using ExecutionResultJournalName = ExecutionResult<Core.Journaling.DB.JournalName>;
 
     /// <summary>
     /// Методы расширений для <see cref="JournalingManager"/>.

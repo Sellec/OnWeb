@@ -2,7 +2,9 @@
 using OnWeb.Core.Modules;
 using OnWeb.CoreBind.Routing;
 using System.Linq.Expressions;
+using System.Linq;
 using OnWeb.CoreBind.Modules;
+using OnWeb;
 
 namespace System.Web.Mvc
 {
@@ -105,6 +107,27 @@ namespace System.Web.Mvc
 
             return url.Action(action, controllerName, values);
         }
+
+        /// <summary>
+        /// Формирует абсолютный или относительный url (см. <paramref name="includeAuthority"/>) к разделу по-умолчанию в пользовательской части сайта для контроллера <typeparamref name="TModuleController"/>.
+        /// </summary>
+        /// <param name="helper"></param>
+        /// <param name="includeAuthority">Если равно true, то формируется абсолютный url, включающий в себя адрес сервера.</param>
+        /// <seealso cref="RoutingManager.CreateRoute{TModule, TModuleController}(Expression{Func{TModuleController, ActionResult}}, bool)"/>
+        public static Uri CreateRoute(this UrlHelper helper, bool includeAuthority = false)
+        {
+            var module = helper.RequestContext.HttpContext.GetAppCore().GetModulesManager().GetModule(helper.RequestContext.HttpContext.GetAppCore().Config.IdModuleDefault);
+            if (module == null) return null;
+
+            var controllerType = module.ControllerTypes.Where(x => x.Key == ControllerTypeDefault.TypeID).Select(x => x.Value).FirstOrDefault();
+            if (controllerType == null) return null;
+
+            var methodInfo = typeof(UrlHelpers).GetMethods(Reflection.BindingFlags.Public | Reflection.BindingFlags.Static).Where(x => x.IsGenericMethod && x.Name == nameof(CreateRoute) && x.GetParameters().Length == 2).FirstOrDefault();
+            if (methodInfo == null) return null;
+
+            return (Uri)methodInfo.MakeGenericMethod(module.QueryType, controllerType).Invoke(null, new object[] { helper, includeAuthority });
+        }
+
 
         /// <summary>
         /// Формирует абсолютный или относительный url (см. <paramref name="includeAuthority"/>) к разделу по-умолчанию в пользовательской части сайта для контроллера <typeparamref name="TModuleController"/>.

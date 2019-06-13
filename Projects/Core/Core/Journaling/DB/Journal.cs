@@ -1,4 +1,4 @@
-﻿namespace OnWeb.Core.DB
+﻿namespace OnWeb.Core.Journaling.DB
 {
     using Items;
     using System;

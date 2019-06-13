@@ -15,11 +15,6 @@ namespace OnWeb.Plugins.MessagingEmail
         /// </summary>
         void SendMailFromSite(string nameTo, string emailTo, string subject, string body, List<int> files = null);
 
-        /// <summary>
-        /// Отправка письма администратору сайта с темой <paramref name="subject"/>, с текстом <paramref name="body"/>.
-        /// </summary>
-        void SendToAdmin(string subject, string body);
-
         void SendMailToDeveloper(string subject, string body, List<int> files = null);
 
         /// <summary>

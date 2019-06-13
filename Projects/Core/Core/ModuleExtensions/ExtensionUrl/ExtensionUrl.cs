@@ -122,11 +122,15 @@ namespace OnWeb.Core.ModuleExtensions.ExtensionUrl
 
         public void RegisterToQuery<TItem>(TItem obj) where TItem : ItemBase
         {
-            var objType = obj.GetType();
-            var list = _defferedObjects.GetOrAdd(objType, t => new ConcurrentDictionary<ItemBase, int>());
+            try
+            {
+                var objType = obj.GetType();
+                var list = _defferedObjects.GetOrAdd(objType, t => new ConcurrentDictionary<ItemBase, int>());
 
-            list[obj] = 0;
-            TimerClearDeffered.Objects[obj] = objType;
+                list[obj] = 0;
+                TimerClearDeffered.Objects[obj] = objType;
+            }
+            catch { }
         }
 
         internal void CheckDeffered(Type type = null)

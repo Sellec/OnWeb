@@ -4,11 +4,14 @@ using System.Web.Mvc;
 
 namespace OnWeb.Plugins.reCAPTCHA
 {
+    using Core.Modules;
+
     class Startup : IExecuteStart, IConfigureBindings
     {
         void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
         {
             bindingsCollection.SetSingleton<ModuleReCaptcha>();
+            bindingsCollection.SetTransient<IModuleController<ModuleReCaptcha>, ModuleReCaptchaController>();
         }
 
         void IExecuteStart<ApplicationCore>.ExecuteStart(ApplicationCore core)

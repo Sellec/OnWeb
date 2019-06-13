@@ -48,9 +48,6 @@ namespace OnWeb.Plugins.Auth
                 if (string.IsNullOrEmpty(model.login)) throw new BehaviourException("Некорректно введен логин!");
                 if (string.IsNullOrEmpty(model.pass)) throw new BehaviourException("Некорректно введен пароль!");
 
-                var phone = PhoneBuilder.ParseString(model.login);
-                if (!model.login.isEmail() && !phone.IsCorrect) throw new BehaviourException("Неправильно введен логин.");
-
                 if (ModelState.IsValid)
                 {
                     var result = AppCore.GetUserContextManager().CreateUserContext(model.login, model.pass, out var userContext, out var resultReason);
@@ -102,16 +99,40 @@ namespace OnWeb.Plugins.Auth
                 if (string.IsNullOrEmpty(model.login)) throw new BehaviourException("Некорректно введен логин!");
                 if (string.IsNullOrEmpty(model.pass)) throw new BehaviourException("Некорректно введен пароль!");
 
-                var phone = PhoneBuilder.ParseString(model.login);
-                if (!model.login.isEmail() && !phone.IsCorrect) throw new BehaviourException("Неправильно введен логин.");
-
-                var result = AppCore.GetUserContextManager().CreateUserContext(model.login, model.pass, out var userContext, out var resultReason);
-                if (result == eAuthResult.Success)
+                if (ModelState.IsValid)
                 {
-                    message = "Авторизация прошла успешно!";
-                    success = true;
+                    var result = AppCore.GetUserContextManager().CreateUserContext(model.login, model.pass, out var userContext, out var resultReason);
+                    switch (result)
+                    {
+                        case eAuthResult.Success:
+                            Module.BindUserContextToRequest(userContext);
+                            AppCore.GetUserContextManager().SetCurrentUserContext(userContext);
+                            message = "Авторизация прошла успешно!";
+                            success = true;
+                            break;
+
+                        case eAuthResult.AuthDisabled:
+                        case eAuthResult.AuthMethodNotAllowed:
+                        case eAuthResult.BlockedUntil:
+                        case eAuthResult.MultipleFound:
+                        case eAuthResult.NothingFound:
+                        case eAuthResult.RegisterDecline:
+                        case eAuthResult.RegisterNeedConfirmation:
+                        case eAuthResult.RegisterWaitForModerate:
+                        case eAuthResult.WrongAuthData:
+                        case eAuthResult.Disabled:
+                        case eAuthResult.YetAuthorized:
+                            ModelState.AddModelError(nameof(model.login), resultReason);
+                            break;
+
+                        case eAuthResult.WrongPassword:
+                            ModelState.AddModelError(nameof(model.pass), resultReason);
+                            break;
+
+                        default:
+                            throw new BehaviourException(resultReason);
+                    }
                 }
-                else throw new BehaviourException(resultReason);
             }
             catch (BehaviourException ex)
             {
@@ -136,6 +157,8 @@ namespace OnWeb.Plugins.Auth
         public ActionResult logout()
         {
             AppCore.GetUserContextManager().DestroyUserContext(AppCore.GetUserContextManager().GetCurrentUserContext());
+            Module.ClearUserContextFromRequest();
+            AppCore.GetUserContextManager().ClearCurrentUserContext();
             return Redirect("/");
         }
 
@@ -147,6 +170,8 @@ namespace OnWeb.Plugins.Auth
             try
             {
                 AppCore.GetUserContextManager().DestroyUserContext(AppCore.GetUserContextManager().GetCurrentUserContext());
+                Module.ClearUserContextFromRequest();
+                AppCore.GetUserContextManager().ClearCurrentUserContext();
                 success = true;
                 message = "Выход прошел успешно.";
             }
@@ -174,8 +199,6 @@ namespace OnWeb.Plugins.Auth
             var answer = JsonAnswer<string>();
             try
             {
-                throw new NotImplementedException(); // todo проверить рекапчу. if (!IsReCaptchaValid) throw new BehaviourException("Докажите, что вы не робот!");
-
                 if (ModelState.IsValid)
                 {
                     if (!string.IsNullOrEmpty(model.email) && !string.IsNullOrEmpty(model.phone)) ModelState.AddModelError(nameof(model.EmailOrPhone), "Следует указать либо адрес электронной почты, либо номер телефона.");
@@ -276,13 +299,11 @@ namespace OnWeb.Plugins.Auth
         }
 
         [ModuleAction("restore4")]
-        public ActionResult PasswordRestorSave(Model.PasswordRestoreSave model = null)
+        public ActionResult PasswordRestoreSave(Model.PasswordRestoreSave model = null)
         {
             var answer = JsonAnswer<string>();
             try
             {
-                throw new NotImplementedException(); // todo проверить рекапчу. if (!IsReCaptchaValid) throw new BehaviourException("Докажите, что вы не робот!");
-
                 if (ModelState.IsValid)
                 {
                     using (var db = Module.CreateUnitOfWork())

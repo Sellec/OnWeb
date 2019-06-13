@@ -121,5 +121,25 @@ namespace OnWeb.Plugins.Auth
             HttpContext.Current.Session["Timestamp"] = DateTime.UtcNow.ToString();
             HttpContext.Current.Session["VerificationKey"] = verificationKey;
         }
+
+        public override void ClearUserContextFromRequest()
+        {
+            try
+            {
+                if (HttpContext.Current == null) throw new InvalidOperationException("Метод вызван не в рамках входящего запроса.");
+            }
+            catch (InvalidOperationException) { throw; }
+            catch
+            {
+                throw new InvalidOperationException("Метод вызван не в рамках входящего запроса.");
+            }
+
+            HttpContext.Current.Response.Cookies.Remove("VerificationKey");
+
+            HttpContext.Current.Session["authorized"] = false;
+            HttpContext.Current.Session["UserId"] = 0;
+            HttpContext.Current.Session.Remove("Timestamp");
+            HttpContext.Current.Session.Remove("VerificationKey");
+        }
     }
 }

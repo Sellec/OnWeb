@@ -106,8 +106,245 @@
     <Content Include="..\..\Projects\Core\**\*.cs" Exclude="..\..\Projects\Core\Properties\AssemblyInfo.cs;..\..\Projects\Core\obj*\**\*.*;">
       <Link>src\Core\%(RecursiveDir)%(Filename)%(Extension)</Link>
     </Content>
-    <Content Include="..\..\Projects\CoreBind\**\*.cs" Exclude="..\..\Projects\CoreBind\Properties\AssemblyInfo.cs;..\..\Projects\NetFramework\obj*\**\*.*;">
-      <Link>src\CoreBind\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    <Content Include="..\..\Projects\CoreBind\NetCore\ApplicationCoreBind.cs">
+      <Link>src\CoreBind\NetCore\ApplicationCoreBind.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetCore\CoreBind\Providers\ResourceProvider.cs">
+      <Link>src\CoreBind\NetCore\CoreBind\Providers\ResourceProvider.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetCore\obj\Debug\netcoreapp2.0\CoreBind.NetCore.AssemblyInfo.cs">
+      <Link>src\CoreBind\NetCore\obj\Debug\netcoreapp2.0\CoreBind.NetCore.AssemblyInfo.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetCore\obj\Release\netcoreapp2.0\CoreBind.NetCore.AssemblyInfo.cs">
+      <Link>src\CoreBind\NetCore\obj\Release\netcoreapp2.0\CoreBind.NetCore.AssemblyInfo.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetCore\Startup.cs">
+      <Link>src\CoreBind\NetCore\Startup.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\ApplicationCoreBind.cs">
+      <Link>src\CoreBind\NetFramework\ApplicationCoreBind.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\ApplicationCoreSingleton.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\ApplicationCoreSingleton.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Binders\JsonDictionaryModelBinder.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Binders\JsonDictionaryModelBinder.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Binders\TraceModelBinder.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Binders\TraceModelBinder.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Exceptions\ActionResultException.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Exceptions\ActionResultException.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Extensions\ModelMetadataExtension.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Extensions\ModelMetadataExtension.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Extensions\ModelStateDictionaryExtension.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Extensions\ModelStateDictionaryExtension.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Extensions\ResponseException.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Extensions\ResponseException.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\HttpApplication.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\HttpApplication.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\ModuleExtensions\CustomFields\ExtensionCustomsFields.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\ModuleExtensions\CustomFields\ExtensionCustomsFields.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\ModuleExtensions\CustomFields\ExtensionCustomsFieldsAdmin.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\ModuleExtensions\CustomFields\ExtensionCustomsFieldsAdmin.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\ModuleExtensions\CustomFields\Extensions\HtmlHelperExtension.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\ModuleExtensions\CustomFields\Extensions\HtmlHelperExtension.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\ModuleExtensions\CustomFields\MetadataAndValues\FieldModelMetadata.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\ModuleExtensions\CustomFields\MetadataAndValues\FieldModelMetadata.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\ModuleExtensions\CustomFields\MetadataAndValues\FieldValueProvider.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\ModuleExtensions\CustomFields\MetadataAndValues\FieldValueProvider.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\ModuleExtensions\CustomFields\MetadataAndValues\FieldValueProviderFactory.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\ModuleExtensions\CustomFields\MetadataAndValues\FieldValueProviderFactory.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\ModuleExtensions\CustomFields\MetadataAndValues\FieldValueProviderResult.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\ModuleExtensions\CustomFields\MetadataAndValues\FieldValueProviderResult.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Modules\Configuration\SaveModel.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Modules\Configuration\SaveModel.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Modules\Configuration\ViewModel.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Modules\Configuration\ViewModel.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Modules\CustomReflectedActionDescriptor.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Modules\CustomReflectedActionDescriptor.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Modules\Internal\ModuleControllerInternalErrors.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Modules\Internal\ModuleControllerInternalErrors.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Modules\Internal\ModuleInternalErrors.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Modules\Internal\ModuleInternalErrors.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Modules\ModuleActionAttribute.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Modules\ModuleActionAttribute.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Modules\ModuleActionInvoker.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Modules\ModuleActionInvoker.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Modules\ModuleControllerAdmin.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Modules\ModuleControllerAdmin.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Modules\ModuleControllerBase.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Modules\ModuleControllerBase.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Modules\ModuleControllerUser.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Modules\ModuleControllerUser.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Providers\EmbeddedResourceProvider.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Providers\EmbeddedResourceProvider.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Providers\ResourceProvider.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Providers\ResourceProvider.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Providers\TraceControllerProvider.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Providers\TraceControllerProvider.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Providers\TraceJsonValueProvider.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Providers\TraceJsonValueProvider.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Providers\TraceJsonValueProviderFactory.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Providers\TraceJsonValueProviderFactory.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Providers\TraceModelMetadataProvider.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Providers\TraceModelMetadataProvider.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Providers\TraceModelMultipleMetadataProvider.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Providers\TraceModelMultipleMetadataProvider.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Providers\TraceSessionStateCacheProvider.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Providers\TraceSessionStateCacheProvider.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Providers\TraceSessionStateProvider.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Providers\TraceSessionStateProvider.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Razor\HtmlMarkupParser.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Razor\HtmlMarkupParser.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Razor\RazorBuildProvider.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Razor\RazorBuildProvider.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Razor\RazorHost.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Razor\RazorHost.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Razor\RazorHostFactory.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Razor\RazorHostFactory.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Razor\RazorResources.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Razor\RazorResources.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Razor\TraceViewPage.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Razor\TraceViewPage.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Razor\WebStartup.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Razor\WebStartup.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Routing\AreaConstants.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Routing\AreaConstants.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Routing\ControllerRouteConstraint.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Routing\ControllerRouteConstraint.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Routing\ControllerType.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Routing\ControllerType.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Routing\ControllerTypeAdmin.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Routing\ControllerTypeAdmin.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Routing\ControllerTypeDefault.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Routing\ControllerTypeDefault.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Routing\ControllerTypeFactory.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Routing\ControllerTypeFactory.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Routing\HttpContextExtensions.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Routing\HttpContextExtensions.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Routing\LanguageRouteConstraint.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Routing\LanguageRouteConstraint.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Routing\ModuleControllerDefaultAttribute.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Routing\ModuleControllerDefaultAttribute.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Routing\RouteHandler.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Routing\RouteHandler.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Routing\RoutesDefaults.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Routing\RoutesDefaults.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Routing\RoutingManager.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Routing\RoutingManager.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Types\NSJsonResult.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Types\NSJsonResult.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Types\RequestAnswerType.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Types\RequestAnswerType.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Types\ResultWData.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Types\ResultWData.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\Users\UserContextManager.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\Users\UserContextManager.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\WebCore\Types\RequestSpecificItem.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\WebCore\Types\RequestSpecificItem.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\WebUtils\RazorRenderHelper.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\WebUtils\RazorRenderHelper.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\WebUtils\TypeHelper.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\WebUtils\TypeHelper.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\_Initialize\ModuleInitializer.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\_Initialize\ModuleInitializer.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\_Initialize\WebInitializer.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\_Initialize\WebInitializer.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\CoreBind\_Initialize\WebRazorHostFactoryInjector.cs">
+      <Link>src\CoreBind\NetFramework\CoreBind\_Initialize\WebRazorHostFactoryInjector.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\Core\ModuleExtensions\CustomFields\ICustomFieldRender.cs">
+      <Link>src\CoreBind\NetFramework\Core\ModuleExtensions\CustomFields\ICustomFieldRender.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\objMVC\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs">
+      <Link>src\CoreBind\NetFramework\objMVC\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\objMVC\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs">
+      <Link>src\CoreBind\NetFramework\objMVC\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\objMVC\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs">
+      <Link>src\CoreBind\NetFramework\objMVC\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\Plugins\Auth\Module2.cs">
+      <Link>src\CoreBind\NetFramework\Plugins\Auth\Module2.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\Plugins\Auth\Startup.cs">
+      <Link>src\CoreBind\NetFramework\Plugins\Auth\Startup.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\Properties\AssemblyInfo.cs">
+      <Link>src\CoreBind\NetFramework\Properties\AssemblyInfo.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\StandbyMonitor.cs">
+      <Link>src\CoreBind\NetFramework\StandbyMonitor.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\Utils\External\ActionParameterAlias\ActionParameterAlias.cs">
+      <Link>src\CoreBind\NetFramework\Utils\External\ActionParameterAlias\ActionParameterAlias.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\Utils\External\ActionParameterAlias\ParameterAliasAttributeGlobal.cs">
+      <Link>src\CoreBind\NetFramework\Utils\External\ActionParameterAlias\ParameterAliasAttributeGlobal.cs</Link>
+    </Content>
+    <Content Include="..\..\Projects\CoreBind\NetFramework\Utils\External\ActionParameterAlias\ParameterAliasValueProvider.cs">
+      <Link>src\CoreBind\NetFramework\Utils\External\ActionParameterAlias\ParameterAliasValueProvider.cs</Link>
     </Content>
     <Content Include="..\..\Projects\Standard\**\*.cs" Exclude="..\..\Projects\Standard\Properties\AssemblyInfo.cs;..\..\Projects\Standard\obj*\**\*.*;">
       <Link>src\Standard\%(RecursiveDir)%(Filename)%(Extension)</Link>

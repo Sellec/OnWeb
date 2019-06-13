@@ -6,7 +6,7 @@ namespace OnWeb.Core.Messaging.DB
     using System.ComponentModel.DataAnnotations.Schema;
 
 #pragma warning disable CS1591 // todo внести комментарии.
-    [Table("MessageQueue")]
+    [Table("MessageQueue1")]
     partial class MessageQueue
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

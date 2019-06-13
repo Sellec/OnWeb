@@ -76,6 +76,8 @@ namespace OnWeb.Plugins.Auth
         /// </summary>
         /// <returns>Возвращает пользовательский контекст или null.</returns>
         /// <exception cref="InvalidOperationException">Возникает, если метод выполняется не в рамках входящего запроса.</exception>
+        /// <seealso cref="BindUserContextToRequest(IUserContext)"/>
+        /// <seealso cref="ClearUserContextFromRequest"/>
         /// <seealso cref="TryGetUserCredentialsFromRequest(out int?)"/>
         public IUserContext RestoreUserContextFromRequest()
         {
@@ -103,7 +105,15 @@ namespace OnWeb.Plugins.Auth
         /// <exception cref="ArgumentException">Возникает, если <paramref name="context"/> ассоциирован с гостем.</exception>
         /// <exception cref="ArgumentNullException">Возникает, если <paramref name="context"/> равен null.</exception>
         /// <exception cref="InvalidOperationException">Возникает, если метод выполняется не в рамках входящего запроса.</exception>
+        /// <seealso cref="ClearUserContextFromRequest"/>
         /// <seealso cref="RestoreUserContextFromRequest"/>
         public abstract void BindUserContextToRequest(IUserContext context);
+
+        /// <summary>
+        /// Удаляет текущий контекст пользователя, сбрасывая авторизацию, таким образом, что последующий вызов <see cref="RestoreUserContextFromRequest"/> НЕ восстановит контекст, ассоциированный с тем же пользователем.
+        /// </summary>
+        /// <seealso cref="BindUserContextToRequest"/>
+        /// <seealso cref="RestoreUserContextFromRequest"/>
+        public abstract void ClearUserContextFromRequest();
     }
 }

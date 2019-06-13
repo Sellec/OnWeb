@@ -264,7 +264,6 @@ namespace OnWeb.Core.Modules
         public virtual Types.NestedLinkCollection GetItems(int IdItemType, Types.eSortType SortOrder = Types.eSortType.Default, params object[] _params)
         {
             return null;
-            //throw new NotImplementedException(string.Format("Функция 'getItemsList' не переопределена в производном классе '{0}'.", this.GetType().FullName));
         }
 
         /// <summary>

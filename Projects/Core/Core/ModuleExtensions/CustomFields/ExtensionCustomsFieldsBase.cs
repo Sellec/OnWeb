@@ -106,11 +106,6 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
         {
             moduleObject.RegisterPermission(PERM_EXTFIELDS_ALLOWMANAGE, "Настройка схемы полей");
 
-            //todo if (!ValueProviderFactories.Factories.Any(x => x is MetadataAndValues.FieldValueProviderFactory))
-            //{
-            //    ValueProviderFactories.Factories.Add(new MetadataAndValues.FieldValueProviderFactory());
-            //}
-
             using (var db = this.CreateUnitOfWork())
                 db.DataContext.ExecuteQuery($"UPDATE CustomFieldsSchemeData SET IdItemType='{ModuleCore.CategoryType}' WHERE IdModule='{Module.ID}' AND IdItemType=0");
 

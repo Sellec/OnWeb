@@ -7,12 +7,13 @@ using System.Linq;
 
 namespace OnWeb.Core.ServiceMonitor
 {
+    using Journaling.DB;
     /// <summary>
     /// Монитор сервисов. Позволяет вносить и получать информацию о сервисах, о их состоянии, событиях и пр.
     /// </summary>
-    public class Monitor : CoreComponentBase<ApplicationCore>, IComponentSingleton<ApplicationCore>, IUnitOfWorkAccessor<UnitOfWork<DB.Journal>>
+    public class Monitor : CoreComponentBase<ApplicationCore>, IComponentSingleton<ApplicationCore>, IUnitOfWorkAccessor<UnitOfWork<Journal>>
     {
-        private static ConcurrentDictionary<Guid, DB.JournalName> _servicesJournalsList = new ConcurrentDictionary<Guid, DB.JournalName>();
+        private static ConcurrentDictionary<Guid, JournalName> _servicesJournalsList = new ConcurrentDictionary<Guid, JournalName>();
         private static ConcurrentDictionary<Guid, ServiceInfo> _servicesList = new ConcurrentDictionary<Guid, ServiceInfo>();
 
         #region CoreComponentBase
@@ -83,7 +84,7 @@ namespace OnWeb.Core.ServiceMonitor
             if (serviceJournal != null) AppCore.Get<Journaling.JournalingManager>().RegisterEvent(serviceJournal.IdJournal, eventType, eventInfo, eventInfoDetailed, null, exception);
         }
 
-        private DB.JournalName GetJournalName(IMonitoredService service)
+        private JournalName GetJournalName(IMonitoredService service)
         {
             return _servicesJournalsList.GetOrAddWithExpiration(service.ServiceID, (key) =>
             {
@@ -96,7 +97,7 @@ namespace OnWeb.Core.ServiceMonitor
         /// <summary>
         /// Возвращает журнал для указанного сервиса.
         /// </summary>
-        public IEnumerable<DB.Journal> GetServiceJournal(IMonitoredService service)
+        public IEnumerable<Journal> GetServiceJournal(IMonitoredService service)
         {
             var serviceJournal = GetJournalName(service);
             return GetServiceJournal(service.ServiceID);
@@ -105,9 +106,9 @@ namespace OnWeb.Core.ServiceMonitor
         /// <summary>
         /// Возвращает журнал для указанного идентификатора сервиса.
         /// </summary>
-        public IEnumerable<DB.Journal> GetServiceJournal(Guid serviceID)
+        public IEnumerable<Journal> GetServiceJournal(Guid serviceID)
         {
-            if (_servicesJournalsList.TryGetValue(serviceID, out DB.JournalName serviceJournal))
+            if (_servicesJournalsList.TryGetValue(serviceID, out JournalName serviceJournal))
             {
                 using (var db = this.CreateUnitOfWork())
                 {
@@ -119,7 +120,7 @@ namespace OnWeb.Core.ServiceMonitor
             }
             else
             {
-                return Enumerable.Empty<DB.Journal>();
+                return Enumerable.Empty<Journal>();
             }
         }
 

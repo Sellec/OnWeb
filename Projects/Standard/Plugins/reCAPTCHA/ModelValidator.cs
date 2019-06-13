@@ -9,10 +9,12 @@ namespace OnWeb.Plugins.reCAPTCHA
 {
     class ModelValidator : System.Web.Mvc.ModelValidator
     {
+        private ApplicationCore _appCore;
         private readonly string _privateKey;
 
-        public ModelValidator(string privateKey, ModelMetadata metadata, ControllerContext controllerContext) : base(metadata, controllerContext)
+        public ModelValidator(ApplicationCore appCore, string privateKey, ModelMetadata metadata, ControllerContext controllerContext) : base(metadata, controllerContext)
         {
+            _appCore = appCore;
             _privateKey = privateKey;
         }
 
@@ -62,12 +64,16 @@ namespace OnWeb.Plugins.reCAPTCHA
                                         case "invalid-input-response":
                                             errors.Add("Ошибка reCAPTCHA - неправильный результат проверки.");
                                             break;
+
+                                        default:
+                                            errors.Add("Неизвестная ошибка reCAPTCHA.");
+                                            break;
                                     }
 
                             return new ModelValidationResult() { Message = string.Join("\r\n", errors) }.ToEnumerable();
                         }
 
-                        return null;
+                        return Enumerable.Empty<ModelValidationResult>();
                     }
                     catch (Exception ex)
                     {

@@ -1,3 +1,5 @@
+@using Auth
+@using Register
 @model Exception
 @{
     Layout = "baseCommon.cshtml";
@@ -35,7 +37,7 @@
 
                 @if (CurrentUserContext.IsGuest)
                 {
-                    <form action='/login/login' method='post' id="enter_login">
+                    <form action='@(Url.CreateRoute<ModuleAuth, ModuleAuthController>(x => x.Login(null)))' method='post' id="enter_login">
                         @Html.Hidden("urlFrom", Url.RequestContext.HttpContext.Request.Url.PathAndQuery)
 
                         <div class="nopadding"><p>@Html.Raw(Config.site_loginfo)</p></div>
@@ -52,8 +54,8 @@
                             @Html.RecaptchaInvisible("Войти", new { @class = "input-submit" })
                         </div>
                         <div class="login-form__row login-links">
-                            <a href="/login/restore" title="Восстановление забытого пароля">Не помню пароль</a>
-                            <a href="/reg" title="">Регистрация</a>
+                            <a href="@(Url.CreateRoute<ModuleAuth, ModuleAuthController>(x => x.PasswordRestore()))" title="Восстановление забытого пароля">Не помню пароль</a>
+                            <a href="@(Url.CreateRoute<ModuleRegister, ModuleRegisterController>())" title="">Регистрация</a>
                         </div>
                     </form>
                 }

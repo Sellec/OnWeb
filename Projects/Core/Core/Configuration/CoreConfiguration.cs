@@ -81,20 +81,6 @@ namespace OnWeb.Core.Configuration
             set => Set("site_keys", value);
         }
 
-        [Display(Name = "Recaptcha секретный ключ")]
-        public string reCaptchaSecretKey
-        {
-            get => Get("reCaptchaSecretKey", "");
-            set => Set("reCaptchaSecretKey", value);
-        }
-
-        [Display(Name = "Recaptcha публичный ключ")]
-        public string reCaptchaSiteKey
-        {
-            get => Get("reCaptchaSiteKey", "");
-            set => Set("reCaptchaSiteKey", value);
-        }
-
         /// <summary>
         /// Основной системный язык.
         /// </summary>
@@ -119,7 +105,7 @@ namespace OnWeb.Core.Configuration
         /// Настройки коннекторов приёма/отправки сообщений.
         /// </summary>
         /// <seealso cref="Messaging.Connectors.IConnectorBase{TMessage}"/>
-        /// <seealso cref="Messaging.IMessagingManager"/>
+        /// <seealso cref="Messaging.MessagingManager"/>
         public List<Messaging.Connectors.ConnectorSettings> ConnectorsSettings
         {
             get => JsonConvert.DeserializeObject<List<Messaging.Connectors.ConnectorSettings>>(Get("ConnectorsSettings", "")) ?? new List<Messaging.Connectors.ConnectorSettings>();

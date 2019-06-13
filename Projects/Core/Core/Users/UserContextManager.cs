@@ -244,6 +244,13 @@ namespace OnWeb.Core.Users
                                 break;
                         }
                     }
+                    else
+                    {
+                        if (!login.isEmail())
+                        {
+                            return new ExecutionAuthResult(eAuthResult.WrongAuthData, "Переданные данные не являются ни номером телефона, ни адресом электронной почты.");
+                        }
+                    }
                 }
 
                 if (query == null)

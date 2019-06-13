@@ -11,6 +11,7 @@ namespace OnWeb.Plugins.Adminmain
     using Core.DB;
     using Core.Items;
     using Core.Journaling;
+    using Core.Journaling.DB;
     using Core.Modules;
     using CoreBind.Modules;
     using CoreBind.Routing;
@@ -61,9 +62,6 @@ namespace OnWeb.Plugins.Adminmain
                     cfg.help_info = model.Configuration.help_info;
                     cfg.site_descr = model.Configuration.site_descr;
                     cfg.site_keys = model.Configuration.site_keys;
-
-                    cfg.reCaptchaSecretKey = model.Configuration.reCaptchaSecretKey;
-                    cfg.reCaptchaSiteKey = model.Configuration.reCaptchaSiteKey;
 
                     cfg.userAuthorizeAllowed = model.Configuration.userAuthorizeAllowed;
 

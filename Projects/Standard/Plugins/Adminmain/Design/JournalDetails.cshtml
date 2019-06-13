@@ -7,7 +7,7 @@
 $(function () {
     $("input#ClearJournal").click(function () {
         $(this).attr("disabled", true);
-        $.requestJSON("@(Url.CreateRoute<Module, ModuleController>(x=>x.JournalClear(Model.JournalName.IdJournal)))", null, function (result, message) {
+        $.requestJSON("@(Url.CreateRoute<Module, ModuleController>(x => x.JournalClear(Model.JournalName.IdJournal)))", null, function (result, message) {
             $(this).removeAttr("disabled");
             if (message.length > 0) alert(message);
             if (result == JsonResult.OK) {

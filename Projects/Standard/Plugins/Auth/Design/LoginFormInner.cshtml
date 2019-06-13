@@ -7,12 +7,24 @@
     var moduleReg = AppCore.Get<ModuleRegister>();
 }
 
+<script type="text/javascript">
+    $(function(){
+        $("#enter_login").requestJSON({
+            after: function (result, message) {
+                if (result == JsonResult.OK) {
+                    window.location = "@(Url.CreateRoute())";
+                }
+            }
+        });
+    });
+</script>
+
 @if (moduleAuth != null)
 {
     <div class="login-block-inner">
         <h1>Вход на сайт</h1>
         <div class="enter-block" id="enter_reg">
-            <form action='@(Url.CreateRoute<ModuleAuth, ModuleAuthController>(x => x.Login(null)))' method='post' id="enter_login">
+            <form action='@(Url.CreateRoute<ModuleAuth, ModuleAuthController>(x => x.LoginJson(null)))' method='post' id="enter_login">
                 @if (moduleAuth.IsSuperuserNeeded())
                 {
                     <div class="login-result nopadding" style="background-color: salmon;"><p>Внимание, на сайте отсутствует суперпользователь. Пожалуйста, перейдите на страницу регистрации и зарегистрируйте новую учетную запись, которая будет оформлена как суперпользователь и немедленно активирована.</p></div>
@@ -21,8 +33,13 @@
                 @if (!string.IsNullOrEmpty(Model?.Result))
                 {
                     <div class="login-result">
-                        @(Model?.Result)
+                        @(Model?.Result)<br />
                     </div>
+                    @Html.ValidationMessageForModel()
+                }
+                else
+                {
+                    @Html.ValidationMessageForModel()
                 }
                 <div class="login-form__row">
                     @{
@@ -30,17 +47,20 @@
                                             (Config.userAuthorizeAllowed == eUserAuthorizeAllowed.OnlyEmail ? "Адрес электронной почты" :
                                             (Config.userAuthorizeAllowed == eUserAuthorizeAllowed.OnlyPhone ? "Номер телефона" : "")));
                     }
-                    <input name='login' type='text' class='style-input' placeholder='@placeholder' />
+                    <input name='login' type='text' class='style-input' placeholder='@placeholder' /><br />
+                    @Html.ValidationMessage("login")
                 </div>
                 <div class="login-form__row">
-                    <input name='pass' type='password' class='style-input' placeholder='Пароль' />
+                    <input name='pass' type='password' class='style-input' placeholder='Пароль' /><br />
+                    @Html.ValidationMessage("pass")
                 </div>
                 <div class="login-form__row">
                     @Html.RecaptchaInvisible("Войти", new { @class = "input-submit" })
                 </div>
                 <div class="login-form__row login-links">
                     <a href="@(Url.CreateRoute<ModuleAuth, ModuleAuthController>(x=>x.PasswordRestore()))" title="Восстановление забытого пароля">Не помню пароль</a>
-                    @if (moduleReg != null) {<a href="@(Url.CreateRoute<ModuleRegister, ModuleRegisterController>(x=>x.Register()))" title="">Регистрация</a>}
+                    @if (moduleReg != null)
+                    {<a href="@(Url.CreateRoute<ModuleRegister, ModuleRegisterController>(x=>x.Register()))" title="">Регистрация</a>}
                 </div>
             </form>
         </div>

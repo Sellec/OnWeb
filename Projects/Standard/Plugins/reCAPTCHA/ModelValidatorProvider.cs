@@ -19,9 +19,11 @@ namespace OnWeb.Plugins.reCAPTCHA
         {
             if (_appCore.GetState() != CoreComponentState.Started) return Enumerable.Empty<System.Web.Mvc.ModelValidator>();
             var module = _appCore.Get<ModuleReCaptcha>();
-            var config = module.GetConfiguration<ModuleReCaptchaConfiguration>();
+            var cfg = module.GetConfiguration<ModuleReCaptchaConfiguration>();
 
-            return config.IsEnabledValidation ? new ModelValidator(config.PrivateKey, metadata, context).ToEnumerable() : Enumerable.Empty<System.Web.Mvc.ModelValidator>();
+            return cfg.IsEnabledValidation && !string.IsNullOrEmpty(cfg.PublicKey) && !string.IsNullOrEmpty(cfg.PrivateKey) ?
+                new ModelValidator(_appCore, cfg.PrivateKey, metadata, context).ToEnumerable() :
+                Enumerable.Empty<System.Web.Mvc.ModelValidator>();
         }
     }
 }
