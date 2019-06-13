@@ -8,7 +8,7 @@
     /// <summary>
     /// Представляет запись в журнале.
     /// </summary>
-    [Table("Journal")]
+    [Table("Journal1")]
     public class Journal
     {
         /// <summary>
