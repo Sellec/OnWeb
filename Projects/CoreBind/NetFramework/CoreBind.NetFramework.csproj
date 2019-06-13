@@ -105,6 +105,13 @@
     <Compile Include="CoreBind\Razor\RazorHost.cs" />
     <Compile Include="CoreBind\Razor\RazorHostFactory.cs" />
     <Compile Include="CoreBind\Razor\WebStartup.cs" />
+    <Compile Include="Core\ModuleExtensions\CustomFields\Field\FieldTypes\HiddenSimpleMultiLineFieldTypeRender.cs" />
+    <Compile Include="Core\ModuleExtensions\CustomFields\Field\FieldTypes\HiddenSingleLineFieldTypeRender.cs" />
+    <Compile Include="Core\ModuleExtensions\CustomFields\Field\FieldTypes\SimpleMultiLineFieldTypeRender.cs" />
+    <Compile Include="Core\ModuleExtensions\CustomFields\Field\FieldTypes\SimpleSingleLineFieldTypeRender.cs" />
+    <Compile Include="Core\ModuleExtensions\CustomFields\Field\FieldTypes\SourceMultipleFieldTypeRender.cs" />
+    <Compile Include="Core\ModuleExtensions\CustomFields\Field\FieldTypes\SourceSingleFieldTypeRender.cs" />
+    <Compile Include="Core\ModuleExtensions\CustomFields\Field\FieldTypes\UnknownFieldTypeRender.cs" />
     <Compile Include="Core\ModuleExtensions\CustomFields\ICustomFieldRender.cs" />
     <Compile Include="Plugins\Auth\Module2.cs" />
     <Compile Include="Plugins\Auth\Startup.cs" />

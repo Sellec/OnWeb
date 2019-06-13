@@ -16,16 +16,6 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Field.FieldTypes
             return new ValuesValidationResult(values);
         }
 
-        //todo RenderHtmlEditor
-        //public override MvcHtmlString RenderHtmlEditor<TModel>(HtmlHelper<TModel> html, IField field, IDictionary<string, object> htmlAttributes, params object[] additionalParameters)
-        //{
-        //    if (htmlAttributes == null) htmlAttributes = new Dictionary<string, object>();
-        //    if (!string.IsNullOrEmpty(field.alias)) htmlAttributes["class"] = (htmlAttributes.GetValueOrDefault("class", null) ?? "") + " FieldAlias_" + field.alias;
-
-        //    var value = (field as Data.FieldData)?.ToString();
-        //    return html.TextArea($"fieldValue_{field.IdField}", value, htmlAttributes);
-        //}
-
         public override int IdType
         {
             get => 7; 

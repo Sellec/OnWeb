@@ -113,6 +113,7 @@ namespace OnWeb.Plugins.FileManager.CustomFieldsFileTypes
             return MvcHtmlString.Create(str);
         }
 
+        #region CoreComponentBase
         /// <summary>
         /// </summary>
         protected sealed override void OnStart()
@@ -124,5 +125,6 @@ namespace OnWeb.Plugins.FileManager.CustomFieldsFileTypes
         protected sealed override void OnStop()
         {
         }
+        #endregion
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace OnWeb.Core.ModuleExtensions.CustomFields.Field.FieldTypes
@@ -18,34 +17,6 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Field.FieldTypes
 
             return new ValuesValidationResult(values);
         }
-
-        //public override MvcHtmlString RenderHtmlEditor<TModel>(HtmlHelper<TModel> html, IField field, IDictionary<string, object> htmlAttributes, params object[] additionalParameters)
-        //{
-        //    var value = (field as Data.FieldData)?.ToString();
-        //    if (htmlAttributes == null || htmlAttributes.IsReadOnly) htmlAttributes = new Dictionary<string, object>(htmlAttributes);
-        //    if (!string.IsNullOrEmpty(field.alias)) htmlAttributes["class"] = (htmlAttributes.GetValueOrDefault("class", null) ?? "") + " FieldAlias_" + field.alias;
-
-        //    switch (field.IdValueType)
-        //    {
-        //        case FieldValueType.Email:
-        //            htmlAttributes["type"] = "email";
-        //            break;
-
-        //        case FieldValueType.Phone:
-        //            htmlAttributes["type"] = "phone";
-        //            break;
-
-        //        case FieldValueType.URL:
-        //            htmlAttributes["type"] = "URL";
-        //            break;
-
-        //        case FieldValueType.Boolean:
-        //            return html.CheckBox($"fieldValue_{field.IdField}", value == true.ToString(), htmlAttributes);
-
-        //    }
-
-        //    return html.TextBox($"fieldValue_{field.IdField}", value, htmlAttributes);
-        //}
 
         public override int IdType
         {

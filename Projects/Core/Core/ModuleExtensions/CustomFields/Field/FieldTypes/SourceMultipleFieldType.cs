@@ -18,68 +18,6 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Field.FieldTypes
             return new ValuesValidationResult(values);
         }
 
-        //todo RenderHtmlEditor
-        //public override MvcHtmlString RenderHtmlEditor<TModel>(HtmlHelper<TModel> html, IField field, IDictionary<string, object> htmlAttributes, params object[] additionalParameters)
-        //{
-        //    var value = (field as Data.FieldData)?.Value;
-        //    var values = (value as IEnumerable<int>)?.Select(x => x);
-
-        //    if (htmlAttributes == null) htmlAttributes = new Dictionary<string, object>();
-        //    if (!string.IsNullOrEmpty(field.alias)) htmlAttributes["class"] = (htmlAttributes.GetValueOrDefault("class", null) ?? "") + " FieldAlias_" + field.alias;
-
-        //    htmlAttributes = htmlAttributes.Where(x => x.Key.ToLower() != "size").ToDictionary(x => x.Key, x => x.Value);
-        //    //htmlAttributes["multiple"] = true;
-
-        //    var list = (field.data != null ? field.data.Select(x => new SelectListItem()
-        //    {
-        //        Value = x.IdFieldValue.ToString(),
-        //        Text = x.FieldValue,
-        //        Selected = values != null && values.Contains(x.IdFieldValue)
-        //    }) : Enumerable.Empty<SelectListItem>()).ToList();
-
-        //    return html.ListBox($"fieldValue_{field.IdField}[]", list, htmlAttributes);
-        //}
-
-        //public override MvcHtmlString RenderHtmlEditor<TModel>(HtmlHelper<TModel> html, IField field, IDictionary<string, object> htmlAttributes, params object[] additionalParameters)
-        //{
-        //    var value = (field as Data.FieldData)?.Value;
-        //    var values = (value as IEnumerable<int>)?.Select(x => x);
-
-        //    if (htmlAttributes == null) htmlAttributes = new Dictionary<string, object>();
-        //    if (!string.IsNullOrEmpty(field.alias)) htmlAttributes["class"] = (htmlAttributes.GetValueOrDefault("class", null) ?? "") + " FieldAlias_" + field.alias;
-
-        //    var builder = new TagBuilder("input");
-
-        //    foreach (var pair in htmlAttributes)
-        //        builder.MergeAttribute(pair.Key, pair.Value?.ToString(), true);
-
-        //    builder.MergeAttribute("type", "checkbox", true);
-        //    builder.MergeAttribute("name", $"fieldValue_{field.id}[]", true);
-        //    builder.MergeAttribute("type", "checkbox", true);
-
-        //    var str = String.Empty;
-        //    if (field.data != null)
-        //        foreach (var fieldValue in field.data)
-        //        {
-        //            var _for = $"fieldValue_{field.id}_{fieldValue.IdFieldValue}";
-
-        //            builder.MergeAttribute("id", _for, true);
-        //            builder.MergeAttribute("value", fieldValue.IdFieldValue.ToString(), true);
-
-        //            if (values != null && values.Contains(fieldValue.IdFieldValue))
-        //                builder.MergeAttribute("checked", null, true);
-        //            else
-        //                builder.Attributes.Remove("checked");
-
-        //            str += builder.ToString(TagRenderMode.SelfClosing);
-
-        //            str += html.Label(_for, fieldValue.FieldValue).ToString();
-        //            str += "<br />";
-        //        }
-
-        //    return MvcHtmlString.Create(str);
-        //}
-
         public override int IdType
         {
             get => 3; 

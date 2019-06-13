@@ -2,18 +2,13 @@
 
 namespace OnWeb.Core.ModuleExtensions.CustomFields.Field.FieldTypes
 {
-    sealed class UnknownFieldType : FieldType
+#pragma warning disable CS1591 // todo внести комментарии.
+    public sealed class UnknownFieldType : FieldType
     {
         public override ValuesValidationResult Validate(IEnumerable<object> values, IField field)
         {
             return new ValuesValidationResult("Неизвестное поле.");
         }
-
-        //todo RenderHtmlEditor
-        //public override MvcHtmlString RenderHtmlEditor<TModel>(HtmlHelper<TModel> html, IField field, IDictionary<string, object> htmlAttributes, params object[] additionalParameters)
-        //{
-        //    return MvcHtmlString.Empty;
-        //}
 
         public override int IdType
         {
