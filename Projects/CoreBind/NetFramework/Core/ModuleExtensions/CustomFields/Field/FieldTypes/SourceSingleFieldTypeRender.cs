@@ -1,15 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using OnUtils.Architecture.AppCore;
+using System.Collections.Generic;
 using System.Linq;
-using OnUtils.Architecture.AppCore;
-using System;
-using System.Globalization;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 
 namespace OnWeb.Core.ModuleExtensions.CustomFields.Field.FieldTypes
 {
-    using Core.ModuleExtensions.CustomFields.MetadataAndValues;
-
 #pragma warning disable CS1591 // todo внести комментарии.
     public class SourceSingleFieldTypeRender : CoreComponentBase<ApplicationCore>, ICustomFieldRender<SourceSingleFieldType>
     {

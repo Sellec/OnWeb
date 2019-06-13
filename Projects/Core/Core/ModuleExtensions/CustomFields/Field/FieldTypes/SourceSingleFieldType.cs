@@ -20,12 +20,6 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Field.FieldTypes
             return new ValuesValidationResult(values);
         }
 
-        //internal override bool ConvertTo(IField field, FieldValueProviderResult result, Type type, CultureInfo culture, out object valueConverted)
-        //{
-        //    valueConverted = null;
-        //    return (result.RawFromForm == null || result.RawFromForm.Length == 0 || result.RawFromForm.Where(x => string.IsNullOrEmpty(x)).Count() == result.RawFromForm.Length);
-        //}
-
         public override int IdType
         {
             get => 2; 

@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
-using System.Web.Mvc;
 
 namespace OnWeb.Core.ModuleExtensions.CustomFields.Field
 {
@@ -21,7 +17,6 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Field
         /// </summary>
         public virtual void Init()
         {
-
         }
 
         /// <summary>
@@ -31,14 +26,6 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Field
         /// <param name="field">Проверяемое поле.</param>
         /// <returns></returns>
         public abstract ValuesValidationResult Validate(IEnumerable<object> values, IField field);
-
-        //todo RenderHtmlEditor
-        ///// <summary>
-        ///// Возвращает html-представление редактора для поля <paramref name="field"/>.
-        ///// </summary>
-        ///// <param name="field"></param>
-        ///// <returns></returns>
-        //public abstract MvcHtmlString RenderHtmlEditor<TModel>(HtmlHelper<TModel> html, IField field, IDictionary<string, object> htmlAttributes, params object[] additionalParameters);
 
         /// <summary>
         /// Возвращает дополнительные атрибуты, которые следует применить к генерируемому свойству в модели.
@@ -53,13 +40,6 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Field
         {
             return new ValueVariantCollection(source != null ? source.OrderBy(x => x.Order) : Enumerable.Empty<DB.CustomFieldsValue>());
         }
-
-        //todo RenderHtmlEditor
-        //internal virtual bool ConvertTo(IField field, MetadataAndValues.FieldValueProviderResult result, Type type, System.Globalization.CultureInfo culture, out object valueConverted)
-        //{
-        //    valueConverted = null;
-        //    return false;
-        //}
 
         /// <summary>
         /// Возвращает значение <see cref="TypeName"/>.
