@@ -84,7 +84,7 @@ namespace OnWeb.Core.ModuleExtensions.ExtensionUrl
                             {
                                 if (dataDequeued.Objects.Count > 0)
                                 {
-                                    var objectsGroupedByType = dataDequeued.Objects.GroupBy(x => x.Value).ToDictionary(x => x.Key, x => x.ToList());
+                                    var objectsGroupedByType = dataDequeued.Objects.Where(x => x.Key != null && x.Value != null).GroupBy(x => x.Value).ToDictionary(x => x.Key, x => x.ToList());
                                     lock (SyncRoot)
                                     {
                                         foreach (var pair in objectsGroupedByType)
