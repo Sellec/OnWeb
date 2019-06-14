@@ -61,7 +61,7 @@ namespace OnWeb.Plugins.CoreModule
                     case Core.Users.eUserAuthorizeAllowed.EmailAndPhone:
                     case Core.Users.eUserAuthorizeAllowed.OnlyPhone:
                         cfg.userAuthorizeAllowed = Core.Users.eUserAuthorizeAllowed.OnlyEmail;
-                        RegisterEvent(Core.Journaling.EventType.CriticalError, "Сервис рассылки СМС не найден - режим авторизации сброшен", "Не найден сервис рассылки СМС-сообщений. В связи с этим режим авторизации пользователей изменен на 'Только Email'.");
+                        this.RegisterEvent(Core.Journaling.EventType.CriticalError, "Сервис рассылки СМС не найден - режим авторизации сброшен", "Не найден сервис рассылки СМС-сообщений. В связи с этим режим авторизации пользователей изменен на 'Только Email'.");
                         GetConfigurationManipulator().ApplyConfiguration(cfg);
                         break;
                 }
