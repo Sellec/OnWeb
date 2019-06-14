@@ -1,11 +1,10 @@
 ﻿using OnUtils.Architecture.AppCore;
-using OnUtils.Data;
 using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace OnWeb.CoreBind.Modules
 {
-    using Core.DB;
     using Core.Modules;
 
     /// <summary>
@@ -58,7 +57,7 @@ namespace OnWeb.CoreBind.Modules
             ViewData["CurrentUserContext"] = AppCore.GetUserContextManager().GetCurrentUserContext();
 
             ViewData["ControllerThreadId"] = System.Threading.Thread.CurrentThread.ManagedThreadId;
-            ViewData["QueriesFromBeginRequest"] = Core.WebUtils.QueryLogHelper.GetQueries();
+            ViewData["QueriesFromBeginRequest"] = new List<QueryCounterExtensions.QueryInfo>(Core.WebUtils.QueryLogHelper.GetQueries());
 
             Core.WebUtils.QueryLogHelper.ClearQueries();
         }
