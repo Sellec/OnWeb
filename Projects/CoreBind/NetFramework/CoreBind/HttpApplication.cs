@@ -141,7 +141,7 @@ namespace OnWeb.CoreBind
         internal void Application_BeginRequest(Object sender, EventArgs e)
         {
             HttpContext.Current.SetAppCore(_applicationCore);
-            _applicationCore.GetUserContextManager().SetCurrentUserContext(_applicationCore.GetUserContextManager().CreateGuestUserContext());
+            _applicationCore.GetUserContextManager().ClearCurrentUserContext();
 
             var isFirstRequest = (bool?)this.Context.GetType().GetProperty("FirstRequest", BindingFlags.Instance | BindingFlags.GetProperty | BindingFlags.NonPublic)?.GetValue(this.Context);
             if (!_applicationCore.IsServerUrlHasBeenSet  && isFirstRequest.HasValue && isFirstRequest.Value)
@@ -251,6 +251,8 @@ namespace OnWeb.CoreBind
             _requestSpecificDisposables = null;
 
             Providers.TraceSessionStateProvider.SaveUnsavedSessionItem();
+
+            _applicationCore.GetUserContextManager().ClearCurrentUserContext();
         }
 
         /// <summary>

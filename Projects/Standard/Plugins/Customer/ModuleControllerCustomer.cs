@@ -148,8 +148,6 @@ namespace OnWeb.Plugins.Customer
 
                         db.SaveChanges();
 
-                        AppCore.GetUserContextManager().CreateUserContext(AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser(), out var userContext, out var resultReason);
-
                         trans.Commit();
 
                         answer.Data = data;
