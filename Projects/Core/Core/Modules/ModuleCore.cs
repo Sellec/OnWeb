@@ -2,7 +2,6 @@
 using OnUtils.Application.Modules;
 using OnUtils.Application.Users;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -10,8 +9,6 @@ using System.Reflection;
 namespace OnWeb.Core.Modules
 {
     using Configuration;
-    using Journaling;
-    using ExecutionRegisterResult = ExecutionResult<int?>;
 
     /// <summary>
     /// Базовый класс для всех модулей. Обязателен при реализации любых модулей, т.к. при задании привязок в DI проверяется наследование именно от этого класса.
@@ -35,7 +32,6 @@ namespace OnWeb.Core.Modules
         internal string _moduleUrlName;
 
         private List<Extensions.ModuleExtension> _extensions = new List<Extensions.ModuleExtension>();
-        private ConcurrentDictionary<int, int> _journalForCurrentModule = new ConcurrentDictionary<int, int>();
 
         /// <summary>
         /// Создает новый экземпляр класса.
@@ -311,60 +307,6 @@ namespace OnWeb.Core.Modules
         {
             get => GetExtension<ModuleExtensions.ExtensionUrl.ExtensionUrl>();
         }
-        #endregion
-
-        #region Ошибки 
-        private int GetJournalForErrors()
-        {
-            var result = AppCore.Get<JournalingManager>().RegisterJournal(JournalingConstants.IdSystemJournalType, "Журнал событий модуля '" + this.Caption + "'", "ModuleErrors_" + ID);
-            if (!result.IsSuccess) Debug.WriteLine("Ошибка получения журнала событий модуля '{0}': {1}", this.Caption, result.Message);
-            return result.Result?.IdJournal ?? -1;
-        }
-
-        /// <summary>
-        /// Регистрирует событие в журнал модуля.
-        /// </summary>
-        /// <param name="eventType">См. <see cref="JournalingManager.RegisterEvent(int, EventType, string, string, DateTime?, Exception)"/>.</param>
-        /// <param name="message">См. <see cref="JournalingManager.RegisterEvent(int, EventType, string, string, DateTime?, Exception)"/>.</param>
-        /// <param name="messageDetailed">См. <see cref="JournalingManager.RegisterEvent(int, EventType, string, string, DateTime?, Exception)"/>.</param>
-        /// <param name="ex">См. <see cref="JournalingManager.RegisterEvent(int, EventType, string, string, DateTime?, Exception)"/>.</param>
-        /// <returns>
-        /// Возвращает объект <see cref="ExecutionRegisterResult"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. 
-        /// В случае успеха свойство <see cref="ExecutionRegisterResult.Result"/> содержит идентификатор записи журнала (см. также <see cref="JournalingManager.GetJournalData(int)"/>).
-        /// В случае ошибки свойство <see cref="ExecutionResult.Message"/> содержит сообщение об ошибке.
-        /// </returns>
-        protected internal ExecutionRegisterResult RegisterEvent(EventType eventType, string message, string messageDetailed = null, Exception ex = null)
-        {
-            var idJournal = _journalForCurrentModule.GetOrAddWithExpiration(0, c => GetJournalForErrors(), TimeSpan.FromMinutes(5));
-
-            var msg = "";
-            // todo придумать, как получать эти данные. возможно, объявить интерфейсы.
-            //var Request = HttpContext.Current != null && HttpContext.Current.Request != null ? HttpContext.Current.Request : null;
-
-            //if (Request != null)
-            //{ 
-            //    msg += $"URL запроса: {Request.Url}\r\n";
-            //    if (Request.UrlReferrer != null) msg += $"URL-referer: {Request.UrlReferrer}\r\n";
-            //}
-
-            //if (UserManager.Instance != null)
-            //{
-            //    if (AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest) msg += $"Пользователь: Гость\r\n";
-            //    else msg += $"Пользователь: {AppCore.GetUserContextManager().GetCurrentUserContext().getData().ToString()} (id: {AppCore.GetUserContextManager().GetCurrentUserContext().ID})\r\n";
-            //}
-
-            //if (Request != null)
-            //{
-            //    if (!string.IsNullOrEmpty(Request.UserAgent)) msg += $"User-agent: {Request.UserAgent}\r\n";
-            //    var ipdns = new Dictionary<string, string>() { { "IP", Request.UserHostAddress }, { "DNS", Request.UserHostName } }.Where(x => !string.IsNullOrEmpty(x.Value)).ToList();
-            //    if (ipdns.Count > 0) msg += $"User {string.Join(" / ", ipdns.Select(x => x.Key))}: {string.Join("/", ipdns.Select(x => x.Value))}\r\n";
-            //}
-
-            msg += messageDetailed;
-
-            return AppCore.Get<JournalingManager>().RegisterEvent(idJournal, eventType, message, msg, null, ex);
-        }
-
         #endregion
 
     }

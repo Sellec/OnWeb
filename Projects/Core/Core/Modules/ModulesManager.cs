@@ -1,22 +1,15 @@
-﻿using System;
+﻿using OnUtils.Application.Modules;
+using OnUtils.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-
-using OnUtils;
-using OnUtils.Application;
-using OnUtils.Application.Modules;
-using OnUtils.Application.Users;
-using OnUtils.Data;
-using OnUtils.Data.UnitOfWork;
-using OnUtils.Utils;
-using OnUtils.Architecture.AppCore;
-using OnUtils.Architecture.AppCore.DI;
 
 namespace OnWeb.Core.Modules
 {
     using Configuration;
     using DB;
+    using Journaling;
 
     // todo ModulesManager привести в порядок описание методов, методы и тело в ModulesManager, сделать общий подход как в FileManager.
     /// <summary>
@@ -86,8 +79,10 @@ namespace OnWeb.Core.Modules
                 LoadModuleCallModuleStart(module);
                 _modules.Add(new Tuple<Type, ModuleBase<ApplicationCore>>(typeof(TModuleType), module));
 
+                AppCore.Get<JournalingManager>().RegisterJournalTyped<TModuleType>("Журнал событий модуля '" + module.Caption + "'");
+
                 this.RegisterEvent(
-                     Journaling.EventType.Info,
+                     EventType.Info,
                     $"Загрузка модуля '{moduleType.FullName}'",
                     $"Модуль загружен на основе типа '{module.GetType().FullName}' с Id={config.IdModule}."
                 );
