@@ -141,6 +141,7 @@ namespace OnWeb.CoreBind
         internal void Application_BeginRequest(Object sender, EventArgs e)
         {
             Core.WebUtils.QueryLogHelper.QueryLogEnabled = true;
+            Context.Items["TimeRequestStart"] = DateTime.Now;
 
             HttpContext.Current.SetAppCore(_applicationCore);
             _applicationCore.GetUserContextManager().ClearCurrentUserContext();
@@ -224,12 +225,15 @@ namespace OnWeb.CoreBind
 
         internal void Application_AcquireRequestState(object sender, EventArgs e)
         {
+            Context.Items["TimeRequestState"] = DateTime.Now;
             var context = _applicationCore.Get<Plugins.Auth.ModuleAuth>().RestoreUserContextFromRequest();
             if (context != null) _applicationCore.GetUserContextManager().SetCurrentUserContext(context);
         }
 
         internal void Application_EndRequest(Object sender, EventArgs e)
         {
+            Context.Items["TimeRequestEnd"] = DateTime.Now;
+
             var queries = Core.WebUtils.QueryLogHelper.GetQueries();
             if (queries.Count > 0)
             {

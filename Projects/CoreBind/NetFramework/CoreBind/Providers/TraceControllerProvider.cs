@@ -39,6 +39,8 @@ namespace OnWeb.CoreBind.Providers
         #region IControllerFactory
         public IController CreateController(RequestContext requestContext, string moduleName)
         {
+            requestContext.HttpContext.Items["TimeController"] = DateTime.Now;
+
             var isAjax = false;
             ModuleCore module = null;
 

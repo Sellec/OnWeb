@@ -57,9 +57,8 @@ namespace OnWeb.CoreBind.Modules
             ViewData["CurrentUserContext"] = AppCore.GetUserContextManager().GetCurrentUserContext();
 
             ViewData["ControllerThreadId"] = System.Threading.Thread.CurrentThread.ManagedThreadId;
-            ViewData["QueriesFromBeginRequest"] = new List<QueryCounterExtensions.QueryInfo>(Core.WebUtils.QueryLogHelper.GetQueries());
-
-            Core.WebUtils.QueryLogHelper.ClearQueries();
+            ViewData["QueriesFromBeginRequest"] = Core.WebUtils.QueryLogHelper.GetQueries().Count;
+            ViewData["TimeViewSend"] = DateTime.Now;
         }
 
         /// <summary>
