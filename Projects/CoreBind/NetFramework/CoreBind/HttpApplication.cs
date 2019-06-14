@@ -274,6 +274,7 @@ namespace OnWeb.CoreBind
             }
 
             Core.WebUtils.QueryLogHelper.QueryLogEnabled = false;
+            Core.WebUtils.QueryLogHelper.ClearQueries();
         }
 
         /// <summary>
