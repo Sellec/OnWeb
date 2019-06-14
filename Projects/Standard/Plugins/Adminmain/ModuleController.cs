@@ -55,7 +55,8 @@ namespace OnWeb.Plugins.Adminmain
                     cfg.IdModuleDefault = model.Configuration.IdModuleDefault;
                     cfg.DeveloperEmail = model.Configuration.DeveloperEmail;
                     cfg.SiteFullName = model.Configuration.SiteFullName;
-                    cfg.helpform_email = model.Configuration.helpform_email;
+                    cfg.ContactEmail = model.Configuration.ContactEmail;
+                    cfg.ReturnEmail = model.Configuration.ReturnEmail;
                     cfg.register_mode = model.Configuration.register_mode;
                     cfg.site_reginfo = model.Configuration.site_reginfo;
                     cfg.site_loginfo = model.Configuration.site_loginfo;

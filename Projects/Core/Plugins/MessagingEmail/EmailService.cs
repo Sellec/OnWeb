@@ -64,7 +64,10 @@ namespace OnWeb.Plugins.MessagingEmail
 
         private string GetNoReplyAddress()
         {
-            var address = "no-reply@localhost";
+            var address = AppCore.Config.ReturnEmail;
+            if (!string.IsNullOrEmpty(address)) return address;
+
+            address = "no-reply@localhost";
             if (AppCore.ServerUrl != null) address = "no-reply@" + AppCore.ServerUrl.Host;
 
             return address;
@@ -76,7 +79,7 @@ namespace OnWeb.Plugins.MessagingEmail
                 "Почтовый робот сайта",
                 GetNoReplyAddress(),
                 "admin",
-                AppCore.Config.Get("helpform_email", ""),
+                AppCore.Config.ContactEmail,
                 null, null,
                 subject,
                 body

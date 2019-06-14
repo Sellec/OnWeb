@@ -76,9 +76,15 @@
                 </div>
 
                 <div>
-                    @Html.LabelFor(x => x.Configuration.helpform_email):<br />
-                    @Html.EditorFor(x => x.Configuration.helpform_email, new { htmlAttributes = new { size = 50 } })<br />
-                    @Html.ValidationMessageFor(x => x.Configuration.helpform_email)
+                    @Html.LabelFor(x => x.Configuration.ContactEmail):<br />
+                    @Html.EditorFor(x => x.Configuration.ContactEmail, new { htmlAttributes = new { size = 50 } })<br />
+                    @Html.ValidationMessageFor(x => x.Configuration.ContactEmail)
+                </div>
+
+                <div>
+                    @Html.LabelFor(x => x.Configuration.ReturnEmail):<br />
+                    @Html.EditorFor(x => x.Configuration.ReturnEmail, new { htmlAttributes = new { size = 50 } })<br />
+                    @Html.ValidationMessageFor(x => x.Configuration.ReturnEmail)
                 </div>
 
                 <div>

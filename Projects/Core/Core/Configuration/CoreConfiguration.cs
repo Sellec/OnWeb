@@ -26,10 +26,18 @@ namespace OnWeb.Core.Configuration
 
         [Display(Name = "Основной контактный email сайта"), Required(ErrorMessage = "Основной контактный email не может быть пустым")]
         [EmailAddress(ErrorMessage = "Неправильно указан основной контактный email сайта")]
-        public string helpform_email
+        public string ContactEmail
         {
-            get => Get("helpform_email", "");
-            set => Set("helpform_email", value);
+            get => Get("ContactEmail", "");
+            set => Set("ContactEmail", value);
+        }
+
+        [Display(Name = "Обратный контактный email-адрес"), Required(ErrorMessage = "Обратный контактный email-адрес не может быть пустым")]
+        [EmailAddress(ErrorMessage = "Неправильно указан обратный контактный email-адрес")]
+        public string ReturnEmail
+        {
+            get => Get("ReturnEmail", "");
+            set => Set("ReturnEmail", value);
         }
 
         [Display(Name = "Режим регистрации на сайте")]
