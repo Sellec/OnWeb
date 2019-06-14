@@ -23,7 +23,7 @@ namespace OnWeb.CoreBind.Providers
             if (controllerContext != null && controllerContext.Controller != null && controllerContext.Controller is Modules.ModuleControllerBase)
             {
                 var module = (controllerContext.Controller as Modules.ModuleControllerBase).ModuleBase;
-                if (module != null) return module.GetType().Namespace.Replace(typeof(OnWeb.Plugins.NamespaceAnchor).Namespace, "").TrimStart('.');
+                if (module != null) return module.QueryType.Namespace.Replace(typeof(OnWeb.Plugins.NamespaceAnchor).Namespace, "").TrimStart('.');
             }
 
             return null;
