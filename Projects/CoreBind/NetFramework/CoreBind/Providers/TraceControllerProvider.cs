@@ -42,6 +42,19 @@ namespace OnWeb.CoreBind.Providers
             var isAjax = false;
             ModuleCore module = null;
 
+            // Проверка на авторизацию. Ловим случаи, когда авторизация не сработала в HttpApplication.
+            var context = AppCore.GetUserContextManager().GetCurrentUserContext();
+            if (context.IsGuest)
+            {
+                var moduleAuth = AppCore.Get<Plugins.Auth.ModuleAuth>();
+                context = moduleAuth.RestoreUserContextFromRequest();
+                if (context != null && !context.IsGuest)
+                {
+                    moduleAuth.RegisterEvent(EventType.CriticalError, "Нарушение процесса авторизации", null);
+                    AppCore.GetUserContextManager().SetCurrentUserContext(context);
+                }
+            }
+
             try
             {
                 /*
