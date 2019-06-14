@@ -329,7 +329,7 @@ namespace OnWeb.CoreBind.Modules
 
         /// <summary>
         /// </summary>
-        protected virtual void displayPrepare(object model)
+        protected virtual void OnViewPrepare(object model)
         {
 
         }
@@ -337,7 +337,7 @@ namespace OnWeb.CoreBind.Modules
         /// <summary>
         /// Позволяет выполнить дополнительные действия перед отображением представления. Например, передать дополнительные значения или изменить поведение.
         /// </summary>
-        protected virtual void onDisplayModule(object model)
+        protected virtual void OnViewModule(object model)
         {
 
         }
@@ -371,7 +371,7 @@ namespace OnWeb.CoreBind.Modules
                     if (!masterName.StartsWith("~/")) masterName = "~/" + masterName;
                 }
 
-                displayPrepare(model);
+                OnViewPrepare(model);
                 return base.View(viewName, masterName, model);
             }
             catch (Exception ex)
@@ -394,7 +394,7 @@ namespace OnWeb.CoreBind.Modules
                 if (template.EndsWith(".tpl")) template = template.Replace(".tpl", ".cshtml");
                 if (!template.StartsWith("~/")) template = "~/" + template;
 
-                displayPrepare(model);
+                OnViewPrepare(model);
 
                 //ViewData.Model = model;
                 using (var sw = new System.IO.StringWriter())

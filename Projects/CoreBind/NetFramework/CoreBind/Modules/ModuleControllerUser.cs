@@ -48,31 +48,19 @@ namespace OnWeb.CoreBind.Modules
 #pragma warning disable CS0618
         /// <summary>
         /// </summary>
-        protected sealed override void displayPrepare(object model)
+        protected sealed override void OnViewPrepare(object model)
         {
-            base.displayPrepare(model);
+            base.OnViewPrepare(model);
 
-            this.onDisplayModule(model);
-            //this.onDisplayBase($template);
-
-            ////foreach($this.mExtensions as $key => $var) $this.assignRef($key."Ex", $var);
+            OnViewModule(model);
 
             ViewData["Module"] = Module;
             ViewData["CurrentUserContext"] = AppCore.GetUserContextManager().GetCurrentUserContext();
 
-            //////////////this.assignRef("Main", ApplicationCore.Instance);
-            //////////////this.assignRef("UserManager", UserManager.Instance);
+            ViewData["ControllerThreadId"] = System.Threading.Thread.CurrentThread.ManagedThreadId;
+            ViewData["QueriesFromBeginRequest"] = Core.WebUtils.QueryLogHelper.GetQueries();
 
-            //////////////this.assign("IsAuthorized", !AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest);
-            //////////////this.assign("IsDeveloper", AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser() == 19 || AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser() == 20);
-            //////////////this.assign("IsAdminPanel", ModulesManager.getModuleByNameBase("Admin").checkPermission(ModuleCore.ACCESSADMIN));
-            //////////////this.assign("IsSuperuser", AppCore.GetUserContextManager().GetCurrentUserContext().IsSuperuser);
-            //////////////this.assign("IsAdmin", this.Module.checkPermission(ModuleCore.ACCESSADMIN));
-
-            //////////////this.assign("User", AppCore.GetUserContextManager().GetCurrentUserContext().getData());
-
-            //////////////var themeActive = ThemeManager.getActive(false);
-            //////////////this.assignRef("ThemeFolder", themeActive != null ? themeActive.FolderName : "");
+            Core.WebUtils.QueryLogHelper.ClearQueries();
         }
 
         /// <summary>

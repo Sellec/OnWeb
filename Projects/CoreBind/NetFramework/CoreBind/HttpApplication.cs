@@ -140,6 +140,8 @@ namespace OnWeb.CoreBind
 
         internal void Application_BeginRequest(Object sender, EventArgs e)
         {
+            Core.WebUtils.QueryLogHelper.QueryLogEnabled = true;
+
             HttpContext.Current.SetAppCore(_applicationCore);
             _applicationCore.GetUserContextManager().ClearCurrentUserContext();
 
@@ -228,6 +230,11 @@ namespace OnWeb.CoreBind
 
         internal void Application_EndRequest(Object sender, EventArgs e)
         {
+            var queries = Core.WebUtils.QueryLogHelper.GetQueries();
+            if (queries.Count > 0)
+            {
+            }
+
             try
             {
                 this.OnEndRequest();
@@ -253,6 +260,16 @@ namespace OnWeb.CoreBind
             Providers.TraceSessionStateProvider.SaveUnsavedSessionItem();
 
             _applicationCore.GetUserContextManager().ClearCurrentUserContext();
+
+            var queries2 = Core.WebUtils.QueryLogHelper.GetQueries();
+            if (queries2.Count > 0)
+            {
+            }
+            if (queries.Count > 0 && queries.Count != queries2.Count)
+            {
+            }
+
+            Core.WebUtils.QueryLogHelper.QueryLogEnabled = false;
         }
 
         /// <summary>

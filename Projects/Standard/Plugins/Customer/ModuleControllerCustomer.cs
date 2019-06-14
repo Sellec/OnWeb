@@ -15,7 +15,7 @@ namespace OnWeb.Plugins.Customer
 
     public class ModuleControllerCustomer : ModuleControllerUser<ModuleCustomer>
     {
-        protected override void onDisplayModule(object model)
+        protected override void OnViewModule(object model)
         {
             using (var db = Module.CreateUnitOfWork())
             {
