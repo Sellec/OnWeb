@@ -6,7 +6,7 @@ namespace OnWeb.Core.DB
     using System.ComponentModel.DataAnnotations.Schema;
 
 #pragma warning disable CS1591 // todo внести комментарии.
-    [Table("ItemType")]
+    [Table("ItemType1")]
     public partial class ItemType
     {
         [Key]
