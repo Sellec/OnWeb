@@ -57,6 +57,7 @@ namespace OnWeb.Plugins.Adminmain
                     cfg.SiteFullName = model.Configuration.SiteFullName;
                     cfg.ContactEmail = model.Configuration.ContactEmail;
                     cfg.ReturnEmail = model.Configuration.ReturnEmail;
+                    cfg.CriticalMessagesEmail = model.Configuration.CriticalMessagesEmail;
                     cfg.register_mode = model.Configuration.register_mode;
                     cfg.site_reginfo = model.Configuration.site_reginfo;
                     cfg.site_loginfo = model.Configuration.site_loginfo;

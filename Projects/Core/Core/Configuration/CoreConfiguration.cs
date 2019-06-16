@@ -40,6 +40,14 @@ namespace OnWeb.Core.Configuration
             set => Set("ReturnEmail", value);
         }
 
+        [Display(Name = "Email для отправки сообщений о критических ошибках"), Required(ErrorMessage = "Email для отправки сообщений о критических ошибках не может быть пустым")]
+        [EmailAddress(ErrorMessage = "Неправильно указан email для отправки сообщений о критических ошибках")]
+        public string CriticalMessagesEmail
+        {
+            get => Get("CriticalMessagesEmail", "");
+            set => Set("CriticalMessagesEmail", value);
+        }
+
         [Display(Name = "Режим регистрации на сайте")]
         public Types.RegisterMode register_mode
         {

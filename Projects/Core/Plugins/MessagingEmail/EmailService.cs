@@ -79,7 +79,7 @@ namespace OnWeb.Plugins.MessagingEmail
                 "Почтовый робот сайта",
                 GetNoReplyAddress(),
                 "admin",
-                AppCore.Config.ContactEmail,
+                AppCore.Config.CriticalMessagesEmail,
                 null, null,
                 subject,
                 body

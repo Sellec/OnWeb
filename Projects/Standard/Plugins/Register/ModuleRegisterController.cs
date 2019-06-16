@@ -72,7 +72,7 @@ namespace OnWeb.Plugins.Register
 
                     preparedData.salt = salt;
 
-                    var regMode = (RegisterMode)AppCore.Config.Get("register_mode", 0);
+                    var regMode = AppCore.Config.register_mode;
                     switch (regMode)
                     {
                         case RegisterMode.SelfConfirmation:
