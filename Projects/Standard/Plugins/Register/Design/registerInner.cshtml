@@ -41,7 +41,7 @@
             <div class="enter-block" id="enter_reg">
                 <form action='@(Url.CreateRoute<ModuleRegister, ModuleRegisterController>(x=>x.RegisterSave(null)))' method='post' id='reg_form' class='pass_inner'>
 
-                    <div class="site_reginfo">@Html.Raw(Config.Get("site_reginfo", ""))</div>
+                    <div class="site_reginfo">@Html.Raw(Config.site_reginfo)</div>
                     <div class="login-form__row">
                         @Html.TextBoxFor(model => model.email, new { @class = "style-input", placeholder = Html.DisplayNameFor(model => model.email) })
                         @Html.ValidationMessageFor(model => model.email)
