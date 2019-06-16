@@ -16,7 +16,7 @@ namespace OnWeb
     /// <summary>
     /// Ядро веб-приложения для ASP.Net MVC.
     /// </summary>
-    sealed class ApplicationCoreBind : ApplicationCore
+    public sealed class ApplicationCoreBind : ApplicationCore
     {
         /// <summary>
         /// </summary>
@@ -177,7 +177,7 @@ namespace OnWeb
         /// <summary>
         /// Указывает, был ли адрес сервера уже однажды назначен, т.е. является ли текущее значение <see cref="ServerUrl"/> значением по-умолчанию.
         /// </summary>
-        internal bool IsServerUrlHasBeenSet { get; private set; } = false;
+        public bool IsServerUrlHasBeenSet { get; private set; } = false;
 
         private Uri _serverUrl = new Uri("http://localhost");
         #endregion

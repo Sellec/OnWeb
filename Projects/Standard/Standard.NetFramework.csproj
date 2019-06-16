@@ -111,6 +111,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CoreBind\HttpApplication.cs" />
     <Compile Include="Design\Additionals\ClassicStructures\PhotoList.cs" />
     <Compile Include="Design\Additionals\Extension\ButtonHtmlExtensions.cs" />
     <Compile Include="Design\Additionals\Extension\DropDownListHtmlExtensions.cs" />

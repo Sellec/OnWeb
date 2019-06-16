@@ -17,7 +17,7 @@ namespace OnWeb.CoreBind.WebCore.Types
         {
             _disposableAction = disposableAction;
 
-            var app = HttpContext.Current.ApplicationInstance as CoreBind.HttpApplication;
+            var app = HttpContext.Current.ApplicationInstance as CoreBind.HttpApplicationBase;
             if (app != null)
             {
                 app._requestSpecificDisposables.Enqueue(this);

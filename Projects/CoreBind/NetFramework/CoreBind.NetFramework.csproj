@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationCoreBind.cs" />
+    <Compile Include="CoreBind\HttpApplicationBase.cs" />
     <Compile Include="CoreBind\ModuleExtensions\CustomFields\ExtensionCustomsFieldsAdmin.cs" />
     <Compile Include="CoreBind\ModuleExtensions\CustomFields\Startup.cs" />
     <Compile Include="CoreBind\Modules\Configuration\SaveModel.cs" />
@@ -81,8 +82,6 @@
     <Compile Include="CoreBind\Users\UserContextManager.cs" />
     <Compile Include="CoreBind\_Initialize\WebRazorHostFactoryInjector.cs" />
     <Compile Include="CoreBind\_Initialize\WebInitializer.cs" />
-    <Compile Include="CoreBind\ApplicationCoreSingleton.cs" />
-    <Compile Include="CoreBind\HttpApplication.cs" />
     <Compile Include="CoreBind\Razor\TraceViewPage.cs" />
     <Compile Include="CoreBind\Binders\JsonDictionaryModelBinder.cs" />
     <Compile Include="CoreBind\Binders\TraceModelBinder.cs" />

@@ -13,7 +13,7 @@ namespace OnWeb.CoreBind
     /// <summary>
     /// Представляет приложение ASP.NET, умеющее инициализировать OnWeb.
     /// </summary>
-    public class HttpApplication : System.Web.HttpApplication
+    public abstract class HttpApplicationBase : System.Web.HttpApplication
     {
         private static object SyncRootStart = new object();
         private static volatile int _instancesCount = 0;
@@ -25,7 +25,7 @@ namespace OnWeb.CoreBind
         /// <summary>
         /// Создает новый экземпляр приложения ASP.NET.
         /// </summary>
-        public HttpApplication()
+        public HttpApplicationBase()
         {
         }
 
@@ -87,9 +87,6 @@ namespace OnWeb.CoreBind
                     var physicalApplicationPath = Server.MapPath("~");
 
                     _applicationCore = new ApplicationCoreBind(physicalApplicationPath, ConnectionString);
-#pragma warning disable CS0612
-                    ApplicationCoreSingleton.Instance = _applicationCore;
-#pragma warning restore CS0612
                     _applicationCore.Start();
 
                     try
