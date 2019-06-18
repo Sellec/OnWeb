@@ -10,7 +10,8 @@ namespace NetCore.TestSite.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        [ParameterAlias("IdPage", "page")]
+        public IActionResult Index(int? IdPage = null)
         {
             return View();
         }

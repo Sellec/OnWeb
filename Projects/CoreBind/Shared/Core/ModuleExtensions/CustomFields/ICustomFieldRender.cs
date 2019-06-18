@@ -1,6 +1,11 @@
 ﻿using OnUtils.Architecture.AppCore;
 using System.Collections.Generic;
+#if NETFULL
 using System.Web.Mvc;
+#elif NETCORE
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using MvcHtmlString = Microsoft.AspNetCore.Html.IHtmlContent;
+#endif
 
 namespace OnWeb.Core.ModuleExtensions.CustomFields
 {

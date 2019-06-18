@@ -1,7 +1,12 @@
 ﻿using OnUtils.Architecture.AppCore;
 using System.Collections.Generic;
+#if NETFULL
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
+#elif NETCORE
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using MvcHtmlString = Microsoft.AspNetCore.Html.IHtmlContent;
+#endif
 
 namespace OnWeb.Core.ModuleExtensions.CustomFields.Field.FieldTypes
 {
@@ -14,7 +19,11 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Field.FieldTypes
             if (!string.IsNullOrEmpty(field.alias)) htmlAttributes["class"] = (htmlAttributes.GetValueOrDefault("class", null) ?? "") + " FieldAlias_" + field.alias;
 
             var value = (field as Data.FieldData)?.ToString();
+#if NETFULL
             return html.TextArea($"fieldValue_{field.IdField}", value, htmlAttributes);
+#elif NETCORE
+            return html.TextArea($"fieldValue_{field.IdField}", value, 0, 0, htmlAttributes);
+#endif
         }
 
         #region CoreComponentBase

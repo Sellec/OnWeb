@@ -16,7 +16,11 @@ namespace OnWeb
         /// </summary>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();//.SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc(options => {
+                options.Filters.Add(new External.ActionParameterAlias.ParameterAliasAttributeGlobal());
+                //GlobalFilters.Filters.Add(new HandleErrorAttribute());
+                //GlobalFilters.Filters.Add(new External.ActionParameterAlias.ParameterAliasAttributeGlobal());
+            });//.SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddRouting();
 
             OnConfigureServices(services);
