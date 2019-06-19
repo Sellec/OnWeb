@@ -1,12 +1,11 @@
 namespace OnWeb.Core.Messaging.DB
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
 #pragma warning disable CS1591 // todo внести комментарии.
-    [Table("MessageQueue1")]
+    [Table("MessageQueue")]
     partial class MessageQueue
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

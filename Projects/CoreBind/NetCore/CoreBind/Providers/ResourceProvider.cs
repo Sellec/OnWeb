@@ -1,36 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.AspNetCore.Mvc.ViewEngines;
+﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace OnWeb.CoreBind.Providers
 {
-    //class my : RazorViewEngine
-    //{
-    //    public my(IRazorPageFactoryProvider pageFactory, IRazorPageActivator pageActivator, HtmlEncoder htmlEncoder, IOptions<RazorViewEngineOptions> optionsAccessor, RazorProject razorProject, ILoggerFactory loggerFactory, DiagnosticSource diagnosticSource) : base(pageFactory, pageActivator, htmlEncoder, optionsAccessor, razorProject, loggerFactory, diagnosticSource)
-    //    {
-    //    }
-
-    //    public my(IRazorPageFactoryProvider pageFactory, IRazorPageActivator pageActivator, HtmlEncoder htmlEncoder, IOptions<RazorViewEngineOptions> optionsAccessor, RazorProjectFileSystem razorFileSystem, ILoggerFactory loggerFactory, DiagnosticSource diagnosticSource) : base(pageFactory, pageActivator, htmlEncoder, optionsAccessor, razorFileSystem, loggerFactory, diagnosticSource)
-    //    {
-    //    }
-
-    //    override 
-    //}
-
-    class c : IViewLocationExpander
-    {
-        IEnumerable<string> IViewLocationExpander.ExpandViewLocations(ViewLocationExpanderContext context, IEnumerable<string> viewLocations)
-        {
-            return viewLocations;
-        }
-
-        void IViewLocationExpander.PopulateValues(ViewLocationExpanderContext context)
-        {
-
-        }
-    }
-
-    class ResourceProvider : Core.Storage.ResourceProvider//, IViewEngine, IRouteHandler
+    class ResourceProvider : Core.Storage.ResourceProvider, IViewEngine, IRouteHandler
     {
         private IViewEngine _previousViewEngine = null;
 
@@ -39,140 +17,229 @@ namespace OnWeb.CoreBind.Providers
             _previousViewEngine = previousViewEngine;
         }
 
-        //#region RazorViewEngine
-        //internal string GetModuleNameFromContext(ActionContext context)
-        //{
-        //    if (context != null && context.ActionDescriptor is ControllerActionDescriptor controllerActionDescriptor)
-        //    {
-        //        var type = Types.TypeHelpers.ExtractGenericInterface(controllerActionDescriptor.ControllerTypeInfo, typeof(Core.Modules.IModuleController<>));
-        //        if (type != null)
-        //        {
-        //            return type.GenericTypeArguments[0].Namespace.Replace(typeof(OnWeb.Plugins.NamespaceAnchor).Namespace, "").TrimStart('.');
-        //        }
-        //    }
+        #region RazorViewEngine
+        internal string GetModuleNameFromContext(ControllerContext controllerContext)
+        {
+            if (controllerContext != null && controllerContext.Controller != null && controllerContext.Controller is Modules.ModuleControllerBase)
+            {
+                var module = (controllerContext.Controller as Modules.ModuleControllerBase).ModuleBase;
+                if (module != null) return module.QueryType.Namespace.Replace(typeof(OnWeb.Plugins.NamespaceAnchor).Namespace, "").TrimStart('.');
+            }
 
-        //    return null;
-        //}
-        //ViewEngineResult IViewEngine.FindView(ActionContext context, string viewName, bool isMainPage)//. .F1indView(ControllerContext controllerContext, string viewName, string masterName, bool useCache)
-        //{
-        //    if (context == null)
-        //    {
-        //        throw new ArgumentNullException("context");
-        //    }
-        //    if (string.IsNullOrEmpty(viewName))
-        //    {
-        //        throw new ArgumentException(Resources.ArgumentCannotBeNullOrEmpty, "viewName");
-        //    }
-        //    if (IsApplicationRelativePath(viewName) || IsRelativePath(viewName))
-        //    {
-        //        return ViewEngineResult.NotFound(viewName, Enumerable.Empty<string>());
-        //    }
-        //    ViewLocationCacheResult result = LocatePageFromViewLocations(context, viewName, isMainPage);
-        //    return CreateViewEngineResult(result, viewName);
-        //    //var masterNamePath = GetFilePath(GetModuleNameFromContext(context), masterName, true, out searchLocations);
+            return null;
+        }
 
-        //    if (!string.IsNullOrEmpty(viewNamePath))
-        //    {
-        //        var res = new ViewEngineResult(CreateView(context, viewNamePath), this);
-        //        return res;
-        //    }
+        ViewEngineResult IViewEngine.FindView(ControllerContext controllerContext, string viewName, string masterName, bool useCache)
+        {
+            //Debug.WriteLine("FindView: viewName={0}, masterName={1}, useCache={2}", viewName, masterName, useCache);
 
-        //    var result = _previousViewEngine.FindView(context, viewName, isMainPage, isMainPage);
-        //    return result;
-        //}
+            var viewNamePath = GetFilePath(GetModuleNameFromContext(controllerContext), viewName, true, out IEnumerable<string> searchLocations);
+            var masterNamePath = GetFilePath(GetModuleNameFromContext(controllerContext), masterName, true, out searchLocations);
 
-        ////ViewEngineResult IViewEngine.FindPartialView(ControllerContext controllerContext, string partialViewName, bool useCache)
-        ////{
-        ////    //Debug.WriteLine("FindPartialView: partialViewName={0}, useCache={1}", partialViewName, useCache);
+            if (!string.IsNullOrEmpty(viewNamePath))
+            {
+                var res = new ViewEngineResult(CreateView(controllerContext, viewNamePath, masterNamePath ?? masterName), this);
+                return res;
+            }
+            
+            var result = _previousViewEngine.FindView(controllerContext, viewName, masterName, useCache);
+            return result;
+        }
 
-        ////    var namesToSearch = new List<string>();
+        ViewEngineResult IViewEngine.FindPartialView(ControllerContext controllerContext, string partialViewName, bool useCache)
+        {
+            //Debug.WriteLine("FindPartialView: partialViewName={0}, useCache={1}", partialViewName, useCache);
 
-        ////    var extension = System.IO.Path.GetExtension(partialViewName);
-        ////    if (string.IsNullOrEmpty(extension))
-        ////    {
-        ////        namesToSearch.Add(partialViewName + ".cshtml");
-        ////        namesToSearch.Add(partialViewName + ".vbhtml");
-        ////    }
-        ////    else namesToSearch.Add(partialViewName);
+            var namesToSearch = new List<string>();
 
-        ////    foreach (var _partialViewName in namesToSearch)
-        ////    {
-        ////        var partialViewNamePath = GetFilePath(GetModuleNameFromContext(controllerContext), _partialViewName, true, out IEnumerable<string> searchLocations);
+            var extension = System.IO.Path.GetExtension(partialViewName);
+            if (string.IsNullOrEmpty(extension))
+            {
+                namesToSearch.Add(partialViewName + ".cshtml");
+                namesToSearch.Add(partialViewName + ".vbhtml");
+            }
+            else namesToSearch.Add(partialViewName);
 
-        ////        if (!string.IsNullOrEmpty(partialViewNamePath))
-        ////        {
-        ////            var res = new ViewEngineResult(CreatePartialView(controllerContext, partialViewNamePath), this);
-        ////            return res;
-        ////        }
-        ////    }
+            foreach (var _partialViewName in namesToSearch)
+            {
+                var partialViewNamePath = GetFilePath(GetModuleNameFromContext(controllerContext), _partialViewName, true, out IEnumerable<string> searchLocations);
 
-        ////    return _previousViewEngine.FindPartialView(controllerContext, partialViewName, useCache);
-        ////}
+                if (!string.IsNullOrEmpty(partialViewNamePath))
+                {
+                    var res = new ViewEngineResult(CreatePartialView(controllerContext, partialViewNamePath), this);
+                    return res;
+                }
+            }
 
-        ////void IViewEngine.ReleaseView(ControllerContext controllerContext, IView view)
-        ////{
-        ////    (view as IDisposable)?.Dispose();
-        ////}
+            return _previousViewEngine.FindPartialView(controllerContext, partialViewName, useCache);
+        }
 
-        //private IView CreateView(ControllerContext controllerContext, string viewPath, string masterPath)
-        //{
-        //    return null;// new RazorView(controllerContext, viewPath, masterPath, true, new string[] { "cshtml", "vbhtml" }, null);
-        //}
+        void IViewEngine.ReleaseView(ControllerContext controllerContext, IView view)
+        {
+            (view as IDisposable)?.Dispose();
+        }
 
-        //private IView CreatePartialView(ControllerContext controllerContext, string partialPath)
-        //{
-        //    return null;// new RazorView(controllerContext, partialPath, null, false, new string[] { "cshtml", "vbhtml" }, null);
-        //}
-        //#endregion
+        private IView CreateView(ControllerContext controllerContext, string viewPath, string masterPath)
+        {
+            return new RazorView(controllerContext, viewPath, masterPath, true, new string[] { "cshtml", "vbhtml" }, null);
+        }
 
-        //        #region IRouteHandler
-        //        class Handler : IHttpHandler
-        //        {
-        //            public bool IsReusable
-        //            {
-        //                get => true;
-        //            }
+        private IView CreatePartialView(ControllerContext controllerContext, string partialPath)
+        {
+            return new RazorView(controllerContext, partialPath, null, false, new string[] { "cshtml", "vbhtml" }, null);
+        }
+        #endregion
 
-        //            public void ProcessRequest(HttpContext context)
-        //            {
-        //            }
-        //        }
+        #region IRouteHandler
+        class Handler : IHttpHandler
+        {
+            public bool IsReusable
+            {
+                get => true;
+            }
 
-        //        public IHttpHandler GetHttpHandler(RequestContext requestContext)
-        //        {
-        //            HttpContext.Current.Items["TimeStart"] = null;
+            public void ProcessRequest(HttpContext context)
+            {
+            }
+        }
 
-        //            var fileRelative = "data/" + requestContext.RouteData.Values["filename"] as string;
-        //            var fileReal = GetFilePath(null, fileRelative, false, out IEnumerable<string> searchLocations);
+        public IHttpHandler GetHttpHandler(RequestContext requestContext)
+        {
+            HttpContext.Current.Items["TimeStart"] = null;
 
-        //            requestContext.HttpContext.Response.Clear();
+            var fileRelative = "data/" + requestContext.RouteData.Values["filename"] as string;
+            var fileReal = GetFilePath(null, fileRelative, false, out IEnumerable<string> searchLocations);
 
-        //            if (fileReal == null)
-        //            {
-        //                //Debug.WriteLineNoLog("fileRelative unknown={0}", fileRelative);
-        //                requestContext.HttpContext.Response.StatusCode = 404;
-        //            }
-        //            else
-        //            {
-        //                var ctt = System.Web.MimeMapping.GetMimeMapping(fileReal);
-        //                requestContext.HttpContext.Response.ContentType = ctt;
-        //                requestContext.HttpContext.Response.WriteFile(fileReal);
-        //            }
+            return GetHttpHandler(requestContext, fileReal);
+        }
 
-        //            HttpContext.Current.Response.Flush(); // Sends all currently buffered output to the client.
-        //            HttpContext.Current.Response.SuppressContent = true;  // Gets or sets a value indicating whether to send HTTP content to the client.
-        //            HttpContext.Current.ApplicationInstance.CompleteRequest(); // Causes ASP.NET to bypass all events and filtering in the HTTP pipeline chain of execution and directly execute the EndRequest event.
+        public IHttpHandler GetHttpHandler(RequestContext requestContext, string fileReal)
+        {
+            requestContext.HttpContext.Response.Clear();
 
-        //            try
-        //            {
-        //                //requestContext.HttpContext.Response.End();
-        //            }
-        //            catch (ThreadAbortException) { }
+            if (fileReal == null)
+            {
+                requestContext.HttpContext.Response.StatusCode = 404;
+            }
+            else
+            {
+                var ctt = MimeMapping.GetMimeMapping(fileReal);
+                requestContext.HttpContext.Response.ContentType = ctt;
+                requestContext.HttpContext.Response.TransmitFile(fileReal);
+            }
 
-        //            return new Handler();
-        //        }
-        //#endregion
+            //todo эти две строки ломают сжатие gzip, если его включить.
+            //HttpContext.Current.Response.Flush();
+            //HttpContext.Current.Response.SuppressContent = true;
 
+            HttpContext.Current.ApplicationInstance.CompleteRequest();
+
+            return new Handler();
+        }
+#endregion
+
+        #region Прекомпиляция
+        [System.Diagnostics.DebuggerNonUserCode]
+        public void GeneratePrecompiled(bool logOnlyErrors = true)
+        {
+            logOnlyErrors = true;
+
+            var filesList = new List<string>();
+
+            var field = typeof(FileInfo).GetField("FullPath", BindingFlags.Instance | BindingFlags.NonPublic);
+
+            var paths = SourceDevelopmentPathList.Merge(SourcePathList);
+
+            foreach (var path in paths)
+            {
+                if (!Directory.Exists(path)) continue;
+
+                var fileList = new DirectoryInfo(path).GetFiles("*.cshtml", SearchOption.AllDirectories);
+                foreach (var file in fileList)
+                {
+                    try
+                    {
+                        var filepath = "";
+                        if (field != null) filepath = (string)field.GetValue(file);
+                        else filepath = file.FullName;
+
+                        if (filepath.ToLower().Contains("symlink")) continue;
+                        if (!filesList.Contains(filepath) && !filepath.Contains("\\bin\\")) filesList.Add(filepath);
+                    }
+                    catch { }
+                }
+            }
+
+            var measure = new MeasureTime();
+            try
+            {
+                foreach (var file in filesList)
+                {
+                    var relPath = TranslateFullPathTo(file);
+
+                    if (Path.GetFileName(relPath).ToLower().StartsWith("base")) continue;
+
+                    GeneratePrecompiledView(relPath, logOnlyErrors);
+                }
+
+                Debug.WriteLine("Precompiling Background {0} files, time {1:D}ms. See detailed errors in console", filesList.Count, measure);
+            }
+            catch (Exception ex) { Debug.WriteLine("Precompiling Background {0} files, time {1:D}ms with error: {2}. See detailed errors in console", filesList.Count, measure, ex.Message); }
+
+            //Task.Factory.StartNew(() =>
+            //{
+            //    var measure = new MeasureTime();
+            //    try
+            //    {
+            //        var tasks = new List<Task>();
+            //        foreach (var file in filesList)
+            //        {
+            //            var relPath = TranslateFullPathTo(file);
+
+            //            if (Path.GetFileName(relPath).ToLower().StartsWith("base"))
+            //                continue;
+
+            //            tasks.Add(Task.Factory.StartNew((state) =>
+            //            {
+            //                var _relPath = state as string;
+            //                GeneratePrecompiledView(_relPath, logOnlyErrors);
+            //            }, relPath, TaskCreationOptions.AttachedToParent));
+            //        }
+            //        Task.WaitAll(tasks.ToArray());
+
+            //        Debug.WriteLine("Precompiling Background {0} files, time {1:D}ms", filesList.Count, measure);
+            //    }
+            //    catch (Exception ex) { Debug.WriteLine("Precompiling Background {0} files, time {1:D}ms with error: {2}", filesList.Count, measure, ex.Message); }
+            //}, TaskCreationOptions.LongRunning);
+        }
+
+        [System.Diagnostics.DebuggerStepThrough]
+        private void GeneratePrecompiledView(string _relPath, bool logOnlyErrors = true)
+        {
+            var measure2 = new MeasureTime();
+            var message = "";
+
+            var success = false;
+            try
+            {
+                var id = System.Threading.Thread.CurrentThread.ManagedThreadId;
+
+                measure2.Start();
+                var type = System.Web.Compilation.BuildManager.GetCompiledType(_relPath);
+                success = true;
+            }
+            catch (Exception ex)
+            {
+                var exx = ex.GetLowLevelException();
+                message = ", err: " + exx.Message;
+            }
+            finally
+            {
+                if (!logOnlyErrors || (logOnlyErrors && !string.IsNullOrEmpty(message)))
+                    Debug.WriteLineNoLog("Precompiling '{0}' is {1}, time {2:D}ms {3}", _relPath, success, measure2, message);
+            }
+        }
+        #endregion
     }
 }
 
