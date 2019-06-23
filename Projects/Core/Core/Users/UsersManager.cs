@@ -175,6 +175,42 @@ namespace OnWeb.Core.Users
         }
 
         /// <summary>
+        /// Удаляет роль <paramref name="idRole"/> у пользователей из списка <paramref name="userIdList"/>. Если <paramref name="userIdList"/> пуст или равен null, то роль снимается со всех пользователей.
+        /// </summary>
+        [ApiReversible]
+        public NotFound RemoveRoleUsers(int idRole, IEnumerable<int> userIdList)
+        {
+            try
+            {
+                using (var db = this.CreateUnitOfWork())
+                using (var scope = db.CreateScope(TransactionScopeOption.Required))
+                {
+                    if (db.Role.Where(x => x.IdRole == idRole).Count() == 0) return NotFound.NotFound;
+
+                    if (userIdList?.Any() == true)
+                    {
+                        db.RoleUser.Where(x => x.IdRole == idRole && userIdList.Contains(x.IdUser)).Delete();
+                    }
+                    else
+                    {
+                        db.RoleUser.Where(x => x.IdRole == idRole).Delete();
+                    }
+
+                    db.SaveChanges();
+                    scope.Commit();
+                }
+
+                return NotFound.Success;
+            }
+            catch (Exception ex)
+            {
+                this.RegisterEvent(Journaling.EventType.Error, "Ошибка при удалении роли у пользователей.", $"Идентификатор роли: {idRole}\r\nИдентификаторы пользователей: {(userIdList?.Any() == true ? "не задано" : string.Join(", ", userIdList))}", ex);
+                CheckBlockingException(ex);
+                return NotFound.Error;
+            }
+        }
+
+        /// <summary>
         /// Добавляет роль <paramref name="idRole"/> пользователям из списка <paramref name="userIdList"/>.
         /// </summary>
         [ApiReversible]
