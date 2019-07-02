@@ -92,6 +92,8 @@ namespace OnWeb.CoreBind.Providers
                  * */
                 if (int.TryParse(moduleName, out int moduleId) && moduleId.ToString() == moduleName)
                     module = AppCore.Get<ModulesManager<ApplicationCore>>().GetModule(moduleId);
+                else if (Guid.TryParse(moduleName, out Guid uniqueName) && uniqueName.ToString() == moduleName)
+                    module = AppCore.Get<ModulesManager<ApplicationCore>>().GetModule(uniqueName);
                 else
                     module = AppCore.Get<ModulesManager<ApplicationCore>>().GetModule(moduleName);
 

@@ -13,5 +13,6 @@ namespace OnWeb.CoreBind.Modules.Configuration
         [MaxLength(200)]
         [Display(Name = "URL-доступное имя модуля")]
         public string UrlName { get; internal set; }
+
     }
 }

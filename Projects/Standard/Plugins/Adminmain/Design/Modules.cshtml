@@ -15,7 +15,8 @@
                 if ( ichild == 0 ) $(this)[0].innerHTML = data.@nameof(Adminmain.Model.Module.Id);
                 else if ( ichild == 1 ) $(this)[0].innerHTML = data.@nameof(Adminmain.Model.Module.Caption);
                 else if ( ichild == 2 ) $(this)[0].innerHTML = data.@nameof(Adminmain.Model.Module.Type);
-                else if ( ichild == 3 ) $(this)[0].innerHTML = data.@nameof(Adminmain.Model.Module.UrlName);
+                else if ( ichild == 3 ) $(this)[0].innerHTML = data.@nameof(Adminmain.Model.Module.UniqueName);
+                else if ( ichild == 4 ) $(this)[0].innerHTML = data.@nameof(Adminmain.Model.Module.UrlName);
             });
 
             $("a", tr_elem).each(function(){
@@ -72,6 +73,7 @@
                         <th style="width:15px">№</th>
                         <th style="width:150px" class="tablesorter-headerAsc">Название</th>
                         <th>Query-тип модуля</th>
+                        <th style="width:220px">Уникальное имя модуля</th>
                         <th style="width:220px">URL-доступное имя модуля</th>
                         <th>Действия</th>
                     </tr>
@@ -84,6 +86,7 @@
                 </tr>
                 <tr id='obraz' style='display:none;'>
                     <td class="center"></td>
+                    <td class="left"></td>
                     <td class="left"></td>
                     <td class="left"></td>
                     <td class="left"></td>

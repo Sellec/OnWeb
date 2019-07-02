@@ -136,6 +136,20 @@ namespace OnWeb.Core.Modules
             }
         }
 
+        internal ModuleCore GetModuleInternal(Guid uniqueName)
+        {
+            lock (_syncRoot)
+            {
+                var module = _modules.
+                    Select(x => x.Item2).
+                    OfType<ModuleCore>().
+                    Where(x => x.UniqueName == uniqueName).
+                    FirstOrDefault();
+
+                return module;
+            }
+        }
+
         internal ConfigurationValuesProvider CreateValuesProviderForModule(ModuleCore module)
         {
             var configurationValuesProvider = new ConfigurationValuesProvider();

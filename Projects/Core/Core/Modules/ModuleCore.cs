@@ -121,7 +121,7 @@ namespace OnWeb.Core.Modules
         /// Порядок определения значения свойства следующий:
         /// 1) Если задано - <see cref="ModuleCoreAttribute.DefaultUrlName"/>;
         /// 2) Если задано - <see cref="ModuleConfiguration{TModule}.UrlName"/>;
-        /// 3) Если предыдущие пункты не вернули значения - используется результат выполнения <see cref="StringExtension.GenerateGuid(string)"/> на основе полного имени (<see cref="Type.FullName"/>) query-типа модуля.
+        /// 3) Если предыдущие пункты не вернули значения - используется <see cref="UniqueName"/>.
         /// </summary>
         /// <seealso cref="ModuleCoreAttribute.DefaultUrlName"/>
         /// <seealso cref="ModuleConfiguration{TModule}.UrlName"/>
@@ -161,6 +161,14 @@ namespace OnWeb.Core.Modules
         public virtual Type QueryType
         {
             get => GetType();
+        }
+
+        /// <summary>
+        /// Возвращает уникальное имя модуля на основе <see cref="Type.FullName"/> query-типа модуля.
+        /// </summary>
+        public Guid UniqueName
+        {
+            get => QueryType.FullName.GenerateGuid();
         }
 
         #endregion
@@ -405,15 +413,15 @@ namespace OnWeb.Core.Modules
         /// Порядок определения значения свойства следующий:
         /// 1) Если задано - <see cref="ModuleCoreAttribute.DefaultUrlName"/>;
         /// 2) Если задано - <see cref="ModuleConfiguration{TModule}.UrlName"/>;
-        /// 3) Если предыдущие пункты не вернули значения - используется результат выполнения <see cref="StringExtension.GenerateGuid(string)"/> на основе полного имени (<see cref="Type.FullName"/>) query-типа модуля.
+        /// 3) Если предыдущие пункты не вернули значения - используется <see cref="ModuleCore.UniqueName"/>.
         /// </summary>
         /// <seealso cref="ModuleCoreAttribute.DefaultUrlName"/>
         /// <seealso cref="ModuleConfiguration{TModule}.UrlName"/>
-        public override string UrlName
+        public sealed override string UrlName
         {
             get
             {
-                if (string.IsNullOrEmpty(_moduleUrlName)) _moduleUrlName = typeof(TSelfReference).FullName.GenerateGuid().ToString();
+                if (string.IsNullOrEmpty(_moduleUrlName)) _moduleUrlName = UniqueName.ToString();
                 return _moduleUrlName;
             }
         }
@@ -421,7 +429,7 @@ namespace OnWeb.Core.Modules
         /// <summary>
         /// Возвращает query-тип модуля.
         /// </summary>
-        public override Type QueryType
+        public sealed override Type QueryType
         {
             get => typeof(TSelfReference);
         }

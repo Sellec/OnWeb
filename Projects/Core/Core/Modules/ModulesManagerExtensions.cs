@@ -1,9 +1,9 @@
 ﻿using OnUtils.Application.Modules;
+using System;
 using System.Collections.Generic;
 
 namespace OnWeb
 {
-    using Core;
     using Core.Modules;
 
     /// <summary>
@@ -37,6 +37,17 @@ namespace OnWeb
         public static ModuleCore GetModule(this ModulesManager<ApplicationCore> manager, int moduleID)
         {
             return ((ModulesManager)manager).GetModuleInternal(moduleID);
+        }
+
+        /// <summary>
+        /// Возвращает модуль с уникальным именем <paramref name="uniqueName"/> (см. <see cref="ModuleCore.UniqueName"/>). 
+        /// </summary>
+        /// <param name="manager"></param>
+        /// <param name="uniqueName">Уникальное имя модуля.</param>
+        /// <returns>Объект модуля либо null, если подходящий модуль не найден.</returns>
+        public static ModuleCore GetModule(this ModulesManager<ApplicationCore> manager, Guid uniqueName)
+        {
+            return ((ModulesManager)manager).GetModuleInternal(uniqueName);
         }
 
     }
