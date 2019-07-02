@@ -55,7 +55,9 @@ namespace OnWeb
             controllerProvider.Start(this);
             ControllerBuilder.Current.SetControllerFactory(controllerProvider);
 
-            ModelMetadataProviders.Current = new TraceModelMetadataProvider();
+            if (!(ModelMetadataProviders.Current is TraceModelMetadataProvider))
+                ModelMetadataProviders.Current = new TraceModelMetadataProvider();
+
             // todo для Model.ValidateModel ModelValidatorProviders.Providers.Add(new TraceModelValidatorProvider());
 
             /*
