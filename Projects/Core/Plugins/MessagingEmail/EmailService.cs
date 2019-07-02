@@ -36,7 +36,7 @@ namespace OnWeb.Plugins.MessagingEmail
 
         void IEmailService.SendMailToDeveloper(string subject, string body, List<int> files)
         {
-            ((IEmailService)this).SendMail("Почтовый робот сайта", GetNoReplyAddress(), "Developers", "test@test.com", null, null, subject, body, files);
+            ((IEmailService)this).SendMail("Почтовый робот сайта", GetNoReplyAddress(), AppCore.Config.DeveloperEmail, AppCore.Config.DeveloperEmail, null, null, subject, body, files);
         }
 
         /**
