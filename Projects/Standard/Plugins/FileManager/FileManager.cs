@@ -449,6 +449,7 @@ namespace OnWeb.Plugins.FileManager
             try
             {
                 using (var db = this.CreateUnitOfWork())
+                using (var scope = db.CreateScope(TransactionScopeOption.Suppress))
                 {
                     var result = db.DataContext.StoredProcedure<object>("Maintenance_RebuildIndexes", new { MinimumIndexFragmentstionToSearch = 5 });
                 }
