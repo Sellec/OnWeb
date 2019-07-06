@@ -24,6 +24,6 @@ namespace OnWeb.Core.Messaging.DB
 
         public DateTime? DateChange { get; set; }
 
-        public byte[] MessageInfo { get; set; }
+        public string MessageInfo { get; set; }
     }
 }

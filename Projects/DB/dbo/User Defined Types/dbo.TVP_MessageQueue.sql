@@ -6,7 +6,9 @@
     [State]           NVARCHAR (200) NULL,
     [IdTypeConnector] INT            NULL,
     [DateChange]      DATETIME       NULL,
-    [MessageInfo]     VARBINARY (1)  NULL);
+    [MessageInfo]     NVARCHAR (MAX) NULL);
+
+
 
 
 

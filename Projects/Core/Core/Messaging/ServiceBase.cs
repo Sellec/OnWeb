@@ -59,7 +59,7 @@ namespace OnWeb.Core.Messaging
                         IdMessageType = IdMessageType,
                         StateType = MessageStateType.NotProcessed,
                         DateCreate = DateTime.Now,
-                        MessageInfo = Encoding.UTF8.GetBytes(Newtonsoft.Json.JsonConvert.SerializeObject(message)),
+                        MessageInfo = Newtonsoft.Json.JsonConvert.SerializeObject(message),
                     };
 
                     db.Repo1.Add(mess);
@@ -85,7 +85,7 @@ namespace OnWeb.Core.Messaging
             {
                 try
                 {
-                    var str = Encoding.UTF8.GetString(x.MessageInfo);
+                    var str = x.MessageInfo;
                     return new IntermediateStateMessage<TMessageType>(Newtonsoft.Json.JsonConvert.DeserializeObject<TMessageType>(str), x);
                 }
                 catch (Exception ex)
