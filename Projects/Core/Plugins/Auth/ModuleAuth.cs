@@ -71,49 +71,5 @@ namespace OnWeb.Plugins.Auth
             return null;
         }
 
-        /// <summary>
-        /// Возвращает пользовательский контекст на основании данных в текущем запросе.
-        /// </summary>
-        /// <returns>Возвращает пользовательский контекст или null.</returns>
-        /// <exception cref="InvalidOperationException">Возникает, если метод выполняется не в рамках входящего запроса.</exception>
-        /// <seealso cref="BindUserContextToRequest(IUserContext)"/>
-        /// <seealso cref="ClearUserContextFromRequest"/>
-        /// <seealso cref="TryGetUserCredentialsFromRequest(out int?)"/>
-        public IUserContext RestoreUserContextFromRequest()
-        {
-            if (TryGetUserCredentialsFromRequest(out int? idUser))
-            {
-                var userContextResult = AppCore.GetUserContextManager().CreateUserContext(idUser.Value, out var userContext, out var resultReason);
-                return userContextResult == Core.Users.eAuthResult.Success ? userContext : null;
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Возвращает данные пользователя из запроса, если их возможно определить и они корректны. Возвращает успех только в том случае, если реквизиты пользователя прошли проверку.
-        /// </summary>
-        /// <param name="idUser">После выхода из метода содержит идентификатор пользователя или null, если идентификатор не определен.</param>
-        /// <returns>Возвращает true, если данные пользователя были найдены в запросе и false в противном случае.</returns>
-        /// <exception cref="InvalidOperationException">Возникает, если метод выполняется не в рамках входящего запроса.</exception>
-        /// <seealso cref="RestoreUserContextFromRequest"/>
-        protected abstract bool TryGetUserCredentialsFromRequest(out int? idUser);
-
-        /// <summary>
-        /// Привязывает указанный контекст пользователя <paramref name="context"/> к текущему запросу таким образом, что последующий вызов <see cref="RestoreUserContextFromRequest"/> восстановит новый контекст, ассоциированный с тем же пользователем.
-        /// </summary>
-        /// <exception cref="ArgumentException">Возникает, если <paramref name="context"/> ассоциирован с гостем.</exception>
-        /// <exception cref="ArgumentNullException">Возникает, если <paramref name="context"/> равен null.</exception>
-        /// <exception cref="InvalidOperationException">Возникает, если метод выполняется не в рамках входящего запроса.</exception>
-        /// <seealso cref="ClearUserContextFromRequest"/>
-        /// <seealso cref="RestoreUserContextFromRequest"/>
-        public abstract void BindUserContextToRequest(IUserContext context);
-
-        /// <summary>
-        /// Удаляет текущий контекст пользователя, сбрасывая авторизацию, таким образом, что последующий вызов <see cref="RestoreUserContextFromRequest"/> НЕ восстановит контекст, ассоциированный с тем же пользователем.
-        /// </summary>
-        /// <seealso cref="BindUserContextToRequest"/>
-        /// <seealso cref="RestoreUserContextFromRequest"/>
-        public abstract void ClearUserContextFromRequest();
     }
 }

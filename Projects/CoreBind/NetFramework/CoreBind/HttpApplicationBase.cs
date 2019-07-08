@@ -223,7 +223,7 @@ namespace OnWeb.CoreBind
         internal void Application_AcquireRequestState(object sender, EventArgs e)
         {
             Context.Items["TimeRequestState"] = DateTime.Now;
-            var context = _applicationCore.Get<Plugins.Auth.ModuleAuth>().RestoreUserContextFromRequest();
+            var context = _applicationCore.Get<Providers.SessionBinder>().RestoreUserContextFromRequest();
             if (context != null) _applicationCore.GetUserContextManager().SetCurrentUserContext(context);
         }
 

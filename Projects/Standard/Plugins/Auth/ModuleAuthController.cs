@@ -53,7 +53,7 @@ namespace OnWeb.Plugins.Auth
                     var result = AppCore.GetUserContextManager().CreateUserContext(model.login, model.pass, out var userContext, out var resultReason);
                     if (result == eAuthResult.Success)
                     {
-                        Module.BindUserContextToRequest(userContext);
+                        AppCore.Get<CoreBind.Providers.SessionBinder>().BindUserContextToRequest(userContext);
                         AppCore.GetUserContextManager().SetCurrentUserContext(userContext);
                         //message = "Авторизация прошла успешно!";
                     }
@@ -105,7 +105,7 @@ namespace OnWeb.Plugins.Auth
                     switch (result)
                     {
                         case eAuthResult.Success:
-                            Module.BindUserContextToRequest(userContext);
+                            AppCore.Get<CoreBind.Providers.SessionBinder>().BindUserContextToRequest(userContext);
                             AppCore.GetUserContextManager().SetCurrentUserContext(userContext);
                             message = "Авторизация прошла успешно!";
                             success = true;
@@ -157,7 +157,7 @@ namespace OnWeb.Plugins.Auth
         public ActionResult logout()
         {
             AppCore.GetUserContextManager().DestroyUserContext(AppCore.GetUserContextManager().GetCurrentUserContext());
-            Module.ClearUserContextFromRequest();
+            AppCore.Get<CoreBind.Providers.SessionBinder>().ClearUserContextFromRequest();
             AppCore.GetUserContextManager().ClearCurrentUserContext();
             return Redirect("/");
         }
@@ -170,7 +170,7 @@ namespace OnWeb.Plugins.Auth
             try
             {
                 AppCore.GetUserContextManager().DestroyUserContext(AppCore.GetUserContextManager().GetCurrentUserContext());
-                Module.ClearUserContextFromRequest();
+                AppCore.Get<CoreBind.Providers.SessionBinder>().ClearUserContextFromRequest();
                 AppCore.GetUserContextManager().ClearCurrentUserContext();
                 success = true;
                 message = "Выход прошел успешно.";

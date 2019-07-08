@@ -76,6 +76,7 @@
     <Compile Include="CoreBind\Modules\CustomReflectedActionDescriptor.cs" />
     <Compile Include="CoreBind\Modules\ModuleControllerUser.cs" />
     <Compile Include="CoreBind\Providers\ResourceProvider.cs" />
+    <Compile Include="CoreBind\Providers\SessionBinder.cs" />
     <Compile Include="CoreBind\Routing\ControllerTypeAdmin.cs" />
     <Compile Include="CoreBind\Modules\ModuleControllerAdmin.cs" />
     <Compile Include="CoreBind\Routing\ModuleControllerDefaultAttribute.cs" />
@@ -105,7 +106,7 @@
     <Compile Include="CoreBind\Razor\RazorHostFactory.cs" />
     <Compile Include="CoreBind\Razor\WebStartup.cs" />
     <Compile Include="Plugins\Auth\Module2.cs" />
-    <Compile Include="Plugins\Auth\Startup.cs" />
+    <Compile Include="Startup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CoreBind\Providers\EmbeddedResourceProvider.cs" />
     <Compile Include="CoreBind\Providers\TraceControllerProvider.cs" />

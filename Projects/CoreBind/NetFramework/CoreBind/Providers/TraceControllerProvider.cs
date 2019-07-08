@@ -48,11 +48,11 @@ namespace OnWeb.CoreBind.Providers
             var context = AppCore.GetUserContextManager().GetCurrentUserContext();
             if (context.IsGuest)
             {
-                var moduleAuth = AppCore.Get<Plugins.Auth.ModuleAuth>();
-                context = moduleAuth.RestoreUserContextFromRequest();
+                var sessionBinder = AppCore.Get<SessionBinder>();
+                context = sessionBinder.RestoreUserContextFromRequest();
                 if (context != null && !context.IsGuest)
                 {
-                    moduleAuth.RegisterEvent(EventType.CriticalError, "Нарушение процесса авторизации", null);
+                    AppCore.Get<Plugins.Auth.ModuleAuth>()?.RegisterEvent(EventType.CriticalError, "Нарушение процесса авторизации", null);
                     AppCore.GetUserContextManager().SetCurrentUserContext(context);
                 }
             }
