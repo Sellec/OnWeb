@@ -31,14 +31,16 @@ namespace OnWeb.Core.ServiceMonitor
 
         #region CoreComponentBase
         /// <summary>
+        /// См. <see cref="CoreComponentBase{TAppCore}.OnStart"/>.
         /// </summary>
-        protected sealed override void OnStart()
+        protected override void OnStart()
         {
         }
 
         /// <summary>
+        /// См. <see cref="CoreComponentBase{TAppCore}.OnStop"/>.
         /// </summary>
-        protected sealed override void OnStop()
+        protected override void OnStop()
         {
         }
         #endregion
