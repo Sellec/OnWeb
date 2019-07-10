@@ -32,10 +32,12 @@ namespace OnWeb.Plugins.Materials
             {
                 var news = (from p in db.News
                             orderby p.name ascending
+                            where p.status
                             select p).ToList();
 
                 var pages = (from p in db.Pages
                              orderby p.name ascending
+                             where p.status > 0
                              select p).ToList();
 
                 var items = news.OfType<ItemBase>().Union(pages.OfType<ItemBase>());
