@@ -1,5 +1,6 @@
+@using Materials
 @model Materials.DB.News
-@{ 
+@{
     Layout = "baseMaterial.cshtml";
     Title = Model.name;
 }
@@ -55,12 +56,12 @@
             </div>
             <div class="new-left-bar">
                 @*
-                <div class="search-news">
-                    <form name="form" action="#" method="POST">
-                        <input type="text" name="search" value="" placeholder="Поиск" class="search-news__input">
-                        <button type="submit" name="submit" class="search-news__submit"></button>
-                    </form>
-                </div>
+                    <div class="search-news">
+                        <form name="form" action="#" method="POST">
+                            <input type="text" name="search" value="" placeholder="Поиск" class="search-news__input">
+                            <button type="submit" name="submit" class="search-news__submit"></button>
+                        </form>
+                    </div>
                 *@
                 <div class="category-nav">
                     <h3 class="category-nav__title">Меню по разделам</h3>
@@ -73,7 +74,7 @@
             </div>
 
             @{
-                var module = AppCore.GetModulesManager().GetModule<Realty.Module>();
+                var module = AppCore.GetModulesManager().GetModule<Realty.ModuleRealty>();
                 var news = module?.GetNewsList(5) ?? new List<Materials.DB.News>();
                 var iteration = 1;
 
@@ -103,8 +104,7 @@
 
 @section scripts {
     <script type="text/javascript">
-        $(function ()
-        {
+        $(function () {
         });
     </script>
 }
