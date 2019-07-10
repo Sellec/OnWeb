@@ -20,7 +20,10 @@ namespace OnWeb.Plugins.Materials
 
         public override IReadOnlyDictionary<ItemBase, Uri> GenerateLinks(IEnumerable<ItemBase> items)
         {
-            return items.Where(x => x is DB.News).ToDictionary(x => x, x => new Uri("/" + UrlName + "/news/" + x.ID, UriKind.Relative));
+            var news = items.Where(x => x is DB.News).ToDictionary(x => x, x => new Uri("/" + UrlName + "/news/" + x.ID, UriKind.Relative));
+            var pages = items.Where(x => x is DB.Page).ToDictionary(x => x, x => new Uri("/" + UrlName + "/page/" + x.ID, UriKind.Relative));
+
+            return news.Union(pages).ToDictionary(x => x.Key, x => x.Value);
         }
 
         //public override IList<AdminMenuItem> getAdminMenuItems()
