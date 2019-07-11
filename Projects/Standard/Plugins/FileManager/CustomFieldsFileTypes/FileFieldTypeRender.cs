@@ -11,7 +11,7 @@ namespace OnWeb.Plugins.FileManager.CustomFieldsFileTypes
     using Core.ModuleExtensions.CustomFields.Field;
     using CoreBind.Razor;
 
-    class FileFieldTypeRender : CoreComponentBase<ApplicationCore>, ICustomFieldRender<FileFieldType>
+    class FileFieldTypeRender : CoreComponentBase<WebApplicationCore>, ICustomFieldRender<FileFieldType>
     {
         MvcHtmlString ICustomFieldRender<FileFieldType>.RenderHtmlEditor<TModel>(HtmlHelper<TModel> html, IField field, IDictionary<string, object> htmlAttributes, params object[] additionalParameters)
         {

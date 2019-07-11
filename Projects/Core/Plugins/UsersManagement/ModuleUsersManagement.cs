@@ -1,14 +1,13 @@
-﻿using System;
+﻿using OnUtils.Application;
+using OnUtils.Application.DB;
+using OnUtils.Application.Journaling;
+using OnUtils.Application.Modules;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using OnUtils.Application.Modules;
 
 namespace OnWeb.Plugins.UsersManagement
 {
-    using Core.Modules;
-    using Core.DB;
-    using Core.Journaling;
-
     /// <summary>
     /// Модуль управления данными пользователей и системой доступа.
     /// </summary>
@@ -86,7 +85,7 @@ namespace OnWeb.Plugins.UsersManagement
                     var query = from permission in db.RolePermission
                                 join role in db.Role on permission.IdRole equals role.IdRole
                                 join userRole in db.RoleUser on role.IdRole equals userRole.IdRole
-                                join user in db.Users on userRole.IdUser equals user.id
+                                join user in db.Users on userRole.IdUser equals user.IdUser
                                 where permission.Permission == permissionKey && permission.IdModule == module.IdModule
                                 select user;
 

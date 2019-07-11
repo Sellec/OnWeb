@@ -101,7 +101,7 @@ namespace OnWeb.CoreBind.Razor
         /// <summary>
         /// Предоставляет доступ к настройкам сайта.
         /// </summary>
-        public Core.Configuration.CoreConfiguration Config
+        public Core.Configuration.WebCoreConfiguration Config
         {
             get => AppCore.Config;
         }
@@ -109,7 +109,7 @@ namespace OnWeb.CoreBind.Razor
         /// <summary>
         /// Возвращает объект ядра, в контексте которого запущено приложение.
         /// </summary>
-        public ApplicationCore AppCore
+        public WebApplicationCore AppCore
         {
             get => Module.AppCore;
         }

@@ -7,7 +7,7 @@ namespace OnWeb.Plugins.EditableMenu
 
     class Startup : IConfigureBindings
     {
-        void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
+        void IConfigureBindings<WebApplicationCore>.ConfigureBindings(IBindingsCollection<WebApplicationCore> bindingsCollection)
         {
             bindingsCollection.SetSingleton<Module>();
             bindingsCollection.AddTransient<IModuleController<Module>, ModuleController>();

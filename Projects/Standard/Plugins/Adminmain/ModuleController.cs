@@ -50,7 +50,7 @@ namespace OnWeb.Plugins.Adminmain
             {
                 if (ModelState.IsValid)
                 {
-                    var cfg = AppCore.GetModulesManager().GetModule<CoreModule.CoreModule>().GetConfigurationManipulator().GetEditable<CoreConfiguration>();
+                    var cfg = AppCore.GetModulesManager().GetModule<WebCoreModule.WebCoreModule>().GetConfigurationManipulator().GetEditable<WebCoreConfiguration>();
 
                     cfg.IdModuleDefault = model.Configuration.IdModuleDefault;
                     cfg.DeveloperEmail = model.Configuration.DeveloperEmail;
@@ -67,7 +67,7 @@ namespace OnWeb.Plugins.Adminmain
 
                     cfg.userAuthorizeAllowed = model.Configuration.userAuthorizeAllowed;
 
-                    var applyResult = AppCore.GetModulesManager().GetModule<CoreModule.CoreModule>().GetConfigurationManipulator().ApplyConfiguration(cfg);
+                    var applyResult = AppCore.GetModulesManager().GetModule<WebCoreModule.WebCoreModule>().GetConfigurationManipulator().ApplyConfiguration(cfg);
                     switch (applyResult.Item1)
                     {
                         case ApplyConfigurationResult.PermissionDenied:

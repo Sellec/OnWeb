@@ -1,4 +1,6 @@
 ﻿using OnUtils;
+using OnUtils.Application;
+using OnUtils.Application.Journaling;
 using OnUtils.Architecture.AppCore;
 using OnUtils.Data;
 using System;
@@ -10,7 +12,7 @@ namespace OnWeb.Core.Users
 {
     using ExecutionResultEntities = ExecutionResult<IEnumerable<UserEntity>>;
 
-    class EntitiesManager : CoreComponentBase<ApplicationCore>, IEntitiesManager, IUnitOfWorkAccessor<UnitOfWork<DB.UserEntity>>
+    class EntitiesManager : CoreComponentBase<WebApplicationCore>, IEntitiesManager, IUnitOfWorkAccessor<UnitOfWork<DB.UserEntity>>
     {
         private const string SessionEntityKey = "UserEntity_";
 
@@ -32,7 +34,7 @@ namespace OnWeb.Core.Users
                 }
                 catch (Exception ex)
                 {
-                    this.RegisterEvent(Journaling.EventType.Error, "Ошибка загрузки списка типов пользовательских сущностей.", "Первичная загрузка.", null, ex);
+                    this.RegisterEvent(EventType.Error, "Ошибка загрузки списка типов пользовательских сущностей.", "Первичная загрузка.", null, ex);
                     return new List<Type>();
                 }
             });
@@ -44,7 +46,7 @@ namespace OnWeb.Core.Users
                 }
                 catch (Exception ex)
                 {
-                    this.RegisterEvent(Journaling.EventType.Error, "Ошибка загрузки списка типов объектов пользователя", $"Из сборки '{e.LoadedAssembly.FullName}'.", null, ex);
+                    this.RegisterEvent(EventType.Error, "Ошибка загрузки списка типов объектов пользователя", $"Из сборки '{e.LoadedAssembly.FullName}'.", null, ex);
                 }
             };
         }
@@ -70,7 +72,7 @@ namespace OnWeb.Core.Users
             {
                 _cachedErrors.GetOrAddWithExpiration("entity_type_unknown_" + item.EntityType, (k) =>
                 {
-                    this.RegisterEvent(Journaling.EventType.Error, "Неизвестный тип объекта пользователя", $"Тип сущности: {item.EntityType}.");
+                    this.RegisterEvent(EventType.Error, "Неизвестный тип объекта пользователя", $"Тип сущности: {item.EntityType}.");
                     return DateTime.Now;
                 }, TimeSpan.FromHours(1));
                 return null;
@@ -86,7 +88,7 @@ namespace OnWeb.Core.Users
                 }
                 else
                 {
-                    this.RegisterEvent(Journaling.EventType.Error, "Ошибка при инициализации объекта пользователя", $"Тип объекта: {item.EntityType}.\r\nОшибка: {initResult.Message}.");
+                    this.RegisterEvent(EventType.Error, "Ошибка при инициализации объекта пользователя", $"Тип объекта: {item.EntityType}.\r\nОшибка: {initResult.Message}.");
                     return null;
                 }
             }
@@ -116,7 +118,7 @@ namespace OnWeb.Core.Users
             }
             catch (Exception ex)
             {
-                this.RegisterEvent(Journaling.EventType.Error, "Ошибка во время получения списка объектов пользователя по типу", $"Тип объекта: {entityType}.", null, ex);
+                this.RegisterEvent(EventType.Error, "Ошибка во время получения списка объектов пользователя по типу", $"Тип объекта: {entityType}.", null, ex);
                 return new ExecutionResultEntities(false, "Ошибка во время получения списка объектов пользователя");
             }
         }
@@ -149,7 +151,7 @@ namespace OnWeb.Core.Users
             }
             catch (Exception ex)
             {
-                this.RegisterEvent(Journaling.EventType.Error, "Ошибка во время получения списка объектов пользователя по пользователю/тегу", $"ID пользователя: {idUser}.\r\nТег: {entityTag}.", null, ex);
+                this.RegisterEvent(EventType.Error, "Ошибка во время получения списка объектов пользователя по пользователю/тегу", $"ID пользователя: {idUser}.\r\nТег: {entityTag}.", null, ex);
                 return new ExecutionResultEntities(false, "Ошибка во время получения списка объектов пользователя");
             }
         }

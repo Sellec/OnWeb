@@ -7,17 +7,17 @@ namespace OnWeb.Plugins.Adminmain.Model
 {
     public class AdminMainModelInfoPage
     {
-        public AdminMainModelInfoPage() : this(new Core.Configuration.CoreConfiguration())
+        public AdminMainModelInfoPage() : this(new Core.Configuration.WebCoreConfiguration())
         {
         }
 
-        public AdminMainModelInfoPage(Core.Configuration.CoreConfiguration configuration)
+        public AdminMainModelInfoPage(Core.Configuration.WebCoreConfiguration configuration)
         {
             Configuration = configuration;
         }
 
         public List<SelectListItem> ModulesList { get; set; } = new List<SelectListItem>();
 
-        public Core.Configuration.CoreConfiguration Configuration { get; }
+        public Core.Configuration.WebCoreConfiguration Configuration { get; }
     }
 }

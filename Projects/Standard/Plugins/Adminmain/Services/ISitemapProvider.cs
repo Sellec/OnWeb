@@ -8,7 +8,7 @@ namespace OnWeb.Plugins.Adminmain.Services
     /// <summary>
     /// Представляет провайдер объектов для создания карты сайта.
     /// </summary>
-    public interface ISitemapProvider : IComponentTransient<ApplicationCore>
+    public interface ISitemapProvider : IComponentTransient<WebApplicationCore>
     {
         /// <summary>
         /// Название провайдера объектов.

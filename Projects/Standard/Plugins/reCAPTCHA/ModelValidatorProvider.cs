@@ -8,9 +8,9 @@ namespace OnWeb.Plugins.reCAPTCHA
 {
     class ModelValidatorProvider : System.Web.Mvc.ModelValidatorProvider
     {
-        private readonly ApplicationCore _appCore;
+        private readonly WebApplicationCore _appCore;
 
-        public ModelValidatorProvider(ApplicationCore appCore)
+        public ModelValidatorProvider(WebApplicationCore appCore)
         {
             _appCore = appCore;
         }

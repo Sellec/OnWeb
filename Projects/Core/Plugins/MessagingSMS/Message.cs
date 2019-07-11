@@ -1,7 +1,7 @@
-﻿namespace OnWeb.Plugins.MessagingSMS
-{
-    using Core.Messaging;
+﻿using OnUtils.Application.Messaging;
 
+namespace OnWeb.Plugins.MessagingSMS
+{
     /// <summary>
     /// Описывает СМС-сообщение.
     /// </summary>

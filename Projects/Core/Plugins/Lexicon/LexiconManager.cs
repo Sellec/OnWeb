@@ -1,4 +1,6 @@
-﻿using OnUtils.Architecture.AppCore;
+﻿using OnUtils.Application;
+using OnUtils.Application.Journaling;
+using OnUtils.Architecture.AppCore;
 using OnUtils.Data;
 using System;
 using System.Collections.Generic;
@@ -6,14 +8,12 @@ using System.Linq;
 
 namespace OnWeb.Plugins.Lexicon
 {
-    using Core;
-    using DB = Core.DB;
-    using Journaling = Core.Journaling;
+    using DB;
 
     /// <summary>
     /// Менеджер для работы со словарными формами.
     /// </summary>
-    public class LexiconManager : CoreComponentBase<ApplicationCore>, IComponentSingleton<ApplicationCore>, IUnitOfWorkAccessor<UnitOfWork<DB.WordCase>>
+    public class LexiconManager : CoreComponentBase<WebApplicationCore>, IComponentSingleton<WebApplicationCore>, IUnitOfWorkAccessor<UnitOfWork<WordCase>>
     {
         /// <summary>
         /// Структура для запроса числительной и падежной формы слова.
@@ -28,17 +28,21 @@ namespace OnWeb.Plugins.Lexicon
             /// <summary>
             /// Результат выполнения запроса.
             /// </summary>
-            public DB.WordCase Result { get; internal set; }
+            public WordCase Result { get; internal set; }
         }
 
         private static Lazy<OnlineMorpher> _morpher = new Lazy<OnlineMorpher>();
 
         #region CoreComponentBase
+        /// <summary>
+        /// </summary>
         protected sealed override void OnStart()
         {
-            AppCore.Get<Journaling.JournalingManager>().RegisterJournalTyped<LexiconManager>("Журнал лексического менеджера");
+            AppCore.Get<JournalingManager>().RegisterJournalTyped<LexiconManager>("Журнал лексического менеджера");
         }
 
+        /// <summary>
+        /// </summary>
         protected sealed override void OnStop()
         {
         }
@@ -48,7 +52,7 @@ namespace OnWeb.Plugins.Lexicon
         {
         }
 
-        //private static string GetWordCase(string word, int count, Func<DB.WordCase, string> wordCaseCallback, string wordDefault = null)
+        //private static string GetWordCase(string word, int count, Func<WordCase, string> wordCaseCallback, string wordDefault = null)
         //{
         //    var request = Get(word, count);
         //    if (request != null && request.Result != null)
@@ -153,7 +157,7 @@ namespace OnWeb.Plugins.Lexicon
 
                 using (var db = this.CreateUnitOfWork())
                 {
-                    IQueryable<DB.WordCase> query = null;
+                    IQueryable<WordCase> query = null;
                     foreach (var request in requestList)
                     {
                         var q = db.Repo1.Where(x => x.NominativeSingle == request.Word);
@@ -181,7 +185,7 @@ namespace OnWeb.Plugins.Lexicon
                             var list = numeralTypesList.ToDictionary(x => x, x => _morpher.Value.GetNumeralResult(request.Word, x));
 
                             if (request.Result == null)
-                                request.Result = new DB.WordCase() {
+                                request.Result = new WordCase() {
                                     NominativeSingle = request.Word,
                                     IsNewSingle = true,
                                     IsNewTwo = true,
@@ -192,12 +196,12 @@ namespace OnWeb.Plugins.Lexicon
                             if (list.ContainsKey(eNumeralType.SingleType) && list[eNumeralType.SingleType] != null)
                             {
                                 upsertFields.AddRange(
-                                    new UpsertField(nameof(DB.WordCase.GenitiveSingle)),
-                                    new UpsertField(nameof(DB.WordCase.DativeSingle)),
-                                    new UpsertField(nameof(DB.WordCase.AccusativeSingle)),
-                                    new UpsertField(nameof(DB.WordCase.InstrumentalSingle)),
-                                    new UpsertField(nameof(DB.WordCase.PrepositionalSingle)),
-                                    new UpsertField(nameof(DB.WordCase.IsNewSingle))
+                                    new UpsertField(nameof(WordCase.GenitiveSingle)),
+                                    new UpsertField(nameof(WordCase.DativeSingle)),
+                                    new UpsertField(nameof(WordCase.AccusativeSingle)),
+                                    new UpsertField(nameof(WordCase.InstrumentalSingle)),
+                                    new UpsertField(nameof(WordCase.PrepositionalSingle)),
+                                    new UpsertField(nameof(WordCase.IsNewSingle))
                                 );
 
                                 request.Result.GenitiveSingle = list[eNumeralType.SingleType].Р ?? "";
@@ -213,13 +217,13 @@ namespace OnWeb.Plugins.Lexicon
                             if (list.ContainsKey(eNumeralType.TwoThreeFour) && list[eNumeralType.TwoThreeFour] != null)
                             {
                                 upsertFields.AddRange(
-                                    new UpsertField(nameof(DB.WordCase.NominativeTwo)),
-                                    new UpsertField(nameof(DB.WordCase.GenitiveTwo)),
-                                    new UpsertField(nameof(DB.WordCase.DativeTwo)),
-                                    new UpsertField(nameof(DB.WordCase.AccusativeTwo)),
-                                    new UpsertField(nameof(DB.WordCase.InstrumentalTwo)),
-                                    new UpsertField(nameof(DB.WordCase.PrepositionalTwo)),
-                                    new UpsertField(nameof(DB.WordCase.IsNewTwo))
+                                    new UpsertField(nameof(WordCase.NominativeTwo)),
+                                    new UpsertField(nameof(WordCase.GenitiveTwo)),
+                                    new UpsertField(nameof(WordCase.DativeTwo)),
+                                    new UpsertField(nameof(WordCase.AccusativeTwo)),
+                                    new UpsertField(nameof(WordCase.InstrumentalTwo)),
+                                    new UpsertField(nameof(WordCase.PrepositionalTwo)),
+                                    new UpsertField(nameof(WordCase.IsNewTwo))
                                 );
 
                                 request.Result.NominativeTwo = list[eNumeralType.TwoThreeFour].И ?? "";
@@ -236,13 +240,13 @@ namespace OnWeb.Plugins.Lexicon
                             if (list.ContainsKey(eNumeralType.Multiple) && list[eNumeralType.Multiple] != null)
                             {
                                 upsertFields.AddRange(
-                                    new UpsertField(nameof(DB.WordCase.NominativeMultiple)),
-                                    new UpsertField(nameof(DB.WordCase.GenitiveMultiple)),
-                                    new UpsertField(nameof(DB.WordCase.DativeMultiple)),
-                                    new UpsertField(nameof(DB.WordCase.AccusativeMultiple)),
-                                    new UpsertField(nameof(DB.WordCase.InstrumentalMultiple)),
-                                    new UpsertField(nameof(DB.WordCase.PrepositionalMultiple)),
-                                    new UpsertField(nameof(DB.WordCase.IsNewMultiple))
+                                    new UpsertField(nameof(WordCase.NominativeMultiple)),
+                                    new UpsertField(nameof(WordCase.GenitiveMultiple)),
+                                    new UpsertField(nameof(WordCase.DativeMultiple)),
+                                    new UpsertField(nameof(WordCase.AccusativeMultiple)),
+                                    new UpsertField(nameof(WordCase.InstrumentalMultiple)),
+                                    new UpsertField(nameof(WordCase.PrepositionalMultiple)),
+                                    new UpsertField(nameof(WordCase.IsNewMultiple))
                                 );
 
                                 request.Result.NominativeMultiple = list[eNumeralType.Multiple].И ?? "";
@@ -270,7 +274,7 @@ namespace OnWeb.Plugins.Lexicon
             {
                 // todo setError(ex.Message);
                 this.RegisterEvent(
-                    Journaling.EventType.Error,
+                    EventType.Error,
                     "Get: ошибка получения данных.",
                     null,
                     null,
@@ -308,12 +312,12 @@ namespace OnWeb.Plugins.Lexicon
                             if (list.ContainsKey(eNumeralType.SingleType) && list[eNumeralType.SingleType] != null)
                             {
                                 upsertFields.AddRange(
-                                    new UpsertField(nameof(DB.WordCase.GenitiveSingle)),
-                                    new UpsertField(nameof(DB.WordCase.DativeSingle)),
-                                    new UpsertField(nameof(DB.WordCase.AccusativeSingle)),
-                                    new UpsertField(nameof(DB.WordCase.InstrumentalSingle)),
-                                    new UpsertField(nameof(DB.WordCase.PrepositionalSingle)),
-                                    new UpsertField(nameof(DB.WordCase.IsNewSingle))
+                                    new UpsertField(nameof(WordCase.GenitiveSingle)),
+                                    new UpsertField(nameof(WordCase.DativeSingle)),
+                                    new UpsertField(nameof(WordCase.AccusativeSingle)),
+                                    new UpsertField(nameof(WordCase.InstrumentalSingle)),
+                                    new UpsertField(nameof(WordCase.PrepositionalSingle)),
+                                    new UpsertField(nameof(WordCase.IsNewSingle))
                                 );
 
                                 word.GenitiveSingle = list[eNumeralType.SingleType].Р;
@@ -329,13 +333,13 @@ namespace OnWeb.Plugins.Lexicon
                             if (list.ContainsKey(eNumeralType.TwoThreeFour) && list[eNumeralType.TwoThreeFour] != null)
                             {
                                 upsertFields.AddRange(
-                                    new UpsertField(nameof(DB.WordCase.NominativeTwo)),
-                                    new UpsertField(nameof(DB.WordCase.GenitiveTwo)),
-                                    new UpsertField(nameof(DB.WordCase.DativeTwo)),
-                                    new UpsertField(nameof(DB.WordCase.AccusativeTwo)),
-                                    new UpsertField(nameof(DB.WordCase.InstrumentalTwo)),
-                                    new UpsertField(nameof(DB.WordCase.PrepositionalTwo)),
-                                    new UpsertField(nameof(DB.WordCase.IsNewTwo))
+                                    new UpsertField(nameof(WordCase.NominativeTwo)),
+                                    new UpsertField(nameof(WordCase.GenitiveTwo)),
+                                    new UpsertField(nameof(WordCase.DativeTwo)),
+                                    new UpsertField(nameof(WordCase.AccusativeTwo)),
+                                    new UpsertField(nameof(WordCase.InstrumentalTwo)),
+                                    new UpsertField(nameof(WordCase.PrepositionalTwo)),
+                                    new UpsertField(nameof(WordCase.IsNewTwo))
                                 );
 
                                 word.NominativeTwo = list[eNumeralType.TwoThreeFour].И;
@@ -352,12 +356,12 @@ namespace OnWeb.Plugins.Lexicon
                             if (list.ContainsKey(eNumeralType.Multiple) && list[eNumeralType.Multiple] != null)
                             {
                                 upsertFields.AddRange(
-                                    new UpsertField(nameof(DB.WordCase.NominativeMultiple)),
-                                    new UpsertField(nameof(DB.WordCase.GenitiveMultiple)),
-                                    new UpsertField(nameof(DB.WordCase.DativeMultiple)),
-                                    new UpsertField(nameof(DB.WordCase.AccusativeMultiple)),
-                                    new UpsertField(nameof(DB.WordCase.InstrumentalMultiple)),
-                                    new UpsertField(nameof(DB.WordCase.IsNewMultiple))
+                                    new UpsertField(nameof(WordCase.NominativeMultiple)),
+                                    new UpsertField(nameof(WordCase.GenitiveMultiple)),
+                                    new UpsertField(nameof(WordCase.DativeMultiple)),
+                                    new UpsertField(nameof(WordCase.AccusativeMultiple)),
+                                    new UpsertField(nameof(WordCase.InstrumentalMultiple)),
+                                    new UpsertField(nameof(WordCase.IsNewMultiple))
                                 );
 
                                 word.NominativeMultiple = list[eNumeralType.Multiple].И;
@@ -379,7 +383,7 @@ namespace OnWeb.Plugins.Lexicon
                         catch (Exception ex)
                         {
                             this.RegisterEvent(
-                                        Journaling.EventType.Error,
+                                        EventType.Error,
                                         $"Get: ошибка получения данных для слова '{word.NominativeSingle}'.",
                                         null,
                                         null,
@@ -395,7 +399,7 @@ namespace OnWeb.Plugins.Lexicon
             {
                 // todo setError(ex.Message);
                 this.RegisterEvent(
-                            Journaling.EventType.Error,
+                            EventType.Error,
                             "Get: ошибка получения данных.",
                             null,
                             null,

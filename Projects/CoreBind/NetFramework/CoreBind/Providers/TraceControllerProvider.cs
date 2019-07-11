@@ -17,7 +17,7 @@ namespace OnWeb.CoreBind.Providers
     using Core.Modules;
     using Routing;
 
-    class TraceControllerProvider : CoreComponentBase<ApplicationCore>, IComponentSingleton<ApplicationCore>, IUnitOfWorkAccessor<Core.DB.CoreContext>, IControllerFactory
+    class TraceControllerProvider : CoreComponentBase<WebApplicationCore>, IComponentSingleton<WebApplicationCore>, IUnitOfWorkAccessor<Core.DB.CoreContext>, IControllerFactory
     {
         private readonly IControllerFactory _controllerFactoryOld = null;
 
@@ -91,11 +91,11 @@ namespace OnWeb.CoreBind.Providers
                  * Ищем модуль, к которому обращаются запросом.
                  * */
                 if (int.TryParse(moduleName, out int moduleId) && moduleId.ToString() == moduleName)
-                    module = AppCore.Get<ModulesManager<ApplicationCore>>().GetModule(moduleId);
+                    module = AppCore.Get<ModulesManager<WebApplicationCore>>().GetModule(moduleId);
                 else if (Guid.TryParse(moduleName, out Guid uniqueName) && uniqueName.ToString() == moduleName)
-                    module = AppCore.Get<ModulesManager<ApplicationCore>>().GetModule(uniqueName);
+                    module = AppCore.Get<ModulesManager<WebApplicationCore>>().GetModule(uniqueName);
                 else
-                    module = AppCore.Get<ModulesManager<ApplicationCore>>().GetModule(moduleName);
+                    module = AppCore.Get<ModulesManager<WebApplicationCore>>().GetModule(moduleName);
 
                 if (module == null) throw new Core.Exceptions.ErrorCodeException(HttpStatusCode.NotFound, $"Адрес '{moduleName}' не найден.");
 

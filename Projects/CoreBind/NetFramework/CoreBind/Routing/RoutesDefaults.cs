@@ -6,7 +6,7 @@ namespace OnWeb.CoreBind.Routing
     {
         class RoutesDefaults
         {
-            public RoutesDefaults(ApplicationCore core)
+            public RoutesDefaults(WebApplicationCore core)
             {
                 var moduleID = core.Config.IdModuleDefault;
                 var module = core.GetModulesManager().GetModule(moduleID) ?? core.GetModulesManager().GetModule<Plugins.Default.ModuleDefault>();
@@ -21,7 +21,7 @@ namespace OnWeb.CoreBind.Routing
 
             public string Action
             {
-                get => nameof(Modules.ModuleControllerUser<Plugins.CoreModule.CoreModule>.Index);
+                get => nameof(Modules.ModuleControllerUser<Plugins.WebCoreModule.WebCoreModule>.Index);
             }
 
             public System.Web.Mvc.UrlParameter Url
@@ -32,7 +32,7 @@ namespace OnWeb.CoreBind.Routing
 
         class RoutesDefaultsWithLanguage : RoutesDefaults
         {
-            public RoutesDefaultsWithLanguage(ApplicationCore core) : base(core)
+            public RoutesDefaultsWithLanguage(WebApplicationCore core) : base(core)
             {
                 Language = core.Get<Core.Languages.Manager>().GetUserLanguage().ShortName;
             }
@@ -43,10 +43,10 @@ namespace OnWeb.CoreBind.Routing
             }
         }
 
-        private readonly ApplicationCore _core = null;
+        private readonly WebApplicationCore _core = null;
         private readonly bool _defaultsWithLanguage;
 
-        public RouteWithDefaults(ApplicationCore core, string url, bool defaultsWithLanguage, RouteValueDictionary constraints, RouteValueDictionary dataTokens, IRouteHandler routeHandler)
+        public RouteWithDefaults(WebApplicationCore core, string url, bool defaultsWithLanguage, RouteValueDictionary constraints, RouteValueDictionary dataTokens, IRouteHandler routeHandler)
             : base(url, new RouteValueDictionary(defaultsWithLanguage ? new RoutesDefaultsWithLanguage(core) : new RoutesDefaults(core)), constraints, dataTokens, routeHandler)
         {
             _core = core;

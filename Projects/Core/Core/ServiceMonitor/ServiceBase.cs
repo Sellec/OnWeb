@@ -5,7 +5,7 @@ using System.Text;
 namespace OnWeb.Core.ServiceMonitor
 {
 #pragma warning disable CS1591 // todo внести комментарии.
-    public abstract class ServiceBase : CoreComponentBase<ApplicationCore>, IMonitoredService
+    public abstract class ServiceBase : CoreComponentBase<WebApplicationCore>, IMonitoredService
     {
         private Guid _serviceID = Guid.Empty;
         private string _serviceName = string.Empty;

@@ -1,4 +1,5 @@
 using OnUtils.Data;
+using OnUtils.Application.DB;
 
 namespace OnWeb.Core.DB
 {
@@ -31,7 +32,5 @@ namespace OnWeb.Core.DB
 
         public IRepository<Routing> Routing { get; }
         public IRepository<RoutingType> RoutingType { get; }
-
-        public IRepository<WordCase> WordCase { get; }
     }
 }

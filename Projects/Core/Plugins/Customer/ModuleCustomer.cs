@@ -1,13 +1,14 @@
-﻿using OnUtils.Data;
+﻿using OnUtils.Application.DB;
+using OnUtils.Application.Items;
+using OnUtils.Application.Modules;
+using OnUtils.Application.Modules.Extensions.CustomFields;
+using OnUtils.Application.Modules.Extensions.ExtensionUrl;
+using OnUtils.Data;
 using System;
 using System.Collections.Generic;
 
 namespace OnWeb.Plugins.Customer
 {
-    using Core.DB;
-    using Core.Items;
-    using Core.Modules;
-
     /// <summary>
     /// Модуль для управления пользователями и личным кабинетом.
     /// </summary>
@@ -26,8 +27,8 @@ namespace OnWeb.Plugins.Customer
             base.InitModuleCustom();
 
             //registerExtensionNeeded<Core.ModuleExtensions.CustomFields.ExtensionCustomsFields>();
-            RegisterExtension<Core.ModuleExtensions.CustomFields.ExtensionCustomsFieldsBase>();
-            RegisterExtension<Core.ModuleExtensions.ExtensionUrl.ExtensionUrl>();
+            RegisterExtension<ExtensionCustomsFieldsBase>();
+            RegisterExtension<ExtensionUrl>();
 
             RegisterPermission(PERM_MANAGEUSERS, "Управление пользователями");
             RegisterPermission(PERM_MANAGEROLES, "Управление ролями");
@@ -44,7 +45,8 @@ namespace OnWeb.Plugins.Customer
         /// </summary>
         public sealed override Uri GenerateLink(ItemBase item)
         {
-            if (item is User) return new Uri(AppCore.ServerUrl, $"{UrlName}/user/{item.ID}");
+            if (item is User) return new Uri(((WebApplicationCore)AppCore).ServerUrl, $"{UrlName}/user/{item.ID}");
+            if (item is Core.DB.User) throw new NotImplementedException();
             //else if (item is Register.Model.Register) return new Uri(ApplicationCore.Instance.ServerUrl, $"{Name}/user/{item.ID}");
             //return base.GenerateLink(item);
 

@@ -18,7 +18,7 @@ namespace OnWeb.CoreBind.Routing
     /// <summary>
     /// Предоставляет функции для работы с маршрутизацией.
     /// </summary>
-    public class RoutingManager : CoreComponentBase<ApplicationCore>, IComponentSingleton<ApplicationCore>, IAutoStart, IMonitoredService
+    public class RoutingManager : CoreComponentBase<WebApplicationCore>, IComponentSingleton<WebApplicationCore>, IAutoStart, IMonitoredService
     {
         private Guid _serviceID = StringsHelper.GenerateGuid(nameof(RoutingManager));
 
@@ -96,7 +96,7 @@ namespace OnWeb.CoreBind.Routing
                     return $"{value}";
                 }).ToList();
 
-                var defaultMethod = methodCall.Method.DeclaringType.GetMethod(nameof(ModuleControllerUser<Plugins.CoreModule.CoreModule>.Index), BindingFlags.Public | BindingFlags.Instance, null, new Type[] { }, null);
+                var defaultMethod = methodCall.Method.DeclaringType.GetMethod(nameof(ModuleControllerUser<Plugins.WebCoreModule.WebCoreModule>.Index), BindingFlags.Public | BindingFlags.Instance, null, new Type[] { }, null);
                 var isDefaultMethod = defaultMethod == methodCall.Method;
                 if (isDefaultMethod && arguments.Count == 0) methodName = null;
 

@@ -1,27 +1,26 @@
 ﻿using OnUtils.Application.Users;
-using OnUtils.Architecture.AppCore;
 using System;
 
 namespace OnWeb.Core.Users
 {
-    class UserContext : CoreComponentBase<ApplicationCore>, IUserContext
+    class UserContext : CoreComponentBase, IUserContext
     {
         private Guid _userID = Guid.Empty;
         private bool _isAuthorized;
         private DB.User _data;
-        private PermissionsList _permissions;
+        private UserPermissions _permissions;
 
         public UserContext(DB.User data, bool isAuthorized)
         {
             _userID = GuidIdentifierGenerator.GenerateGuid(GuidType.User, data.id);
             _data = data;
             _isAuthorized = isAuthorized;
-            _permissions = new PermissionsList();
+            _permissions = new UserPermissions();
         }
 
-        public void ApplyPermissions(PermissionsList permissions = null)
+        public void ApplyPermissions(UserPermissions permissions = null)
         {
-            _permissions = permissions ?? new PermissionsList();
+            _permissions = permissions ?? new UserPermissions();
         }
 
         #region CoreComponentBase
@@ -60,7 +59,7 @@ namespace OnWeb.Core.Users
             get => _isAuthorized && _data.Superuser != 0;
         }
 
-        PermissionsList IUserContext.Permissions
+        UserPermissions IUserContext.Permissions
         {
             get => _permissions;
         }

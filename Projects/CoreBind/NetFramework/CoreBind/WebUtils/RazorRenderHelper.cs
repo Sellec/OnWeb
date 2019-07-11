@@ -52,7 +52,7 @@ namespace OnWeb.Core.WebUtils
                     routeData.Values["controller"] = "fake";
 
                     var controller = Activator.CreateInstance(typeof(FakeController<>).MakeGenericType(module.GetType())) as ModuleControllerBase;
-                    var method = controller.GetType().GetMethod(nameof(ModuleControllerUser<Plugins.CoreModule.CoreModule>.InitController), BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                    var method = controller.GetType().GetMethod(nameof(ModuleControllerUser<Plugins.WebCoreModule.WebCoreModule>.InitController), BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
                     method.Invoke(controller, new object[] { module });
 
                     var controllerContext = new ControllerContext(new RequestContext(contextWrapper, routeData), controller as Controller);

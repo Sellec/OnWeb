@@ -10,7 +10,7 @@ namespace OnWeb.Core.Users
     /// Представляет менеджер, управляющий объектами пользователя. 
     /// Используется, например, в случаях, когда необходимо привязать к учетной записи пользователя какой-либо объект (ссылка на избранное, текстовый документ и т. д.).
     /// </summary>
-    public interface IEntitiesManager : IComponentSingleton<ApplicationCore>
+    public interface IEntitiesManager : IComponentSingleton<WebApplicationCore>
     {
         /// <summary>
         /// Возвращает список объектов пользователя с типом <paramref name="entityType"/>.

@@ -54,13 +54,13 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="OnUtils.Application">
-      <Version>0.1.1.6</Version>
+      <Version>0.1.2</Version>
     </PackageReference>
     <PackageReference Include="OnUtils">
-      <Version>0.1.1.12</Version>
+      <Version>0.1.2</Version>
     </PackageReference>
     <PackageReference Include="OnUtils.Data.EntityFramework">
-      <Version>0.1.1.2</Version>
+      <Version>0.1.2</Version>
     </PackageReference>
     <PackageReference Include="System.ComponentModel.Annotations">
       <Version>4.5.0</Version>

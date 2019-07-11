@@ -7,13 +7,13 @@ namespace OnWeb.Plugins.Customer
 
     class Startup : IConfigureBindings, IExecuteStart
     {
-        void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
+        void IConfigureBindings<WebApplicationCore>.ConfigureBindings(IBindingsCollection<WebApplicationCore> bindingsCollection)
         {
             bindingsCollection.SetSingleton<ModuleCustomer, ModuleStandard>();
             bindingsCollection.SetTransient<IModuleController<ModuleCustomer>>(typeof(ModuleControllerCustomer), typeof(ModuleControllerAdminCustomer));
         }
 
-        void IExecuteStart<ApplicationCore>.ExecuteStart(ApplicationCore core)
+        void IExecuteStart<WebApplicationCore>.ExecuteStart(WebApplicationCore core)
         {
             core.Get<ModuleCustomer>().RegisterExtension<Core.ModuleExtensions.CustomFields.ExtensionCustomsFieldsAdmin>();
         }

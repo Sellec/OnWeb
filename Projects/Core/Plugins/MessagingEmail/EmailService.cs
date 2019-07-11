@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OnUtils.Application.Messaging;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -36,7 +37,7 @@ namespace OnWeb.Plugins.MessagingEmail
 
         void IEmailService.SendMailToDeveloper(string subject, string body, List<int> files)
         {
-            ((IEmailService)this).SendMail("Почтовый робот сайта", GetNoReplyAddress(), AppCore.Config.DeveloperEmail, AppCore.Config.DeveloperEmail, null, null, subject, body, files);
+            ((IEmailService)this).SendMail("Почтовый робот сайта", GetNoReplyAddress(), AppCore.GetWebConfig().DeveloperEmail, AppCore.GetWebConfig().DeveloperEmail, null, null, subject, body, files);
         }
 
         /**
@@ -64,11 +65,11 @@ namespace OnWeb.Plugins.MessagingEmail
 
         private string GetNoReplyAddress()
         {
-            var address = AppCore.Config.ReturnEmail;
+            var address = AppCore.GetWebConfig().ReturnEmail;
             if (!string.IsNullOrEmpty(address)) return address;
 
             address = "no-reply@localhost";
-            if (AppCore.ServerUrl != null) address = "no-reply@" + AppCore.ServerUrl.Host;
+            if (((WebApplicationCore)AppCore).ServerUrl != null) address = "no-reply@" + ((WebApplicationCore)AppCore).ServerUrl.Host;
 
             return address;
         }
@@ -79,7 +80,7 @@ namespace OnWeb.Plugins.MessagingEmail
                 "Почтовый робот сайта",
                 GetNoReplyAddress(),
                 "admin",
-                AppCore.Config.CriticalMessagesEmail,
+                AppCore.GetWebConfig().CriticalMessagesEmail,
                 null, null,
                 subject,
                 body

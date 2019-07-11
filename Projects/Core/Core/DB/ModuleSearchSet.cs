@@ -1,3 +1,5 @@
+using OnUtils.Application.Items;
+
 namespace OnWeb.Core.DB
 {
     using System.ComponentModel.DataAnnotations;
@@ -5,7 +7,7 @@ namespace OnWeb.Core.DB
 
 #pragma warning disable CS1591 // todo внести комментарии.
     [Table("ModuleSearchSet")]
-    public partial class ModuleSearchSet : Items.ItemBase
+    public partial class ModuleSearchSet : ItemBase
     {
         [NotMapped]
         private int _idModule = 0;
@@ -31,7 +33,7 @@ namespace OnWeb.Core.DB
             set
             {
                 _idModule = value;
-                Owner = DeprecatedSingletonInstances.ModulesManager.GetModule(value);
+                Owner = OnUtils.Application.DeprecatedSingletonInstances.ModulesManager.GetModule(value);
             }
         }
 

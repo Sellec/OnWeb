@@ -1,4 +1,8 @@
 ﻿using OnUtils;
+using OnUtils.Application;
+using OnUtils.Application.DB;
+using OnUtils.Application.Journaling;
+using OnUtils.Application.Modules;
 using OnUtils.Architecture.AppCore;
 using OnUtils.Data;
 using System;
@@ -7,14 +11,14 @@ using System.Linq;
 
 namespace OnWeb.Core.Routing
 {
-    using ExecutionResultUrlList = ExecutionResult<Dictionary<int, string>>;
     using ExecutionResultUrl = ExecutionResult<string>;
+    using ExecutionResultUrlList = ExecutionResult<Dictionary<int, string>>;
 
     /// <summary>
     /// Менеджер маршрутизации. Позволяет получать и управлять адресами сущностей.
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Compiler", "CS0618")]
-    public class UrlManager : CoreComponentBase<ApplicationCore>, IComponentSingleton<ApplicationCore>, IUnitOfWorkAccessor<UnitOfWork<DB.Routing, DB.ModuleConfig>>, IAutoStart
+    public class UrlManager : CoreComponentBase<WebApplicationCore>, IComponentSingleton<WebApplicationCore>, IUnitOfWorkAccessor<UnitOfWork<DB.Routing, ModuleConfig>>, IAutoStart
     {
         private static Dictionary<string, string> TRANSLATETABLE = new Dictionary<string, string>() {
             { "а", "a" }, { "б", "b" }, { "в", "v" }, { "г", "g" }, { "д", "d" }, { "е", "e" }, { "ж", "g" }, { "з", "z" },
@@ -84,7 +88,7 @@ namespace OnWeb.Core.Routing
         protected sealed override void OnStart()
         {
             DeprecatedSingletonInstances.UrlManager = this;
-            AppCore.Get<Journaling.JournalingManager>().RegisterJournalTyped<UrlManager>("Журнал менеджера адресов");
+            AppCore.Get<JournalingManager>().RegisterJournalTyped<UrlManager>("Журнал менеджера адресов");
         }
 
         /// <summary>
@@ -110,7 +114,7 @@ namespace OnWeb.Core.Routing
         /// <exception cref="ArgumentNullException">Возникает, если <paramref name="action"/> содержит пустое значение (пустая строка или null).</exception>
         /// <exception cref="ArgumentNullException">Возникает, если <paramref name="Url"/> содержит пустое значение (пустая строка или null).</exception>
         [ApiReversible]
-        public ExecutionResult Register(Modules.ModuleCore module, int IdItem, int IdItemType, string action, IEnumerable<ActionArgument> Arguments, string Url, string UniqueKey = null)
+        public ExecutionResult Register(ModuleCore module, int IdItem, int IdItemType, string action, IEnumerable<ActionArgument> Arguments, string Url, string UniqueKey = null)
         {
             return Register(module, new RegisterItem()
             {
@@ -134,7 +138,7 @@ namespace OnWeb.Core.Routing
         /// <exception cref="ArgumentNullException">Возникает, если в одном из элементов последовательности <paramref name="items"/> свойство <see cref="RegisterItem.Url"/> содержит пустое значение (пустая строка или null).</exception>
         /// <exception cref="ArgumentException">Возникает, если комбинация {IdItem/IdItemType/action/UniqueKey} в последовательности повторяется несколько раз.</exception>
         [ApiReversible]
-        public ExecutionResult Register(Modules.ModuleCore module, IEnumerable<RegisterItem> items)
+        public ExecutionResult Register(ModuleCore module, IEnumerable<RegisterItem> items)
         {
             try
             {
@@ -211,7 +215,7 @@ namespace OnWeb.Core.Routing
                 else
                 {
                     this.RegisterEvent(
-                        Journaling.EventType.Error,
+                        EventType.Error,
                         "register: ошибка при регистрации адресов.",
                         $"Модуль: {(module == null ? "не указан" : module.ID.ToString())}\r\n" +
                         (itemsToRegister.Count() > 1 ? "Часть адресов не была зарегистрирована. Операция отменена." : $"Не удалось зарегистрировать адрес '{items.First().Url}'")
@@ -225,7 +229,7 @@ namespace OnWeb.Core.Routing
             catch (Exception ex)
             {
                 this.RegisterEvent(
-                    Journaling.EventType.Error,
+                    EventType.Error,
                     "register: ошибка при регистрации адресов.",
                     $"Модуль: {(module == null ? "не указан" : module.ID.ToString())}",
                     exception: ex
@@ -244,7 +248,7 @@ namespace OnWeb.Core.Routing
         /// <param name="UniqueKey">См. описание <see cref="RegisterItem.UniqueKey"/>.</param>
         /// <returns>Возвращает объект <see cref="ExecutionResult"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. В случае ошибки свойство <see cref="ExecutionResult.Message"/> содержит сообщение об ошибке.</returns>
         [ApiReversible]
-        public ExecutionResult Unregister(Modules.ModuleCore module, string action, int IdItem, int IdItemType = 1, string UniqueKey = null)
+        public ExecutionResult Unregister(ModuleCore module, string action, int IdItem, int IdItemType = 1, string UniqueKey = null)
         {
             try
             {
@@ -264,7 +268,7 @@ namespace OnWeb.Core.Routing
             catch (Exception ex)
             {
                 this.RegisterEvent(
-                    Journaling.EventType.Error,
+                    EventType.Error,
                     "register: ошибка при удалении адреса.",
                     $"Модуль: {(module == null ? "не указан" : module.ID.ToString())}\r\naction='{action}'\r\nIdItem={IdItem}\r\nIdItemType={IdItemType}\r\nUniqueKey='{UniqueKey}'",
                     exception: ex
@@ -289,7 +293,7 @@ namespace OnWeb.Core.Routing
         /// <exception cref="ArgumentNullException">Возникает, если параметр <paramref name="module"/> равен null.</exception>
         /// <exception cref="ArgumentNullException">Возникает, если параметр <paramref name="IdItemList"/> равен null.</exception>
         [ApiReversible]
-        public ExecutionResultUrlList GetUrl(Modules.ModuleCore module, IEnumerable<int> IdItemList, int IdItemType, string UniqueKey = null)
+        public ExecutionResultUrlList GetUrl(ModuleCore module, IEnumerable<int> IdItemList, int IdItemType, string UniqueKey = null)
         {
             try
             {
@@ -318,7 +322,7 @@ namespace OnWeb.Core.Routing
             catch (Exception ex)
             {
                 this.RegisterEvent(
-                    Journaling.EventType.Error,
+                    EventType.Error,
                     "register: ошибка при получении адресов",
                     $"Модуль: {(module == null ? "не указан" : module.ID.ToString())}\r\n" +
                     $"IdItemList='{string.Join(", ", IdItemList)}'\r\nIdItemType={IdItemType}\r\nUniqueKey='{UniqueKey}'",
@@ -342,7 +346,7 @@ namespace OnWeb.Core.Routing
         /// </returns>
         /// <exception cref="ArgumentNullException">Возникает, если параметр <paramref name="module"/> равен null.</exception>
         [ApiReversible]
-        public ExecutionResultUrl GetUrl(Modules.ModuleCore module, int IdItem, int IdItemType, string UniqueKey = null)
+        public ExecutionResultUrl GetUrl(ModuleCore module, int IdItem, int IdItemType, string UniqueKey = null)
         {
             var result = GetUrl(module, new int[] { IdItem }, IdItemType, UniqueKey);
             return new ExecutionResultUrl(result.IsSuccess, result.Message, result.IsSuccess ? result.Result[IdItem] : null);

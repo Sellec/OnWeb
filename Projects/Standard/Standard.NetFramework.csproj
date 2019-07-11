@@ -89,10 +89,10 @@
       <Version>3.2.7</Version>
     </PackageReference>
     <PackageReference Include="OnUtils.Application">
-      <Version>0.1.1.6</Version>
+      <Version>0.1.2</Version>
     </PackageReference>
     <PackageReference Include="OnUtils">
-      <Version>0.1.1.12</Version>
+      <Version>0.1.2</Version>
     </PackageReference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />

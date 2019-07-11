@@ -9,7 +9,7 @@ namespace OnWeb.Plugins.Materials
     using Core.Items;
     using Adminmain.Services;
 
-    class MaterialsSitemapProvider : CoreComponentBase<ApplicationCore>, ISitemapProvider
+    class MaterialsSitemapProvider : CoreComponentBase<WebApplicationCore>, ISitemapProvider
     {
         #region CoreComponentBase
         protected override void OnStart()

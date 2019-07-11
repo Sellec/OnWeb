@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using OnUtils.Application.Messaging;
+using System.Collections.Generic;
 
 namespace OnWeb.Plugins.MessagingEmail
 {
-    using Core.Messaging;
-
     /// <summary>
     /// Описывает сообщение электронной почты.
     /// </summary>

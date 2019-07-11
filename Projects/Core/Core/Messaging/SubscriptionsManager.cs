@@ -1,4 +1,3 @@
-using OnUtils.Architecture.AppCore;
 using OnUtils.Data;
 using System;
 using System.Collections.Generic;
@@ -10,7 +9,7 @@ namespace OnWeb.Core.Messaging
     using Plugins.MessagingEmail;
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Compiler", "CS0618")]
-    class SubscriptionsManager : CoreComponentBase<ApplicationCore>, ISubscriptionsManager, IUnitOfWorkAccessor<CoreContext>
+    class SubscriptionsManager : CoreComponentBase, ISubscriptionsManager, IUnitOfWorkAccessor<CoreContext>
     {
         #region CoreComponentBase
         protected sealed override void OnStart()

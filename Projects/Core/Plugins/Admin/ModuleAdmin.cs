@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using OnUtils.Application.Items;
+using OnUtils.Application.Modules;
 using OnUtils.Application.Users;
+using System;
+using System.Collections.Generic;
 
 namespace OnWeb.Plugins.Admin
 {
-    using Core.Modules;
-    using Core.Items;
-
     /// <summary>
     /// Модуль доступа в панель управления.
     /// </summary>

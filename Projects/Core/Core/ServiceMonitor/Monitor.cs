@@ -1,4 +1,7 @@
-﻿using OnUtils.Architecture.AppCore;
+﻿using OnUtils.Application;
+using OnUtils.Application.Journaling;
+using OnUtils.Application.Journaling.DB;
+using OnUtils.Architecture.AppCore;
 using OnUtils.Data;
 using System;
 using System.Collections.Concurrent;
@@ -7,11 +10,10 @@ using System.Linq;
 
 namespace OnWeb.Core.ServiceMonitor
 {
-    using Journaling.DB;
     /// <summary>
     /// Монитор сервисов. Позволяет вносить и получать информацию о сервисах, о их состоянии, событиях и пр.
     /// </summary>
-    public class Monitor : CoreComponentBase<ApplicationCore>, IComponentSingleton<ApplicationCore>, IUnitOfWorkAccessor<UnitOfWork<Journal>>
+    public class Monitor : CoreComponentBase<WebApplicationCore>, IComponentSingleton<WebApplicationCore>, IUnitOfWorkAccessor<UnitOfWork<Journal>>
     {
         private static ConcurrentDictionary<Guid, JournalName> _servicesJournalsList = new ConcurrentDictionary<Guid, JournalName>();
         private static ConcurrentDictionary<Guid, ServiceInfo> _servicesList = new ConcurrentDictionary<Guid, ServiceInfo>();
@@ -61,11 +63,11 @@ namespace OnWeb.Core.ServiceMonitor
         {
             RegisterServiceStateWithoutJournal(service, serviceStatus, serviceStatusDetailed);
 
-            var eventType = Journaling.EventType.Info;
-            if (serviceStatus == ServiceStatus.RunningIdeal) eventType = Journaling.EventType.Info;
-            else if (serviceStatus == ServiceStatus.RunningWithErrors) eventType = Journaling.EventType.Error;
-            else if (serviceStatus == ServiceStatus.CannotRunBecouseOfErrors) eventType = Journaling.EventType.CriticalError;
-            else if (serviceStatus == ServiceStatus.Shutdown) eventType = Journaling.EventType.Info;
+            var eventType = EventType.Info;
+            if (serviceStatus == ServiceStatus.RunningIdeal) eventType = EventType.Info;
+            else if (serviceStatus == ServiceStatus.RunningWithErrors) eventType = EventType.Error;
+            else if (serviceStatus == ServiceStatus.CannotRunBecouseOfErrors) eventType = EventType.CriticalError;
+            else if (serviceStatus == ServiceStatus.Shutdown) eventType = EventType.Info;
 
             RegisterServiceEvent(service, eventType, serviceStatus.ToStringFriendly(), serviceStatusDetailed, exception);
         }
@@ -74,22 +76,22 @@ namespace OnWeb.Core.ServiceMonitor
         /// Записывает в журнал сервиса событие, связанное с сервисом.
         /// </summary>
         /// <param name="service">Сервис, для которого производится регистрация состояния.</param>
-        /// <param name="eventType">См. <see cref="Journaling.JournalingManager.RegisterEvent"/>.</param>
-        /// <param name="eventInfo">См. <see cref="Journaling.JournalingManager.RegisterEvent"/>.</param>
-        /// <param name="eventInfoDetailed">См. <see cref="Journaling.JournalingManager.RegisterEvent"/>.</param>
-        /// <param name="exception">См. <see cref="Journaling.JournalingManager.RegisterEvent"/>.</param>
-        public void RegisterServiceEvent(IMonitoredService service, Journaling.EventType eventType, string eventInfo, string eventInfoDetailed = null, Exception exception = null)
+        /// <param name="eventType">См. <see cref="JournalingManager.RegisterEvent"/>.</param>
+        /// <param name="eventInfo">См. <see cref="JournalingManager.RegisterEvent"/>.</param>
+        /// <param name="eventInfoDetailed">См. <see cref="JournalingManager.RegisterEvent"/>.</param>
+        /// <param name="exception">См. <see cref="JournalingManager.RegisterEvent"/>.</param>
+        public void RegisterServiceEvent(IMonitoredService service, EventType eventType, string eventInfo, string eventInfoDetailed = null, Exception exception = null)
         {
             var serviceJournal = GetJournalName(service);
-            if (serviceJournal != null) AppCore.Get<Journaling.JournalingManager>().RegisterEvent(serviceJournal.IdJournal, eventType, eventInfo, eventInfoDetailed, null, exception);
+            if (serviceJournal != null) AppCore.Get<JournalingManager>().RegisterEvent(serviceJournal.IdJournal, eventType, eventInfo, eventInfoDetailed, null, exception);
         }
 
         private JournalName GetJournalName(IMonitoredService service)
         {
             return _servicesJournalsList.GetOrAddWithExpiration(service.ServiceID, (key) =>
             {
-                var result = AppCore.Get<Journaling.JournalingManager>().RegisterJournal(1, service.ServiceName, "ServiceMonitor_" + key.ToString());
-                if (!result.IsSuccess) this.RegisterEvent(Journaling.EventType.Error, "Не удалось зарегистрировать журнал мониторинга", $"Журнал для типа '{service.GetType().FullName}'");
+                var result = AppCore.Get<JournalingManager>().RegisterJournal(1, service.ServiceName, "ServiceMonitor_" + key.ToString());
+                if (!result.IsSuccess) this.RegisterEvent(EventType.Error, "Не удалось зарегистрировать журнал мониторинга", $"Журнал для типа '{service.GetType().FullName}'");
                 return result.Result;
             }, TimeSpan.FromMinutes(15));
         }
@@ -145,7 +147,6 @@ namespace OnWeb.Core.ServiceMonitor
 
 namespace System
 {
-    using Journaling = OnWeb.Core.Journaling;
     using ServiceMonitor = OnWeb.Core.ServiceMonitor;
 
     /// <summary>
@@ -168,11 +169,11 @@ namespace System
         /// Записывает в журнал сервиса событие, связанное с сервисом.
         /// </summary>
         /// <param name="service">Сервис, для которого производится регистрация состояния.</param>
-        /// <param name="eventType">См. <see cref="Journaling.JournalingManager.RegisterEvent"/>.</param>
-        /// <param name="eventInfo">См. <see cref="Journaling.JournalingManager.RegisterEvent"/>.</param>
-        /// <param name="eventInfoDetailed">См. <see cref="Journaling.JournalingManager.RegisterEvent"/>.</param>
-        /// <param name="exception">См. <see cref="Journaling.JournalingManager.RegisterEvent"/>.</param>
-        public static void RegisterServiceEvent(this ServiceMonitor.IMonitoredService service, Journaling.EventType eventType, string eventInfo, string eventInfoDetailed = null, Exception exception = null)
+        /// <param name="eventType">См. <see cref="JournalingManager.RegisterEvent"/>.</param>
+        /// <param name="eventInfo">См. <see cref="JournalingManager.RegisterEvent"/>.</param>
+        /// <param name="eventInfoDetailed">См. <see cref="JournalingManager.RegisterEvent"/>.</param>
+        /// <param name="exception">См. <see cref="JournalingManager.RegisterEvent"/>.</param>
+        public static void RegisterServiceEvent(this ServiceMonitor.IMonitoredService service, EventType eventType, string eventInfo, string eventInfoDetailed = null, Exception exception = null)
         {
             service.GetAppCore().Get<ServiceMonitor.Monitor>()?.RegisterServiceEvent(service, eventType, eventInfo, eventInfoDetailed, exception);
         }

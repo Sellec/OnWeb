@@ -327,7 +327,7 @@ namespace OnWeb.CoreBind
         /// <summary>
         /// Возвращает ядро приложения.
         /// </summary>
-        public ApplicationCore AppCore
+        public WebApplicationCore AppCore
         {
             get => _applicationCore;
         }

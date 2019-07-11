@@ -6,7 +6,7 @@ namespace OnWeb.Core.ServiceMonitor
     /// <summary>
     /// Представляет сервис, который можно отслеживать через <see cref="Monitor"/>.
     /// </summary>
-    public interface IMonitoredService : IComponent<ApplicationCore>
+    public interface IMonitoredService : IComponent<WebApplicationCore>
     {
         /// <summary>
         /// Возвращает уникальный идентификатор сервиса.

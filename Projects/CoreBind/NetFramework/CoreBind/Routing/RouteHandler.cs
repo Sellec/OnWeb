@@ -14,9 +14,9 @@ namespace OnWeb.CoreBind.Routing
     class RouteHandler : MvcRouteHandler, IRouteConstraint
     {
         private ConcurrentDictionary<string, Routing> _dbCache = new ConcurrentDictionary<string, Routing>();
-        private readonly ApplicationCore _core = null;
+        private readonly WebApplicationCore _core = null;
 
-        public RouteHandler(ApplicationCore core)
+        public RouteHandler(WebApplicationCore core)
         {
             _core = core;
         }
@@ -117,7 +117,7 @@ namespace OnWeb.CoreBind.Routing
                     }
                 }
 
-                var module = _core.Get<ModulesManager<ApplicationCore>>().GetModule(route.IdModule);
+                var module = _core.Get<ModulesManager<WebApplicationCore>>().GetModule(route.IdModule);
                 if (module != null)
                 {
                     var arguments = Newtonsoft.Json.JsonConvert.DeserializeObject<IEnumerable<Core.Routing.ActionArgument>>(route.Arguments, new Newtonsoft.Json.JsonSerializerSettings()

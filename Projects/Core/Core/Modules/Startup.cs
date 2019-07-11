@@ -1,4 +1,5 @@
-﻿using OnUtils.Architecture.AppCore;
+﻿using OnUtils.Application;
+using OnUtils.Architecture.AppCore;
 using OnUtils.Architecture.AppCore.DI;
 
 namespace OnWeb.Core.Modules
@@ -7,7 +8,8 @@ namespace OnWeb.Core.Modules
     {
         void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
         {
-            bindingsCollection.RegisterBindingConstraintHandler(new ModuleCoreBindingConstraint());
+            bindingsCollection.SetSingleton<ModuleRegisteredHandler>();
+            bindingsCollection.SetTransient<OnUtils.Application.Modules.Extensions.ExtensionUrl.ExtensionUrl, Extensions.ExtensionUrl.WebExtensionUrl>();
         }
     }
 }

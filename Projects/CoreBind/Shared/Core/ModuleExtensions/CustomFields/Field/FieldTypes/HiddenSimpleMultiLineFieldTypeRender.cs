@@ -11,7 +11,7 @@ using MvcHtmlString = Microsoft.AspNetCore.Html.IHtmlContent;
 namespace OnWeb.Core.ModuleExtensions.CustomFields.Field.FieldTypes
 {
 #pragma warning disable CS1591 // todo внести комментарии.
-    public class HiddenSimpleMultiLineFieldTypeRender : CoreComponentBase<ApplicationCore>, ICustomFieldRender<HiddenSimpleMultiLineFieldType>
+    public class HiddenSimpleMultiLineFieldTypeRender : CoreComponentBase<WebApplicationCore>, ICustomFieldRender<HiddenSimpleMultiLineFieldType>
     {
         MvcHtmlString ICustomFieldRender<HiddenSimpleMultiLineFieldType>.RenderHtmlEditor<TModel>(HtmlHelper<TModel> html, IField field, IDictionary<string, object> htmlAttributes, params object[] additionalParameters)
         {

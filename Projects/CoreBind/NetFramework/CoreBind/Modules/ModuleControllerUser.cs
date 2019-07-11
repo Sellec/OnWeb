@@ -14,7 +14,7 @@ namespace OnWeb.CoreBind.Modules
     public abstract class ModuleControllerUser<TModule> : ModuleControllerBase, IModuleController<TModule>
         where TModule : ModuleCore<TModule>
     {
-        private class CoreComponentImpl : CoreComponentBase<ApplicationCore>
+        private class CoreComponentImpl : CoreComponentBase<WebApplicationCore>
         {
             protected override void OnStart()
             {

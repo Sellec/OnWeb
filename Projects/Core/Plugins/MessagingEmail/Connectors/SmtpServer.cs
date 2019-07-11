@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
-using OnUtils.Architecture.AppCore;
+using OnUtils.Application.Journaling;
+using OnUtils.Application.Messaging;
+using OnUtils.Application.Messaging.Connectors;
 using OnUtils.Architecture.ObjectPool;
 using System;
 using System.Net.Mail;
@@ -7,14 +9,12 @@ using System.Text;
 
 namespace OnWeb.Plugins.MessagingEmail.Connectors
 {
-    using Core.Journaling;
-    using Core.Messaging;
-    using Core.Messaging.Connectors;
+    using Core;
 
     /// <summary>
     /// Предоставляет возможность отправки электронной почты через smtp-сервер. Поддерживается только <see cref="SmtpDeliveryMethod.Network"/>.
     /// </summary>
-    public sealed class SmtpServer : CoreComponentBase<ApplicationCore>, IConnectorBase<EmailMessage>, IDisposable
+    public sealed class SmtpServer : CoreComponentBase, IConnectorBase<EmailMessage>, IDisposable
     {
         private SmtpClient _client = null;
 
@@ -91,7 +91,7 @@ namespace OnWeb.Plugins.MessagingEmail.Connectors
                     Body = message.MessageBody.Body?.ToString(),
                 };
 
-                var developerEmail = AppCore.Config.DeveloperEmail;
+                var developerEmail = AppCore.GetWebConfig().DeveloperEmail;
                 if (Debug.IsDeveloper && string.IsNullOrEmpty(developerEmail)) return;
 
                 message.MessageBody.To.ForEach(x => mailMessage.To.Add(new MailAddress(Debug.IsDeveloper ? developerEmail : x.ContactData, string.IsNullOrEmpty(x.Name) ? x.ContactData : x.Name)));

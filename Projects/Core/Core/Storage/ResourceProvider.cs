@@ -11,7 +11,7 @@ namespace OnWeb.Core.Storage
     /// Работает в качестве RazorViewEngine для поиска представлений и в качестве RouteHandler для поиска файлов.
     /// Вся функциональность объединена в одном классе.
     /// </summary>
-    public abstract class ResourceProvider : CoreComponentBase<ApplicationCore>, IComponentSingleton<ApplicationCore>, IAutoStart
+    public abstract class ResourceProvider : CoreComponentBase<WebApplicationCore>, IComponentSingleton<WebApplicationCore>, IAutoStart
     {
         private List<string> _listSourcePaths = new List<string>();
         private Dictionary<string, string> _resourceDirectoryPaths = new Dictionary<string, string>();

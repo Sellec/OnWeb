@@ -7,7 +7,7 @@ using OnUtils.Architecture.AppCore;
 
 namespace OnWeb.Plugins.Adminmain.Services
 {
-    public class SitemapGeneration : CoreComponentBase<ApplicationCore>
+    public class SitemapGeneration : CoreComponentBase<WebApplicationCore>
     {
         #region Static
         private static SitemapGeneration _instance = null;

@@ -1,4 +1,6 @@
-﻿using OnUtils.Architecture.AppCore;
+﻿using OnUtils.Application;
+using OnUtils.Application.DB;
+using OnUtils.Application.Journaling;
 using OnUtils.Data;
 using System;
 using System.Collections.Generic;
@@ -11,7 +13,7 @@ namespace OnWeb.Core.Users
     /// <summary>
     /// Представляет менеджер, позволяющий управлять данными пользователей.
     /// </summary>
-    public sealed class UsersManager : CoreComponentBase<ApplicationCore>, IComponentSingleton<ApplicationCore>, IUnitOfWorkAccessor<DB.CoreContext>
+    public sealed class UsersManager : CoreComponentBase, IComponentSingleton, IUnitOfWorkAccessor<DB.CoreContext>
     {
         #region CoreComponentBase
         /// <summary>
@@ -50,7 +52,7 @@ namespace OnWeb.Core.Users
 
                     if (onlyActive) queryBase = queryBase.Where(x => x.State == 0);
 
-                    var idRoleUser = AppCore.ConfigurationOptionGet(UserContextManager.RoleUserName, 0);
+                    var idRoleUser = AppCore.Config.RoleUser;
                     if (!roleIdList.Contains(idRoleUser))
                     {
                         var queryRolesWithUsers = exceptSuperuser ? (from user in queryBase
@@ -80,7 +82,7 @@ namespace OnWeb.Core.Users
             catch (Exception ex)
             {
                 this.RegisterEvent(
-                    Journaling.EventType.Error,
+                    EventType.Error,
                     "Ошибка получения списка пользователей, обладающих ролями.",
                     $"Идентификаторы ролей: {string.Join(", ", roleIdList)}.\r\nПо активности: {(onlyActive ? "только активных" : "всех")}.\r\nСуперпользователи: {(exceptSuperuser ? "только если роль назначена напрямую" : "добавлять всегда")}.\r\nСортировка: {orderBy?.ToString()}.",
                     ex);
@@ -96,11 +98,11 @@ namespace OnWeb.Core.Users
         /// <param name="userIdList">Список ролей для поиска пользователей.</param>
         /// <returns></returns>
         [ApiReversible]
-        public Dictionary<int, List<DB.Role>> RolesByUser(int[] userIdList)
+        public Dictionary<int, List<Role>> RolesByUser(int[] userIdList)
         {
             try
             {
-                if (userIdList == null || userIdList.Length == 0) return new Dictionary<int, List<DB.Role>>();
+                if (userIdList == null || userIdList.Length == 0) return new Dictionary<int, List<Role>>();
 
                 using (var db = this.CreateUnitOfWork())
                 {
@@ -116,7 +118,7 @@ namespace OnWeb.Core.Users
             catch (Exception ex)
             {
                 Debug.Logs($"rolesByUser: {userIdList}; {ex.Message}");
-                this.RegisterEvent(Journaling.EventType.Error, "Ошибка получения списка ролей, назначенных пользователям.", $"Идентификаторы пользователей: {(userIdList?.Any() == true ? "не задано" : string.Join(", ", userIdList))}", ex);
+                this.RegisterEvent(EventType.Error, "Ошибка получения списка ролей, назначенных пользователям.", $"Идентификаторы пользователей: {(userIdList?.Any() == true ? "не задано" : string.Join(", ", userIdList))}", ex);
 
                 CheckBlockingException(ex);
                 throw;
@@ -146,7 +148,7 @@ namespace OnWeb.Core.Users
                         var usersInRole = db.RoleUser.Where(x => x.IdRole == idRole).Select(x => x.IdUser).ToList();
                         userIdList.Where(x => !usersInRole.Contains(x)).ToList().ForEach(IdUser =>
                         {
-                            db.RoleUser.Add(new DB.RoleUser()
+                            db.RoleUser.Add(new RoleUser()
                             {
                                 IdRole = idRole,
                                 IdUser = IdUser,
@@ -168,7 +170,7 @@ namespace OnWeb.Core.Users
             }
             catch (Exception ex)
             {
-                this.RegisterEvent(Journaling.EventType.Error, "Ошибка при замене пользователей роли.", $"Идентификатор роли: {idRole}\r\nИдентификаторы пользователей: {(userIdList?.Any() == true ? "не задано" : string.Join(", ", userIdList))}", ex);
+                this.RegisterEvent(EventType.Error, "Ошибка при замене пользователей роли.", $"Идентификатор роли: {idRole}\r\nИдентификаторы пользователей: {(userIdList?.Any() == true ? "не задано" : string.Join(", ", userIdList))}", ex);
                 CheckBlockingException(ex);
                 return NotFound.Error;
             }
@@ -204,7 +206,7 @@ namespace OnWeb.Core.Users
             }
             catch (Exception ex)
             {
-                this.RegisterEvent(Journaling.EventType.Error, "Ошибка при удалении роли у пользователей.", $"Идентификатор роли: {idRole}\r\nИдентификаторы пользователей: {(userIdList?.Any() == true ? "не задано" : string.Join(", ", userIdList))}", ex);
+                this.RegisterEvent(EventType.Error, "Ошибка при удалении роли у пользователей.", $"Идентификатор роли: {idRole}\r\nИдентификаторы пользователей: {(userIdList?.Any() == true ? "не задано" : string.Join(", ", userIdList))}", ex);
                 CheckBlockingException(ex);
                 return NotFound.Error;
             }
@@ -228,7 +230,7 @@ namespace OnWeb.Core.Users
 
                     db.Users.Where(x => userIdList.Contains(x.id)).ToList().ForEach((DB.User x) =>
                     {
-                        db.RoleUser.AddOrUpdate(new DB.RoleUser()
+                        db.RoleUser.AddOrUpdate(new RoleUser()
                         {
                             IdRole = idRole,
                             IdUser = x.id,
@@ -245,7 +247,7 @@ namespace OnWeb.Core.Users
             }
             catch (Exception ex)
             {
-                this.RegisterEvent(Journaling.EventType.Error, "Ошибка при регистрации роли для списка пользователей.", $"Идентификатор роли: {idRole}\r\nИдентификаторы пользователей: {(userIdList?.Any() == true ? "не задано" : string.Join(", ", userIdList))}", ex);
+                this.RegisterEvent(EventType.Error, "Ошибка при регистрации роли для списка пользователей.", $"Идентификатор роли: {idRole}\r\nИдентификаторы пользователей: {(userIdList?.Any() == true ? "не задано" : string.Join(", ", userIdList))}", ex);
                 CheckBlockingException(ex);
                 return NotFound.Error;
             }
@@ -280,7 +282,7 @@ namespace OnWeb.Core.Users
             catch (Exception ex)
             {
                 Debug.WriteLine("user: {0}; ", ex.Message);
-                this.RegisterEvent(Journaling.EventType.Error, "Ошибка при получении данных пользователей.", $"Идентификаторы пользователей: {(users?.Any() == true ? "не задано" : string.Join(", ", users.Keys))}", ex);
+                this.RegisterEvent(EventType.Error, "Ошибка при получении данных пользователей.", $"Идентификаторы пользователей: {(users?.Any() == true ? "не задано" : string.Join(", ", users.Keys))}", ex);
 
                 CheckBlockingException(ex);
                 throw ex;

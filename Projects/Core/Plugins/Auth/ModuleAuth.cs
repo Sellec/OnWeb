@@ -1,4 +1,5 @@
-﻿using OnUtils.Application.Users;
+﻿using OnUtils.Application.Modules;
+using OnUtils.Application.Users;
 using OnUtils.Data;
 using System;
 using System.Linq;
@@ -6,7 +7,6 @@ using System.Linq;
 namespace OnWeb.Plugins.Auth
 {
     using Core.DB;
-    using Core.Modules;
 
     /// <summary>
     /// Модуль авторизации.
@@ -40,7 +40,7 @@ namespace OnWeb.Plugins.Auth
         }
 
         /// <summary>
-        /// Запоминает адрес <paramref name="requestedAddress"/>, запрошенный пользователем, ассоциированным с текущим активным контекстом (см. <see cref="UserContextManager{TApplication}.GetCurrentUserContext"/>).
+        /// Запоминает адрес <paramref name="requestedAddress"/>, запрошенный пользователем, ассоциированным с текущим активным контекстом (см. <see cref="UserContextManager.GetCurrentUserContext"/>).
         /// </summary>
         public void RememberUserContextRequestedAddressWhenRedirectedToAuthorization(Uri requestedAddress)
         {
@@ -56,7 +56,7 @@ namespace OnWeb.Plugins.Auth
         }
 
         /// <summary>
-        /// Возвращает адрес, запомненный модулем во время последнего вызова <see cref="RememberUserContextRequestedAddressWhenRedirectedToAuthorization(IUserContext, Uri)"/> для пользователя, ассоциированного с текущим активным контекстом (см. <see cref="UserContextManager{TApplication}.GetCurrentUserContext"/>).
+        /// Возвращает адрес, запомненный модулем во время последнего вызова <see cref="RememberUserContextRequestedAddressWhenRedirectedToAuthorization(IUserContext, Uri)"/> для пользователя, ассоциированного с текущим активным контекстом (см. <see cref="UserContextManager.GetCurrentUserContext"/>).
         /// </summary>
         public Uri GetRememberedUserContextRequestedAddressWhenRedirectedToAuthorization()
         {

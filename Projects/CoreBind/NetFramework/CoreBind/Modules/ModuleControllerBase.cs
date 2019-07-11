@@ -28,9 +28,9 @@ namespace OnWeb.CoreBind.Modules
     /// Базовый класс контроллера. Не должен использоваться для создания контроллеров напрямую, только через наследование от <see cref="ModuleControllerBase"/>
     /// </summary>
     [ModuleController(Routing.ControllerTypeDefault.TypeID)]
-    public abstract class ModuleControllerBase : Controller, IComponentTransient<ApplicationCore>
+    public abstract class ModuleControllerBase : Controller, IComponentTransient<WebApplicationCore>
     {
-        private class CoreComponentBaseImpl : CoreComponentBase<ApplicationCore>, IComponent<ApplicationCore>
+        private class CoreComponentBaseImpl : CoreComponentBase<WebApplicationCore>, IComponent<WebApplicationCore>
         {
             protected override void OnStart()
             {
@@ -77,7 +77,7 @@ namespace OnWeb.CoreBind.Modules
         /// <summary>
         /// См. <see cref="CoreComponentBase{TAppCore}.Start(TAppCore)"/>.
         /// </summary>
-        public void Start(ApplicationCore core)
+        public void Start(WebApplicationCore core)
         {
             _coreComponent.Start(core);
         }
@@ -101,7 +101,7 @@ namespace OnWeb.CoreBind.Modules
         /// <summary>
         /// См. <see cref="IComponent{TAppCore}.GetAppCore"/>.
         /// </summary>
-        public ApplicationCore GetAppCore()
+        public WebApplicationCore GetAppCore()
         {
             return _coreComponent.GetAppCore();
         }
@@ -586,7 +586,7 @@ namespace OnWeb.CoreBind.Modules
             var msg = $"URL запроса: {Request.Url}\r\n";
             if (Request.UrlReferrer != null) msg += $"URL-referer: {Request.UrlReferrer}\r\n";
 
-            var context = AppCore.Get<UserContextManager<ApplicationCore>>().GetCurrentUserContext();
+            var context = AppCore.Get<UserContextManager<WebApplicationCore>>().GetCurrentUserContext();
 
             if (context.IsGuest) msg += $"Пользователь: Гость\r\n";
             else msg += $"Пользователь: {context.GetData().ToString()} (id: {context.GetIdUser()})\r\n";
@@ -681,7 +681,7 @@ namespace OnWeb.CoreBind.Modules
         /// <summary>
         /// Возвращает ядро приложения, в рамках которого запущен контроллер.
         /// </summary>
-        public ApplicationCore AppCore
+        public WebApplicationCore AppCore
         {
             get => GetAppCore();
         }

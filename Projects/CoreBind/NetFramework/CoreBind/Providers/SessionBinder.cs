@@ -8,7 +8,7 @@ namespace OnWeb.CoreBind.Providers
     /// <summary>
     /// Управляет процессом определения пользователя во время выполнения запроса и процессом привязки пользователя после авторизации.
     /// </summary>
-    public class SessionBinder : CoreComponentBase<ApplicationCore>, IComponentSingleton<ApplicationCore>
+    public class SessionBinder : CoreComponentBase<WebApplicationCore>, IComponentSingleton<WebApplicationCore>
     {
         /// <summary>
         /// См. <see cref="CoreComponentBase{TAppCore}.OnStart"/>.

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OnUtils.Application.Items;
+using System;
 using System.Collections.Generic;
 
 namespace OnWeb.Core.Routing
@@ -14,7 +15,7 @@ namespace OnWeb.Core.Routing
         public int IdItem { get; set; }
 
         /// <summary>
-        /// Идентификатор типа сущности. Рекомендуется использование фабрики типов <see cref="Items.ItemTypeFactory"/> для получения идентификатора типа (например, метод <see cref="Items.ItemTypeFactory.GetItemType(Type)"/>).
+        /// Идентификатор типа сущности. Рекомендуется использование фабрики типов <see cref="ItemTypeFactory"/> для получения идентификатора типа (например, метод <see cref="ItemTypeFactory.GetItemType(Type)"/>).
         /// Этот идентификатор используется для отделения друг от друга сущностей разного типа с одинаковыми идентификаторами (<see cref="IdItem"/>).
         /// </summary>
         public int IdItemType { get; set; }

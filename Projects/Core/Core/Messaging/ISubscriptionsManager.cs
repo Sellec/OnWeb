@@ -1,4 +1,3 @@
-using OnUtils.Architecture.AppCore;
 using System.Collections.Generic;
 
 namespace OnWeb.Core.Messaging
@@ -8,7 +7,7 @@ namespace OnWeb.Core.Messaging
     /// <summary>
     /// Представляет менеджер, управляющий подписками и рассылками сообщений.
     /// </summary>
-    public interface ISubscriptionsManager : IComponentSingleton<ApplicationCore>
+    public interface ISubscriptionsManager : IComponentSingleton
     {
         /// <summary>
         /// Возвращает список подписок в системе.

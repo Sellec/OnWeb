@@ -17,12 +17,12 @@ namespace System.Web.Mvc
     {
         const string EXTENSIONPREFIX = "HttpContextExtensions_";
 
-        public static ApplicationCore GetAppCore(this HttpContextBase context)
+        public static WebApplicationCore GetAppCore(this HttpContextBase context)
         {
-            return context.Items.Contains(EXTENSIONPREFIX + "ApplicationCore") ? (ApplicationCore)context.Items[EXTENSIONPREFIX + "ApplicationCore"] : null;
+            return context.Items.Contains(EXTENSIONPREFIX + "ApplicationCore") ? (WebApplicationCore)context.Items[EXTENSIONPREFIX + "ApplicationCore"] : null;
         }
 
-        public static void SetAppCore(this HttpContext context, ApplicationCore appCore)
+        public static void SetAppCore(this HttpContext context, WebApplicationCore appCore)
         {
             context.Items[EXTENSIONPREFIX + "ApplicationCore"] = appCore;
         }

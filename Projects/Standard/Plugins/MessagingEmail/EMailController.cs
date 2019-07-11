@@ -42,11 +42,11 @@ namespace OnWeb.Plugins.MessagingEmail
                 };
             }
 
-            var cfg = AppCore.GetModulesManager().GetModule<CoreModule.CoreModule>().GetConfigurationManipulator().GetEditable<CoreConfiguration>();
+            var cfg = AppCore.GetModulesManager().GetModule<WebCoreModule.WebCoreModule>().GetConfigurationManipulator().GetEditable<WebCoreConfiguration>();
 
             cfg.ConnectorsSettings = connectors.Values.ToList();
 
-            AppCore.GetModulesManager().GetModule<CoreModule.CoreModule>().GetConfigurationManipulator().ApplyConfiguration(cfg);
+            AppCore.GetModulesManager().GetModule<WebCoreModule.WebCoreModule>().GetConfigurationManipulator().ApplyConfiguration(cfg);
             AppCore.Get<Core.Messaging.MessagingManager>().UpdateConnectorsFromSettings();
 
             return base.ConfigurationSaveCustom(formData, out outputMessage);

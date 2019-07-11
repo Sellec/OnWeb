@@ -1,3 +1,7 @@
+using OnUtils.Application.DB;
+using OnUtils.Application.Items;
+using OnUtils.Application.Modules;
+
 namespace OnWeb.Core.DB
 {
     using System;
@@ -25,11 +29,11 @@ namespace OnWeb.Core.DB
     }
 
     [Table("users")]
-    [Items.ItemType(Modules.ModuleCore.ItemType)]
+    [ItemType(ModuleCore.ItemType)]
     [System.Diagnostics.DebuggerDisplay("User: id={ID}")]
-    public partial class User : Items.ItemBase
+    public partial class User : ItemBase
     {
-        public User() : base(DeprecatedSingletonInstances.ModulesManager.GetModule<Plugins.Customer.ModuleCustomer>())
+        public User() : base(OnUtils.Application.DeprecatedSingletonInstances.ModulesManager.GetModule<Plugins.Customer.ModuleCustomer>())
         {
 
         }

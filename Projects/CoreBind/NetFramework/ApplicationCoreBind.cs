@@ -16,7 +16,7 @@ namespace OnWeb
     /// <summary>
     /// Ядро веб-приложения для ASP.Net MVC.
     /// </summary>
-    public sealed class ApplicationCoreBind : ApplicationCore
+    public sealed class ApplicationCoreBind : WebApplicationCore
     {
         /// <summary>
         /// </summary>
@@ -28,7 +28,7 @@ namespace OnWeb
         /// <summary>
         /// См. <see cref="AppCore{TAppCore}.OnBindingsRequired(IBindingsCollection{TAppCore})"/>.
         /// </summary>
-        protected override void OnBindingsRequired(IBindingsCollection<ApplicationCore> bindingsCollection)
+        protected override void OnBindingsRequired(IBindingsCollection<WebApplicationCore> bindingsCollection)
         {
             base.OnBindingsRequired(bindingsCollection);
 
@@ -40,7 +40,7 @@ namespace OnWeb
                 return instance;
             });
             bindingsCollection.SetSingleton<RoutingManager>();
-            bindingsCollection.SetSingleton<UserContextManager<ApplicationCore>, CoreBind.Users.UserContextManager>();
+            bindingsCollection.SetSingleton<UserContextManager<WebApplicationCore>, CoreBind.Users.UserContextManager>();
         }
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace OnWeb
 
         #region Свойства
         /// <summary>
-        /// См. <see cref="ApplicationCore.ServerUrl"/>.
+        /// См. <see cref="WebApplicationCore.ServerUrl"/>.
         /// </summary>
         public override Uri ServerUrl
         {

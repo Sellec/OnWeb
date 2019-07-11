@@ -1,12 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using OnUtils.Application.Configuration;
 
 namespace OnWeb.Plugins.Auth
 {
-    public class ModuleConfiguration : Core.Configuration.ModuleConfiguration<ModuleAuth>
+    public class ModuleConfiguration : ModuleConfiguration<ModuleAuth>
     {
+        /// <summary>
+        /// Допустимое количество одновременно неудачных попыток входа, после которых возможность совершения новых попыток блокируется на определенное время (<see cref="AuthorizationAttemptsBlock"/>).
+        /// </summary>
+        public int AuthorizationAttempts
+        {
+            get => Get("AuthorizationAttemptsBlock", 0);
+            set => Set("AuthorizationAttemptsBlock", value);
+        }
+
+        /// <summary>
+        /// Время блокировки после исчерпания лимита неудачных попыток входа (<see cref="AuthorizationAttempts"/>).
+        /// </summary>
+        public int AuthorizationAttemptsBlock
+        {
+            get => Get("AuthorizationAttemptsBlock", 0);
+            set => Set("AuthorizationAttemptsBlock", value);
+        }
+
+        /// <summary>
+        /// Сообщение для пользователя, показываемое после исчерпания лимита неудачных попыток входа (<see cref="AuthorizationAttempts"/>).
+        /// </summary>
+        public string AuthorizationAttemptsMessage
+        {
+            get => Get("AuthorizationAttemptsMessage", "");
+            set => Set("AuthorizationAttemptsMessage", value);
+        }
+
+        /// <summary>
+        /// Сообщение для пользователя во время последующих попыток входа, показываемое после исчерпания лимита неудачных попыток входа (<see cref="AuthorizationAttempts"/>).
+        /// </summary>
+        public string AuthorizationAttemptsBlockMessage
+        {
+            get => Get("AuthorizationAttemptsBlockMessage", "");
+            set => Set("AuthorizationAttemptsBlockMessage", value);
+        }
+
+
         public int EventLoginSuccess
         {
             get => Get("eventLoginSuccess", 0);
@@ -31,16 +65,5 @@ namespace OnWeb.Plugins.Auth
             set => Set("eventLogout", value);
         }
 
-        public int RoleUser
-        {
-            get => Get("roleUser", 0);
-            set => Set("roleUser", value);
-        }
-
-        public int RoleGuest
-        {
-            get => Get("roleGuest", 0);
-            set => Set("roleGuest", value);
-        }
     }
 }
