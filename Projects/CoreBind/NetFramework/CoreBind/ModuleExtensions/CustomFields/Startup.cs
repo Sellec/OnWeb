@@ -1,4 +1,6 @@
-﻿using OnUtils.Architecture.AppCore;
+﻿using OnUtils.Application;
+using OnUtils.Application.Modules.Extensions.CustomFields.Field.FieldTypes;
+using OnUtils.Architecture.AppCore;
 using OnUtils.Architecture.AppCore.DI;
 using System.Linq;
 using System.Web.Mvc;
@@ -7,7 +9,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
 {
     using Core.ModuleExtensions.CustomFields.Field.FieldTypes;
 
-    class Startup : IConfigureBindings<ApplicationCore>,  IExecuteStart<ApplicationCore>
+    class Startup : IConfigureBindings, IExecuteStart
     {
         void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
         {
@@ -20,7 +22,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
             bindingsCollection.SetTransient<ICustomFieldRender<UnknownFieldType>, UnknownFieldTypeRender>();
         }
 
-        void IExecuteStart<ApplicationCore>.ExecuteStart(WebApplicationBase core)
+        void IExecuteStart<ApplicationCore>.ExecuteStart(ApplicationCore core)
         {
             if (!ValueProviderFactories.Factories.Any(x => x is MetadataAndValues.FieldValueProviderFactory))
             {

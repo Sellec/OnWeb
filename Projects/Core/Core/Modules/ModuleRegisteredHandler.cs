@@ -14,6 +14,12 @@ namespace OnWeb.Core.Modules
         #region CoreComponentBase
         protected override void OnStart()
         {
+            var modules = AppCore.GetModulesManager().GetModules();
+            var method = GetType().GetMethod(nameof(OnModuleInitialized));
+            foreach(var module in modules)
+            {
+                method.MakeGenericMethod(module.QueryType).Invoke(this, new object[] { module });
+            }
         }
 
         protected override void OnStop()
@@ -22,7 +28,7 @@ namespace OnWeb.Core.Modules
         #endregion
 
         #region IModuleRegisteredHandler
-        void IModuleRegisteredHandler.OnModuleInitialized<TModuleType>(TModuleType module)
+        public void OnModuleInitialized<TModuleType>(TModuleType module) where TModuleType : ModuleCore<TModuleType>
         {
             var controllerTypes = AppCore.GetBindedTypes<IModuleController<TModuleType>>();
 

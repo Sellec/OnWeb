@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.SessionState;
+using OnUtils.Application.DB;
 
 namespace OnWeb.CoreBind.Providers
 {
@@ -24,7 +25,7 @@ namespace OnWeb.CoreBind.Providers
         private static object SyncRootSave = new object();
         private static object SyncRootRead = new object();
 
-        private static ConcurrentDictionary<string, Core.DB.Sessions> _cache = null;
+        private static ConcurrentDictionary<string, Sessions> _cache = null;
 
         private static object _saveTaskSyncRoot = new object();
         private static Task _saveTask = null;
@@ -72,7 +73,7 @@ namespace OnWeb.CoreBind.Providers
             {
                 //lock (SyncRootRead)
                 {
-                    if (_cache == null) _cache = new ConcurrentDictionary<string, Core.DB.Sessions>();
+                    if (_cache == null) _cache = new ConcurrentDictionary<string, Sessions>();
 
                     foreach (var res in _dbContext.Sessions.AsNoTracking()) _cache.TryAdd(res.SessionId, res);
 
@@ -312,7 +313,7 @@ namespace OnWeb.CoreBind.Providers
         /// </summary>
         public override void CreateUninitializedItem(HttpContext context, string id, int timeout)
         {
-            var session = new Core.DB.Sessions
+            var session = new Sessions
             {
                 SessionId = id,
                 IdUser = 0,
@@ -328,9 +329,9 @@ namespace OnWeb.CoreBind.Providers
             SaveChanges();
         }
 
-        private Core.DB.Sessions GetSessionItem(string id)
+        private Sessions GetSessionItem(string id)
         {
-            Core.DB.Sessions item = null;
+            Sessions item = null;
             if (_cache.TryGetValue(id, out item) && !item.IsDeleted)
             {
                 return item;
@@ -374,7 +375,7 @@ namespace OnWeb.CoreBind.Providers
                                                 {
                                                     _dbContext.DeleteEntity(p.Value);
 
-                                                    Core.DB.Sessions item = null;
+                                                    Sessions item = null;
                                                     _cache.TryRemove(p.Key, out item);
                                                 }
                                             }
@@ -389,8 +390,8 @@ namespace OnWeb.CoreBind.Providers
                                 Debug.WriteLine("SessionStateProvider: Update error2: {0}", ex.Message);
                                 foreach (var entry in ex.Entries)
                                 {
-                                    Core.DB.Sessions item = entry.Entity as Core.DB.Sessions;
-                                    _dbContext.Sessions.Delete(entry.Entity as Core.DB.Sessions);
+                                    Sessions item = entry.Entity as Sessions;
+                                    _dbContext.Sessions.Delete(entry.Entity as Sessions);
                                     _cache.TryRemove(item.SessionId, out item);
                                 }
                             }
@@ -460,7 +461,7 @@ namespace OnWeb.CoreBind.Providers
     {
         class SessionContext : UnitOfWorkBase
         {
-            public IRepository<Core.DB.Sessions> Sessions { get; set; }
+            public IRepository<Sessions> Sessions { get; set; }
         }
     }
 }

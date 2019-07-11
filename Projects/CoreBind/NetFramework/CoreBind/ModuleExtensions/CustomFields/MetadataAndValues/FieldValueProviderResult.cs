@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using OnUtils.Application.Modules.Extensions.CustomFields.Field;
+using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -6,9 +7,9 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.MetadataAndValues
 {
     class FieldValueProviderResult : ValueProviderResult
     {
-        private Field.IField _field = null;
+        private IField _field = null;
 
-        public FieldValueProviderResult(Field.IField field, string[] rawValue, CultureInfo culture) : base(rawValue, rawValue?.FirstOrDefault(), culture)
+        public FieldValueProviderResult(IField field, string[] rawValue, CultureInfo culture) : base(rawValue, rawValue?.FirstOrDefault(), culture)
         {
             RawFromForm = rawValue;
             _field = field;

@@ -1,5 +1,4 @@
-﻿using OnUtils.Application.Modules;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -117,7 +116,7 @@ namespace OnWeb.CoreBind.Routing
                     }
                 }
 
-                var module = _core.Get<ModulesManager<ApplicationCore>>().GetModule(route.IdModule);
+                var module = _core.GetModulesManager().GetModule(route.IdModule);
                 if (module != null)
                 {
                     var arguments = Newtonsoft.Json.JsonConvert.DeserializeObject<IEnumerable<Core.Routing.ActionArgument>>(route.Arguments, new Newtonsoft.Json.JsonSerializerSettings()

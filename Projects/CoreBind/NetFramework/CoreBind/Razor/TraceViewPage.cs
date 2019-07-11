@@ -1,4 +1,6 @@
-﻿using OnUtils.Application.Users;
+﻿using OnUtils.Application;
+using OnUtils.Application.Modules;
+using OnUtils.Application.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +9,7 @@ using System.Web.Mvc.Html;
 
 namespace OnWeb.CoreBind.Razor
 {
-    using Core.Modules;
+    using Plugins.WebCoreModule;
 
     public interface IModuleProvider
     {
@@ -101,15 +103,15 @@ namespace OnWeb.CoreBind.Razor
         /// <summary>
         /// Предоставляет доступ к настройкам сайта.
         /// </summary>
-        public Core.Configuration.WebCoreConfiguration Config
+        public WebCoreConfiguration Config
         {
-            get => AppCore.Config;
+            get => AppCore.GetWebConfig();
         }
 
         /// <summary>
         /// Возвращает объект ядра, в контексте которого запущено приложение.
         /// </summary>
-        public WebApplicationBase AppCore
+        public ApplicationCore AppCore
         {
             get => Module.AppCore;
         }

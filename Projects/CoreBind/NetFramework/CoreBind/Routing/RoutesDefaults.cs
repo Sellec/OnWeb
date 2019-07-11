@@ -1,4 +1,5 @@
-﻿using System.Web.Routing;
+﻿using OnUtils.Application.Languages;
+using System.Web.Routing;
 
 namespace OnWeb.CoreBind.Routing
 {
@@ -8,7 +9,7 @@ namespace OnWeb.CoreBind.Routing
         {
             public RoutesDefaults(WebApplicationBase core)
             {
-                var moduleID = core.Config.IdModuleDefault;
+                var moduleID = core.WebConfig.IdModuleDefault;
                 var module = core.GetModulesManager().GetModule(moduleID) ?? core.GetModulesManager().GetModule<Plugins.Default.ModuleDefault>();
 
                 Controller = module.IdModule.ToString();
@@ -34,7 +35,7 @@ namespace OnWeb.CoreBind.Routing
         {
             public RoutesDefaultsWithLanguage(WebApplicationBase core) : base(core)
             {
-                Language = core.Get<Core.Languages.Manager>().GetUserLanguage().ShortName;
+                Language = core.Get<Manager>().GetUserLanguage().ShortName;
             }
 
             public string Language

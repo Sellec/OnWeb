@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using OnUtils.Application.Items;
+using OnUtils.Application.Modules;
+using OnUtils.Application.Modules.Extensions.CustomFields.Field;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace OnWeb.Core.ModuleExtensions.CustomFields.MetadataAndValues
@@ -12,7 +15,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.MetadataAndValues
             _controllerContext = controllerContext.Controller as CoreBind.Modules.ModuleControllerBase;
         }
 
-        private bool GetValue(string prefix, out string[] valueOut, out Field.IField fieldOut)
+        private bool GetValue(string prefix, out string[] valueOut, out IField fieldOut)
         {
             valueOut = null;
             fieldOut = null;
@@ -20,16 +23,16 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.MetadataAndValues
             var prefixParts = prefix.Split('.');
             if (prefixParts.Length == 0) return false;
 
-            if (prefixParts.Last() == nameof(Items.ItemBase.Fields)) return true;
+            if (prefixParts.Last() == nameof(ItemBase.Fields)) return true;
 
             if (prefixParts.Length >= 2 &&
-                prefixParts[prefixParts.Length - 2] == nameof(Items.ItemBase.Fields) &&
+                prefixParts[prefixParts.Length - 2] == nameof(ItemBase.Fields) &&
                 prefixParts.Last().StartsWith("fieldValue_"))
             {
                 int idField = 0;
                 if (!int.TryParse(prefixParts.Last().Replace("fieldValue_", ""), out idField)) return false;
 
-                var field = (_controllerContext.ModuleBase as Modules.ModuleCore)?.Fields?.GetFieldByID(idField);
+                var field = (_controllerContext.ModuleBase as ModuleCore)?.Fields?.GetFieldByID(idField);
                 if (field == null) return false;
 
                 fieldOut = field;
@@ -50,14 +53,14 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.MetadataAndValues
         public bool ContainsPrefix(string prefix)
         {
             string[] value;
-            Field.IField field;
+            IField field;
             return GetValue(prefix, out value, out field);
         }
 
         public ValueProviderResult GetValue(string key)
         {
             string[] value;
-            Field.IField field;
+            IField field;
             if (!GetValue(key, out value, out field)) return null;
             if (field == null) return null; // Для GetValue if (prefixParts.Last() == nameof(Web.Items.ItemBase.Fields)) не должно возвращать значение.
 

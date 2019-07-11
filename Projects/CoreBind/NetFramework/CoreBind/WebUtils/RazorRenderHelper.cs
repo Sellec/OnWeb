@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OnUtils.Application.Modules;
+using System;
 using System.IO;
 using System.Reflection;
 using System.Web;
@@ -13,7 +14,7 @@ namespace OnWeb.Core.WebUtils
     /// </summary>
     public static class RazorRenderHelper
     {
-        class FakeController<TModule> : ModuleControllerUser<TModule> where TModule : Modules.ModuleCore<TModule>
+        class FakeController<TModule> : ModuleControllerUser<TModule> where TModule : ModuleCore<TModule>
         {
             public override ActionResult Index()
             {
@@ -29,7 +30,7 @@ namespace OnWeb.Core.WebUtils
             }
         }
 
-        public static string RenderView(Modules.ModuleCore module, string template, object model = null)
+        public static string RenderView(ModuleCore module, string template, object model = null)
         {
             try
             {
@@ -44,7 +45,7 @@ namespace OnWeb.Core.WebUtils
                 using (var sw = new System.IO.StringWriter())
                 {
                     var filename = "/";
-                    var uri = module?.AppCore?.ServerUrl?.ToString() ?? "http://localhost/";
+                    var uri = (module?.AppCore as WebApplicationBase)?.ServerUrl?.ToString() ?? "http://localhost/";
                     var context = HttpContext.Current ?? new HttpContext(new HttpRequest(filename, uri, ""), new HttpResponse(new StringWriter()));
 
                     var contextWrapper = new HttpContextWrapper(context);

@@ -1,27 +1,22 @@
-﻿using OnUtils.Data;
+﻿using OnUtils.Application.DB;
+using OnUtils.Application.Items;
+using OnUtils.Application.Modules;
+using OnUtils.Application.Modules.Extensions;
+using OnUtils.Application.Modules.Extensions.CustomFields;
+using OnUtils.Application.Modules.Extensions.CustomFields.DB;
+using OnUtils.Application.Modules.Extensions.CustomFields.Field;
+using OnUtils.Application.Modules.Extensions.CustomFields.Model;
+using OnUtils.Application.Modules.Extensions.CustomFields.Scheme;
+using OnUtils.Application.Types;
+using OnUtils.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using OnUtils.Application.Modules;
-using OnUtils.Application.Modules.Extensions;
-using OnUtils.Application.Modules.Extensions.CustomFields;
-using OnUtils.Application.Modules.Extensions.CustomFields.Data;
-using OnUtils.Application.Modules.Extensions.CustomFields.DB;
-using OnUtils.Application.Modules.Extensions.CustomFields.Field;
-using OnUtils.Application.Modules.Extensions.CustomFields.MetadataAndValues;
-using OnUtils.Application.Modules.Extensions.CustomFields.Model;
-using OnUtils.Application.Modules.Extensions.CustomFields.Scheme;
-using OnUtils.Application.Types;
 
 namespace OnWeb.Core.ModuleExtensions.CustomFields
 {
-    using Core.DB;
-    using Core.Modules;
     using CoreBind.Modules;
-    using DB;
-    using Modules.Extensions;
-    using Scheme;
 
     /// <summary>
     /// Админский класс расширения пользовательских полей. 
@@ -30,9 +25,15 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
     public class ExtensionCustomsFieldsAdmin : ExtensionCustomsFieldsBase
     {
         #region Вспомогательное
+        public static NestedLinkSimple RelativeToModule(string url, string caption, ModuleCore module)
+        {
+            var moduleAdmin = module.AppCore.Get<Plugins.Admin.ModuleAdmin>();
+            return new NestedLinkSimple(caption, new Uri($"/{moduleAdmin.UrlName}/mnadmin/{module.UrlName}/{url}", UriKind.Relative));
+        }
+
         public override NestedLinkCollection getAdminMenu()
         {
-            return new NestedLinkCollection(NestedLinkSimple.RelativeToModule("fields", "Управление полями", this.Module));
+            return new NestedLinkCollection(RelativeToModule("fields", "Управление полями", this.Module));
         }
 
         /// <summary>
@@ -65,14 +66,14 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
             {
                 var items = new Dictionary<SchemeItem, string>();
 
-                if (itemType.IdItemType != Items.ItemTypeFactory.CategoryType.IdItemType)
+                if (itemType.IdItemType != ItemTypeFactory.CategoryType.IdItemType)
                 {
                     items[new SchemeItem(0, itemType.IdItemType)] = "По-умолчанию";
                 }
                 else
                 {
                     var _itemsPre = this.Module.GetItems(itemType.IdItemType, Types.eSortType.Name);
-                    var _items = _itemsPre != null ? _itemsPre.GetSimplifiedHierarchy() : new Types.NestedListCollectionSimplified();
+                    var _items = _itemsPre != null ? _itemsPre.GetSimplifiedHierarchy() : new NestedListCollectionSimplified();
 
                     if (_items != null && _items.Count() > 0)
                         foreach (var res in _items)
@@ -104,9 +105,9 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
                 var fields = (from p in db.CustomFieldsFields
                               where p.Block == 0 && p.IdModule == id
                               orderby p.name
-                              select p).ToDictionary(x => x.IdField, x => x as Field.IField);
+                              select p).ToDictionary(x => x.IdField, x => x as IField);
 
-                return Controller.display("ModuleExtensions/CustomFields/Design/SchemesEdit.cshtml", new Model.Fields
+                return Controller.display("ModuleExtensions/CustomFields/Design/SchemesEdit.cshtml", new Fields
                 {
                     FieldsList = fields,
                     SchemeItems = schemeItems,
@@ -128,9 +129,9 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
                 var schemes = db.CustomFieldsSchemes.
                     Where(x => x.IdModule == Module.ID && x.IdScheme > 0).
                     OrderBy(x => x.NameScheme).
-                    ToDictionary(x => (uint)x.IdScheme, x => new Model.SchemeContainerItem.Scheme() { Name = x.NameScheme, Fields = new Dictionary<int, Field.IField>() });
+                    ToDictionary(x => (uint)x.IdScheme, x => new SchemeContainerItem.Scheme() { Name = x.NameScheme, Fields = new Dictionary<int, IField>() });
 
-                schemes[0] = new Model.SchemeContainerItem.Scheme() { Name = "По-умолчанию", Fields = new Dictionary<int, Field.IField>() };
+                schemes[0] = new SchemeContainerItem.Scheme() { Name = "По-умолчанию", Fields = new Dictionary<int, IField>() };
 
                 var sql = (from datas in db.CustomFieldsSchemeDatas
                            where datas.IdModule == Module.ID && datas.IdItemType == schemeItem.IdItemType && datas.IdSchemeItem == schemeItem.IdItem
@@ -143,10 +144,10 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
                                                       x => x.Fields.GroupBy(IdField => IdField).
                                                                 Select(group => fields.GetValueOrDefault(group.Key)).
                                                                 Where(field => field != null).
-                                                                ToDictionary(field => field.IdField, field => field as Field.IField)
+                                                                ToDictionary(field => field.IdField, field => field as IField)
                                          );
 
-                var model = new Model.SchemeContainerItem() { SchemeItem = schemeItem };
+                var model = new SchemeContainerItem() { SchemeItem = schemeItem };
 
                 if (fieldsWithSchemes.ContainsKey(0)) schemes[0].Fields = fieldsWithSchemes[0];
                 foreach (var p in schemes)
@@ -313,14 +314,14 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
             }
             else
             {
-                data = new DB.CustomFieldsField() { IdFieldType = 0, IdModule = this.Module.ID };
+                data = new CustomFieldsField() { IdFieldType = 0, IdModule = this.Module.ID };
             }
 
-            return Controller.display("ModuleExtensions/CustomFields/Design/FieldEdit.cshtml", new Model.FieldEdit(data));
+            return Controller.display("ModuleExtensions/CustomFields/Design/FieldEdit.cshtml", new FieldEdit(data));
         }
 
         [ModuleAction("fieldSave")]
-        public JsonResult FieldSave(Model.FieldEdit model = null)
+        public JsonResult FieldSave(FieldEdit model = null)
         {
             var result = Controller.JsonAnswer();
 
@@ -342,7 +343,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
                     }
                     else
                     {
-                        data = new DB.CustomFieldsField() { IdFieldType = 0, IdModule = this.Module.ID };
+                        data = new CustomFieldsField() { IdFieldType = 0, IdModule = this.Module.ID };
                         db.CustomFieldsFields.Add(data);
                     }
 
