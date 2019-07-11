@@ -1,15 +1,15 @@
-﻿using OnUtils.Architecture.AppCore;
+﻿using OnUtils.Application.Modules;
 using System.Web;
 using System.Web.Routing;
 
 namespace OnWeb.CoreBind.Routing
 {
-    using Core.Modules;
+    using Core;
 
     /// <summary>
     /// Описывает тип контроллера и предоставляет способ выбрать нужный тип контроллера во время обработки входящего запроса.
     /// </summary>
-    public abstract class ControllerType : CoreComponentBase<WebApplicationCore>
+    public abstract class ControllerType : CoreComponentBase
     {
         /// <summary>
         /// </summary>
@@ -20,10 +20,14 @@ namespace OnWeb.CoreBind.Routing
         }
 
         #region CoreComponentBase
+        /// <summary>
+        /// </summary>
         protected sealed override void OnStart()
         {
         }
 
+        /// <summary>
+        /// </summary>
         protected sealed override void OnStop()
         {
         }

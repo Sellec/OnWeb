@@ -3,6 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using OnUtils.Application.Modules;
+using OnUtils.Application.Modules.Extensions;
+using OnUtils.Application.Modules.Extensions.CustomFields;
+using OnUtils.Application.Modules.Extensions.CustomFields.Data;
+using OnUtils.Application.Modules.Extensions.CustomFields.DB;
+using OnUtils.Application.Modules.Extensions.CustomFields.Field;
+using OnUtils.Application.Modules.Extensions.CustomFields.MetadataAndValues;
+using OnUtils.Application.Modules.Extensions.CustomFields.Model;
+using OnUtils.Application.Modules.Extensions.CustomFields.Scheme;
+using OnUtils.Application.Types;
 
 namespace OnWeb.Core.ModuleExtensions.CustomFields
 {
@@ -19,15 +29,10 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
     [ModuleExtension("CustomFields", true)]
     public class ExtensionCustomsFieldsAdmin : ExtensionCustomsFieldsBase
     {
-        public ExtensionCustomsFieldsAdmin(ModuleCore moduleObject)
-            : base(moduleObject)
-        {
-        }
-
         #region Вспомогательное
-        public override Types.NestedLinkCollection getAdminMenu()
+        public override NestedLinkCollection getAdminMenu()
         {
-            return new Types.NestedLinkCollection(Types.NestedLinkSimple.RelativeToModule("fields", "Управление полями", this.Module));
+            return new NestedLinkCollection(NestedLinkSimple.RelativeToModule("fields", "Управление полями", this.Module));
         }
 
         /// <summary>

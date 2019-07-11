@@ -69,7 +69,7 @@ namespace OnWeb.Plugins.MessagingEmail
             if (!string.IsNullOrEmpty(address)) return address;
 
             address = "no-reply@localhost";
-            if (((WebApplicationCore)AppCore).ServerUrl != null) address = "no-reply@" + ((WebApplicationCore)AppCore).ServerUrl.Host;
+            if (((WebApplicationBase)AppCore).ServerUrl != null) address = "no-reply@" + ((WebApplicationBase)AppCore).ServerUrl.Host;
 
             return address;
         }

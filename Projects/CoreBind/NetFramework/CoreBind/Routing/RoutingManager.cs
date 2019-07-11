@@ -7,18 +7,19 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Web.Mvc;
+using Journaling = OnUtils.Application.Journaling;
 
 namespace OnWeb.CoreBind.Routing
 {
+    using Core;
     using Core.Modules;
     using Core.ServiceMonitor;
     using CoreBind.Modules;
-    using Journaling = Core.Journaling;
 
     /// <summary>
     /// Предоставляет функции для работы с маршрутизацией.
     /// </summary>
-    public class RoutingManager : CoreComponentBase<WebApplicationCore>, IComponentSingleton<WebApplicationCore>, IAutoStart, IMonitoredService
+    public class RoutingManager : CoreComponentBase, IComponentSingleton, IAutoStart, IMonitoredService
     {
         private Guid _serviceID = StringsHelper.GenerateGuid(nameof(RoutingManager));
 
@@ -72,7 +73,9 @@ namespace OnWeb.CoreBind.Routing
                 if (!controllerType.IsAssignableToGenericType(typeof(ModuleControllerUser<>)) && !controllerType.IsAssignableToGenericType(typeof(ModuleControllerUser<>)))
                     throw new HandledException("", new NotSupportedException($"Передаваемый тип контроллера должен быть наследником универсального типа {typeof(ModuleControllerUser<>).FullName} или {typeof(ModuleControllerAdmin<>).FullName}."));
 
-                var controllerTypeCandidates = module.ControllerTypes.Where(x => controllerType.IsAssignableFrom(x.Value)).ToList();
+                var controllerTypes = AppCore.Get<ModuleRegisteredHandler>().GetModuleControllerTypes<TModule>();
+
+                var controllerTypeCandidates = controllerTypes.Where(x => controllerType.IsAssignableFrom(x.Value)).ToList();
                 if (controllerTypeCandidates.Count == 0) throw new HandledException("", new NotSupportedException($"Среди контроллеров модуля '{module.Caption}' нет контроллера, в цепочке наследования которого находится тип '{controllerType.FullName}'."));
                 else if (controllerTypeCandidates.Count > 1) throw new HandledException("", new NotSupportedException($"Среди контроллеров модуля '{module.Caption}' есть несколько контроллеров, в цепочке наследования котороых находится тип '{controllerType.FullName}'. Используйте в качестве {nameof(TModuleController)} другой тип, точно относящийся к одному из контроллеров, либо уменьшите общность наследования контроллеров модуля."));
 
@@ -101,7 +104,7 @@ namespace OnWeb.CoreBind.Routing
                 if (isDefaultMethod && arguments.Count == 0) methodName = null;
 
                 var url = controllerTypeFromFactory.CreateRelativeUrl(module.UrlName, methodName, arguments.ToArray());
-                return includeAuthority ? new Uri(AppCore.ServerUrl, url) : new Uri(url, UriKind.Relative);
+                return includeAuthority ? new Uri(((WebApplicationBase)AppCore).ServerUrl, url) : new Uri(url, UriKind.Relative);
             }
             catch (HandledException ex)
             {

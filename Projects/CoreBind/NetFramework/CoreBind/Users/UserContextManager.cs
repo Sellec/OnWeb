@@ -2,7 +2,7 @@
 
 namespace OnWeb.CoreBind.Users
 {
-    class UserContextManager : Core.Users.UserContextManager
+    class UserContextManager : OnUtils.Application.Users.UserContextManager
     {
         public override void ClearCurrentUserContext()
         {

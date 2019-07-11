@@ -1,12 +1,11 @@
-﻿using OnUtils.Architecture.AppCore;
-using System;
+﻿using System;
 
 namespace OnWeb.Core.ServiceMonitor
 {
     /// <summary>
     /// Представляет сервис, который можно отслеживать через <see cref="Monitor"/>.
     /// </summary>
-    public interface IMonitoredService : IComponent<WebApplicationCore>
+    public interface IMonitoredService : IComponent
     {
         /// <summary>
         /// Возвращает уникальный идентификатор сервиса.

@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OnUtils.Application.Modules;
+using System;
 using System.Web.Mvc;
 
 namespace OnWeb.CoreBind.Modules.Internal
 {
-    using Core.Modules;
-
     interface IModuleControllerInternalErrors
     {
         void SetException(Exception ex);

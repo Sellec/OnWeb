@@ -1,15 +1,11 @@
-﻿using System;
+﻿using OnUtils.Application.Modules;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Routing;
 
 namespace OnWeb.CoreBind.Routing
 {
-    using Core.Modules;
-
     /// <summary>
     /// Тип контроллера по-умолчанию. Фактически нужен для того, чтобы любой запрос был обработан контроллером, помеченным атрибутом с таким типом.
     /// Остальные типы контроллеров должны создаваться для специфических запросов.

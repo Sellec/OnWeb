@@ -9,7 +9,7 @@ namespace OnWeb.Plugins.WebCoreModule
 
 #pragma warning disable CS1591 // todo внести комментарии.
     /// <summary>
-    /// Класс конфигурации. При создании экземпляра объекта через метод Create ядра <see cref="WebApplicationCore"/> автоматически заполняется значениями настроек ядра.
+    /// Класс конфигурации. При создании экземпляра объекта через метод Create ядра <see cref="WebApplicationBase"/> автоматически заполняется значениями настроек ядра.
     /// </summary>
     public class WebCoreConfiguration : ModuleConfiguration<WebCoreModule>
     {

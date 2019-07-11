@@ -1,7 +1,6 @@
 ﻿using OnUtils;
 using OnUtils.Application;
 using OnUtils.Application.Journaling;
-using OnUtils.Architecture.AppCore;
 using OnUtils.Data;
 using System;
 using System.Collections.Concurrent;
@@ -12,7 +11,7 @@ namespace OnWeb.Core.Users
 {
     using ExecutionResultEntities = ExecutionResult<IEnumerable<UserEntity>>;
 
-    class EntitiesManager : CoreComponentBase<WebApplicationCore>, IEntitiesManager, IUnitOfWorkAccessor<UnitOfWork<DB.UserEntity>>
+    class EntitiesManager : CoreComponentBase, IEntitiesManager, IUnitOfWorkAccessor<UnitOfWork<DB.UserEntity>>
     {
         private const string SessionEntityKey = "UserEntity_";
 

@@ -1,5 +1,6 @@
 ﻿using OnUtils.Application;
 using OnUtils.Application.Users;
+using OnUtils.Application.Languages;
 using OnUtils.Architecture.AppCore;
 using OnUtils.Architecture.AppCore.DI;
 using System;
@@ -16,11 +17,11 @@ namespace OnWeb
     /// <summary>
     /// Ядро веб-приложения для ASP.Net MVC.
     /// </summary>
-    public sealed class ApplicationCoreBind : WebApplicationCore
+    public sealed class WebApplication : WebApplicationBase
     {
         /// <summary>
         /// </summary>
-        public ApplicationCoreBind(string physicalApplicationPath, string connectionString) : base(physicalApplicationPath, connectionString)
+        public WebApplication(string physicalApplicationPath, string connectionString) : base(physicalApplicationPath, connectionString)
         {
             OnUtils.Tasks.TasksManager.SetDefaultService(new OnUtils.Tasks.MomentalThreading.TasksService());
         }
@@ -28,7 +29,7 @@ namespace OnWeb
         /// <summary>
         /// См. <see cref="AppCore{TAppCore}.OnBindingsRequired(IBindingsCollection{TAppCore})"/>.
         /// </summary>
-        protected override void OnBindingsRequired(IBindingsCollection<WebApplicationCore> bindingsCollection)
+        protected override void OnBindingsRequired(IBindingsCollection<ApplicationCore> bindingsCollection)
         {
             base.OnBindingsRequired(bindingsCollection);
 
@@ -40,11 +41,11 @@ namespace OnWeb
                 return instance;
             });
             bindingsCollection.SetSingleton<RoutingManager>();
-            bindingsCollection.SetSingleton<UserContextManager<WebApplicationCore>, CoreBind.Users.UserContextManager>();
+            bindingsCollection.SetSingleton<UserContextManager, CoreBind.Users.UserContextManager>();
         }
 
         /// <summary>
-        /// См. <see cref="ApplicationBase{TSelfReference}.OnApplicationStart"/>.
+        /// См. <see cref="ApplicationBase.OnApplicationStart"/>.
         /// </summary>
         protected override void OnApplicationStart()
         {
@@ -97,7 +98,7 @@ namespace OnWeb
                 (ResourceProvider)Get<Core.Storage.ResourceProvider>() 
             ));
 
-            var languageChecker = new LanguageRouteConstraint(Get<Core.Languages.Manager>().GetLanguages()
+            var languageChecker = new LanguageRouteConstraint(Get<Manager>().GetLanguages()
                                                                             .Where(x => !string.IsNullOrEmpty(x.ShortName))
                                                                             .Select(x => x.ShortName).ToArray());
 
@@ -164,7 +165,7 @@ namespace OnWeb
 
         #region Свойства
         /// <summary>
-        /// См. <see cref="WebApplicationCore.ServerUrl"/>.
+        /// См. <see cref="WebApplicationBase.ServerUrl"/>.
         /// </summary>
         public override Uri ServerUrl
         {

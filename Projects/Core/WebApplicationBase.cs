@@ -9,11 +9,11 @@ namespace OnWeb
     /// <summary>
     /// Ядро веб-приложения.
     /// </summary>
-    public abstract class WebApplicationCore : ApplicationCore
+    public abstract class WebApplicationBase : ApplicationCore
     {
         class ConnectionStringResolver : IConnectionStringResolver
         {
-            internal WebApplicationCore _core = null;
+            internal WebApplicationBase _core = null;
 
             string IConnectionStringResolver.ResolveConnectionStringForDataContext(Type[] entityTypes)
             {
@@ -25,7 +25,7 @@ namespace OnWeb
 
         /// <summary>
         /// </summary>
-        public WebApplicationCore(string physicalApplicationPath, string connectionString) : base(physicalApplicationPath)
+        public WebApplicationBase(string physicalApplicationPath, string connectionString) : base(physicalApplicationPath)
         {
             try
             {

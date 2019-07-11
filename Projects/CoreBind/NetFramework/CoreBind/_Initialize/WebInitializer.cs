@@ -36,9 +36,9 @@ namespace OnWeb.CoreBind._Initialize
 
                             var newtonsoftAssembly = typeof(Newtonsoft.Json.JsonSerializer).Assembly;
                             var utilsAssembly = utilsInjectorType.Assembly;
-                            var applicationAssembly = typeof(ApplicationBase<>).Assembly;
+                            var applicationAssembly = typeof(ApplicationCore).Assembly;
                             var mvcAssembly = typeof(System.Web.Mvc.ActionResult).Assembly;
-                            var webCoreAssembly = typeof(WebApplicationCore).Assembly;
+                            var webCoreAssembly = typeof(WebApplicationBase).Assembly;
                             var webAssembly = webInjectorType.Assembly;
 
                             //var webAssemblyReferences = webAssembly.GetReferencedAssemblies().Select(x => System.Reflection.Assembly.Load(x.FullName)).ToList();

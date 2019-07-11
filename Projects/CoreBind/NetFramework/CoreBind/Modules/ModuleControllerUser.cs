@@ -1,10 +1,10 @@
-﻿using OnUtils.Architecture.AppCore;
+﻿using OnUtils.Application.Modules;
 using System;
-using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace OnWeb.CoreBind.Modules
 {
+    using Core;
     using Core.Modules;
 
     /// <summary>
@@ -14,7 +14,7 @@ namespace OnWeb.CoreBind.Modules
     public abstract class ModuleControllerUser<TModule> : ModuleControllerBase, IModuleController<TModule>
         where TModule : ModuleCore<TModule>
     {
-        private class CoreComponentImpl : CoreComponentBase<WebApplicationCore>
+        private class CoreComponentImpl : CoreComponentBase
         {
             protected override void OnStart()
             {

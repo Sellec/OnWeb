@@ -1,4 +1,6 @@
-﻿using OnUtils.Architecture.AppCore;
+﻿using OnUtils.Application.Modules.Extensions.CustomFields.Data;
+using OnUtils.Application.Modules.Extensions.CustomFields.Field;
+using OnUtils.Application.Modules.Extensions.CustomFields.Field.FieldTypes;
 using System.Collections.Generic;
 using System.Linq;
 #if NETFULL
@@ -13,11 +15,11 @@ using MvcHtmlString = Microsoft.AspNetCore.Html.IHtmlContent;
 namespace OnWeb.Core.ModuleExtensions.CustomFields.Field.FieldTypes
 {
 #pragma warning disable CS1591 // todo внести комментарии.
-    public class SourceSingleFieldTypeRender : CoreComponentBase<WebApplicationCore>, ICustomFieldRender<SourceSingleFieldType>
+    public class SourceSingleFieldTypeRender : CoreComponentBase, ICustomFieldRender<SourceSingleFieldType>
     {
         MvcHtmlString ICustomFieldRender<SourceSingleFieldType>.RenderHtmlEditor<TModel>(HtmlHelper<TModel> html, IField field, IDictionary<string, object> htmlAttributes, params object[] additionalParameters)
         {
-            var value = (field as Data.FieldData)?.Value?.ToString();
+            var value = (field as FieldData)?.Value?.ToString();
 
             if (htmlAttributes == null) htmlAttributes = new Dictionary<string, object>();
             if (!string.IsNullOrEmpty(field.alias)) htmlAttributes["class"] = (htmlAttributes.GetValueOrDefault("class", null) ?? "") + " FieldAlias_" + field.alias;

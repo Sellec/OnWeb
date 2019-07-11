@@ -58,7 +58,7 @@ namespace OnWeb.CoreBind.Modules
                         if (method != null)
                         {
                             var attrs = method.GetCustomAttributes(true);
-                            if (extension.Attributes.IsAdminPart && _controller.ModuleBase.CheckPermission(module.AppCore.Get<UserContextManager<WebApplicationCore>>().GetCurrentUserContext(), ModulesConstants.PermissionManage) != CheckPermissionResult.Allowed)
+                            if (extension.Attributes.IsAdminPart && _controller.ModuleBase.CheckPermission(module.AppCore.GetUserContextManager().GetCurrentUserContext(), ModulesConstants.PermissionManage) != CheckPermissionResult.Allowed)
                                 throw new Exception("Недостаточно прав!");
 
                             MethodInfo mm = null;
@@ -161,7 +161,7 @@ namespace OnWeb.CoreBind.Modules
                         if (method != null)
                         {
                             var attrs = method.GetCustomAttributes(true);
-                            if (extension.Attributes.IsAdminPart && _controller.ModuleBase.CheckPermission(module.AppCore.Get<UserContextManager<WebApplicationCore>>().GetCurrentUserContext(), ModulesConstants.PermissionManage) != CheckPermissionResult.Allowed)
+                            if (extension.Attributes.IsAdminPart && _controller.ModuleBase.CheckPermission(module.AppCore.GetUserContextManager().GetCurrentUserContext(), ModulesConstants.PermissionManage) != CheckPermissionResult.Allowed)
                                 throw new Exception("Недостаточно прав!");
 
                             MethodInfo mm = null;

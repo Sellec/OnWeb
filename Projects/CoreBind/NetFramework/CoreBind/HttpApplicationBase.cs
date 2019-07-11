@@ -17,7 +17,7 @@ namespace OnWeb.CoreBind
     {
         private static object SyncRootStart = new object();
         private static volatile int _instancesCount = 0;
-        private static ApplicationCoreBind _applicationCore = null;
+        private static WebApplication _applicationCore = null;
 
         [ThreadStatic]
         internal Queue<IDisposable> _requestSpecificDisposables;
@@ -86,7 +86,7 @@ namespace OnWeb.CoreBind
 
                     var physicalApplicationPath = Server.MapPath("~");
 
-                    _applicationCore = new ApplicationCoreBind(physicalApplicationPath, ConnectionString);
+                    _applicationCore = new WebApplication(physicalApplicationPath, ConnectionString);
                     _applicationCore.Start();
 
                     try
@@ -327,7 +327,7 @@ namespace OnWeb.CoreBind
         /// <summary>
         /// Возвращает ядро приложения.
         /// </summary>
-        public WebApplicationCore AppCore
+        public WebApplicationBase AppCore
         {
             get => _applicationCore;
         }

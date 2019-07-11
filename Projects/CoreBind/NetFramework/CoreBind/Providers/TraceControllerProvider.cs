@@ -1,5 +1,7 @@
-﻿using OnUtils.Application.Modules;
-using OnUtils.Architecture.AppCore;
+﻿using OnUtils.Application;
+using OnUtils.Application.Exceptions;
+using OnUtils.Application.Journaling;
+using OnUtils.Application.Modules;
 using OnUtils.Data;
 using System;
 using System.Collections.Generic;
@@ -13,11 +15,11 @@ using System.Web.SessionState;
 
 namespace OnWeb.CoreBind.Providers
 {
-    using Core.Journaling;
+    using Core;
     using Core.Modules;
     using Routing;
 
-    class TraceControllerProvider : CoreComponentBase<WebApplicationCore>, IComponentSingleton<WebApplicationCore>, IUnitOfWorkAccessor<Core.DB.CoreContext>, IControllerFactory
+    class TraceControllerProvider : CoreComponentBase, IComponentSingleton, IUnitOfWorkAccessor<Core.DB.CoreContext>, IControllerFactory
     {
         private readonly IControllerFactory _controllerFactoryOld = null;
 
@@ -91,13 +93,13 @@ namespace OnWeb.CoreBind.Providers
                  * Ищем модуль, к которому обращаются запросом.
                  * */
                 if (int.TryParse(moduleName, out int moduleId) && moduleId.ToString() == moduleName)
-                    module = AppCore.Get<ModulesManager<WebApplicationCore>>().GetModule(moduleId);
+                    module = AppCore.GetModulesManager().GetModule(moduleId);
                 else if (Guid.TryParse(moduleName, out Guid uniqueName) && uniqueName.ToString() == moduleName)
-                    module = AppCore.Get<ModulesManager<WebApplicationCore>>().GetModule(uniqueName);
+                    module = AppCore.GetModulesManager().GetModule(uniqueName);
                 else
-                    module = AppCore.Get<ModulesManager<WebApplicationCore>>().GetModule(moduleName);
+                    module = AppCore.GetModulesManager().GetModule(moduleName);
 
-                if (module == null) throw new Core.Exceptions.ErrorCodeException(HttpStatusCode.NotFound, $"Адрес '{moduleName}' не найден.");
+                if (module == null) throw new ErrorCodeException(HttpStatusCode.NotFound, $"Адрес '{moduleName}' не найден.");
 
                 /*
                  * Ищем контроллер, который относится к модулю.
@@ -147,12 +149,13 @@ namespace OnWeb.CoreBind.Providers
 
         private IController CreateController(ControllerType controllerType, ModuleCore module, RouteValueDictionary routeValues)
         {
-            var targetType = module.ControllerTypes.GetValueOrDefault(controllerType.ControllerTypeID);
+            var controllerTypes = AppCore.Get<ModuleRegisteredHandler>().GetModuleControllerTypes(module.QueryType);
+            var targetType = controllerTypes.GetValueOrDefault(controllerType.ControllerTypeID);
             if (targetType == null) throw new NotSupportedException(controllerType.ErrorCannotFindControllerTypeSpecified(module, routeValues));
 
             if (!controllerType.CheckPermissions(module, routeValues))
             {
-                throw new Core.Exceptions.ErrorCodeException(HttpStatusCode.Forbidden, "Отсутствует доступ.");
+                throw new ErrorCodeException(HttpStatusCode.Forbidden, "Отсутствует доступ.");
             }
 
             if (targetType != null)

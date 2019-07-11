@@ -5,10 +5,12 @@ using System.Web;
 
 namespace OnWeb.CoreBind.Providers
 {
+    using Core;
+
     /// <summary>
     /// Управляет процессом определения пользователя во время выполнения запроса и процессом привязки пользователя после авторизации.
     /// </summary>
-    public class SessionBinder : CoreComponentBase<WebApplicationCore>, IComponentSingleton<WebApplicationCore>
+    public class SessionBinder : CoreComponentBase, IComponentSingleton
     {
         /// <summary>
         /// См. <see cref="CoreComponentBase{TAppCore}.OnStart"/>.
@@ -36,7 +38,7 @@ namespace OnWeb.CoreBind.Providers
         {
             if (TryGetUserCredentialsFromRequest(out int? idUser))
             {
-                var userContextResult = AppCore.GetUserContextManager().CreateUserContext(idUser.Value, out var userContext, out var resultReason);
+                var userContextResult = AppCore.Get<Core.Users.WebUserContextManager>().CreateUserContext(idUser.Value, out var userContext);
                 return userContextResult == Core.Users.eAuthResult.Success ? userContext : null;
             }
 
@@ -100,7 +102,6 @@ namespace OnWeb.CoreBind.Providers
 
             return false;
         }
-
 
         /// <summary>
         /// Привязывает указанный контекст пользователя <paramref name="context"/> к текущему запросу таким образом, что последующий вызов <see cref="RestoreUserContextFromRequest"/> восстановит новый контекст, ассоциированный с тем же пользователем.

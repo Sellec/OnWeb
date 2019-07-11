@@ -18,7 +18,7 @@ namespace OnWeb.Core.Routing
     /// Менеджер маршрутизации. Позволяет получать и управлять адресами сущностей.
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Compiler", "CS0618")]
-    public class UrlManager : CoreComponentBase<WebApplicationCore>, IComponentSingleton<WebApplicationCore>, IUnitOfWorkAccessor<UnitOfWork<DB.Routing, ModuleConfig>>, IAutoStart
+    public class UrlManager : CoreComponentBase<ApplicationCore>, IComponentSingleton<ApplicationCore>, IUnitOfWorkAccessor<UnitOfWork<DB.Routing, ModuleConfig>>, IAutoStart
     {
         private static Dictionary<string, string> TRANSLATETABLE = new Dictionary<string, string>() {
             { "а", "a" }, { "б", "b" }, { "в", "v" }, { "г", "g" }, { "д", "d" }, { "е", "e" }, { "ж", "g" }, { "з", "z" },

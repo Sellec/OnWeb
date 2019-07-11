@@ -1,4 +1,6 @@
-﻿using OnUtils.Architecture.AppCore;
+﻿using OnUtils.Application.Modules.Extensions.CustomFields.Data;
+using OnUtils.Application.Modules.Extensions.CustomFields.Field;
+using OnUtils.Application.Modules.Extensions.CustomFields.Field.FieldTypes;
 using System.Collections.Generic;
 #if NETFULL
 using System.Web.Mvc;
@@ -11,7 +13,7 @@ using MvcHtmlString = Microsoft.AspNetCore.Html.IHtmlContent;
 namespace OnWeb.Core.ModuleExtensions.CustomFields.Field.FieldTypes
 {
 #pragma warning disable CS1591 // todo внести комментарии.
-    public class HiddenSimpleMultiLineFieldTypeRender : CoreComponentBase<WebApplicationCore>, ICustomFieldRender<HiddenSimpleMultiLineFieldType>
+    public class HiddenSimpleMultiLineFieldTypeRender : CoreComponentBase, ICustomFieldRender<HiddenSimpleMultiLineFieldType>
     {
         MvcHtmlString ICustomFieldRender<HiddenSimpleMultiLineFieldType>.RenderHtmlEditor<TModel>(HtmlHelper<TModel> html, IField field, IDictionary<string, object> htmlAttributes, params object[] additionalParameters)
         {
@@ -19,7 +21,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.Field.FieldTypes
             htmlAttributes["style"] = "display:none;";
             if (!string.IsNullOrEmpty(field.alias)) htmlAttributes["class"] = (htmlAttributes.GetValueOrDefault("class", null) ?? "") + " FieldAlias_" + field.alias;
 
-            var value = (field as Data.FieldData)?.ToString();
+            var value = (field as FieldData)?.ToString();
 #if NETFULL
             return html.TextArea($"fieldValue_{field.IdField}", value, htmlAttributes);
 #elif NETCORE

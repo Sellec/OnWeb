@@ -13,7 +13,7 @@ namespace OnWeb.Plugins.Lexicon
     /// <summary>
     /// Менеджер для работы со словарными формами.
     /// </summary>
-    public class LexiconManager : CoreComponentBase<WebApplicationCore>, IComponentSingleton<WebApplicationCore>, IUnitOfWorkAccessor<UnitOfWork<WordCase>>
+    public class LexiconManager : CoreComponentBase<ApplicationCore>, IComponentSingleton<ApplicationCore>, IUnitOfWorkAccessor<UnitOfWork<WordCase>>
     {
         /// <summary>
         /// Структура для запроса числительной и падежной формы слова.

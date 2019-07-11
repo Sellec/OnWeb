@@ -1,4 +1,5 @@
-﻿using OnUtils.Architecture.AppCore;
+﻿using OnUtils.Application.Modules.Extensions.CustomFields.Field;
+using OnUtils.Application.Modules.Extensions.CustomFields.Field.FieldTypes;
 using System.Collections.Generic;
 #if NETFULL
 using System.Web.Mvc;
@@ -10,7 +11,7 @@ using MvcHtmlString = Microsoft.AspNetCore.Html.IHtmlContent;
 
 namespace OnWeb.Core.ModuleExtensions.CustomFields.Field.FieldTypes
 {
-    sealed class UnknownFieldTypeRender : CoreComponentBase<WebApplicationCore>, ICustomFieldRender<UnknownFieldType>
+    sealed class UnknownFieldTypeRender : CoreComponentBase, ICustomFieldRender<UnknownFieldType>
     {
         MvcHtmlString ICustomFieldRender<UnknownFieldType>.RenderHtmlEditor<TModel>(HtmlHelper<TModel> html, IField field, IDictionary<string, object> htmlAttributes, params object[] additionalParameters)
         {

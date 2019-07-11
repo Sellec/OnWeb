@@ -10,7 +10,7 @@ namespace OnWeb.Core.Modules.Extensions.ExtensionUrl
     {
         protected override Uri GetBaseUrlForAbsolute()
         {
-            return ((WebApplicationCore)AppCore).ServerUrl;
+            return ((WebApplicationBase)AppCore).ServerUrl;
         }
 
         protected override ExecutionResult<Dictionary<int, string>> GetUrl(ModuleCore module, IEnumerable<int> idItemList, int idItemType)

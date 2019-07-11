@@ -1,5 +1,8 @@
-﻿using OnUtils.Application.Modules;
-using OnUtils.Application.Users;
+﻿using OnUtils.Application;
+using OnUtils.Application.Exceptions;
+using OnUtils.Application.Journaling;
+using OnUtils.Application.Modules;
+using OnUtils.Application.Modules.Extensions;
 using OnUtils.Architecture.AppCore;
 using System;
 using System.Collections.Concurrent;
@@ -13,24 +16,21 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Async;
-using System.Web.Mvc.Filters;
 using System.Web.Mvc.Html;
 using System.Web.Routing;
 
 namespace OnWeb.CoreBind.Modules
 {
     using Core;
-    using Core.Exceptions;
     using Core.Modules;
-    using Journaling = Core.Journaling;
 
     /// <summary>
     /// Базовый класс контроллера. Не должен использоваться для создания контроллеров напрямую, только через наследование от <see cref="ModuleControllerBase"/>
     /// </summary>
     [ModuleController(Routing.ControllerTypeDefault.TypeID)]
-    public abstract class ModuleControllerBase : Controller, IComponentTransient<WebApplicationCore>
+    public abstract class ModuleControllerBase : Controller, IComponentTransient
     {
-        private class CoreComponentBaseImpl : CoreComponentBase<WebApplicationCore>, IComponent<WebApplicationCore>
+        private class CoreComponentBaseImpl : CoreComponentBase<ApplicationCore>, IComponent<ApplicationCore>
         {
             protected override void OnStart()
             {
@@ -62,7 +62,7 @@ namespace OnWeb.CoreBind.Modules
 
             }
 
-            var result = AppCore.Get<Journaling.JournalingManager>().RegisterJournal(Journaling.JournalingConstants.IdSystemJournalType, journalName, "ModuleControllerError_" + errorCode.ToString());
+            var result = AppCore.Get<JournalingManager>().RegisterJournal(JournalingConstants.IdSystemJournalType, journalName, "ModuleControllerError_" + errorCode.ToString());
             if (!result.IsSuccess) Debug.WriteLine("Ошибка получения журнала для кода {0}: {1}", errorCode, result.Message);
             return result.Result?.IdJournal ?? -1;
         }
@@ -77,7 +77,7 @@ namespace OnWeb.CoreBind.Modules
         /// <summary>
         /// См. <see cref="CoreComponentBase{TAppCore}.Start(TAppCore)"/>.
         /// </summary>
-        public void Start(WebApplicationCore core)
+        public void Start(ApplicationCore core)
         {
             _coreComponent.Start(core);
         }
@@ -101,7 +101,7 @@ namespace OnWeb.CoreBind.Modules
         /// <summary>
         /// См. <see cref="IComponent{TAppCore}.GetAppCore"/>.
         /// </summary>
-        public WebApplicationCore GetAppCore()
+        public ApplicationCore GetAppCore()
         {
             return _coreComponent.GetAppCore();
         }
@@ -507,7 +507,6 @@ namespace OnWeb.CoreBind.Modules
         /// <param name="success">Результат выполнения скрипта - true или false.</param>
         /// <param name="message">Возвращаемый текст сообщения.</param>
         /// <param name="data">Дополнительные возвращаемые данные.</param>
-        /// <param name="modelState">Результат проверки модели данных.</param>
         /// <returns></returns>
         protected internal JsonResult ReturnJson(bool success, string message, object data = null)
         {
@@ -576,9 +575,9 @@ namespace OnWeb.CoreBind.Modules
         /// Регистрирует событие в журнал HTTP-кодов.
         /// </summary>
         /// <param name="code">Код HTTP ошибки</param>
-        /// <param name="message">См. <see cref="Journaling.JournalingManager.RegisterEvent(int, Journaling.EventType, string, string, DateTime?, Exception)"/>.</param>
-        /// <param name="messageDetailed">См. <see cref="Journaling.JournalingManager.RegisterEvent(int, Journaling.EventType, string, string, DateTime?, Exception)"/>.</param>
-        /// <param name="ex">См. <see cref="Journaling.JournalingManager.RegisterEvent(int, Journaling.EventType, string, string, DateTime?, Exception)"/>.</param>
+        /// <param name="message">См. <see cref="JournalingManager.RegisterEvent(int, EventType, string, string, DateTime?, Exception)"/>.</param>
+        /// <param name="messageDetailed">См. <see cref="JournalingManager.RegisterEvent(int, EventType, string, string, DateTime?, Exception)"/>.</param>
+        /// <param name="ex">См. <see cref="JournalingManager.RegisterEvent(int, EventType, string, string, DateTime?, Exception)"/>.</param>
         internal protected void RegisterEventWithCode(HttpStatusCode code, string message, string messageDetailed = null, Exception ex = null)
         {
             var idJournal = _journalsForErrors.GetOrAddWithExpiration((int)code, GetJournalForErrors, TimeSpan.FromMinutes(5));
@@ -586,7 +585,7 @@ namespace OnWeb.CoreBind.Modules
             var msg = $"URL запроса: {Request.Url}\r\n";
             if (Request.UrlReferrer != null) msg += $"URL-referer: {Request.UrlReferrer}\r\n";
 
-            var context = AppCore.Get<UserContextManager<WebApplicationCore>>().GetCurrentUserContext();
+            var context = AppCore.GetUserContextManager().GetCurrentUserContext();
 
             if (context.IsGuest) msg += $"Пользователь: Гость\r\n";
             else msg += $"Пользователь: {context.GetData().ToString()} (id: {context.GetIdUser()})\r\n";
@@ -597,8 +596,8 @@ namespace OnWeb.CoreBind.Modules
 
             msg += messageDetailed;
 
-            var errorType = (int)code == 500 ? Journaling.EventType.CriticalError : Journaling.EventType.Error;
-            AppCore.Get<Journaling.JournalingManager>().RegisterEvent(idJournal, errorType, message, msg, null, ex);
+            var errorType = (int)code == 500 ? EventType.CriticalError : EventType.Error;
+            AppCore.Get<JournalingManager>().RegisterEvent(idJournal, errorType, message, msg, null, ex);
         }
 
         /// <summary>
@@ -652,7 +651,7 @@ namespace OnWeb.CoreBind.Modules
 
         internal ActionResult ExtensionWrapper(object _extension, object _extensionMethod, params object[] _args)
         {
-            var extension = _extension as Core.Modules.Extensions.ModuleExtension;
+            var extension = _extension as ModuleExtension;
             var extensionMethod = _extensionMethod as MethodInfo;
 
             try
@@ -681,7 +680,7 @@ namespace OnWeb.CoreBind.Modules
         /// <summary>
         /// Возвращает ядро приложения, в рамках которого запущен контроллер.
         /// </summary>
-        public WebApplicationCore AppCore
+        public ApplicationCore AppCore
         {
             get => GetAppCore();
         }

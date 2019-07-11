@@ -45,7 +45,7 @@ namespace OnWeb.Plugins.Customer
         /// </summary>
         public sealed override Uri GenerateLink(ItemBase item)
         {
-            if (item is User) return new Uri(((WebApplicationCore)AppCore).ServerUrl, $"{UrlName}/user/{item.ID}");
+            if (item is User) return new Uri(((WebApplicationBase)AppCore).ServerUrl, $"{UrlName}/user/{item.ID}");
             if (item is Core.DB.User) throw new NotImplementedException();
             //else if (item is Register.Model.Register) return new Uri(ApplicationCore.Instance.ServerUrl, $"{Name}/user/{item.ID}");
             //return base.GenerateLink(item);

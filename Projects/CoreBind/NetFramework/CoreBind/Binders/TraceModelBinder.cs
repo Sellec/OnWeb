@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Web.Mvc;
+using OnUtils.Application.Modules.Extensions.CustomFields.Data;
+using OnUtils.Application.Modules.Extensions.CustomFields;
+
 
 namespace OnWeb.CoreBind.Binders
 {
     /// <summary>
-    /// Представляет стандартную реализацию привязки модели с поддержкой пользовательских полей (<see cref="Core.ModuleExtensions.CustomFields.ExtensionCustomsFields"/>.
+    /// Представляет стандартную реализацию привязки модели с поддержкой пользовательских полей (<see cref="ExtensionCustomsFieldsBase"/>.
     /// </summary>
     class TraceModelBinder : DefaultModelBinder
     {
@@ -17,7 +20,7 @@ namespace OnWeb.CoreBind.Binders
 
             foreach (PropertyDescriptor prop in props)
             {
-                if (typeof(Core.ModuleExtensions.CustomFields.Data.DefaultSchemeWData).IsAssignableFrom(prop.PropertyType))
+                if (typeof(DefaultSchemeWData).IsAssignableFrom(prop.PropertyType))
                 {
                     properties2.Add(prop);
                 }
@@ -37,7 +40,7 @@ namespace OnWeb.CoreBind.Binders
 
         public override object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
         {
-            if (bindingContext.ModelType == typeof(Core.ModuleExtensions.CustomFields.Data.DefaultSchemeWData))
+            if (bindingContext.ModelType == typeof(DefaultSchemeWData))
             {
                 var model = bindingContext.Model;
                 bindingContext.ModelMetadata = ModelMetadataProviders.Current.GetMetadataForType(() => model, bindingContext.Model.GetType());

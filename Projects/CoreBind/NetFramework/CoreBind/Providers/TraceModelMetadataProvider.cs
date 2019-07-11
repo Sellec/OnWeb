@@ -1,9 +1,9 @@
-﻿using System;
+﻿using OnUtils.Application.Modules.Extensions.CustomFields.Data;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web.Mvc;
 using System.ComponentModel;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace OnWeb.CoreBind.Providers
 {
@@ -61,7 +61,7 @@ namespace OnWeb.CoreBind.Providers
 
         protected override ModelMetadata CreateMetadata(IEnumerable<Attribute> attributes, Type containerType, Func<object> modelAccessor, Type modelType, string propertyName)
         {
-            if (modelType == typeof(Core.ModuleExtensions.CustomFields.Data.DefaultSchemeWData))
+            if (modelType == typeof(DefaultSchemeWData))
             {
                 //var modelValue = modelAccessor.Invoke();
                 //modelType = modelValue.GetType();

@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace OnWeb.Core.Modules
 {
-    class ModuleRegisteredHandler : CoreComponentBase, IModuleRegisteredHandler
+    public class ModuleRegisteredHandler : CoreComponentBase, IModuleRegisteredHandler
     {
         private ConcurrentDictionary<Type, Dictionary<int, Type>> _moduleControllerTypesList = new ConcurrentDictionary<Type, Dictionary<int, Type>>();
 
@@ -22,9 +22,9 @@ namespace OnWeb.Core.Modules
         #endregion
 
         #region IModuleRegisteredHandler
-        void IModuleRegisteredHandler.OnModuleInitialized<TModule>(TModule module)
+        void IModuleRegisteredHandler.OnModuleInitialized<TModuleType>(TModuleType module)
         {
-            var controllerTypes = AppCore.GetBindedTypes<IModuleController<TModule>>();
+            var controllerTypes = AppCore.GetBindedTypes<IModuleController<TModuleType>>();
 
             if (controllerTypes != null)
             {
@@ -44,5 +44,15 @@ namespace OnWeb.Core.Modules
 
         }
         #endregion
+
+        public Dictionary<int, Type> GetModuleControllerTypes<TModuleType>() where TModuleType : ModuleCore<TModuleType>
+        {
+            return GetModuleControllerTypes(typeof(TModuleType));
+        }
+
+        public Dictionary<int, Type> GetModuleControllerTypes(Type moduleType)
+        {
+            return _moduleControllerTypesList.TryGetValue(moduleType, out var value) ? value : new Dictionary<int, Type>();
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace OnWeb.Core.ServiceMonitor
     /// <summary>
     /// Монитор сервисов. Позволяет вносить и получать информацию о сервисах, о их состоянии, событиях и пр.
     /// </summary>
-    public class Monitor : CoreComponentBase<WebApplicationCore>, IComponentSingleton<WebApplicationCore>, IUnitOfWorkAccessor<UnitOfWork<Journal>>
+    public class Monitor : CoreComponentBase<ApplicationCore>, IComponentSingleton<ApplicationCore>, IUnitOfWorkAccessor<UnitOfWork<Journal>>
     {
         private static ConcurrentDictionary<Guid, JournalName> _servicesJournalsList = new ConcurrentDictionary<Guid, JournalName>();
         private static ConcurrentDictionary<Guid, ServiceInfo> _servicesList = new ConcurrentDictionary<Guid, ServiceInfo>();

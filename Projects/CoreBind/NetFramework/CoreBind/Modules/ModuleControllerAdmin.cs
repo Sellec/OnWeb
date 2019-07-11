@@ -1,15 +1,15 @@
-﻿using OnUtils.Data;
+﻿using OnUtils.Application.Configuration;
+using OnUtils.Application.Journaling;
+using OnUtils.Application.Modules;
 using System;
 using System.Linq;
 using System.Web.Mvc;
 
 namespace OnWeb.CoreBind.Modules
 {
-    using Core.DB;
     using Core.Modules;
     using CoreBind.Types;
     using Routing;
-    using Core.Configuration;
 
     [ModuleController(ControllerTypeAdmin.TypeID)]
     public abstract class ModuleControllerAdmin<TModule, TConfigurationViewModel, TConfigurationSaveModel> : ModuleControllerUser<TModule>
@@ -102,7 +102,7 @@ namespace OnWeb.CoreBind.Modules
                                 break;
 
                             case ApplyConfigurationResult.Failed:
-                                var journalData = AppCore.Get<Core.Journaling.JournalingManager>().GetJournalData(result.Item2.Value);
+                                var journalData = AppCore.Get<JournalingManager>().GetJournalData(result.Item2.Value);
                                 answer.FromFail($"Возникла ошибка при сохранении настроек: {(journalData?.Message ?? "текст ошибки не найден")}. {outputMessage}".Trim());
                                 break;
 

@@ -4,7 +4,7 @@ namespace OnWeb
 {
     /// <summary>
     /// </summary>
-    public static class WebApplicationCoreExtensions
+    public static class WebApplicationBaseExtensions
     {
         /// <summary>
         /// Возвращает модуль ядра веб-приложения.
@@ -19,7 +19,7 @@ namespace OnWeb
         /// </summary>
         public static Plugins.WebCoreModule.WebCoreConfiguration GetWebConfig(this ApplicationCore appCore)
         {
-            return ((WebApplicationCore)appCore).WebConfig;
+            return ((WebApplicationBase)appCore).WebConfig;
         }
 
     }
