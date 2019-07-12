@@ -7,19 +7,13 @@ using System.Reflection;
 
 namespace OnWeb.Core.Modules
 {
-    public class ModuleRegisteredHandler : CoreComponentBase, IModuleRegisteredHandler
+    public class ModuleControllerTypesManager : CoreComponentBase, IModuleRegisteredHandler
     {
         private ConcurrentDictionary<Type, Dictionary<int, Type>> _moduleControllerTypesList = new ConcurrentDictionary<Type, Dictionary<int, Type>>();
 
         #region CoreComponentBase
         protected override void OnStart()
         {
-            var modules = AppCore.GetModulesManager().GetModules();
-            var method = GetType().GetMethod(nameof(OnModuleInitialized));
-            foreach(var module in modules)
-            {
-                method.MakeGenericMethod(module.QueryType).Invoke(this, new object[] { module });
-            }
         }
 
         protected override void OnStop()

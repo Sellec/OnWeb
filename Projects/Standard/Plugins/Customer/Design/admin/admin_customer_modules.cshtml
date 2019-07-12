@@ -15,7 +15,7 @@ $(document).ready(function(){
         var aj = new ajaxRequest();
         aj.setPOST('ext_id',data[1]);
         aj.setPOST('ext_status',$(this).attr('value'));
-        aj.load('/admin/madmin/@Module.Name/customer_modules_save','div_result');        
+        aj.load('/admin/madmin/@Module.UrlName/customer_modules_save','div_result');        
     } catch(err) {alert(err);}
     });
     

@@ -1,11 +1,8 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Linq;
+﻿using OnUtils.Application.Configuration;
 
 namespace OnWeb.Plugins.reCAPTCHA
 {
     using Model;
-    using OnWeb.Core.Configuration;
 
     class ModuleReCaptchaController : CoreBind.Modules.ModuleControllerAdmin<ModuleReCaptcha, Configuration, Configuration>
     {

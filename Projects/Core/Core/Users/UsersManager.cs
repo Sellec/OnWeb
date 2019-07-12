@@ -56,20 +56,20 @@ namespace OnWeb.Core.Users
                     if (!roleIdList.Contains(idRoleUser))
                     {
                         var queryRolesWithUsers = exceptSuperuser ? (from user in queryBase
-                                                                     join role in db.RoleUser on user.id equals role.IdUser
+                                                                     join role in db.RoleUser on user.IdUser equals role.IdUser
                                                                      where roleIdList.Contains(role.IdRole)
                                                                      select new { role.IdUser, role.IdRole }) : (from user in queryBase
-                                                                                                                 join role in db.RoleUser on user.id equals role.IdUser
+                                                                                                                 join role in db.RoleUser on user.IdUser equals role.IdUser
                                                                                                                  where roleIdList.Contains(role.IdRole) || user.Superuser != 0
                                                                                                                  select new { role.IdUser, role.IdRole });
 
                         var data = queryRolesWithUsers.ToList().GroupBy(x => x.IdUser, x => x.IdRole).ToDictionary(x => x.Key, x => x.Distinct().ToArray());
 
                         var queryUsers = from user in db.Users
-                                         where data.Keys.Contains(user.id)
+                                         where data.Keys.Contains(user.IdUser)
                                          select user;
 
-                        var data2 = queryUsers.ToList().ToDictionary(x => x, x => data[x.id]);
+                        var data2 = queryUsers.ToList().ToDictionary(x => x, x => data[x.IdUser]);
                         return data2;
                     }
                     else
@@ -143,7 +143,7 @@ namespace OnWeb.Core.Users
                         db.RoleUser.Where(x => x.IdRole == idRole && !userIdList.Contains(x.IdUser)).Delete();
 
                         var context = AppCore.GetUserContextManager().GetCurrentUserContext();
-                        var IdUserChange = context.GetIdUser();
+                        var IdUserChange = context.IdUser;
 
                         var usersInRole = db.RoleUser.Where(x => x.IdRole == idRole).Select(x => x.IdUser).ToList();
                         userIdList.Where(x => !usersInRole.Contains(x)).ToList().ForEach(IdUser =>
@@ -226,14 +226,14 @@ namespace OnWeb.Core.Users
                     if (db.Role.Where(x => x.IdRole == idRole).Count() == 0) return NotFound.NotFound;
 
                     var context = AppCore.GetUserContextManager().GetCurrentUserContext();
-                    var IdUserChange = context.GetIdUser();
+                    var IdUserChange = context.IdUser;
 
-                    db.Users.Where(x => userIdList.Contains(x.id)).ToList().ForEach((DB.User x) =>
+                    db.Users.Where(x => userIdList.Contains(x.IdUser)).ToList().ForEach((DB.User x) =>
                     {
                         db.RoleUser.AddOrUpdate(new RoleUser()
                         {
                             IdRole = idRole,
-                            IdUser = x.id,
+                            IdUser = x.IdUser,
                             IdUserChange = IdUserChange,
                             DateChange = DateTime.Now.Timestamp()
                         });
@@ -272,8 +272,8 @@ namespace OnWeb.Core.Users
                 {
                     using (var db = this.CreateUnitOfWork())
                     {
-                        var sql = (from p in db.Users where listIDForRequest.Contains(p.id) select p);
-                        foreach (var res in sql) users[res.id] = res;
+                        var sql = (from p in db.Users where listIDForRequest.Contains(p.IdUser) select p);
+                        foreach (var res in sql) users[res.IdUser] = res;
                     }
                 }
 

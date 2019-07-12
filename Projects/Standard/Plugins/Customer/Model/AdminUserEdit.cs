@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using OnUtils.Application.Journaling.DB;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 
 namespace OnWeb.Plugins.Customer.Model
 {
     using Core.DB;
-    using Core.Journaling.DB;
 
     public class AdminUserEdit
     {

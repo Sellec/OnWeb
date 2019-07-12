@@ -1,11 +1,11 @@
-﻿using System;
+﻿using OnUtils.Application.Items;
+using System;
 using System.Linq;
 using System.Web.Mvc;
 
 namespace OnWeb.Plugins.EditableMenu
 {
     using AdminForModules.Menu;
-    using Core.Items;
     using CoreBind.Modules;
 
     public class ModuleController : ModuleControllerAdmin<Module>
@@ -31,7 +31,7 @@ namespace OnWeb.Plugins.EditableMenu
                 return this.display("EditableMenuEdit.cshtml", new Design.Model.EditableMenu()
                 {
                     Menu = menu,
-                    Modules = (from p in AppCore.GetModulesManager().GetModules() orderby p.Caption select p).ToList()
+                    Modules = AppCore.GetModulesManager().GetModules().OrderBy(x => x.Caption).ToList()
                 });
             }
         }

@@ -19,7 +19,6 @@ namespace OnWeb.Core.DB
 
         public int IdEventType { get; set; }
 
-        [Required]
         [StringLength(50)]
         public string IP { get; set; }
 

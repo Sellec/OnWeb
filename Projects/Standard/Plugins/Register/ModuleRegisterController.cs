@@ -1,4 +1,5 @@
-﻿using OnUtils.Data;
+﻿using OnUtils.Application.Exceptions;
+using OnUtils.Data;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -9,7 +10,6 @@ namespace OnWeb.Plugins.Register
 {
     using Core.DB;
     using Core.Types;
-    using Core.Exceptions;
     using CoreBind.Modules;
 
     public class ModuleRegisterController : ModuleControllerUser<ModuleRegister>
@@ -72,7 +72,7 @@ namespace OnWeb.Plugins.Register
 
                     preparedData.salt = salt;
 
-                    var regMode = AppCore.Config.register_mode;
+                    var regMode = AppCore.GetWebConfig().register_mode;
                     switch (regMode)
                     {
                         case RegisterMode.SelfConfirmation:
@@ -137,7 +137,7 @@ namespace OnWeb.Plugins.Register
                 var message = "";
                 using (var db = new CoreContext())
                 {
-                    var data = db.Users.FirstOrDefault(x => x.id == idUser);
+                    var data = db.Users.FirstOrDefault(x => x.IdUser == idUser);
                     if (data == null)
                     {
                         message = "Пользователь с указанным идентификатором не найден.";

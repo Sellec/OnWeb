@@ -40,14 +40,15 @@ namespace OnWeb.Core.DB
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int id { get; set; }
+        [Column("id")]
+        public int IdUser { get; set; }
 
         /// <summary>
-        /// Ñì. <see cref="id"/>.
+        /// Ñì. <see cref="IdUser"/>.
         /// </summary>
         public override int ID
         {
-            get => id;
+            get => IdUser;
             set { }
         }
 
@@ -56,7 +57,7 @@ namespace OnWeb.Core.DB
         /// </summary>
         public override string Caption
         {
-            get => !string.IsNullOrEmpty(name) ? name : !string.IsNullOrEmpty(email) ? email : id.ToString();
+            get => !string.IsNullOrEmpty(name) ? name : !string.IsNullOrEmpty(email) ? email : IdUser.ToString();
             set => name = value;
         }
 

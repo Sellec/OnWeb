@@ -32,7 +32,7 @@ namespace OnWeb.Plugins.Customer.NetSpecific.NetFramework
                     {
                         if (!string.IsNullOrEmpty(model2.email))
                         {
-                            if (db.Users.Where(x => x.email == model2.email && x.id != model2.id).Count() > 0)
+                            if (db.Users.Where(x => x.email == model2.email && x.IdUser != model2.IdUser).Count() > 0)
                                 results.Add(new ModelValidationResult()
                                 {
                                     MemberName = nameof(model2.email),
@@ -43,7 +43,7 @@ namespace OnWeb.Plugins.Customer.NetSpecific.NetFramework
                         if (!string.IsNullOrEmpty(model2.phone))
                         {
                             var phone = UsersExtensions.preparePhone(model2.phone);
-                            if (db.Users.Where(x => x.phone == phone && x.id != model2.id).Count() > 0)
+                            if (db.Users.Where(x => x.phone == phone && x.IdUser != model2.IdUser).Count() > 0)
                                 results.Add(new ModelValidationResult()
                                 {
                                     MemberName = nameof(model2.phone),

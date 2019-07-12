@@ -1,7 +1,7 @@
-﻿namespace OnWeb.Plugins.reCAPTCHA
-{
-    using Core.Configuration;
+﻿using OnUtils.Application.Configuration;
 
+namespace OnWeb.Plugins.reCAPTCHA
+{
     /// <summary>
     /// Настройки модуля <see cref="ModuleReCaptcha"/>.
     /// </summary>

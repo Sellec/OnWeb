@@ -10,15 +10,6 @@ namespace OnWeb
     public static class UsersExtensions
     {
         /// <summary>
-        /// Возвращает идентификатор пользователя, ассоциированного с контекстом. См. <see cref="Core.DB.User.id"/>.
-        /// </summary> 
-        public static int GetIdUser(this IUserContext context)
-        {
-            if (context is Core.Users.UserContext coreContext) return coreContext.IdUser;
-            throw new ArgumentException("Контекст пользователя не является контекстом, используемым в веб-ядре.", nameof(context));
-        }
-
-        /// <summary>
         /// Возвращает данные пользователя, ассоциированного с контекстом. См. <see cref="Core.DB.User"/>.
         /// </summary>
         public static Core.DB.User GetData(this IUserContext context)
@@ -33,7 +24,7 @@ namespace OnWeb
         ///// <returns>Возвращает объект <see cref="ExecutionResultEntities"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. В случае ошибки свойство <see cref="ExecutionResult.Message"/> содержит сообщение об ошибке.</returns>
         //public static ExecutionResultEntities GetEntities(this IUserContext context, string tag = null)
         //{
-        //    var entitiesResult = context.GetAppCore()?.Get<Core.Users.IEntitiesManager>()?.GetUserEntities(context.GetIdUser(), tag);
+        //    var entitiesResult = context.GetAppCore()?.Get<Core.Users.IEntitiesManager>()?.GetUserEntities(context.IdUser, tag);
         //    return entitiesResult;
         //}
 

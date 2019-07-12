@@ -126,14 +126,14 @@ namespace OnWeb.CoreBind.Providers
                 throw new InvalidOperationException("Метод вызван не в рамках входящего запроса.");
             }
 
-            var verificationKey = $"{context.GetIdUser()}_{DateTime.Now.Ticks.MD5()}";
+            var verificationKey = $"{context.IdUser}_{DateTime.Now.Ticks.MD5()}";
 
             var cookie = HttpContext.Current.Response.Cookies.Get("VerificationKey");
             if (cookie != null) HttpContext.Current.Response.Cookies.Remove("VerificationKey");
             HttpContext.Current.Response.Cookies.Add(new HttpCookie("VerificationKey", verificationKey) { Expires = DateTime.Now.AddYears(1), Path = "/" });
 
             HttpContext.Current.Session["authorized"] = true;
-            HttpContext.Current.Session["UserId"] = context.GetIdUser();
+            HttpContext.Current.Session["UserId"] = context.IdUser;
             HttpContext.Current.Session["Timestamp"] = DateTime.UtcNow.ToString();
             HttpContext.Current.Session["VerificationKey"] = verificationKey;
         }

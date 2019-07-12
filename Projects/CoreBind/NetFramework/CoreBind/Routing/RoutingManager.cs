@@ -73,7 +73,7 @@ namespace OnWeb.CoreBind.Routing
                 if (!controllerType.IsAssignableToGenericType(typeof(ModuleControllerUser<>)) && !controllerType.IsAssignableToGenericType(typeof(ModuleControllerUser<>)))
                     throw new HandledException("", new NotSupportedException($"Передаваемый тип контроллера должен быть наследником универсального типа {typeof(ModuleControllerUser<>).FullName} или {typeof(ModuleControllerAdmin<>).FullName}."));
 
-                var controllerTypes = AppCore.Get<ModuleRegisteredHandler>().GetModuleControllerTypes<TModule>();
+                var controllerTypes = AppCore.Get<ModuleControllerTypesManager>().GetModuleControllerTypes<TModule>();
 
                 var controllerTypeCandidates = controllerTypes.Where(x => controllerType.IsAssignableFrom(x.Value)).ToList();
                 if (controllerTypeCandidates.Count == 0) throw new HandledException("", new NotSupportedException($"Среди контроллеров модуля '{module.Caption}' нет контроллера, в цепочке наследования которого находится тип '{controllerType.FullName}'."));

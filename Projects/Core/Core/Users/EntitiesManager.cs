@@ -138,7 +138,7 @@ namespace OnWeb.Core.Users
                         ToList();
 
                     // todo заняться этим методом в рамках привязки к aspnet.
-                    //if (!AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest && AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser() == IdUser)
+                    //if (!AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest && AppCore.GetUserContextManager().GetCurrentUserContext().IdUser == IdUser)
                     //{
                     //    //TODO надо ли объединять с entities из сессии или лучше сделать, чтобы entities из сессии автоматом переливались в базу, когда юзер авторизовался?
                     //    var listFromSession = GetUserEntitiesSession(Tag);

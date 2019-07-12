@@ -1,10 +1,10 @@
-﻿using System.ComponentModel;
+﻿using OnUtils.Application.Items;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace OnWeb.Plugins.Customer.Model
 {
     using Core.DB;
-    using Core.Items;
 
     [ItemTypeAlias(typeof(User))]
     public class ProfileEdit : ItemBase<ModuleCustomer>
@@ -15,7 +15,7 @@ namespace OnWeb.Plugins.Customer.Model
 
         public ProfileEdit(User source)
         {
-            this.ID = source.id;
+            this.ID = source.IdUser;
             this.email = source.email;
             this.phone = source.phone;
             this.name = source.name;

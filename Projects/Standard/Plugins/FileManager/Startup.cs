@@ -1,11 +1,12 @@
-﻿using OnUtils.Architecture.AppCore;
+﻿using OnUtils.Application;
+using OnUtils.Architecture.AppCore;
 using OnUtils.Architecture.AppCore.DI;
 
 namespace OnWeb.Plugins.FileManager
 {
     using Core.ModuleExtensions.CustomFields;
-    using CustomFieldsFileTypes;
     using Core.Modules;
+    using CustomFieldsFileTypes;
 
     class Startup : IConfigureBindings
     {

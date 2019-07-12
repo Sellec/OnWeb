@@ -1,27 +1,29 @@
-﻿using System;
+﻿using OnUtils.Application.Modules;
+using OnUtils.Application.Types;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Web.Routing;
-using System.Collections.Generic;
 
 namespace OnWeb.Plugins
 {
-    using Core.Types;
+    using Core.Modules;
     using CoreBind.Routing;
 
     static class Extensions
     {
-        public static Type ControllerUser(this Core.Modules.ModuleCore module)
+        public static Type ControllerUser(this ModuleCore module)
         {
-            return module.ControllerTypes.GetValueOrDefault(ControllerTypeDefault.TypeID);
+            return module.AppCore.Get<ModuleControllerTypesManager>().GetModuleControllerTypes(module.QueryType).GetValueOrDefault(ControllerTypeDefault.TypeID);
         }
 
-        public static Type ControllerAdmin(this Core.Modules.ModuleCore module)
+        public static Type ControllerAdmin(this ModuleCore module)
         {
-            return module.ControllerTypes.GetValueOrDefault(ControllerTypeAdmin.TypeID);
+            return module.AppCore.Get<ModuleControllerTypesManager>().GetModuleControllerTypes(module.QueryType).GetValueOrDefault(ControllerTypeAdmin.TypeID);
         }
 
-        public static NestedLinkCollection GetAdminMenuItems(this Core.Modules.ModuleCore module)
+        public static NestedLinkCollection GetAdminMenuItems(this ModuleCore module)
         {
             var list = new NestedLinkCollection();
 
@@ -30,7 +32,7 @@ namespace OnWeb.Plugins
 
             try
             {
-                if ((module as Core.Modules.ModuleCore).ControllerAdmin() != null)
+                if (module.ControllerAdmin() != null)
                 {
                     var moduleAdmin = module.AppCore.Get<Admin.ModuleAdmin>();
                     var methods = module.ControllerAdmin().GetMethods();

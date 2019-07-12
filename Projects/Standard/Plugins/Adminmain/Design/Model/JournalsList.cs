@@ -1,10 +1,9 @@
-﻿using System;
+﻿using OnUtils.Application.Journaling;
+using OnUtils.Application.Journaling.DB;
+using System;
 
 namespace OnWeb.Plugins.Adminmain.Design.Model
 {
-    using Core.Journaling;
-    using Core.Journaling.DB;
-
     public class JournalsList
     {
         public JournalName JournalName { get; set; }

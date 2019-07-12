@@ -1,11 +1,9 @@
-﻿using OnUtils.Data;
-using OnUtils.Tasks;
+﻿using OnUtils.Application.Modules;
+using OnUtils.Data;
 using System;
 
 namespace OnWeb.Plugins.Adminmain
 {
-    using Core.Modules;
-
     /// <summary>
     /// Модуль управления основными функциями.
     /// </summary>

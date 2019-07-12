@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using OnUtils.Application.Modules;
+using System.Collections.Generic;
 
 namespace OnWeb.Plugins.Adminmain.Model
 {
-    using Core.Modules;
-
     public class Routing
     {
         public List<ModuleCore> Modules;

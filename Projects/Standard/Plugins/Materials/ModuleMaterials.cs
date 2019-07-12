@@ -1,21 +1,22 @@
-﻿using OnUtils.Data;
+﻿using OnUtils.Application.Items;
+using OnUtils.Application.Modules;
+using OnUtils.Application.Modules.Extensions.CustomFields;
+using OnUtils.Application.Modules.Extensions.ExtensionUrl;
+using OnUtils.Application.Types;
+using OnUtils.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace OnWeb.Plugins.Materials
 {
-    using Core.Items;
-    using Core.Modules;
-    using Core.Types;
-
     [ModuleCore("Контент", DefaultUrlName = "Content")]
     public class ModuleMaterials : ModuleCore<ModuleMaterials>, IUnitOfWorkAccessor<DB.DataLayerContext>
     {
         protected override void InitModuleCustom()
         {
-            RegisterExtension<Core.ModuleExtensions.ExtensionUrl.ExtensionUrl>();
-            RegisterExtension<Core.ModuleExtensions.CustomFields.ExtensionCustomsFieldsBase>();
+            RegisterExtension<ExtensionUrl>();
+            RegisterExtension<ExtensionCustomsFieldsBase>();
         }
 
         public override IReadOnlyDictionary<ItemBase, Uri> GenerateLinks(IEnumerable<ItemBase> items)
@@ -76,7 +77,7 @@ namespace OnWeb.Plugins.Materials
             }
         }
 
-        public override NestedLinkCollection GetItems(int IdItemType, eSortType SortOrder = eSortType.Default, params object[] _params)
+        public override NestedLinkCollection GetItems(int IdItemType, params object[] _params)
         {
             if (IdItemType == ItemType)
             {
@@ -97,7 +98,7 @@ namespace OnWeb.Plugins.Materials
 
         public override Uri GenerateLink(ItemBase item)
         {
-            if (item.Owner == this && item is DB.Page) return new Uri(string.Format("/{0}", (item as DB.Page).urlname), UriKind.Relative);
+            if (item.Owner == this && item is DB.Page page) return new Uri(string.Format("/{0}", page.urlname), UriKind.Relative);
             return null;
         }
     }

@@ -129,7 +129,7 @@ namespace OnWeb.Core.Users
                         return checkLoginResult.AuthResult;
                     }
 
-                    id = res.id;
+                    id = res.IdUser;
                     var attempts = authConfig.AuthorizationAttempts;
                     authorizationAttemptsExceeded = attempts > 0 && (res.AuthorizationAttempts + 1) >= attempts;
 
@@ -138,12 +138,13 @@ namespace OnWeb.Core.Users
                     var context = new UserContext(res, true);
                     context.Start(AppCore);
 
-                    var permissionsResult = AppCore.GetUserContextManager().TryRestorePermissions(context);
+                    var permissionsResult = AppCore.GetUserContextManager().GetPermissions(context.IdUser);
                     if (!permissionsResult.IsSuccess)
                     {
                         resultReason = returnNewFailedResultWithAuthAttempt(permissionsResult.Message);
                         return eAuthResult.UnknownError;
                     }
+                    context.ApplyPermissions(permissionsResult.Result);
 
                     var idEvent = authConfig.EventLoginSuccess;
                     if (idEvent > 0) RegisterLogHistoryEvent(db, id, idEvent);
@@ -192,7 +193,7 @@ namespace OnWeb.Core.Users
                 // Если в $user передан id и $password не передан вообще.
                 if (idUser > 0)
                 {
-                    query = db.Users.Where(x => x.id == idUser).ToList();
+                    query = db.Users.Where(x => x.IdUser == idUser).ToList();
                     directAuthorize = true;
                 }
 

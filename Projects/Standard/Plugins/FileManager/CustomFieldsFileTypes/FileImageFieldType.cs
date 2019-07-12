@@ -1,12 +1,11 @@
-﻿using OnUtils.Data;
+﻿using OnUtils.Application.Modules.Extensions.CustomFields.Field;
+using OnUtils.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace OnWeb.Plugins.FileManager.CustomFieldsFileTypes
 {
-    using Core.ModuleExtensions.CustomFields.Field;
-
     public class FileImageFieldType : FileFieldType
     {
         public override ValuesValidationResult Validate(IEnumerable<object> values, IField field)

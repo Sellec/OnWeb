@@ -1,10 +1,11 @@
-﻿using OnUtils.Utils;
-using OnWeb.Core.Modules;
-using OnWeb.CoreBind.Routing;
-using System.Linq.Expressions;
-using System.Linq;
-using OnWeb.CoreBind.Modules;
+﻿using OnUtils.Application.Modules;
+using OnUtils.Utils;
 using OnWeb;
+using OnWeb.Core.Modules;
+using OnWeb.CoreBind.Modules;
+using OnWeb.CoreBind.Routing;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace System.Web.Mvc
 {
@@ -116,10 +117,12 @@ namespace System.Web.Mvc
         /// <seealso cref="RoutingManager.CreateRoute{TModule, TModuleController}(Expression{Func{TModuleController, ActionResult}}, bool)"/>
         public static Uri CreateRoute(this UrlHelper helper, bool includeAuthority = false)
         {
-            var module = helper.RequestContext.HttpContext.GetAppCore().GetModulesManager().GetModule(helper.RequestContext.HttpContext.GetAppCore().Config.IdModuleDefault);
+            var appCore = helper.RequestContext.HttpContext.GetAppCore();
+            var module = appCore.GetModulesManager().GetModule(appCore.GetWebConfig().IdModuleDefault);
             if (module == null) return null;
 
-            var controllerType = module.ControllerTypes.Where(x => x.Key == ControllerTypeDefault.TypeID).Select(x => x.Value).FirstOrDefault();
+            var controllerTypes = appCore.Get<ModuleControllerTypesManager>().GetModuleControllerTypes(module.QueryType);
+            var controllerType = controllerTypes.Where(x => x.Key == ControllerTypeDefault.TypeID).Select(x => x.Value).FirstOrDefault();
             if (controllerType == null) return null;
 
             var methodInfo = typeof(UrlHelpers).GetMethods(Reflection.BindingFlags.Public | Reflection.BindingFlags.Static).Where(x => x.IsGenericMethod && x.Name == nameof(CreateRoute) && x.GetParameters().Length == 2).FirstOrDefault();

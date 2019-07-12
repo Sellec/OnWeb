@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using OnUtils.Application.DB;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OnWeb.Plugins.Customer.Model
 {
-    using Core.DB;
-
     [NotMapped]
     public class AdminRoleEdit : Role
     {
@@ -14,14 +13,14 @@ namespace OnWeb.Plugins.Customer.Model
 
         public AdminRoleEdit(Role role)
         {
-            this.IdRole = role.IdRole;
-            this.NameRole = role.NameRole;
-            this.IdUserChange = role.IdUserChange;
-            this.DateChange = role.DateChange;
-            this.IdUserCreate = role.IdUserCreate;
-            this.DateCreate = role.DateCreate;
+            IdRole = role.IdRole;
+            NameRole = role.NameRole;
+            IdUserChange = role.IdUserChange;
+            DateChange = role.DateChange;
+            IdUserCreate = role.IdUserCreate;
+            DateCreate = role.DateCreate;
 
-            this.Permissions = new List<string>();
+            Permissions = new List<string>();
         }
 
         [Display(Name = "Разрешения модуля")]

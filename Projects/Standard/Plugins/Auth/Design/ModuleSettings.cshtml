@@ -1,7 +1,6 @@
 @model Auth.Design.Model.ModuleSettings
 @{ 
     Layout = "AdminForModules/Design/baseModuleEdit.cshtml";
-    var roleList = Model.Roles.Select(x => new SelectListItem() { Value = x.IdRole.ToString(), Text = x.NameRole });
     var eventTypeList = Model.EventTypes.Select(x => new SelectListItem() { Value = x.IdEventType.ToString(), Text = x.NameEventType });
 }
 
@@ -14,18 +13,6 @@
 }
 
 @section ModuleConfiguration {
-    <tr>
-        <td>Роль, присваиваемая авторизованным пользователям:</td>
-        <td>
-            @Html.DropDownListFor(x => x.RoleUser, roleList)
-        </td>
-    </tr>
-    <tr>
-        <td>Роль, присваиваемая гостям:</td>
-        <td>
-            @Html.DropDownListFor(x => x.RoleGuest, roleList)
-        </td>
-    </tr>
     <tr>
         <td>Событие удачной авторизации:</td>
         <td>

@@ -1,4 +1,5 @@
-﻿using OnUtils.Architecture.AppCore;
+﻿using OnUtils.Application;
+using OnUtils.Architecture.AppCore;
 using OnUtils.Architecture.AppCore.DI;
 
 namespace OnWeb.Plugins.Auth

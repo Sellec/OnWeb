@@ -58,16 +58,7 @@ namespace OnWeb.Core.Messaging
             }
         }
 
-        /// <summary>
-        /// Рассылка писем по рассылке номер <paramref name="IdSubscription"/> с темой <paramref name="subject"/> с текстом <paramref name="body"/>.
-        /// </summary>
-        /// <param name="IdSubscription">Номер рассылки</param>
-        /// <param name="subject">Тема письма. Если не указана, то используется название листа рассылки.</param>
-        /// <param name="body">Тело письма. Обязательный параметр, письмо не может быть пустым.</param>
-        /// <param name="files">Список файлов, которые следует прикрепить к телу письма.</param>
-        /// <param name="excludedAddresses">Почтовые адреса, которые следует исключить во время рассылания писем.</param>
-        /// <returns></returns>
-        bool ISubscriptionsManager.send(int IdSubscription, string subject, string body, List<int> files, ICollection<string> excludedAddresses)
+        bool ISubscriptionsManager.send(int IdSubscription, string subject, string body, ContentType contentType, List<int> files, ICollection<string> excludedAddresses)
         {
             try
             {
@@ -87,7 +78,7 @@ namespace OnWeb.Core.Messaging
 
                     (from s in db.SubscriptionRole
                      join r in db.RoleUser on s.IdRole equals r.IdRole
-                     join u in db.Users on r.IdUser equals u.id
+                     join u in db.Users on r.IdUser equals u.IdUser
                      where s.IdSubscription == IdSubscription
                      select u).ToList().ForEach(x => emails[x.email] = x.Caption);
 
@@ -98,7 +89,7 @@ namespace OnWeb.Core.Messaging
                     {
                         if (excludedAddresses != null && excludedAddresses.Contains(pair.Key)) continue;
 
-                        AppCore.Get<IEmailService>().SendMailFromSite(pair.Value, pair.Key, subject, body, files);
+                        AppCore.Get<IEmailService>().SendMailFromSite(pair.Value, pair.Key, subject, body, contentType, files);
                     }
 
                     if (!full) Debug.WriteLine("IdSubscription={0}. Исполнен частично.", IdSubscription);
@@ -135,7 +126,7 @@ namespace OnWeb.Core.Messaging
                         {
                             subscr_id = IdSubscription,
                             email = email,
-                            IdUserChange = context.GetIdUser(),
+                            IdUserChange = context.IdUser,
                             DateChange = DateTime.Now.Timestamp()
                         });
 
@@ -179,7 +170,7 @@ namespace OnWeb.Core.Messaging
                         {
                             IdSubscription = IdSubscription,
                             IdRole = IdRole,
-                            IdUserChange = context.GetIdUser(),
+                            IdUserChange = context.IdUser,
                             DateChange = DateTime.Now.Timestamp()
                         });
 

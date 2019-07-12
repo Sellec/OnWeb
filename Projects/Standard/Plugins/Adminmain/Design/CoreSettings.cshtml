@@ -1,5 +1,8 @@
 @model Adminmain.Model.AdminMainModelInfoPage
-@{ var moduleAdmin = AppCore.Get<Admin.ModuleAdmin>(); }
+@{ 
+    var moduleAdmin = AppCore.Get<Admin.ModuleAdmin>();
+    var roleList = Model.Roles.Select(x => new SelectListItem() { Value = x.IdRole.ToString(), Text = x.NameRole });
+}
 
 <script type="text/javascript" src='/data/js/ajax.js'></script>
 <script type='text/javascript'>
@@ -58,84 +61,97 @@
                 <h2>Общие параметры:</h2>
 
                 <div>
-                    @Html.LabelFor(x => x.Configuration.SiteFullName):<br />
-                    @Html.EditorFor(x => x.Configuration.SiteFullName, new { htmlAttributes = new { size = 50 } })<br />
-                    @Html.ValidationMessageFor(x => x.Configuration.SiteFullName)
+                    @Html.LabelFor(x => x.WebCoreConfiguration.SiteFullName):<br />
+                    @Html.EditorFor(x => x.WebCoreConfiguration.SiteFullName, new { htmlAttributes = new { size = 50 } })<br />
+                    @Html.ValidationMessageFor(x => x.WebCoreConfiguration.SiteFullName)
                 </div>
 
                 <div>
-                    @Html.LabelFor(x => x.Configuration.IdModuleDefault):<br>
-                    @Html.DropDownListFor(x => x.Configuration.IdModuleDefault, Model.ModulesList)<br />
-                    @Html.ValidationMessageFor(x => x.Configuration.IdModuleDefault)
+                    @Html.LabelFor(x => x.WebCoreConfiguration.IdModuleDefault):<br>
+                    @Html.DropDownListFor(x => x.WebCoreConfiguration.IdModuleDefault, Model.ModulesList)<br />
+                    @Html.ValidationMessageFor(x => x.WebCoreConfiguration.IdModuleDefault)
                 </div>
 
                 <div>
-                    @Html.LabelFor(x => x.Configuration.ContactEmail):<br />
-                    @Html.EditorFor(x => x.Configuration.ContactEmail, new { htmlAttributes = new { size = 50 } })<br />
-                    @Html.ValidationMessageFor(x => x.Configuration.ContactEmail)
+                    @Html.LabelFor(x => x.WebCoreConfiguration.ContactEmail):<br />
+                    @Html.EditorFor(x => x.WebCoreConfiguration.ContactEmail, new { htmlAttributes = new { size = 50 } })<br />
+                    @Html.ValidationMessageFor(x => x.WebCoreConfiguration.ContactEmail)
                 </div>
 
                 <div>
-                    @Html.LabelFor(x => x.Configuration.ReturnEmail):<br />
-                    @Html.EditorFor(x => x.Configuration.ReturnEmail, new { htmlAttributes = new { size = 50 } })<br />
-                    @Html.ValidationMessageFor(x => x.Configuration.ReturnEmail)
+                    @Html.LabelFor(x => x.WebCoreConfiguration.ReturnEmail):<br />
+                    @Html.EditorFor(x => x.WebCoreConfiguration.ReturnEmail, new { htmlAttributes = new { size = 50 } })<br />
+                    @Html.ValidationMessageFor(x => x.WebCoreConfiguration.ReturnEmail)
                 </div>
 
                 <div>
-                    @Html.LabelFor(x => x.Configuration.DeveloperEmail):<br>
-                    @Html.TextBoxFor(x => x.Configuration.DeveloperEmail)<br />
-                    @Html.ValidationMessageFor(x => x.Configuration.DeveloperEmail)
+                    @Html.LabelFor(x => x.WebCoreConfiguration.DeveloperEmail):<br>
+                    @Html.TextBoxFor(x => x.WebCoreConfiguration.DeveloperEmail)<br />
+                    @Html.ValidationMessageFor(x => x.WebCoreConfiguration.DeveloperEmail)
                 </div>
 
                 <div>
-                    @Html.LabelFor(x => x.Configuration.CriticalMessagesEmail):<br />
-                    @Html.EditorFor(x => x.Configuration.CriticalMessagesEmail, new { htmlAttributes = new { size = 50 } })<br />
-                    @Html.ValidationMessageFor(x => x.Configuration.CriticalMessagesEmail)
+                    @Html.LabelFor(x => x.WebCoreConfiguration.CriticalMessagesEmail):<br />
+                    @Html.EditorFor(x => x.WebCoreConfiguration.CriticalMessagesEmail, new { htmlAttributes = new { size = 50 } })<br />
+                    @Html.ValidationMessageFor(x => x.WebCoreConfiguration.CriticalMessagesEmail)
                 </div>
 
                 <div>
-                    @Html.LabelFor(x => x.Configuration.register_mode):<br>
-                    @Html.EnumDropDownListFor(x => x.Configuration.register_mode)<br />
-                    @Html.ValidationMessageFor(x => x.Configuration.register_mode)
+                    @Html.LabelFor(x => x.WebCoreConfiguration.register_mode):<br>
+                    @Html.EnumDropDownListFor(x => x.WebCoreConfiguration.register_mode)<br />
+                    @Html.ValidationMessageFor(x => x.WebCoreConfiguration.register_mode)
                 </div>
 
                 <div>
-                    @Html.LabelFor(x => x.Configuration.userAuthorizeAllowed):<br>
-                    @Html.EnumDropDownListFor(x => x.Configuration.userAuthorizeAllowed)<br />
-                    @Html.ValidationMessageFor(x => x.Configuration.userAuthorizeAllowed)
+                    @Html.LabelFor(x => x.WebCoreConfiguration.userAuthorizeAllowed):<br>
+                    @Html.EnumDropDownListFor(x => x.WebCoreConfiguration.userAuthorizeAllowed)<br />
+                    @Html.ValidationMessageFor(x => x.WebCoreConfiguration.userAuthorizeAllowed)
                 </div>
 
                 <div>
-                    @Html.LabelFor(x => x.Configuration.site_reginfo):<br />
-                    @Html.TextAreaFor(x => x.Configuration.site_reginfo, new { id = "site_reginfo", rows = 5, cols = 60 })<br />
-                    @Html.ValidationMessageFor(x => x.Configuration.site_reginfo)
+                    @Html.LabelFor(x => x.WebCoreConfiguration.site_reginfo):<br />
+                    @Html.TextAreaFor(x => x.WebCoreConfiguration.site_reginfo, new { id = "site_reginfo", rows = 5, cols = 60 })<br />
+                    @Html.ValidationMessageFor(x => x.WebCoreConfiguration.site_reginfo)
                 </div>
 
                 <div>
-                    @Html.LabelFor(x => x.Configuration.site_loginfo):<br />
-                    @Html.TextAreaFor(x => x.Configuration.site_loginfo, new { id = "site_loginfo", rows = 5, cols = 60 })<br />
-                    @Html.ValidationMessageFor(x => x.Configuration.site_loginfo)
+                    @Html.LabelFor(x => x.WebCoreConfiguration.site_loginfo):<br />
+                    @Html.TextAreaFor(x => x.WebCoreConfiguration.site_loginfo, new { id = "site_loginfo", rows = 5, cols = 60 })<br />
+                    @Html.ValidationMessageFor(x => x.WebCoreConfiguration.site_loginfo)
                 </div>
 
                 <hr /><br />
 
                 <div>
-                    @Html.LabelFor(x => x.Configuration.help_info):<br />
-                    @Html.TextAreaFor(x => x.Configuration.help_info, new { id = "help_info", rows = 5, cols = 60 })<br />
-                    @Html.ValidationMessageFor(x => x.Configuration.help_info)
+                    @Html.LabelFor(x => x.WebCoreConfiguration.help_info):<br />
+                    @Html.TextAreaFor(x => x.WebCoreConfiguration.help_info, new { id = "help_info", rows = 5, cols = 60 })<br />
+                    @Html.ValidationMessageFor(x => x.WebCoreConfiguration.help_info)
                 </div>
 
                 <div>
-                    @Html.LabelFor(x => x.Configuration.site_descr):<br />
-                    @Html.EditorFor(x => x.Configuration.site_descr, new { htmlAttributes = new { size = 50 } })<br />
-                    @Html.ValidationMessageFor(x => x.Configuration.site_descr)
+                    @Html.LabelFor(x => x.WebCoreConfiguration.site_descr):<br />
+                    @Html.EditorFor(x => x.WebCoreConfiguration.site_descr, new { htmlAttributes = new { size = 50 } })<br />
+                    @Html.ValidationMessageFor(x => x.WebCoreConfiguration.site_descr)
                 </div>
 
                 <div>
-                    @Html.LabelFor(x => x.Configuration.site_keys):<br />
-                    @Html.EditorFor(x => x.Configuration.site_keys, new { htmlAttributes = new { size = 50 } })<br />
-                    @Html.ValidationMessageFor(x => x.Configuration.site_keys)
+                    @Html.LabelFor(x => x.WebCoreConfiguration.site_keys):<br />
+                    @Html.EditorFor(x => x.WebCoreConfiguration.site_keys, new { htmlAttributes = new { size = 50 } })<br />
+                    @Html.ValidationMessageFor(x => x.WebCoreConfiguration.site_keys)
                 </div>
+
+                <div>
+                    @Html.LabelFor(x => x.AppCoreConfiguration.RoleGuest):<br />
+                    @Html.DropDownListFor(x => x.AppCoreConfiguration.RoleGuest, roleList)
+                    @Html.ValidationMessageFor(x => x.AppCoreConfiguration.RoleGuest)
+                </div>
+
+                <div>
+                    @Html.LabelFor(x => x.AppCoreConfiguration.RoleUser):<br />
+                    @Html.DropDownListFor(x => x.AppCoreConfiguration.RoleUser, roleList)
+                    @Html.ValidationMessageFor(x => x.AppCoreConfiguration.RoleUser)
+                </div>
+
 
                 <input type='submit' id='save_func' value='&nbsp;Сохранить&nbsp;'> <img src="/data/img/loading.gif" alt="" id="loading_img" style="display:none">
             </form>

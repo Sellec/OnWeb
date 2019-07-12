@@ -1,11 +1,14 @@
 ﻿using Newtonsoft.Json;
+using OnUtils.Application.Configuration;
+using OnUtils.Application.Messaging;
+using OnUtils.Application.Messaging.Connectors;
+using OnUtils.Application.Modules.CoreModule;
 using System;
 using System.Linq;
 
 namespace OnWeb.Plugins.MessagingEmail
 {
     using Model;
-    using OnWeb.Core.Configuration;
 
     class EMailController : CoreBind.Modules.ModuleControllerAdmin<EMailModule, Configuration, Configuration>
     {
@@ -30,7 +33,7 @@ namespace OnWeb.Plugins.MessagingEmail
             connectors.Remove(typeof(Connectors.SmtpServer).FullName);
             if (formData.IsUseSmtp)
             {
-                connectors[typeof(Connectors.SmtpServer).FullName] = new Core.Messaging.Connectors.ConnectorSettings()
+                connectors[typeof(Connectors.SmtpServer).FullName] = new ConnectorSettings()
                 {
                     ConnectorTypeName = typeof(Connectors.SmtpServer).FullName,
                     SettingsSerialized = JsonConvert.SerializeObject(new Connectors.SmtpServerSettings()
@@ -42,12 +45,12 @@ namespace OnWeb.Plugins.MessagingEmail
                 };
             }
 
-            var cfg = AppCore.GetModulesManager().GetModule<WebCoreModule.WebCoreModule>().GetConfigurationManipulator().GetEditable<WebCoreConfiguration>();
+            var cfg = AppCore.Get<CoreModule>().GetConfigurationManipulator().GetEditable<CoreConfiguration>();
 
             cfg.ConnectorsSettings = connectors.Values.ToList();
 
-            AppCore.GetModulesManager().GetModule<WebCoreModule.WebCoreModule>().GetConfigurationManipulator().ApplyConfiguration(cfg);
-            AppCore.Get<Core.Messaging.MessagingManager>().UpdateConnectorsFromSettings();
+            AppCore.Get<CoreModule>().GetConfigurationManipulator().ApplyConfiguration(cfg);
+            AppCore.Get<MessagingManager>().UpdateConnectorsFromSettings();
 
             return base.ConfigurationSaveCustom(formData, out outputMessage);
         }

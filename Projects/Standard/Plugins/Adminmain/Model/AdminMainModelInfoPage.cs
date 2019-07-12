@@ -1,23 +1,30 @@
-﻿using System;
+﻿using OnUtils.Application.Configuration;
+using OnUtils.Application.DB;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 
 namespace OnWeb.Plugins.Adminmain.Model
 {
+    using WebCoreModule;
+
     public class AdminMainModelInfoPage
     {
-        public AdminMainModelInfoPage() : this(new Core.Configuration.WebCoreConfiguration())
+        public AdminMainModelInfoPage() : this(new CoreConfiguration(), new WebCoreConfiguration())
         {
         }
 
-        public AdminMainModelInfoPage(Core.Configuration.WebCoreConfiguration configuration)
+        public AdminMainModelInfoPage(CoreConfiguration appCoreConfiguration, WebCoreConfiguration webCoreConfiguration)
         {
-            Configuration = configuration;
+            AppCoreConfiguration = appCoreConfiguration;
+            WebCoreConfiguration = webCoreConfiguration;
         }
+
+        public List<Role> Roles { get; set; }
 
         public List<SelectListItem> ModulesList { get; set; } = new List<SelectListItem>();
 
-        public Core.Configuration.WebCoreConfiguration Configuration { get; }
+        public CoreConfiguration AppCoreConfiguration { get; }
+
+        public WebCoreConfiguration WebCoreConfiguration { get; }
     }
 }

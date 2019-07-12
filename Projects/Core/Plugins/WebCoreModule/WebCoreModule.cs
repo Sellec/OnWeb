@@ -47,8 +47,6 @@ namespace OnWeb.Plugins.WebCoreModule
 
                 scope.Commit();
             }
-
-            OnConfigurationApplied();
         }
 
         /// <summary>
@@ -70,5 +68,11 @@ namespace OnWeb.Plugins.WebCoreModule
                 }
             }
         }
+
+        internal void RunConfigurationCheck()
+        {
+            OnConfigurationApplied();
+        }
+
     }
 }

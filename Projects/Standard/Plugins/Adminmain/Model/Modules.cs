@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using OnUtils.Application.Modules;
+using System.Collections.Generic;
 
 namespace OnWeb.Plugins.Adminmain.Model
 {
     public class Module
     {
-        public Module(Core.Modules.ModuleCore module)
+        public Module(ModuleCore module)
         {
             Id = module.ID;
             Caption = module.Caption;

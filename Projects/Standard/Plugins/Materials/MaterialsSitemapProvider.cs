@@ -1,12 +1,11 @@
-﻿using System;
+﻿using OnUtils.Application;
+using OnUtils.Application.Items;
+using OnUtils.Architecture.AppCore;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using OnUtils.Architecture.AppCore;
 
 namespace OnWeb.Plugins.Materials
 {
-    using Core.Items;
     using Adminmain.Services;
 
     class MaterialsSitemapProvider : CoreComponentBase<ApplicationCore>, ISitemapProvider

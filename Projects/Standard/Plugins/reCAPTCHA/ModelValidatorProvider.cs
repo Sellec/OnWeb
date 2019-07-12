@@ -1,16 +1,17 @@
-﻿using OnUtils.Architecture.AppCore;
+﻿using OnUtils.Application;
+using OnUtils.Architecture.AppCore;
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace OnWeb.Plugins.reCAPTCHA
 {
     class ModelValidatorProvider : System.Web.Mvc.ModelValidatorProvider
     {
-        private readonly WebApplicationBase _appCore;
+        private readonly ApplicationCore _appCore;
 
-        public ModelValidatorProvider(WebApplicationBase appCore)
+        public ModelValidatorProvider(ApplicationCore appCore)
         {
             _appCore = appCore;
         }

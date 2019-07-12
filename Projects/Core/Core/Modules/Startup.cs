@@ -8,7 +8,7 @@ namespace OnWeb.Core.Modules
     {
         void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
         {
-            bindingsCollection.SetSingleton<ModuleRegisteredHandler>();
+            bindingsCollection.SetSingleton<ModuleControllerTypesManager>();
             bindingsCollection.SetTransient<OnUtils.Application.Modules.Extensions.ExtensionUrl.ExtensionUrl, Extensions.ExtensionUrl.WebExtensionUrl>();
         }
     }

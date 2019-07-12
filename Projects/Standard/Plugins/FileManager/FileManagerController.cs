@@ -7,14 +7,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-using OnUtils.Data;
-
 namespace OnWeb.Plugins.FileManager
 {
     using CoreBind.Modules;
-    using Core.Modules;
-    using Core.Routing;
-    using CoreBind.Routing;
 
     public class FileManagerController : ModuleControllerUser<FileManager>
     {

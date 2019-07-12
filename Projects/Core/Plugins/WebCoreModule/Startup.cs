@@ -10,6 +10,7 @@ namespace OnWeb.Plugins.WebCoreModule
         {
             bindingsCollection.RegisterBindingConstraintHandler(new BindingConstraint());
             bindingsCollection.SetSingleton<WebCoreModule>();
+            bindingsCollection.SetSingleton<WebCoreConfigurationChecker>();
         }
     }
 }

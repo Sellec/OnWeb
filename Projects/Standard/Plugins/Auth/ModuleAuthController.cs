@@ -1,15 +1,15 @@
-﻿using OnUtils.Application.Modules;
+﻿using OnUtils.Application;
+using OnUtils.Application.Exceptions;
+using OnUtils.Application.Journaling;
+using OnUtils.Application.Modules;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web.Mvc;
 
 namespace OnWeb.Plugins.Auth
 {
     using Core.DB;
-    using Core.Exceptions;
-    using Core.Journaling;
     using Core.Users;
     using CoreBind.Modules;
     using MessagingEmail;
@@ -50,7 +50,7 @@ namespace OnWeb.Plugins.Auth
 
                 if (ModelState.IsValid)
                 {
-                    var result = AppCore.GetUserContextManager().CreateUserContext(model.login, model.pass, out var userContext, out var resultReason);
+                    var result = AppCore.Get<WebUserContextManager>().CreateUserContext(model.login, model.pass, out var userContext, out var resultReason);
                     if (result == eAuthResult.Success)
                     {
                         AppCore.Get<CoreBind.Providers.SessionBinder>().BindUserContextToRequest(userContext);
@@ -101,7 +101,7 @@ namespace OnWeb.Plugins.Auth
 
                 if (ModelState.IsValid)
                 {
-                    var result = AppCore.GetUserContextManager().CreateUserContext(model.login, model.pass, out var userContext, out var resultReason);
+                    var result = AppCore.Get<WebUserContextManager>().CreateUserContext(model.login, model.pass, out var userContext, out var resultReason);
                     switch (result)
                     {
                         case eAuthResult.Success:
@@ -210,11 +210,11 @@ namespace OnWeb.Plugins.Auth
                 {
                     if (!isPhone)
                     {
-                        if (!AppCore.Config.userAuthorizeAllowed.In(eUserAuthorizeAllowed.EmailAndPhone, eUserAuthorizeAllowed.OnlyEmail)) ModelState.AddModelError(nameof(model.email), "К сожалению, в данный момент авторизация через адрес электронной почты отключена, восстановление пароля таким способом невозможно.");
+                        if (!AppCore.GetWebConfig().userAuthorizeAllowed.In(eUserAuthorizeAllowed.EmailAndPhone, eUserAuthorizeAllowed.OnlyEmail)) ModelState.AddModelError(nameof(model.email), "К сожалению, в данный момент авторизация через адрес электронной почты отключена, восстановление пароля таким способом невозможно.");
                     }
                     else if (isPhone)
                     {
-                        if (!AppCore.Config.userAuthorizeAllowed.In(eUserAuthorizeAllowed.EmailAndPhone, eUserAuthorizeAllowed.OnlyPhone)) ModelState.AddModelError(nameof(model.phone), "К сожалению, в данный момент авторизация через номер телефона отключена, восстановление пароля таким образом невозможно.");
+                        if (!AppCore.GetWebConfig().userAuthorizeAllowed.In(eUserAuthorizeAllowed.EmailAndPhone, eUserAuthorizeAllowed.OnlyPhone)) ModelState.AddModelError(nameof(model.phone), "К сожалению, в данный момент авторизация через номер телефона отключена, восстановление пароля таким образом невозможно.");
                     }
                 }
 
@@ -244,19 +244,20 @@ namespace OnWeb.Plugins.Auth
                                 if (!isPhone)
                                 {
                                     var code = DateTime.Now.Microtime().MD5();
-                                    db.PasswordRemember.Add(new PasswordRemember() { user_id = user.id, code = code });
+                                    db.PasswordRemember.Add(new PasswordRemember() { user_id = user.IdUser, code = code });
 
                                     AppCore.Get<IEmailService>().SendMailFromSite(
                                         user.Caption,
                                         user.email,
                                         "Восстановление пароля на сайте",
-                                        this.displayToVar("PasswordRestoreNotificationEmail.cshtml", new Design.Model.PasswordRestoreSend() { User = user, Code = code, CodeType = codeType })
+                                        this.displayToVar("PasswordRestoreNotificationEmail.cshtml", new Design.Model.PasswordRestoreSend() { User = user, Code = code, CodeType = codeType }),
+                                        ContentType.Html
                                     );
                                 }
                                 else
                                 {
                                     var code = OnUtils.Utils.StringsHelper.GenerateRandomString("0123456789", 4);
-                                    db.PasswordRemember.Add(new PasswordRemember() { user_id = user.id, code = code });
+                                    db.PasswordRemember.Add(new PasswordRemember() { user_id = user.IdUser, code = code });
 
                                     AppCore.Get<MessagingSMS.IService>().SendMessage(user.phone, "Код восстановления пароля: " + code);
                                 }
@@ -309,7 +310,7 @@ namespace OnWeb.Plugins.Auth
                     using (var db = Module.CreateUnitOfWork())
                     {
                         var res = (from p in db.PasswordRemember
-                                   join u in db.Users on p.user_id equals u.id
+                                   join u in db.Users on p.user_id equals u.IdUser
                                    where p.code == model.Code
                                    select new { Password = p, User = u }).FirstOrDefault();
 

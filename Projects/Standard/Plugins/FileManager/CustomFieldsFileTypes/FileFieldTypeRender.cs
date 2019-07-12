@@ -1,4 +1,7 @@
-﻿using OnUtils.Architecture.AppCore;
+﻿using OnUtils.Application;
+using OnUtils.Application.Modules.Extensions.CustomFields.Data;
+using OnUtils.Application.Modules.Extensions.CustomFields.Field;
+using OnUtils.Architecture.AppCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +10,6 @@ using System.Web.Mvc;
 namespace OnWeb.Plugins.FileManager.CustomFieldsFileTypes
 {
     using Core.ModuleExtensions.CustomFields;
-    using Core.ModuleExtensions.CustomFields.Data;
-    using Core.ModuleExtensions.CustomFields.Field;
     using CoreBind.Razor;
 
     class FileFieldTypeRender : CoreComponentBase<ApplicationCore>, ICustomFieldRender<FileFieldType>

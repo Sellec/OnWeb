@@ -1,9 +1,8 @@
-﻿using System;
+﻿using OnUtils.Application.Items;
+using System;
 
 namespace OnWeb.Plugins.FileManager.Conversations
 {
-    using Core.Items;
-
     /// <summary>
     /// Представляет базовые возможности для преобразований файлов на уровне файлового менеджера.
     /// </summary>

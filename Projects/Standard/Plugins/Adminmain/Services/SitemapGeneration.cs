@@ -1,13 +1,14 @@
-﻿using System;
+﻿using OnUtils.Application.Items;
+using OnUtils.Tasks;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using OnUtils.Tasks;
-using OnUtils.Architecture.AppCore;
 
 namespace OnWeb.Plugins.Adminmain.Services
 {
-    public class SitemapGeneration : CoreComponentBase<ApplicationCore>
+    using Core;
+
+    public class SitemapGeneration : CoreComponentBase
     {
         #region Static
         private static SitemapGeneration _instance = null;
@@ -58,7 +59,7 @@ namespace OnWeb.Plugins.Adminmain.Services
                         return null;
                     }
                 }).Where(x => x != null).ToList();
-                var linksAll = providerList.SelectMany(x => x.GetItems() ?? new List<Core.Items.ItemBase>()).ToList();
+                var linksAll = providerList.SelectMany(x => x.GetItems() ?? new List<ItemBase>()).ToList();
 
                 var moduleAdminmain = AppCore.GetModulesManager().GetModule<Module>();
 

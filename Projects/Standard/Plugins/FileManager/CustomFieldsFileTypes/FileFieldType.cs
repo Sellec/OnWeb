@@ -1,4 +1,5 @@
-﻿using OnUtils.Data;
+﻿using OnUtils.Application.Modules.Extensions.CustomFields.Field;
+using OnUtils.Data;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,7 +8,6 @@ using System.Reflection.Emit;
 
 namespace OnWeb.Plugins.FileManager.CustomFieldsFileTypes
 {
-    using Core.ModuleExtensions.CustomFields.Field;
     using DB;
 
     public class FileFieldType : FieldType

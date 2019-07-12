@@ -1,4 +1,7 @@
 ﻿using MimeDetective;
+using OnUtils.Application;
+using OnUtils.Application.Journaling;
+using OnUtils.Application.Modules;
 using OnUtils.Data;
 using OnUtils.Tasks;
 using System;
@@ -10,8 +13,6 @@ using System.Web.Mvc;
 
 namespace OnWeb.Plugins.FileManager
 {
-    using Core.Journaling;
-    using Core.Modules;
     using DictionaryFiles = Dictionary<int, DB.File>;
 
     /// <summary>
@@ -187,7 +188,7 @@ namespace OnWeb.Plugins.FileManager
                     data.PathFile = pathFile;
                     data.DateChange = DateTime.Now.Timestamp();
                     data.DateExpire = dateExpires;
-                    data.IdUserChange = context.GetIdUser();
+                    data.IdUserChange = context.IdUser;
                     data.UniqueKey = uniqueKey;
 
                     var fileInfo = new FileInfo(pathFileFull);

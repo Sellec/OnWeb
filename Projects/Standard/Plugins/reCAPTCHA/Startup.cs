@@ -1,4 +1,5 @@
-﻿using OnUtils.Architecture.AppCore;
+﻿using OnUtils.Application;
+using OnUtils.Architecture.AppCore;
 using OnUtils.Architecture.AppCore.DI;
 using System.Web.Mvc;
 
@@ -14,7 +15,7 @@ namespace OnWeb.Plugins.reCAPTCHA
             bindingsCollection.SetTransient<IModuleController<ModuleReCaptcha>, ModuleReCaptchaController>();
         }
 
-        void IExecuteStart<ApplicationCore>.ExecuteStart(WebApplicationBase core)
+        void IExecuteStart<ApplicationCore>.ExecuteStart(ApplicationCore core)
         {
             ModelValidatorProviders.Providers.Insert(0, new ModelValidatorProvider(core));
         }

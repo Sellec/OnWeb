@@ -1,4 +1,5 @@
-﻿using OnUtils.Data;
+﻿using OnUtils.Application.DB;
+using OnUtils.Data;
 
 namespace OnWeb.Plugins.Adminmain
 {
@@ -12,6 +13,10 @@ namespace OnWeb.Plugins.Adminmain
         /// <summary>
         /// </summary>
         public IRepository<ModuleConfig> ConfigModules { get; }
+
+        /// <summary>
+        /// </summary>
+        public IRepository<Role> Role { get; }
 
         /// <summary>
         /// </summary>

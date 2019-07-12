@@ -3,6 +3,7 @@ using System.Collections.Generic;
 namespace OnWeb.Core.Messaging
 {
     using Core.DB;
+    using Plugins.MessagingEmail;
 
     /// <summary>
     /// Представляет менеджер, управляющий подписками и рассылками сообщений.
@@ -33,8 +34,9 @@ namespace OnWeb.Core.Messaging
         /// <param name="body">Тело письма. Обязательный параметр, письмо не может быть пустым.</param>
         /// <param name="files">Список файлов, которые следует прикрепить к телу письма.</param>
         /// <param name="excludedAddresses">Почтовые адреса, которые следует исключить во время рассылания писем.</param>
+        /// <param name="contentType">Указывает тип содержимого для рассылки.</param>
         /// <returns></returns>
-        bool send(int IdSubscription, string subject, string body, List<int> files = null, ICollection<string> excludedAddresses = null);
+        bool send(int IdSubscription, string subject, string body, ContentType contentType, List<int> files = null, ICollection<string> excludedAddresses = null);
 
         /// <summary>
         /// Добавление нового подписчика в указанный лист.

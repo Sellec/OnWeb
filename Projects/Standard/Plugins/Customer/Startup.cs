@@ -1,4 +1,5 @@
-﻿using OnUtils.Architecture.AppCore;
+﻿using OnUtils.Application;
+using OnUtils.Architecture.AppCore;
 using OnUtils.Architecture.AppCore.DI;
 
 namespace OnWeb.Plugins.Customer
@@ -13,7 +14,7 @@ namespace OnWeb.Plugins.Customer
             bindingsCollection.SetTransient<IModuleController<ModuleCustomer>>(typeof(ModuleControllerCustomer), typeof(ModuleControllerAdminCustomer));
         }
 
-        void IExecuteStart<ApplicationCore>.ExecuteStart(WebApplicationBase core)
+        void IExecuteStart<ApplicationCore>.ExecuteStart(ApplicationCore core)
         {
             core.Get<ModuleCustomer>().RegisterExtension<Core.ModuleExtensions.CustomFields.ExtensionCustomsFieldsAdmin>();
         }

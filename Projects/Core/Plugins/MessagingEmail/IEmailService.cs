@@ -12,9 +12,9 @@ namespace OnWeb.Plugins.MessagingEmail
         /// <summary>
         /// Отправка письма получателю <paramref name="nameTo"/> с адресом <paramref name="emailTo"/> с темой <paramref name="subject"/>, с текстом <paramref name="body"/>.
         /// </summary>
-        void SendMailFromSite(string nameTo, string emailTo, string subject, string body, List<int> files = null);
+        void SendMailFromSite(string nameTo, string emailTo, string subject, string body, ContentType contentType, List<int> files = null);
 
-        void SendMailToDeveloper(string subject, string body, List<int> files = null);
+        void SendMailToDeveloper(string subject, string body, ContentType contentType, List<int> files = null);
 
         /// <summary>
         /// Отправка письма на указанный адрес, с указанной темой, с указанным текстом.
@@ -29,7 +29,7 @@ namespace OnWeb.Plugins.MessagingEmail
         /// <param name="body">текст письма</param>
         /// <param name="files">Прикрепленные файлы</param>
         /// <returns></returns>
-        void SendMail(string name_from, string email_from, string name_to, string email_to, Encoding data_charset, Encoding send_charset, string subject, string body, List<int> files = null);
+        void SendMail(string name_from, string email_from, string name_to, string email_to, Encoding data_charset, Encoding send_charset, string subject, string body, ContentType contentType, List<int> files = null);
 
     }
 }

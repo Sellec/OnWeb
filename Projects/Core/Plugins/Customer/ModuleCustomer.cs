@@ -45,8 +45,7 @@ namespace OnWeb.Plugins.Customer
         /// </summary>
         public sealed override Uri GenerateLink(ItemBase item)
         {
-            if (item is User) return new Uri(((WebApplicationBase)AppCore).ServerUrl, $"{UrlName}/user/{item.ID}");
-            if (item is Core.DB.User) throw new NotImplementedException();
+            if (item is UserBase || item is Core.DB.User) return new Uri(((WebApplicationBase)AppCore).ServerUrl, $"{UrlName}/user/{item.ID}");
             //else if (item is Register.Model.Register) return new Uri(ApplicationCore.Instance.ServerUrl, $"{Name}/user/{item.ID}");
             //return base.GenerateLink(item);
 
@@ -74,7 +73,7 @@ namespace OnWeb.Plugins.Customer
         {
             var context = AppCore.GetUserContextManager().GetCurrentUserContext();
 
-            if (IdUser == context.GetIdUser()) return;
+            if (IdUser == context.IdUser) return;
 
             if (!context.IsSuperuser) throw new Exception("Недостаточно прав на редактирование других пользователей.");
         }

@@ -57,11 +57,11 @@ namespace OnWeb.Plugins.Customer
         [ModuleAction("editLoad", ModulesConstants.PermissionAccessUserString)]
         public ActionResult ProfileEditAjax(int? IdUser = null)
         {
-            if (!IdUser.HasValue) IdUser = AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser();
+            if (!IdUser.HasValue) IdUser = AppCore.GetUserContextManager().GetCurrentUserContext().IdUser;
 
             using (var db = new UnitOfWork<User>())
             {
-                var data = db.Repo1.Where(x => x.id == IdUser.Value).FirstOrDefault();
+                var data = db.Repo1.Where(x => x.IdUser == IdUser.Value).FirstOrDefault();
                 if (data == null) throw new Exception("Указанный пользователь не найден.");
                 else Module.CheckPermissionToEditOtherUser(IdUser.Value);
 
@@ -91,7 +91,7 @@ namespace OnWeb.Plugins.Customer
                 using (var db = new UnitOfWork<User>())
                 using (var trans = db.CreateScope())
                 {
-                    var data = db.Repo1.Where(x => x.id == model.ID).FirstOrDefault();
+                    var data = db.Repo1.Where(x => x.IdUser == model.ID).FirstOrDefault();
                     if (data == null) throw new Exception("Указанный пользователь не найден.");
                     else Module.CheckPermissionToEditOtherUser(model.ID);
 
@@ -103,7 +103,7 @@ namespace OnWeb.Plugins.Customer
                             data.email = data.email?.ToLower();
                             if (data.email != model.email)
                             {
-                                var others = db.Repo1.AsNoTracking().Where(x => x.email.ToLower() == model.email && x.id != data.id).Count();
+                                var others = db.Repo1.AsNoTracking().Where(x => x.email.ToLower() == model.email && x.IdUser != data.IdUser).Count();
                                 if (others > 0) ModelState.AddModelError(prefix + nameof(model.email), "Такой email-адрес уже используется!");
                                 else data.email = model.email;
                             }
@@ -118,7 +118,7 @@ namespace OnWeb.Plugins.Customer
                                 if (string.IsNullOrEmpty(model.phone)) model.phone = null;
                                 else
                                 {
-                                    var others = db.Repo1.AsNoTracking().Where(x => x.phone.ToLower() == model.phone && x.id != data.id).Count();
+                                    var others = db.Repo1.AsNoTracking().Where(x => x.phone.ToLower() == model.phone && x.IdUser != data.IdUser).Count();
                                     if (others > 0) ModelState.AddModelError(prefix + nameof(model.phone), "Такой номер телефона уже используется!");
                                     else
                                     {

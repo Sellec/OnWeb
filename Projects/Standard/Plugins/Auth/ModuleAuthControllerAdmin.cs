@@ -1,9 +1,10 @@
-﻿using System;
+﻿using OnUtils.Application.Configuration;
+using OnUtils.Application.DB;
+using System;
 using System.Linq;
 
 namespace OnWeb.Plugins.Auth
 {
-    using Core.Configuration;
     using CoreBind.Modules;
     using Model;
 
@@ -14,8 +15,6 @@ namespace OnWeb.Plugins.Auth
             using (var db = Module.CreateUnitOfWork())
             {
                 viewModelForFill.ApplyConfiguration(Module.GetConfiguration<ModuleConfiguration>());
-                viewModelForFill.Roles = (from p in db.Role orderby p.NameRole ascending select p).ToList();
-                viewModelForFill.Roles.Insert(0, new Core.DB.Role() { IdRole = 0, NameRole = "Не выбрано" });
                 viewModelForFill.EventTypes = (from p in db.UserLogHistoryEventType orderby p.NameEventType ascending select p).ToList();
                 viewModelForFill.EventTypes.Insert(0, new Core.DB.UserLogHistoryEventType() { IdEventType = 0, NameEventType = "Не выбрано" });
                 viewName = "ModuleSettings.cshtml";
@@ -26,8 +25,6 @@ namespace OnWeb.Plugins.Auth
         {
             var cfg = Module.GetConfigurationManipulator().GetEditable<ModuleConfiguration>();
 
-            if (formData.RoleGuest.HasValue) cfg.RoleGuest = formData.RoleGuest.Value;
-            if (formData.RoleUser.HasValue) cfg.RoleUser = formData.RoleUser.Value;
             if (formData.EventLoginSuccess.HasValue) cfg.EventLoginSuccess = formData.EventLoginSuccess.Value;
             if (formData.EventLoginError.HasValue) cfg.EventLoginError = formData.EventLoginError.Value;
             if (formData.EventLoginUpdate.HasValue) cfg.EventLoginUpdate = formData.EventLoginUpdate.Value;

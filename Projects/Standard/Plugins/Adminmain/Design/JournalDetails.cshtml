@@ -1,5 +1,5 @@
 @using Adminmain
-@using Core.Journaling
+@using OnUtils.Application.Journaling
 @model Adminmain.Design.Model.JournalDetails
 @{ var formID = DateTime.Now.Ticks.ToString(); }
 
@@ -19,7 +19,7 @@ $(function () {
 });
 </script>
 
-<h4>Журнал: @Model.JournalName.Name / <input type="button" id="ClearJournal" value="Очистить журнал"/></h4>
+<h4>Журнал: @Model.JournalName.Name / <input type="button" id="ClearJournal" value="Очистить журнал" /></h4>
 <table class='tablesorter' style="width:1140px" id="FormID_@formID">
     <thead>
         <tr>
@@ -54,4 +54,3 @@ $(function () {
         </tr>
     }
 </table>
-       

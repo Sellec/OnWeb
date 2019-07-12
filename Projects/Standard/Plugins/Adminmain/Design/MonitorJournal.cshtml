@@ -1,31 +1,31 @@
-@model List<Core.Journaling.DB.Journal>
+@using OnUtils.Application.Journaling.DB
+@model List<Journal>
 
-            <table class='tablesorter' style="width:750px">
-                <thead>
-                    <tr>
-                        <th style="width:120px">Дата</th>
-                        <th style="width:200px">Состояние</th>
-                        <th style="width:400px">Состояние с детализацией</th>
-                    </tr>
-                </thead>
-                @if (Model.Count == 0)
-                {
-                <tr id='not_founded' style='display:none;'>
-                    <td class="center" colspan='10'>
-                        Журнал пуст
-                    </td>
-                </tr>
-                }
-                else
-                {
-                    foreach (var pair in Model)
-                    {
-                        <tr>
-                            <td class="left">@pair.DateEvent.ToString("dd.MM.yyyy HH:mm:ss")</td>
-                            <td class="left">@pair.EventInfo</td>
-                            <td class="left">@Html.Nl2Br(pair.EventInfoDetailed)</td>
-                        </tr>
-                    }
-                }
-            </table>
-       
+<table class='tablesorter' style="width:750px">
+    <thead>
+        <tr>
+            <th style="width:120px">Дата</th>
+            <th style="width:200px">Состояние</th>
+            <th style="width:400px">Состояние с детализацией</th>
+        </tr>
+    </thead>
+    @if (Model.Count == 0)
+    {
+        <tr id='not_founded' style='display:none;'>
+            <td class="center" colspan='10'>
+                Журнал пуст
+            </td>
+        </tr>
+    }
+    else
+    {
+        foreach (var pair in Model)
+        {
+            <tr>
+                <td class="left">@pair.DateEvent.ToString("dd.MM.yyyy HH:mm:ss")</td>
+                <td class="left">@pair.EventInfo</td>
+                <td class="left">@Html.Nl2Br(pair.EventInfoDetailed)</td>
+            </tr>
+        }
+    }
+</table>

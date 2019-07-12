@@ -1,7 +1,7 @@
-﻿namespace OnWeb.Plugins.reCAPTCHA
-{
-    using Core.Modules;
+﻿using OnUtils.Application.Modules;
 
+namespace OnWeb.Plugins.reCAPTCHA
+{
     /// <summary>
     /// Модуль проверки рекапчи. Нужен для хранения настроек.
     /// </summary>

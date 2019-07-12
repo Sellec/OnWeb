@@ -54,7 +54,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="OnUtils.Application">
-      <Version>0.1.2.3</Version>
+      <Version>0.1.2.6</Version>
     </PackageReference>
     <PackageReference Include="OnUtils">
       <Version>0.1.2</Version>
@@ -652,6 +652,10 @@
     <ProjectReference Include="..\..\Core\Core.csproj">
       <Project>{f61ffcc5-3711-4d42-916a-ef83032f542a}</Project>
       <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Standard\Standard.NetFramework.csproj">
+      <Project>{c844d3be-ec89-4a5f-b54e-b07d9dfcb4c9}</Project>
+      <Name>Standard.NetFramework</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

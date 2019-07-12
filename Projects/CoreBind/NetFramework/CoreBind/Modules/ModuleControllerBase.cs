@@ -588,7 +588,7 @@ namespace OnWeb.CoreBind.Modules
             var context = AppCore.GetUserContextManager().GetCurrentUserContext();
 
             if (context.IsGuest) msg += $"Пользователь: Гость\r\n";
-            else msg += $"Пользователь: {context.GetData().ToString()} (id: {context.GetIdUser()})\r\n";
+            else msg += $"Пользователь: {context.GetData().ToString()} (id: {context.IdUser})\r\n";
 
             if (!string.IsNullOrEmpty(Request.UserAgent)) msg += $"User-agent: {Request.UserAgent}\r\n";
             var ipdns = new Dictionary<string, string>() { { "IP", Request.UserHostAddress }, { "DNS", Request.UserHostName } }.Where(x => !string.IsNullOrEmpty(x.Value)).ToList();

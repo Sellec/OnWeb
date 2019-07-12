@@ -1,4 +1,7 @@
-﻿using OnUtils.Data;
+﻿using OnUtils.Application;
+using OnUtils.Application.Journaling;
+using OnUtils.Application.Modules;
+using OnUtils.Data;
 using OnUtils.Data.Validation;
 using OnUtils.Utils;
 using System;
@@ -9,8 +12,6 @@ using System.Web.Mvc;
 namespace OnWeb.Plugins.Register
 {
     using Core.DB;
-    using Core.Journaling;
-    using Core.Modules;
     using Core.Types;
     using CoreBind.Types;
     using MessagingEmail;
@@ -76,7 +77,7 @@ namespace OnWeb.Plugins.Register
                         var salt = StringsHelper.GenerateRandomString("abcdefghijklmnoprstuvxyzABCDEFGHIKLMNOPRSTUVXYZ0123456789", 5);
                         var stateConfirmation = DateTime.Now.Ticks.ToString().MD5();
 
-                        var regMode = AppCore.Config.register_mode;
+                        var regMode = AppCore.GetWebConfig().register_mode;
 
                         if (data.State.HasValue)
                         {
@@ -152,7 +153,8 @@ namespace OnWeb.Plugins.Register
                                         data.name,
                                         data.email,
                                         "Регистрация на сайте",
-                                        Core.WebUtils.RazorRenderHelper.RenderView(this, "RegisterNotificationEmailImmediately.cshtml", query)
+                                        Core.WebUtils.RazorRenderHelper.RenderView(this, "RegisterNotificationEmailImmediately.cshtml", query),
+                                        ContentType.Html
                                     );
 
                                 if (hasPhone)
@@ -167,7 +169,8 @@ namespace OnWeb.Plugins.Register
                                         data.name,
                                         data.email,
                                         "Регистрация на сайте",
-                                        Core.WebUtils.RazorRenderHelper.RenderView(this, "RegisterNotificationEmailConfirm.cshtml", new Model.RegisterNotificationConfirm() { Data = query, ConfirmationCode = query.StateConfirmation })
+                                        Core.WebUtils.RazorRenderHelper.RenderView(this, "RegisterNotificationEmailConfirm.cshtml", new Model.RegisterNotificationConfirm() { Data = query, ConfirmationCode = query.StateConfirmation }),
+                                        ContentType.Html
                                     );
 
                                 answer.FromSuccess("Вы успешно зарегистрировались на сайте. В течение определенного времени на Ваш электронный адрес, указанный при регистрации, придет письмо с указаниями по дальнейшим действиям, необходимым для завершения регистрации.");
@@ -179,7 +182,8 @@ namespace OnWeb.Plugins.Register
                                         data.name,
                                         data.email,
                                         "Регистрация на сайте",
-                                        Core.WebUtils.RazorRenderHelper.RenderView(this, "RegisterNotificationEmailModerate.cshtml", query)
+                                        Core.WebUtils.RazorRenderHelper.RenderView(this, "RegisterNotificationEmailModerate.cshtml", query),
+                                        ContentType.Html
                                     );
 
                                 answer.FromSuccess($"Заявка на регистрацию отправлена. Администратор рассмотрит Вашу заявку и примет решение, после чего Вы получите уведомление на указанный {credentitals}.");
@@ -190,7 +194,7 @@ namespace OnWeb.Plugins.Register
                                     var mailAdmin = Core.WebUtils.RazorRenderHelper.RenderView(this, "RegisterNotificationEmailAdmin.cshtml", query);
                                     usersToNotify.
                                         Where(x => !string.IsNullOrEmpty(x.email)).
-                                        ForEach(x => AppCore.Get<IEmailService>().SendMailFromSite(x.email, x.email, "Новая заявка на регистрацию", mailAdmin));
+                                        ForEach(x => AppCore.Get<IEmailService>().SendMailFromSite(x.email, x.email, "Новая заявка на регистрацию", mailAdmin, ContentType.Html));
                                 }
                             }
 

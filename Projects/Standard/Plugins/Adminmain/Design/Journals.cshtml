@@ -1,3 +1,4 @@
+@using OnUtils.Application.Journaling
 @model List<Adminmain.Design.Model.JournalsList>
 @{ var moduleAdmin = AppCore.Get<Admin.ModuleAdmin>(); }
 
@@ -46,7 +47,7 @@
                         <tr>
                             <td class="left">@journal.JournalName.Name</td>
                             <td class="left">@journal.EventsCount</td>
-                            <td class="left" style="background-color: @(journal.EventLastType == Core.Journaling.EventType.CriticalError ? "#f44141 !important" : (journal.EventLastType == Core.Journaling.EventType.Error ? "#f48341 !important" : (journal.EventLastType == Core.Journaling.EventType.Warning ? "#f4c741 !important" : "")))">
+                            <td class="left" style="background-color: @(journal.EventLastType == EventType.CriticalError ? "#f44141 !important" : (journal.EventLastType == EventType.Error ? "#f48341 !important" : (journal.EventLastType == EventType.Warning ? "#f4c741 !important" : "")))">
                                 @(journal.EventLastDate.HasValue ? journal.EventLastDate.Value.ToString("dd.MM.yyyy HH:mm:ss") : "")
                             </td>
                             <td>

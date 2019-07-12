@@ -1,4 +1,7 @@
-﻿using OnUtils.Application.Modules;
+﻿using OnUtils.Application;
+using OnUtils.Application.DB;
+using OnUtils.Application.Journaling;
+using OnUtils.Application.Modules;
 using OnUtils.Data;
 using System;
 using System.Collections.Generic;
@@ -9,7 +12,6 @@ using System.Web.Mvc;
 namespace OnWeb.Plugins.Customer
 {
     using Core.DB;
-    using Core.Journaling;
     using CoreBind.Modules;
     using MessagingEmail;
 
@@ -53,7 +55,7 @@ namespace OnWeb.Plugins.Customer
         {
             using (var db = this.CreateUnitOfWork())
             {
-                var data = IdUser != 0 ? db.Users.Where(x => x.id == IdUser).FirstOrDefault() : new User();
+                var data = IdUser != 0 ? db.Users.Where(x => x.IdUser == IdUser).FirstOrDefault() : new User();
                 if (data == null) throw new KeyNotFoundException("Неправильно указан пользователь!");
                 var history = AppCore.Get<JournalingManager>().GetJournalForItem(data);
 
@@ -62,15 +64,17 @@ namespace OnWeb.Plugins.Customer
                     history = history.Result,
                     User = data,
                     UserRoles = db.RoleUser
-                                    .Where(x => x.IdUser == data.id)
-                                    .Select(x => x.IdRole),
+                                    .Where(x => x.IdUser == data.IdUser)
+                                    .Select(x => x.IdRole)
+                                    .ToList(),
                     Roles = db.Role
                                 .OrderBy(x => x.NameRole)
                                 .Select(x => new SelectListItem()
                                 {
                                     Value = x.IdRole.ToString(),
                                     Text = x.NameRole
-                                }),
+                                })
+                                .ToList(),
                 };
 
                 return this.display("admin/admin_customer_users_ae.cshtml", model);
@@ -96,7 +100,7 @@ namespace OnWeb.Plugins.Customer
 
                         if (IdUser > 0)
                         {
-                            data = db.Users.Where(u => u.id == IdUser).FirstOrDefault();
+                            data = db.Users.Where(u => u.IdUser == IdUser).FirstOrDefault();
                             if (data == null) ModelState.AddModelError("IdUser", "Неправильно указан пользователь!");
                             else if (data.Superuser != 0 && AppCore.GetUserContextManager().GetCurrentUserContext().IsSuperuser) ModelState.AddModelError("IdUser", "У вас нет прав на редактирование суперпользователей - это могут делать только другие суперпользователи!");
                             else
@@ -158,9 +162,9 @@ namespace OnWeb.Plugins.Customer
 
                         if (ModelState.ContainsKeyCorrect("User.password"))
                         {
-                            if (data.id > 0 && Request.Form.HasKey("changepass") && Request.Form["changepass"] == "2")
+                            if (data.IdUser > 0 && Request.Form.HasKey("changepass") && Request.Form["changepass"] == "2")
                                 data.password = UsersExtensions.hashPassword(model.User.password);
-                            else if (data.id == 0)
+                            else if (data.IdUser == 0)
                                 data.password = UsersExtensions.hashPassword(model.User.password);
                         }
 
@@ -180,18 +184,18 @@ namespace OnWeb.Plugins.Customer
                         {
                             data.Fields.CopyValuesFrom(model.User.Fields);
                             data.DateChangeBase = DateTime.Now;
-                            data.IdUserChange = AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser();
+                            data.IdUserChange = AppCore.GetUserContextManager().GetCurrentUserContext().IdUser;
 
                             using (var trans = new TransactionScope())
                             {
-                                if (data.id == 0) db.Users.Add(data);
+                                if (data.IdUser == 0) db.Users.Add(data);
 
                                 if (db.SaveChanges<User>() > 0)
                                 {
                                     result.Message = "Сохранение данных прошло успешно!";
                                     result.Success = true;
 
-                                    Module.RegisterEventForItem(data, EventType.Info, "Редактирование данных", $"Пользователь №{data.id} '" + data.ToString() + "'");
+                                    Module.RegisterEventForItem(data, EventType.Info, "Редактирование данных", $"Пользователь №{data.IdUser} '" + data.ToString() + "'");
 
                                     //                            if (!($res = $this->mExtensions['fields"]->savePostData($IdUser)))
                                     //                    {
@@ -214,12 +218,12 @@ namespace OnWeb.Plugins.Customer
                                     {
                                         {
                                             var rolesMustHave = new List<int>(model.UserRoles ?? new List<int>());
-                                            db.RoleUser.Where(x => x.IdUser == data.id).Delete();
+                                            db.RoleUser.Where(x => x.IdUser == data.IdUser).Delete();
                                             rolesMustHave.ForEach(x => db.RoleUser.Add(new RoleUser()
                                             {
                                                 IdRole = x,
-                                                IdUser = data.id,
-                                                IdUserChange = AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser(),
+                                                IdUser = data.IdUser,
+                                                IdUserChange = AppCore.GetUserContextManager().GetCurrentUserContext().IdUser,
                                                 DateChange = DateTime.Now.Timestamp()
                                             }));
 
@@ -240,10 +244,11 @@ namespace OnWeb.Plugins.Customer
                                                 data.ToString(),
                                                 data.email,
                                                 "Успешная регистрация на сайте",
-                                                this.displayToVar("Register/register_mail2.cshtml")
+                                                this.displayToVar("Register/register_mail2.cshtml"),
+                                                ContentType.Html
                                             );
 
-                                            Module.RegisterEventForItem(data, EventType.Info, "Заявка одобрена", "Пользователь №" + data.id + " '" + data.ToString() + "'");
+                                            Module.RegisterEventForItem(data, EventType.Info, "Заявка одобрена", "Пользователь №" + data.IdUser + " '" + data.ToString() + "'");
                                         }
                                         if (oldState == UserState.RegisterWaitForModerate && data.State == UserState.RegisterDecline)
                                         {
@@ -263,10 +268,11 @@ namespace OnWeb.Plugins.Customer
                                                 data.ToString(),
                                                 data.email,
                                                 "Регистрация на сайте отклонена",
-                                                this.displayToVar("Register/register_mail_decline.cshtml")
+                                                this.displayToVar("Register/register_mail_decline.cshtml"),
+                                                ContentType.Html
                                             );
 
-                                            Module.RegisterEventForItem(data, EventType.Info, "Заявка отклонена", "Пользователь №" + data.id + " '" + data.ToString() + "'. Заявка отклонена администратором" + message);
+                                            Module.RegisterEventForItem(data, EventType.Info, "Заявка отклонена", "Пользователь №" + data.IdUser + " '" + data.ToString() + "'. Заявка отклонена администратором" + message);
                                         }
                                         if (oldState != data.State && data.State == UserState.Disabled)
                                         {
@@ -290,15 +296,16 @@ namespace OnWeb.Plugins.Customer
                                                 data.ToString(),
                                                 data.email,
                                                 "Аккаунт заблокирован",
-                                                this.displayToVar("Register/register_mail_ban.cshtml")
+                                                this.displayToVar("Register/register_mail_ban.cshtml"),
+                                                ContentType.Html
                                             );
 
-                                            Module.RegisterEventForItem(data, EventType.Info, "Аккаунт заблокирован", "Пользователь №" + data.id + " '" + data.ToString() + "'. Аккаунт заблокирован" + message);
+                                            Module.RegisterEventForItem(data, EventType.Info, "Аккаунт заблокирован", "Пользователь №" + data.IdUser + " '" + data.ToString() + "'. Аккаунт заблокирован" + message);
                                         }
 
                                     }
 
-                                    result.Data = data.id;
+                                    result.Data = data.IdUser;
 
                                     trans.Complete();
                                 }
@@ -320,12 +327,12 @@ namespace OnWeb.Plugins.Customer
             try
             {
                 if (IdUser == 0) result.Message = "Не указан пользователь!";
-                else if (IdUser == AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser()) result.Message = "Нельзя удалять себя самого!";
+                else if (IdUser == AppCore.GetUserContextManager().GetCurrentUserContext().IdUser) result.Message = "Нельзя удалять себя самого!";
                 else
                 {
                     using (var db = this.CreateUnitOfWork())
                     {
-                        var data = db.Users.Where(x => x.id == IdUser).FirstOrDefault();
+                        var data = db.Users.Where(x => x.IdUser == IdUser).FirstOrDefault();
                         if (data == null) result.Message = "Неправильно указан пользователь!";
                         else
                         {
@@ -361,7 +368,7 @@ namespace OnWeb.Plugins.Customer
             {
                 using (var db = this.CreateUnitOfWork())
                 {
-                    var data = db.Users.Where(u => u.id == IdUser).FirstOrDefault();
+                    var data = db.Users.Where(u => u.IdUser == IdUser).FirstOrDefault();
                     if (data == null) throw new Exception("Неправильно указан пользователь!");
 
                     Response.SetCookie("LogonSuperuserAs", IdUser.ToString(), DateTime.Now.AddDays(365), "/");
@@ -438,7 +445,7 @@ namespace OnWeb.Plugins.Customer
                     {
                         data = new Role()
                         {
-                            IdUserCreate = AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser(),
+                            IdUserCreate = AppCore.GetUserContextManager().GetCurrentUserContext().IdUser,
                             DateCreate = DateTime.Now.Timestamp()
                         };
                     }
@@ -458,7 +465,7 @@ namespace OnWeb.Plugins.Customer
                     if (ModelState.IsValid)
                     {
                         data.NameRole = model.NameRole;
-                        data.IdUserChange = AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser();
+                        data.IdUserChange = AppCore.GetUserContextManager().GetCurrentUserContext().IdUser;
                         data.DateChange = DateTime.Now.Timestamp();
 
                         if (data.IdRole == 0) db.Role.Add(data);
@@ -488,7 +495,7 @@ namespace OnWeb.Plugins.Customer
                                                         IdModule = moduleID,
                                                         IdRole = data.IdRole,
                                                         Permission = d[1],
-                                                        IdUserChange = AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser(),
+                                                        IdUserChange = AppCore.GetUserContextManager().GetCurrentUserContext().IdUser,
                                                         DateChange = DateTime.Now.Timestamp()
                                                     });
 
@@ -567,13 +574,13 @@ namespace OnWeb.Plugins.Customer
                 model.Roles = db.Role.OrderBy(x => x.NameRole).ToList();
 
                 var q = (from u in db.Users
-                         join r in db.RoleUser on u.id equals r.IdUser into r_j
+                         join r in db.RoleUser on u.IdUser equals r.IdUser into r_j
                          from r in r_j.DefaultIfEmpty()
-                         group new { u, r } by u.id into gr
+                         group new { u, r } by u.IdUser into gr
                          select new { User = gr.FirstOrDefault().u, Roles = gr.Where(x => x.r != null).Select(x => x.r.IdRole).ToList() }).ToList();
 
                 model.Users = q.Select(x => x.User).OrderBy(x => x.ToString()).ToList();
-                model.RolesUser = q.ToDictionary(x => x.User.id, x => x.Roles);
+                model.RolesUser = q.ToDictionary(x => x.User.IdUser, x => x.Roles);
 
             }
             return display("admin/admin_customer_rolesDelegate.cshtml", model);
@@ -598,7 +605,7 @@ namespace OnWeb.Plugins.Customer
                             {
                                 IdRole = role,
                                 IdUser = user.Key,
-                                IdUserChange = AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser(),
+                                IdUserChange = AppCore.GetUserContextManager().GetCurrentUserContext().IdUser,
                                 DateChange = DateTime.Now.Timestamp()
                             });
                         }

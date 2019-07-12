@@ -8,7 +8,7 @@ function update_all()
 	try {
 		$('#table_results').tablefill(mUsersData, function(tr_elem, data){
 			$(tr_elem).find('td').each(function(ichild){
-				if ( ichild == 0 ) $(this).text(data.@nameof(Core.DB.User.id));
+				if ( ichild == 0 ) $(this).text(data.@nameof(Core.DB.User.IdUser));
 				else if ( ichild == 1 ) $(this).html(data.@nameof(Core.DB.User.name) + '<br>' + data.@nameof(Core.DB.User.email) + '<br>' + data.@nameof(Core.DB.User.phone));
 				else if ( ichild == 2 ) $(this).text(data.@nameof(Core.DB.User.Superuser) != 0 ? 'Суперпользователь' : 'Пользователь');
 				else if ( ichild == 3 ) $(this).text(data.@nameof(Core.DB.User.State));
@@ -16,7 +16,7 @@ function update_all()
 			});
 			
 			$(tr_elem).find('a.user_link, a.user_delete').each(function(){
-			    $(this).attr('href', $(this).attr('href') + data.@nameof(Core.DB.User.id))
+			    $(this).attr('href', $(this).attr('href') + data.@nameof(Core.DB.User.IdUser))
 			});
 		}, null, function(){
 		    $("a.user_delete").click(function(){

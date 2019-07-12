@@ -1,4 +1,7 @@
-﻿using System;
+﻿using OnUtils.Application;
+using OnUtils.Application.Items;
+using OnUtils.Application.Journaling;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -6,8 +9,6 @@ using System.Web.Mvc;
 namespace OnWeb.Plugins.Materials
 {
     using AdminForModules.Menu;
-    using Core.Items;
-    using Core.Journaling;
     using Core.Routing;
     using CoreBind.Modules;
 
@@ -80,7 +81,7 @@ namespace OnWeb.Plugins.Materials
                         DB.News data = null;
                         if (model.id <= 0)
                         {
-                            data = new DB.News() { date = DateTime.Now, user = AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser(), status = true, Block = false };
+                            data = new DB.News() { date = DateTime.Now, user = AppCore.GetUserContextManager().GetCurrentUserContext().IdUser, status = true, Block = false };
                             db.News.Add(data);
                         }
                         else

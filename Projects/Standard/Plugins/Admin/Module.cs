@@ -1,14 +1,12 @@
-﻿using OnUtils.Application.Modules;
+﻿using OnUtils.Application.Items;
+using OnUtils.Application.Modules;
+using OnUtils.Application.Types;
+using OnUtils.Application.Users;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace OnWeb.Plugins.Admin
 {
-    using Core.Items;
-    using Core.Modules;
-    using Core.Types;
-    using OnUtils.Application.Users;
-
     /// <summary>
     /// См. <see cref="ModuleAdmin"/>.
     /// </summary>

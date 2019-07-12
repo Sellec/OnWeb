@@ -164,7 +164,7 @@ namespace OnWeb.Core.Routing
                     throw new ArgumentException("Следующие ключи повторяются несколько раз: " + string.Join(", ", keys), nameof(items));
                 }
 
-                var idUser = AppCore.GetUserContextManager().GetCurrentUserContext().GetIdUser();
+                var idUser = AppCore.GetUserContextManager().GetCurrentUserContext().IdUser;
 
                 var itemsToRegister = items.Select(x => new DB.Routing
                 {

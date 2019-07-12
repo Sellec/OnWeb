@@ -1,10 +1,9 @@
-﻿using System;
+﻿using OnUtils.Application.Journaling.DB;
+using System;
 using System.Collections.Generic;
 
 namespace OnWeb.Plugins.Customer.Model
 {
-    using Core.Journaling.DB;
-
     public class History
     {
         public DateTime DateStart;

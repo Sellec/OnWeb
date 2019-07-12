@@ -1,21 +1,24 @@
-﻿using OnUtils.Data;
+﻿using OnUtils.Application.Configuration;
+using OnUtils.Application.Items;
+using OnUtils.Application.Journaling;
+using OnUtils.Application.Journaling.DB;
+using OnUtils.Application.Modules.CoreModule;
+using OnUtils.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using OnUtils.Application.DB;
 
 namespace OnWeb.Plugins.Adminmain
 {
     using AdminForModules.Menu;
-    using Core.Configuration;
     using Core.DB;
-    using Core.Items;
-    using Core.Journaling;
-    using Core.Journaling.DB;
     using Core.Modules;
     using CoreBind.Modules;
     using CoreBind.Routing;
     using Services;
+    using WebCoreModule;
 
     /// <summary>
     /// Представляет контроллер для панели управления.
@@ -25,18 +28,25 @@ namespace OnWeb.Plugins.Adminmain
         [MenuAction("Настройки", "info", Module.PERM_CONFIGMAIN)]
         public virtual ActionResult MainSettings()
         {
-            var model = new Model.AdminMainModelInfoPage(AppCore.Config)
+            var handler = AppCore.Get<ModuleControllerTypesManager>();
+            var model = new Model.AdminMainModelInfoPage(AppCore.Config, AppCore.GetWebConfig())
             {
-                ModulesList = (from p in AppCore.GetModulesManager().GetModules().OfType<ModuleCore>()
-                               where p.ControllerTypes != null
+                ModulesList = (from p in AppCore.GetModulesManager().GetModules()
+                               where handler.GetModuleControllerTypes(p.QueryType) != null
                                orderby p.Caption
                                select new SelectListItem()
                                {
                                    Value = p.ID.ToString(),
                                    Text = p.Caption,
-                                   Selected = AppCore.Config.IdModuleDefault == p.ID
+                                   Selected = AppCore.GetWebConfig().IdModuleDefault == p.ID
                                }).ToList()
             };
+
+            using (var db = Module.CreateUnitOfWork())
+            {
+                model.Roles = (from p in db.Role orderby p.NameRole ascending select p).ToList();
+                model.Roles.Insert(0, new Role() { IdRole = 0, NameRole = "Не выбрано" });
+            }
 
             return this.display("CoreSettings.tpl", model);
         }
@@ -45,29 +55,21 @@ namespace OnWeb.Plugins.Adminmain
         public virtual JsonResult MainSettingsSave(Model.AdminMainModelInfoPage model)
         {
             var result = JsonAnswer();
+            CoreConfiguration cfgAppOld = null;
+            WebCoreConfiguration cfgWebOld = null;
 
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var cfg = AppCore.GetModulesManager().GetModule<WebCoreModule.WebCoreModule>().GetConfigurationManipulator().GetEditable<WebCoreConfiguration>();
+                    cfgAppOld = AppCore.GetModulesManager().GetModule<CoreModule>().GetConfigurationManipulator().GetEditable<CoreConfiguration>();
+                    cfgWebOld = AppCore.GetModulesManager().GetModule<WebCoreModule>().GetConfigurationManipulator().GetEditable<WebCoreConfiguration>();
 
-                    cfg.IdModuleDefault = model.Configuration.IdModuleDefault;
-                    cfg.DeveloperEmail = model.Configuration.DeveloperEmail;
-                    cfg.SiteFullName = model.Configuration.SiteFullName;
-                    cfg.ContactEmail = model.Configuration.ContactEmail;
-                    cfg.ReturnEmail = model.Configuration.ReturnEmail;
-                    cfg.CriticalMessagesEmail = model.Configuration.CriticalMessagesEmail;
-                    cfg.register_mode = model.Configuration.register_mode;
-                    cfg.site_reginfo = model.Configuration.site_reginfo;
-                    cfg.site_loginfo = model.Configuration.site_loginfo;
-                    cfg.help_info = model.Configuration.help_info;
-                    cfg.site_descr = model.Configuration.site_descr;
-                    cfg.site_keys = model.Configuration.site_keys;
+                    var cfgApp = AppCore.GetModulesManager().GetModule<CoreModule>().GetConfigurationManipulator().GetEditable<CoreConfiguration>();
+                    cfgApp.RoleGuest = model.AppCoreConfiguration.RoleGuest;
+                    cfgApp.RoleUser = model.AppCoreConfiguration.RoleUser;
 
-                    cfg.userAuthorizeAllowed = model.Configuration.userAuthorizeAllowed;
-
-                    var applyResult = AppCore.GetModulesManager().GetModule<WebCoreModule.WebCoreModule>().GetConfigurationManipulator().ApplyConfiguration(cfg);
+                    var applyResult = AppCore.GetModulesManager().GetModule<CoreModule>().GetConfigurationManipulator().ApplyConfiguration(cfgApp);
                     switch (applyResult.Item1)
                     {
                         case ApplyConfigurationResult.PermissionDenied:
@@ -87,8 +89,49 @@ namespace OnWeb.Plugins.Adminmain
                             result.Message = "Сохранено успешно!";
                             result.Success = true;
                             break;
-
                     }
+
+                    if (result.Success)
+                    {
+                        var cfg = AppCore.GetModulesManager().GetModule<WebCoreModule>().GetConfigurationManipulator().GetEditable<WebCoreConfiguration>();
+                        cfg.IdModuleDefault = model.WebCoreConfiguration.IdModuleDefault;
+                        cfg.DeveloperEmail = model.WebCoreConfiguration.DeveloperEmail;
+                        cfg.SiteFullName = model.WebCoreConfiguration.SiteFullName;
+                        cfg.ContactEmail = model.WebCoreConfiguration.ContactEmail;
+                        cfg.ReturnEmail = model.WebCoreConfiguration.ReturnEmail;
+                        cfg.CriticalMessagesEmail = model.WebCoreConfiguration.CriticalMessagesEmail;
+                        cfg.register_mode = model.WebCoreConfiguration.register_mode;
+                        cfg.site_reginfo = model.WebCoreConfiguration.site_reginfo;
+                        cfg.site_loginfo = model.WebCoreConfiguration.site_loginfo;
+                        cfg.help_info = model.WebCoreConfiguration.help_info;
+                        cfg.site_descr = model.WebCoreConfiguration.site_descr;
+                        cfg.site_keys = model.WebCoreConfiguration.site_keys;
+
+                        cfg.userAuthorizeAllowed = model.WebCoreConfiguration.userAuthorizeAllowed;
+
+                        applyResult = AppCore.GetModulesManager().GetModule<WebCoreModule>().GetConfigurationManipulator().ApplyConfiguration(cfg);
+                        switch (applyResult.Item1)
+                        {
+                            case ApplyConfigurationResult.PermissionDenied:
+                                result.Message = "Недостаточно прав для сохранения конфигурации системы.";
+                                result.Success = false;
+                                break;
+
+                            case ApplyConfigurationResult.Failed:
+                                var journalData = AppCore.Get<JournalingManager>().GetJournalData(applyResult.Item2.Value);
+                                result.Message = $"Возникла ошибка при сохранении настроек: {(journalData?.Message ?? "текст ошибки не найден")}.";
+                                result.Success = false;
+                                break;
+
+                            case ApplyConfigurationResult.Success:
+                                System.Web.Routing.RouteTable.Routes.Where(x => x is RouteWithDefaults).Select(x => x as RouteWithDefaults).ForEach(x => x.UpdateDefaults());
+
+                                result.Message = "Сохранено успешно!";
+                                result.Success = true;
+                                break;
+                        }
+                    }
+
                 }
             }
             catch (Exception ex)
@@ -96,6 +139,16 @@ namespace OnWeb.Plugins.Adminmain
                 result.Success = false;
                 result.Message = ex.Message;
             }
+
+            try
+            {
+                if (!result.Success)
+                {
+                    if (cfgAppOld != null) AppCore.GetModulesManager().GetModule<CoreModule>().GetConfigurationManipulator().ApplyConfiguration(cfgAppOld);
+                    if (cfgWebOld != null) AppCore.GetModulesManager().GetModule<WebCoreModule>().GetConfigurationManipulator().ApplyConfiguration(cfgWebOld);
+                }
+            }
+            catch { }
 
             return this.ReturnJson(result);
         }

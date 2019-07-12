@@ -149,7 +149,7 @@ namespace OnWeb.CoreBind.Providers
 
         private IController CreateController(ControllerType controllerType, ModuleCore module, RouteValueDictionary routeValues)
         {
-            var controllerTypes = AppCore.Get<ModuleRegisteredHandler>().GetModuleControllerTypes(module.QueryType);
+            var controllerTypes = AppCore.Get<ModuleControllerTypesManager>().GetModuleControllerTypes(module.QueryType);
             var targetType = controllerTypes.GetValueOrDefault(controllerType.ControllerTypeID);
             if (targetType == null) throw new NotSupportedException(controllerType.ErrorCannotFindControllerTypeSpecified(module, routeValues));
 

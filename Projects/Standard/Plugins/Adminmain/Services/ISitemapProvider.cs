@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using OnUtils.Architecture.AppCore;
+﻿using OnUtils.Application.Items;
+using System.Collections.Generic;
 
 namespace OnWeb.Plugins.Adminmain.Services
 {
-    using Core.Items;
+    using Core;
 
     /// <summary>
     /// Представляет провайдер объектов для создания карты сайта.
     /// </summary>
-    public interface ISitemapProvider : IComponentTransient<ApplicationCore>
+    public interface ISitemapProvider : IComponentTransient
     {
         /// <summary>
         /// Название провайдера объектов.

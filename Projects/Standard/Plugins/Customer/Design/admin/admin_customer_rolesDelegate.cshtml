@@ -79,7 +79,7 @@
 
                 //if (User == null && User == undefined) throw new Error("Пользователь не выбран.");
 
-                $.requestJSON('/admin/madmin/@Module.Name/rolesDelegateSave/', {Roles : UsersRoles}, function(result, message){
+                $.requestJSON('/admin/madmin/@Module.UrlName/rolesDelegateSave/', {Roles : UsersRoles}, function(result, message){
                     if (message != null && message.length > 0) $("#delegateTableResult").html(message);
                 });
             }
@@ -183,8 +183,8 @@
                     <tbody class="rowsFiltered" style="display:none;">
 @foreach (var user in Model.Users)
 {
-    <tr data-id="@user.id">
-        <td>(@user.id) @user.ToString()</td>
+    <tr data-id="@user.IdUser">
+        <td>(@user.IdUser) @user.ToString()</td>
         <td></td>
     </tr>
 }
@@ -193,7 +193,7 @@
                     <tr>
                         <td>
                             <select style='width:100%' class="plistUsers" size="40">
-                                @foreach (var user in Model.Users) { @Html.Option(user.id, $"({user.id}) {user.ToString()}", new { data_id = user.id }) }
+                                @foreach (var user in Model.Users) { @Html.Option(user.IdUser, $"({user.IdUser}) {user.ToString()}", new { data_id = user.IdUser }) }
                             </select>
                         </td>
                         <td>
@@ -223,9 +223,9 @@
                     <tbody class="rowsFiltered" style="display:none;">
                         @foreach (var user in Model.Users)
                         {
-                            <tr data-id="@user.id">
+                            <tr data-id="@user.IdUser">
                                 <td></td>
-                                <td>(@user.id) @user.ToString()</td>
+                                <td>(@user.IdUser) @user.ToString()</td>
                             </tr>
                         }
                     </tbody>
@@ -243,7 +243,7 @@
                                 <div class="checkBoxList">
                                     @foreach (var user in Model.Users)
                                     {
-                                        <label><input type="checkbox" value="@user.id" data-id="@user.id" class="plistUsers" disabled /> <span>(@user.id) @user.ToString()</span></label>
+                                        <label><input type="checkbox" value="@user.IdUser" data-id="@user.IdUser" class="plistUsers" disabled /> <span>(@user.IdUser) @user.ToString()</span></label>
                                     }
                                 </div>
                             </td>

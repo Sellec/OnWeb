@@ -1,5 +1,6 @@
 @using Customer
 @using Core.DB
+@using OnUtils.Application.Modules.Extensions.CustomFields.Field;
 @model User
 @{ 
     Layout = "baseCustomer.cshtml";
@@ -52,7 +53,7 @@
 {
     <div>
         <label class="column col3of16">@field.Value.GetDisplayName(): </label>
-        <div class="column col10of16"><span>@field.Value.GetDisplayValue(field.Value, Core.ModuleExtensions.CustomFields.Field.OutputType.Html) </span></div>
+        <div class="column col10of16"><span>@field.Value.GetDisplayValue(field.Value, OutputType.Html) </span></div>
     </div>
     <div class="break"></div>
 
