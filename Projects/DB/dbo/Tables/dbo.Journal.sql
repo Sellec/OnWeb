@@ -8,8 +8,10 @@
     [DateEvent]         DATETIME       NOT NULL,
     [IdRelatedItem]     INT            NULL,
     [IdRelatedItemType] NCHAR (10)     NULL,
-    CONSTRAINT [PK_ServiceJournal] PRIMARY KEY CLUSTERED ([IdJournalData] ASC)
+    CONSTRAINT [PK_Journal] PRIMARY KEY CLUSTERED ([IdJournalData] ASC)
 );
+
+
 
 
 

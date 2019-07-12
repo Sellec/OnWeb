@@ -3,12 +3,14 @@
     [IdUser]      INT            CONSTRAINT [DF__userloghi__IdUse__70FDBF69] DEFAULT ((0)) NOT NULL,
     [DateEvent]   INT            CONSTRAINT [DF__userloghi__DateE__71F1E3A2] DEFAULT ((0)) NOT NULL,
     [IdEventType] INT            CONSTRAINT [DF__userloghi__IdEve__72E607DB] DEFAULT ((0)) NOT NULL,
-    [IP]          NVARCHAR (50)  CONSTRAINT [DF__userloghisto__IP__73DA2C14] DEFAULT (N'') NOT NULL,
-    [Browser]     NVARCHAR (255) CONSTRAINT [DF__userloghi__Brows__74CE504D] DEFAULT (N'') NOT NULL,
-    [Place]       NVARCHAR (255) CONSTRAINT [DF__userloghi__Place__75C27486] DEFAULT (N'') NOT NULL,
-    [Comment]     NVARCHAR (MAX) NOT NULL,
+    [IP]          NVARCHAR (50)  CONSTRAINT [DF__userloghisto__IP__73DA2C14] DEFAULT (N'') NULL,
+    [Browser]     NVARCHAR (255) CONSTRAINT [DF__userloghi__Brows__74CE504D] DEFAULT (N'') NULL,
+    [Place]       NVARCHAR (255) CONSTRAINT [DF__userloghi__Place__75C27486] DEFAULT (N'') NULL,
+    [Comment]     NVARCHAR (MAX) NULL,
     CONSTRAINT [PK_userloghistory_IdRecord] PRIMARY KEY CLUSTERED ([IdRecord] ASC)
 );
+
+
 
 
 GO
