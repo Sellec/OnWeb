@@ -38,7 +38,7 @@ namespace System.Web.Mvc
                 var controller = url.ViewContext.Controller as ModuleControllerBase;
                 if (controller != null)
                 {
-                    code = controller.displayToVar("editablemenu.cshtml", new EditableMenu()
+                    code = controller.ViewString("editablemenu.cshtml", new EditableMenu()
                     {
                         EditableMenuData = urls,
                         Class = Class,

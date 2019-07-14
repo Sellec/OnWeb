@@ -28,7 +28,7 @@ namespace OnWeb.Plugins.Materials
 
                 var model = query.OrderByDescending(x => x.date).ToList();
 
-                return this.display("Admin/NewsList.cshtml", model);
+                return View("Admin/NewsList.cshtml", model);
             }
         }
 

@@ -36,7 +36,7 @@ namespace OnWeb.Plugins.Customer
         public override ActionResult Index()
         {
             var data = AppCore.GetUserContextManager().GetCurrentUserContext().GetData();
-            return this.display("customerIndex.cshtml", data);
+            return View("customerIndex.cshtml", data);
         }
 
         /*
@@ -48,7 +48,7 @@ namespace OnWeb.Plugins.Customer
             return Index();
 
             var data = AppCore.GetUserContextManager().GetCurrentUserContext().GetData();
-            return this.display("customerProfile.cshtml", data);
+            return View("customerProfile.cshtml", data);
         }
 
         /*
@@ -66,7 +66,7 @@ namespace OnWeb.Plugins.Customer
                 else Module.CheckPermissionToEditOtherUser(IdUser.Value);
 
                 var d = data.Fields;
-                return this.display("customerProfileInner.cshtml", new Design.Model.Profile()
+                return View("customerProfileInner.cshtml", new Design.Model.Profile()
                 {
                     User = data,
                     Edit = new Model.ProfileEdit(data)
@@ -171,7 +171,7 @@ namespace OnWeb.Plugins.Customer
         [ModuleAction("pchange", ModulesConstants.PermissionAccessUserString)]
         public ActionResult passwordChange()
         {
-            return this.display("customerPassword.cshtml", AppCore.GetUserContextManager().GetCurrentUserContext().GetData());
+            return View("customerPassword.cshtml", AppCore.GetUserContextManager().GetCurrentUserContext().GetData());
         }
 
         /*
@@ -232,7 +232,7 @@ namespace OnWeb.Plugins.Customer
 
         //        //Показываем шаблон. Шаблон вызовет для КАЖДОГО тега метод OnShowDataInCustomer. 
         //        //Надо в каждом типе тега в методе OnShowDataInCustomer выводить html-код для показа в ЛК.
-        //        this.display(this.getUserManager().isAuthorized() ? "customer_tags_show.cshtml" : "customer_tags_show_unregistered.cshtml");
+        //        View(this.getUserManager().isAuthorized() ? "customer_tags_show.cshtml" : "customer_tags_show_unregistered.cshtml");
         //    }
         //}
 
@@ -289,7 +289,7 @@ namespace OnWeb.Plugins.Customer
         //    }
 
         //    this.assign("include_code", includeCode);
-        //    this.display("customer_external.cshtml");
+        //    View("customer_external.cshtml");
         //}    
 
         //function subscribes()
@@ -340,7 +340,7 @@ namespace OnWeb.Plugins.Customer
 
         //    this.assign("listByEmail", listByEmail);
         //    this.assign("listByRole", listByRole);
-        //    this.display("customer_subscriptions.cshtml");
+        //    View("customer_subscriptions.cshtml");
         //}
 
         //function subscribesUnsubscribe(IdSubscription = null)

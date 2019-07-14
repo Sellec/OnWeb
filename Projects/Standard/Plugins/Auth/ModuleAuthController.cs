@@ -83,7 +83,7 @@ namespace OnWeb.Plugins.Auth
 
             this.assign("authorized", !AppCore.GetUserContextManager().GetCurrentUserContext().IsGuest);
 
-            return this.display("login.cshtml", new Design.Model.Login() { Result = message });
+            return View("login.cshtml", new Design.Model.Login() { Result = message });
         }
 
         [HttpPost]
@@ -250,7 +250,7 @@ namespace OnWeb.Plugins.Auth
                                         user.Caption,
                                         user.email,
                                         "Восстановление пароля на сайте",
-                                        this.displayToVar("PasswordRestoreNotificationEmail.cshtml", new Design.Model.PasswordRestoreSend() { User = user, Code = code, CodeType = codeType }),
+                                        this.ViewString("PasswordRestoreNotificationEmail.cshtml", new Design.Model.PasswordRestoreSend() { User = user, Code = code, CodeType = codeType }),
                                         ContentType.Html
                                     );
                                 }
@@ -296,7 +296,7 @@ namespace OnWeb.Plugins.Auth
         {
             if (Module.IsNeededAnyUserToRegister()) return Redirect<Register.ModuleRegister, Register.ModuleRegisterController>(x => x.Register());
 
-            return this.display("PasswordRestoreVerify.cshtml", new Design.Model.PasswordRestoreVerify() { Code = Code?.Truncate(0, 32), CodeType = CodeType?.Truncate(0, 6) });
+            return View("PasswordRestoreVerify.cshtml", new Design.Model.PasswordRestoreVerify() { Code = Code?.Truncate(0, 32), CodeType = CodeType?.Truncate(0, 6) });
         }
 
         [ModuleAction("restore4")]

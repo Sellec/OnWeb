@@ -149,13 +149,13 @@ namespace OnWeb.CoreBind.Modules
             }
 
             if (code == 404)
-                return this.display("error404NotFound.cshtml", exception);
+                return View("error404NotFound.cshtml", exception);
             else if (code == 401)
-                return this.display("error401NotAuthorized.cshtml", exception);
+                return View("error401NotAuthorized.cshtml", exception);
             else if (code == 403)
-                return this.display("error403NotAllowed.cshtml", exception);
+                return View("error403NotAllowed.cshtml", exception);
             else
-                return this.display("errorHandled.cshtml", exception);
+                return View("errorHandled.cshtml", exception);
         }
 
         #endregion
@@ -345,6 +345,7 @@ namespace OnWeb.CoreBind.Modules
         /// <summary>
         /// Обертка над <see cref="Controller.View(string, object)"/>
         /// </summary>
+        [Obsolete("Рекомендуется View")]
         public ActionResult display(string template, object model = null)
         {
             return View(template, model);
@@ -386,7 +387,7 @@ namespace OnWeb.CoreBind.Modules
         * 
         * @param mixed $template
         */
-        public string displayToVar(string template, object model = null)
+        public string ViewString(string template, object model = null)
         {
             try
             {
@@ -397,7 +398,7 @@ namespace OnWeb.CoreBind.Modules
                 OnViewPrepare(model);
 
                 //ViewData.Model = model;
-                using (var sw = new System.IO.StringWriter())
+                using (var sw = new StringWriter())
                 {
                     var viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, template);
                     if (viewResult.View == null) throw new ArgumentException($"Представление '{template}' не найдено.", nameof(template));
@@ -412,50 +413,6 @@ namespace OnWeb.CoreBind.Modules
             {
                 Debug.WriteLine(ex.Message);
                 throw ex;
-            }
-        }
-
-        /// <summary>
-        /// </summary>
-        public IHtmlString displayFromAnotherModule(string controllerName, string actionName, RouteValueDictionary routeValues, bool asAdmin)
-        {
-            MvcHtmlString resultText = null;
-            try
-            {
-                var viewContext = new ViewContext(this.ControllerContext, new FakeView(), this.ViewData, this.TempData, TextWriter.Null);
-                var html = new HtmlHelper(viewContext, new ViewPage());
-
-                if (asAdmin) HttpContext.Items["isAdmin"] = true;
-                var result = html.Action(actionName, controllerName, routeValues);
-                resultText = result;
-            }
-            catch (HttpException ex)
-            {
-                var d = ex.GetLowLevelException();
-                var dd = d.GetType();
-                Debug.WriteLine(d.Message);
-
-                resultText = MvcHtmlString.Create(d.Message);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-
-                resultText = MvcHtmlString.Create("<span>" + ex.Message + "</span>");
-            }
-            finally
-            {
-                HttpContext.Items["isAdmin"] = null;
-            }
-
-            return resultText;
-        }
-
-        class FakeView : IView
-        {
-            public void Render(ViewContext viewContext, TextWriter writer)
-            {
-                throw new InvalidOperationException();
             }
         }
 

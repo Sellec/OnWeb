@@ -16,7 +16,7 @@ namespace OnWeb.Plugins.EditableMenu
             using (var db = Module.CreateUnitOfWork())
             {
                 var model = db.Repo1.OrderBy(x => x.id).ToList();
-                return this.display("EditableMenu.cshtml", model);
+                return View("EditableMenu.cshtml", model);
             }
         }
 
@@ -28,7 +28,7 @@ namespace OnWeb.Plugins.EditableMenu
                 var menu = IdMenu == 0 ? new DB.Menu() : db.Repo1.Where(x => x.id == IdMenu).FirstOrDefault();
                 if (menu == null) throw new Exception(string.Format("Меню с id={0} не найдено.", IdMenu));
 
-                return this.display("EditableMenuEdit.cshtml", new Design.Model.EditableMenu()
+                return View("EditableMenuEdit.cshtml", new Design.Model.EditableMenu()
                 {
                     Menu = menu,
                     Modules = AppCore.GetModulesManager().GetModules().OrderBy(x => x.Caption).ToList()

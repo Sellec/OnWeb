@@ -22,7 +22,7 @@ namespace OnWeb.Plugins.Materials
             using (var db = Module.CreateUnitOfWork())
             {
                 var data = db.News.Where(x => !x.Block).OrderByDescending(x => x.date).ToList();
-                return this.display("NewsList.cshtml", data);
+                return View("NewsList.cshtml", data);
             }
         }
 
@@ -42,7 +42,7 @@ namespace OnWeb.Plugins.Materials
                     else throw new Exception("Указанная новость не найдена.");
                 }
 
-                return this.display("News.cshtml", data);
+                return View("News.cshtml", data);
             }
         }
     }

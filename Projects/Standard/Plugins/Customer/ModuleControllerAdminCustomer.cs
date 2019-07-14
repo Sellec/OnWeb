@@ -28,7 +28,7 @@ namespace OnWeb.Plugins.Customer
 
 
                 this.assign("IsSuperuser", AppCore.GetUserContextManager().GetCurrentUserContext().IsSuperuser);
-                return this.display("admin/admin_customer_users.cshtml", users);
+                return View("admin/admin_customer_users.cshtml", users);
             }
         }
 
@@ -40,7 +40,7 @@ namespace OnWeb.Plugins.Customer
                 var users = db.Users.Where(x => x.State == 0).OrderBy(x => x.name).ToList();
 
                 this.assign("IsSuperuser", AppCore.GetUserContextManager().GetCurrentUserContext().IsSuperuser);
-                return this.display("admin/admin_customer_users.cshtml", users);
+                return View("admin/admin_customer_users.cshtml", users);
             }
         }
 
@@ -77,7 +77,7 @@ namespace OnWeb.Plugins.Customer
                                 .ToList(),
                 };
 
-                return this.display("admin/admin_customer_users_ae.cshtml", model);
+                return View("admin/admin_customer_users_ae.cshtml", model);
             }
         }
 
@@ -244,7 +244,7 @@ namespace OnWeb.Plugins.Customer
                                                 data.ToString(),
                                                 data.email,
                                                 "Успешная регистрация на сайте",
-                                                this.displayToVar("Register/register_mail2.cshtml"),
+                                                this.ViewString("Register/register_mail2.cshtml"),
                                                 ContentType.Html
                                             );
 
@@ -268,7 +268,7 @@ namespace OnWeb.Plugins.Customer
                                                 data.ToString(),
                                                 data.email,
                                                 "Регистрация на сайте отклонена",
-                                                this.displayToVar("Register/register_mail_decline.cshtml"),
+                                                this.ViewString("Register/register_mail_decline.cshtml"),
                                                 ContentType.Html
                                             );
 
@@ -296,7 +296,7 @@ namespace OnWeb.Plugins.Customer
                                                 data.ToString(),
                                                 data.email,
                                                 "Аккаунт заблокирован",
-                                                this.displayToVar("Register/register_mail_ban.cshtml"),
+                                                this.ViewString("Register/register_mail_ban.cshtml"),
                                                 ContentType.Html
                                             );
 
@@ -421,7 +421,7 @@ namespace OnWeb.Plugins.Customer
                 }
                 model.ModulesPermissions = mperms;
             }
-            return this.display("admin/admin_customer_rolesManage.cshtml", model);
+            return View("admin/admin_customer_rolesManage.cshtml", model);
         }
 
         [ModuleAction("roleSave", ModuleCustomer.PERM_MANAGEROLES)]

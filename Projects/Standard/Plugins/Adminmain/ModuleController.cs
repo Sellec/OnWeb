@@ -48,7 +48,7 @@ namespace OnWeb.Plugins.Adminmain
                 model.Roles.Insert(0, new Role() { IdRole = 0, NameRole = "Не выбрано" });
             }
 
-            return this.display("CoreSettings.tpl", model);
+            return View("CoreSettings.tpl", model);
         }
 
         [ModuleAction("info_save", Module.PERM_CONFIGMAIN)]
@@ -166,7 +166,7 @@ namespace OnWeb.Plugins.Adminmain
                               select new Model.Module(p)).ToList()
             };
 
-            return this.display("Modules.cshtml", model);
+            return View("Modules.cshtml", model);
         }
             
         [MenuAction("Sitemap", "sitemap", Module.PERM_SITEMAP)]
@@ -246,7 +246,7 @@ namespace OnWeb.Plugins.Adminmain
                 model.RoutesOld = query2[RoutingType.eTypes.Old];
             }
 
-            return this.display("routing.cshtml", model);
+            return View("routing.cshtml", model);
         }
 
         [ModuleAction("routingModule", Module.PERM_ROUTING)]
@@ -300,7 +300,7 @@ namespace OnWeb.Plugins.Adminmain
                         .ToList();
             }
 
-            return this.display("routing_module.cshtml", model);
+            return View("routing_module.cshtml", model);
         }
 
         [MenuAction("Рассылки и уведомления", "messaging", Module.PERM_MANAGE_MESSAGING)]
@@ -308,7 +308,7 @@ namespace OnWeb.Plugins.Adminmain
         {
             //Web.AppCore.Get<Core.Messaging.Email.IService>().sendMailFromSite("test", "test@test.ru", "test", "test!!!!!!!!");
 
-            return this.display("Messaging.cshtml");
+            return View("Messaging.cshtml");
         }
 
         public virtual ActionResult MessagingTestEmail()
@@ -327,7 +327,7 @@ namespace OnWeb.Plugins.Adminmain
         [MenuAction("Состояние системы", "monitor")]
         public virtual ActionResult Monitor()
         {
-            return this.display("Monitor.cshtml");
+            return View("Monitor.cshtml");
         }
 
         public virtual ActionResult MonitorJournal(Guid? serviceGuid = null)
@@ -337,7 +337,7 @@ namespace OnWeb.Plugins.Adminmain
                 if (!serviceGuid.HasValue) throw new Exception("Не указан идентификатор сервиса.");
 
                 var serviceJournal = AppCore.Get<Core.ServiceMonitor.Monitor>().GetServiceJournal(serviceGuid.Value);
-                return this.display("MonitorJournal.cshtml", serviceJournal.ToList());
+                return View("MonitorJournal.cshtml", serviceJournal.ToList());
             }
             catch (Exception ex)
             {
@@ -371,7 +371,7 @@ namespace OnWeb.Plugins.Adminmain
                                 EventLastType = d2 == null ? null : (EventType?)d2.EventType
                             }).ToList();
 
-                return this.display("Journals.cshtml", data);
+                return View("Journals.cshtml", data);
             }
         }
 
