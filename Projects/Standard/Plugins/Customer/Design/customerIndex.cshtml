@@ -53,7 +53,7 @@
 {
     <div>
         <label class="column col3of16">@field.Value.GetDisplayName(): </label>
-        <div class="column col10of16"><span>@field.Value.GetDisplayValue(field.Value, OutputType.Html) </span></div>
+        <div class="column col10of16"><span>@Html.Raw(field.Value.GetDisplayValue(field.Value, OutputType.Html)) </span></div>
     </div>
     <div class="break"></div>
 
