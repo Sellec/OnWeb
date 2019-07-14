@@ -2,7 +2,7 @@
 <package >
   <metadata minClientVersion="3.3.0">
     <id>OnWeb</id>
-    <version>0.1.2.7</version>
+    <version>0.1.2.10</version>
     <authors>Sellec</authors>
     <owners>Sellec</owners>
     <description>
@@ -24,7 +24,7 @@
         <dependency id="OnUtils" version="0.1.2" />
         <dependency id="OnUtils.Application" version="0.1.2" />
         <dependency id="OnUtils.Data.EntityFramework" version="0.1.2" />
-        <dependency id="OnUtils.Tasks.MomentalThreading" version="0.1.1.2" />
+        <dependency id="OnUtils.Tasks.MomentalThreading" version="0.1.1.4" />
         <dependency id="Newtonsoft.Json" version="12.0.1" />
         <dependency id="Ude.NetStandard" version="1.1.0" />
         <dependency id="System.ComponentModel.Annotations" version="4.5.0" />
@@ -43,7 +43,7 @@
         <dependency id="OnUtils" version="0.1.2" />
         <dependency id="OnUtils.Application" version="0.1.2" />
         <dependency id="OnUtils.Data.EntityFramework" version="0.1.2" />
-        <dependency id="OnUtils.Tasks.MomentalThreading" version="0.1.1.2" />
+        <dependency id="OnUtils.Tasks.MomentalThreading" version="0.1.1.4" />
         <dependency id="Newtonsoft.Json" version="12.0.1" />
         <dependency id="Ude.NetStandard" version="1.1.0" />
         <dependency id="System.ComponentModel.Annotations" version="4.5.0" />

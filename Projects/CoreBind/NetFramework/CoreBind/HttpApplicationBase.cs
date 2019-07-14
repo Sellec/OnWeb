@@ -18,6 +18,9 @@ namespace OnWeb.CoreBind
         private static object SyncRootStart = new object();
         private static volatile int _instancesCount = 0;
         private static WebApplication _applicationCore = null;
+        private static bool _applicationCoreStarted = false;
+        private static Uri _urlFirst = null;
+        private static Guid _unique = Guid.NewGuid();
 
         [ThreadStatic]
         internal Queue<IDisposable> _requestSpecificDisposables;
@@ -63,6 +66,8 @@ namespace OnWeb.CoreBind
         #region HttpApplication
         internal void Application_Start()
         {
+            Debug.WriteLine($"Application_Start({_unique}, {GetType().AssemblyQualifiedName})");
+
             HtmlHelper.ClientValidationEnabled = true;
 
             GlobalFilters.Filters.Add(new HandleErrorAttribute());
@@ -72,11 +77,12 @@ namespace OnWeb.CoreBind
             ModelBinders.Binders.DefaultBinder = new Binders.TraceModelBinder();
 
             lock (SyncRootStart)
+            {
                 if (_applicationCore == null)
                 {
                     try
                     {
-                        this.OnBeforeApplicationStart();
+                        OnBeforeApplicationStart();
                     }
                     catch (Exception ex)
                     {
@@ -87,20 +93,9 @@ namespace OnWeb.CoreBind
                     var physicalApplicationPath = Server.MapPath("~");
 
                     _applicationCore = new WebApplication(physicalApplicationPath, ConnectionString);
-                    _applicationCore.Start();
-
-                    try
-                    {
-                        this.OnAfterApplicationStart();
-                    // todo     _applicationCore.OnApplicationAfterStartAfterUserEvent();
-                    }
-                    catch (Exception ex)
-                    {
-                        _applicationCore = null;
-                        Debug.WriteLine("OnAfterApplicationStart: {0}", ex.Message);
-                        throw;
-                    }
+                    _applicationCoreStarted = false;
                 }
+            }
         }
 
         /// <summary>
@@ -137,15 +132,56 @@ namespace OnWeb.CoreBind
 
         internal void Application_BeginRequest(Object sender, EventArgs e)
         {
+            var isFirstRequest = (bool?)Context.GetType().GetProperty("FirstRequest", BindingFlags.Instance | BindingFlags.GetProperty | BindingFlags.NonPublic)?.GetValue(Context);
+            if (isFirstRequest.HasValue && isFirstRequest.Value) _urlFirst = Request.Url;
+
+            lock (SyncRootStart)
+            {
+                if (_applicationCore == null)
+                {
+                    try
+                    {
+                        OnBeforeApplicationStart();
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine("OnApplicationStart: {0}", ex.Message);
+                        throw;
+                    }
+
+                    var physicalApplicationPath = Server.MapPath("~");
+
+                    _applicationCore = new WebApplication(physicalApplicationPath, ConnectionString);
+                    _applicationCoreStarted = false;
+                }
+
+                if (!_applicationCoreStarted)
+                {
+                    if (!_applicationCore.IsServerUrlHasBeenSet && _urlFirst != null)
+                        _applicationCore.ServerUrl = new UriBuilder(_urlFirst.Scheme, _urlFirst.Host, _urlFirst.Port).Uri;
+
+                    _applicationCore.Start();
+
+                    try
+                    {
+                        OnAfterApplicationStart();
+                        // todo     _applicationCore.OnApplicationAfterStartAfterUserEvent();
+                        _applicationCoreStarted = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        _applicationCore = null;
+                        Debug.WriteLine("OnAfterApplicationStart: {0}", ex.Message);
+                        throw;
+                    }
+                }
+            }
+
             Core.WebUtils.QueryLogHelper.QueryLogEnabled = true;
             Context.Items["TimeRequestStart"] = DateTime.Now;
 
             HttpContext.Current.SetAppCore(_applicationCore);
             _applicationCore.GetUserContextManager().ClearCurrentUserContext();
-
-            var isFirstRequest = (bool?)this.Context.GetType().GetProperty("FirstRequest", BindingFlags.Instance | BindingFlags.GetProperty | BindingFlags.NonPublic)?.GetValue(this.Context);
-            if (!_applicationCore.IsServerUrlHasBeenSet  && isFirstRequest.HasValue && isFirstRequest.Value)
-                _applicationCore.ServerUrl = new UriBuilder(Request.Url.Scheme, Request.Url.Host, Request.Url.Port).Uri;
 
             _requestSpecificDisposables = new Queue<IDisposable>();
 
@@ -279,6 +315,32 @@ namespace OnWeb.CoreBind
         public void Application_PostRequestHandlerExecute(object sender, EventArgs e)
         {
             UpdateSessionCookieExpiration();
+        }
+
+        internal void Application_Disposed(Object sender, EventArgs e)
+        {
+            try
+            {
+                Debug.WriteLine($"Application_Disposed({_unique}, {GetType().AssemblyQualifiedName})");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Application_Disposed({_unique}, {GetType().AssemblyQualifiedName}): {ex.ToString()}");
+            }
+        }
+
+        internal void Application_End(Object sender, EventArgs e)
+        {
+            try
+            {
+                Debug.WriteLine($"Application_End({_unique}, {GetType().AssemblyQualifiedName})");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Application_End({_unique}, {GetType().AssemblyQualifiedName}): {ex.ToString()}");
+            }
+
+            OnUtils.Tasks.TasksManager.DeleteAllTasks();
         }
 
         private void UpdateSessionCookieExpiration()
