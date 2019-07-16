@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace OnWeb.Core.ModuleExtensions.CustomFields
+namespace OnWeb.Core.Modules.Extensions.CustomFields
 {
     using Core.Modules;
     using CoreBind.Modules;
@@ -75,7 +75,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
                 }
                 else
                 {
-                    var _itemsPre = this.Module.GetItems(itemType.IdItemType, Types.eSortType.Name);
+                    var _itemsPre = this.Module.GetItems(itemType.IdItemType);
                     var _items = _itemsPre != null ? _itemsPre.GetSimplifiedHierarchy() : new NestedListCollectionSimplified();
 
                     if (_items != null && _items.Count() > 0)

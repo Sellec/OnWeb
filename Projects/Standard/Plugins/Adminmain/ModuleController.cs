@@ -30,7 +30,7 @@ namespace OnWeb.Plugins.Adminmain
         public virtual ActionResult MainSettings()
         {
             var handler = AppCore.Get<ModuleControllerTypesManager>();
-            var model = new Model.AdminMainModelInfoPage(AppCore.Config, AppCore.WebConfig)
+            var model = new Model.AdminMainModelInfoPage(AppCore.AppConfig, AppCore.WebConfig)
             {
                 ModulesList = (from p in AppCore.GetModulesManager().GetModules()
                                where handler.GetModuleControllerTypes(p.QueryType) != null
@@ -63,7 +63,7 @@ namespace OnWeb.Plugins.Adminmain
             {
                 if (ModelState.IsValid)
                 {
-                    cfgAppOld = AppCore.GetModulesManager().GetModule<CoreModule<WebApplicationBase>>().GetConfigurationManipulator().GetEditable<CoreConfiguration<WebApplicationBase>>();
+                    cfgAppOld = AppCore.AppCoreModule.GetConfigurationManipulator().GetEditable<CoreConfiguration<WebApplicationBase>>();
                     cfgWebOld = AppCore.GetModulesManager().GetModule<WebCoreModule>().GetConfigurationManipulator().GetEditable<WebCoreConfiguration>();
 
                     var cfgApp = AppCore.GetModulesManager().GetModule<CoreModule<WebApplicationBase>>().GetConfigurationManipulator().GetEditable<CoreConfiguration<WebApplicationBase>>();

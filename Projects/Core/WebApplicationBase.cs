@@ -1,6 +1,7 @@
 ﻿using OnUtils.Application;
 using OnUtils.Data;
 using System;
+using OnUtils.Application.Modules.CoreModule;
 
 namespace OnWeb
 {
@@ -44,6 +45,14 @@ namespace OnWeb
         }
 
         #region Свойства
+        /// <summary>
+        /// Возвращает модуль ядра приложения.
+        /// </summary>
+        public CoreModule<WebApplicationBase> AppCoreModule
+        {
+            get => Get<CoreModule<WebApplicationBase>>();
+        }
+
         /// <summary>
         /// Возвращает основной веб-модуль приложения.
         /// </summary>

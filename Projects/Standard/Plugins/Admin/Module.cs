@@ -32,7 +32,7 @@ namespace OnWeb.Plugins.Admin
                 }
                 else
                 {
-                    var links = (module as IMenuProvider)?.GetAdminMenuItemsBase();
+                    var links = module.GetAdminMenuItems();
                     if (links == null) links = new NestedLinkCollection();
 
                     if (links.Count > 0)

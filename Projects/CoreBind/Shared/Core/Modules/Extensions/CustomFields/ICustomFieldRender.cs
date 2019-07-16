@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using MvcHtmlString = Microsoft.AspNetCore.Html.IHtmlContent;
 #endif
 
-namespace OnWeb.Core.ModuleExtensions.CustomFields
+namespace OnWeb.Core.Modules.Extensions.CustomFields
 {
     /// <summary>
     /// Представляет рендер для пользовательского поля.

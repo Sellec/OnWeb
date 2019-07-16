@@ -52,7 +52,7 @@ namespace OnWeb.Core.Users
 
                     if (onlyActive) queryBase = queryBase.Where(x => x.State == 0);
 
-                    var idRoleUser = AppCore.Config.RoleUser;
+                    var idRoleUser = AppCore.AppConfig.RoleUser;
                     if (!roleIdList.Contains(idRoleUser))
                     {
                         var queryRolesWithUsers = exceptSuperuser ? (from user in queryBase

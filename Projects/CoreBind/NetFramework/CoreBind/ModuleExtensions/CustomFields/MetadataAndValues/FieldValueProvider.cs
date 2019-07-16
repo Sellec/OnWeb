@@ -4,7 +4,7 @@ using OnUtils.Application.Modules.Extensions.CustomFields.Field;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace OnWeb.Core.ModuleExtensions.CustomFields.MetadataAndValues
+namespace OnWeb.Core.Modules.Extensions.CustomFields.MetadataAndValues
 {
     using Core.Items;
 

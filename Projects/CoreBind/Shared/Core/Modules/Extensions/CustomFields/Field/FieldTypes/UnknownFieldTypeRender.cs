@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using MvcHtmlString = Microsoft.AspNetCore.Html.IHtmlContent;
 #endif
 
-namespace OnWeb.Core.ModuleExtensions.CustomFields.Field.FieldTypes
+namespace OnWeb.Core.Modules.Extensions.CustomFields.Field.FieldTypes
 {
     sealed class UnknownFieldTypeRender : CoreComponentBase, ICustomFieldRender<UnknownFieldType>
     {

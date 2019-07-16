@@ -8,7 +8,7 @@ using System.Web.Mvc;
 namespace OnWeb.Plugins.FileManager.CustomFieldsFileTypes
 {
     using Core;
-    using Core.ModuleExtensions.CustomFields;
+    using Core.Modules.Extensions.CustomFields;
     using CoreBind.Razor;
 
 

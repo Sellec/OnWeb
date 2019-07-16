@@ -18,7 +18,7 @@ namespace OnWeb.Plugins.MessagingEmail
         {
             viewName = "ModuleSettings.cshtml";
 
-            var connectors = AppCore.Config.ConnectorsSettings.
+            var connectors = AppCore.AppConfig.ConnectorsSettings.
                 Where(x => x.ConnectorTypeName.StartsWith(typeof(Connectors.SmtpServer).Namespace)).
                 Select(x => new { x.ConnectorTypeName, Settings = JsonConvert.DeserializeObject<Connectors.SmtpServerSettings>(x.SettingsSerialized) }).
                 ToList();
@@ -30,7 +30,7 @@ namespace OnWeb.Plugins.MessagingEmail
 
         protected override ModuleConfiguration<EMailModule> ConfigurationSaveCustom(Configuration formData, out string outputMessage)
         {
-            var connectors = AppCore.Config.ConnectorsSettings.ToDictionary(x => x.ConnectorTypeName, x => x);
+            var connectors = AppCore.AppConfig.ConnectorsSettings.ToDictionary(x => x.ConnectorTypeName, x => x);
 
             connectors.Remove(typeof(Connectors.SmtpServer).FullName);
             if (formData.IsUseSmtp)

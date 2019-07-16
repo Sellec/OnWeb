@@ -29,7 +29,7 @@ namespace OnWeb.Plugins.Customer
         {
             base.InitModuleCustom();
 
-            //registerExtensionNeeded<Core.ModuleExtensions.CustomFields.ExtensionCustomsFields>();
+            //registerExtensionNeeded<Core.Modules.Extensions.CustomFields.ExtensionCustomsFields>();
             RegisterExtension<ExtensionCustomsFieldsBase>();
             RegisterExtension<ExtensionUrl>();
 

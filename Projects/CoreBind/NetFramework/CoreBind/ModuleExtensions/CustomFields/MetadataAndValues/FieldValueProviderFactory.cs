@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
-namespace OnWeb.Core.ModuleExtensions.CustomFields.MetadataAndValues
+namespace OnWeb.Core.Modules.Extensions.CustomFields.MetadataAndValues
 {
     class FieldValueProviderFactory : ValueProviderFactory
     {

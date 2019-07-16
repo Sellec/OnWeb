@@ -5,9 +5,9 @@ using OnUtils.Architecture.AppCore.DI;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace OnWeb.Core.ModuleExtensions.CustomFields
+namespace OnWeb.Core.Modules.Extensions.CustomFields
 {
-    using Core.ModuleExtensions.CustomFields.Field.FieldTypes;
+    using Core.Modules.Extensions.CustomFields.Field.FieldTypes;
 
     class Startup : IConfigureBindings, IExecuteStart
     {

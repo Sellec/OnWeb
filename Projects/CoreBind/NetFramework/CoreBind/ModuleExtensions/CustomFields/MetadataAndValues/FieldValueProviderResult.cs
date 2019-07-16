@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace OnWeb.Core.ModuleExtensions.CustomFields.MetadataAndValues
+namespace OnWeb.Core.Modules.Extensions.CustomFields.MetadataAndValues
 {
     class FieldValueProviderResult : ValueProviderResult
     {

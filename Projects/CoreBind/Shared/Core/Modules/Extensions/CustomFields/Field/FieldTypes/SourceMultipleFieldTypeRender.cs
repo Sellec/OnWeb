@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using MvcHtmlString = Microsoft.AspNetCore.Html.IHtmlContent;
 #endif
 
-namespace OnWeb.Core.ModuleExtensions.CustomFields.Field.FieldTypes
+namespace OnWeb.Core.Modules.Extensions.CustomFields.Field.FieldTypes
 {
 #pragma warning disable CS1591 // todo внести комментарии.
     public class SourceMultipleFieldTypeRender : CoreComponentBase, ICustomFieldRender<SourceMultipleFieldType>
