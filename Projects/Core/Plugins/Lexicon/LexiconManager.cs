@@ -1,6 +1,5 @@
 ﻿using OnUtils.Application;
 using OnUtils.Application.Journaling;
-using OnUtils.Architecture.AppCore;
 using OnUtils.Data;
 using System;
 using System.Collections.Generic;
@@ -8,12 +7,14 @@ using System.Linq;
 
 namespace OnWeb.Plugins.Lexicon
 {
+    using Core;
+    using Core.Journaling;
     using DB;
 
     /// <summary>
     /// Менеджер для работы со словарными формами.
     /// </summary>
-    public class LexiconManager : CoreComponentBase<ApplicationCore>, IComponentSingleton<ApplicationCore>, IUnitOfWorkAccessor<UnitOfWork<WordCase>>
+    public class LexiconManager : CoreComponentBase, IComponentSingleton, IUnitOfWorkAccessor<UnitOfWork<WordCase>>
     {
         /// <summary>
         /// Структура для запроса числительной и падежной формы слова.

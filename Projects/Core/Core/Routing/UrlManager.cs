@@ -2,7 +2,6 @@
 using OnUtils.Application;
 using OnUtils.Application.DB;
 using OnUtils.Application.Journaling;
-using OnUtils.Application.Modules;
 using OnUtils.Architecture.AppCore;
 using OnUtils.Data;
 using System;
@@ -11,6 +10,7 @@ using System.Linq;
 
 namespace OnWeb.Core.Routing
 {
+    using Modules;
     using ExecutionResultUrl = ExecutionResult<string>;
     using ExecutionResultUrlList = ExecutionResult<Dictionary<int, string>>;
 
@@ -18,7 +18,7 @@ namespace OnWeb.Core.Routing
     /// Менеджер маршрутизации. Позволяет получать и управлять адресами сущностей.
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Compiler", "CS0618")]
-    public class UrlManager : CoreComponentBase<ApplicationCore>, IComponentSingleton<ApplicationCore>, IUnitOfWorkAccessor<UnitOfWork<DB.Routing, ModuleConfig>>, IAutoStart
+    public class UrlManager : CoreComponentBase, IComponentSingleton, IUnitOfWorkAccessor<UnitOfWork<DB.Routing, ModuleConfig>>, IAutoStart
     {
         private static Dictionary<string, string> TRANSLATETABLE = new Dictionary<string, string>() {
             { "а", "a" }, { "б", "b" }, { "в", "v" }, { "г", "g" }, { "д", "d" }, { "е", "e" }, { "ж", "g" }, { "з", "z" },
@@ -88,7 +88,7 @@ namespace OnWeb.Core.Routing
         protected sealed override void OnStart()
         {
             DeprecatedSingletonInstances.UrlManager = this;
-            AppCore.Get<JournalingManager>().RegisterJournalTyped<UrlManager>("Журнал менеджера адресов");
+            AppCore.Get<JournalingManager<WebApplicationBase>>().RegisterJournalTyped<UrlManager>("Журнал менеджера адресов");
         }
 
         /// <summary>
@@ -114,7 +114,8 @@ namespace OnWeb.Core.Routing
         /// <exception cref="ArgumentNullException">Возникает, если <paramref name="action"/> содержит пустое значение (пустая строка или null).</exception>
         /// <exception cref="ArgumentNullException">Возникает, если <paramref name="Url"/> содержит пустое значение (пустая строка или null).</exception>
         [ApiReversible]
-        public ExecutionResult Register(ModuleCore module, int IdItem, int IdItemType, string action, IEnumerable<ActionArgument> Arguments, string Url, string UniqueKey = null)
+        public ExecutionResult Register<TModuleType>(ModuleCore<TModuleType> module, int IdItem, int IdItemType, string action, IEnumerable<ActionArgument> Arguments, string Url, string UniqueKey = null)
+            where TModuleType : ModuleCore<TModuleType>
         {
             return Register(module, new RegisterItem()
             {
@@ -138,7 +139,8 @@ namespace OnWeb.Core.Routing
         /// <exception cref="ArgumentNullException">Возникает, если в одном из элементов последовательности <paramref name="items"/> свойство <see cref="RegisterItem.Url"/> содержит пустое значение (пустая строка или null).</exception>
         /// <exception cref="ArgumentException">Возникает, если комбинация {IdItem/IdItemType/action/UniqueKey} в последовательности повторяется несколько раз.</exception>
         [ApiReversible]
-        public ExecutionResult Register(ModuleCore module, IEnumerable<RegisterItem> items)
+        public ExecutionResult Register<TModuleType>(ModuleCore<TModuleType> module, IEnumerable<RegisterItem> items)
+            where TModuleType : ModuleCore<TModuleType>
         {
             try
             {
@@ -248,7 +250,8 @@ namespace OnWeb.Core.Routing
         /// <param name="UniqueKey">См. описание <see cref="RegisterItem.UniqueKey"/>.</param>
         /// <returns>Возвращает объект <see cref="ExecutionResult"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. В случае ошибки свойство <see cref="ExecutionResult.Message"/> содержит сообщение об ошибке.</returns>
         [ApiReversible]
-        public ExecutionResult Unregister(ModuleCore module, string action, int IdItem, int IdItemType = 1, string UniqueKey = null)
+        public ExecutionResult Unregister<TModuleType>(ModuleCore<TModuleType> module, string action, int IdItem, int IdItemType = 1, string UniqueKey = null)
+            where TModuleType : ModuleCore<TModuleType>
         {
             try
             {
@@ -278,38 +281,44 @@ namespace OnWeb.Core.Routing
         }
 
         /// <summary>
-        /// Возвращает адреса для сущностей типа <paramref name="IdItemType"/> с идентификаторами из списка <paramref name="IdItemList"/> для модуля <paramref name="module"/>.
+        /// Возвращает адреса для сущностей типа <paramref name="idItemType"/> с идентификаторами из списка <paramref name="idItemList"/> для модуля <paramref name="module"/>.
         /// </summary>
         /// <param name="module">Модуль, к которому относится регистрируемая сущность.</param>
-        /// <param name="IdItemList">Список идентификаторов сущностей, для которых необходимо получить адреса. См. также описание <see cref="RegisterItem.IdItem"/>.</param>
-        /// <param name="IdItemType">См. описание <see cref="RegisterItem.IdItemType"/>.</param>
-        /// <param name="UniqueKey">См. описание <see cref="RegisterItem.UniqueKey"/>.</param>
+        /// <param name="idItemList">Список идентификаторов сущностей, для которых необходимо получить адреса. См. также описание <see cref="RegisterItem.IdItem"/>.</param>
+        /// <param name="idItemType">См. описание <see cref="RegisterItem.IdItemType"/>.</param>
+        /// <param name="uniqueKey">См. описание <see cref="RegisterItem.UniqueKey"/>.</param>
         /// <returns>
         /// Возвращает объект <see cref="ExecutionResultUrlList"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. 
         /// В случае ошибки свойство <see cref="ExecutionResult.Message"/> содержит сообщение об ошибке.
-        /// В случае успеха свойство <see cref="ExecutionResultUrlList.Result"/> содержит коллекцию пар {идентификатор:url}, причем количество пар равно количеству идентификаторов в <paramref name="IdItemList"/>. 
+        /// В случае успеха свойство <see cref="ExecutionResultUrlList.Result"/> содержит коллекцию пар {идентификатор:url}, причем количество пар равно количеству идентификаторов в <paramref name="idItemList"/>. 
         /// Если для какого-то идентификатора не был получен адрес, то значение в паре будет равно null.
         /// </returns>
         /// <exception cref="ArgumentNullException">Возникает, если параметр <paramref name="module"/> равен null.</exception>
-        /// <exception cref="ArgumentNullException">Возникает, если параметр <paramref name="IdItemList"/> равен null.</exception>
+        /// <exception cref="ArgumentNullException">Возникает, если параметр <paramref name="idItemList"/> равен null.</exception>
         [ApiReversible]
-        public ExecutionResultUrlList GetUrl(ModuleCore module, IEnumerable<int> IdItemList, int IdItemType, string UniqueKey = null)
+        public ExecutionResultUrlList GetUrl<TModuleType>(ModuleCore<TModuleType> module, IEnumerable<int> idItemList, int idItemType, string uniqueKey = null)
+            where TModuleType : ModuleCore<TModuleType>
+        {
+            return GetUrl((IModuleCoreInternal)module, idItemList, idItemType, uniqueKey);
+        }
+
+        internal ExecutionResultUrlList GetUrl(IModuleCoreInternal module, IEnumerable<int> idItemList, int idItemType, string uniqueKey = null)
         {
             try
             {
                 //setError(null); // todo
 
                 if (module == null) throw new ArgumentNullException(nameof(module));
-                if (IdItemList == null) throw new ArgumentNullException(nameof(IdItemList));
+                if (idItemList == null) throw new ArgumentNullException(nameof(idItemList));
 
                 using (var db = this.CreateUnitOfWork())
                 {
                     db.DataContext.QueryTimeout = 60 * 1000;
 
-                    var coll = IdItemList.GroupBy(x => x).Select(x => x.Key).ToDictionary(x => x, x => string.Empty);
+                    var coll = idItemList.GroupBy(x => x).Select(x => x.Key).ToDictionary(x => x, x => string.Empty);
 
                     var queryResults = db.Repo1.
-                        Where(x => x.IdModule == module.ID && coll.Keys.ToList().Contains(x.IdItem) && x.IdItemType == IdItemType && x.UniqueKey == UniqueKey).
+                        Where(x => x.IdModule == module.IdModule && coll.Keys.ToList().Contains(x.IdItem) && x.IdItemType == idItemType && x.UniqueKey == uniqueKey).
                         Select(x => new { x.IdItem, x.UrlFull });
 
                     var results = queryResults.ToList();
@@ -324,8 +333,8 @@ namespace OnWeb.Core.Routing
                 this.RegisterEvent(
                     EventType.Error,
                     "register: ошибка при получении адресов",
-                    $"Модуль: {(module == null ? "не указан" : module.ID.ToString())}\r\n" +
-                    $"IdItemList='{string.Join(", ", IdItemList)}'\r\nIdItemType={IdItemType}\r\nUniqueKey='{UniqueKey}'",
+                    $"Модуль: {(module == null ? "не указан" : module.IdModule.ToString())}\r\n" +
+                    $"IdItemList='{string.Join(", ", idItemList)}'\r\nIdItemType={idItemType}\r\nUniqueKey='{uniqueKey}'",
                     exception: ex
                 );
                 return new ExecutionResultUrlList(false, "Возникла ошибка во время получения списка адресов.");
@@ -346,7 +355,8 @@ namespace OnWeb.Core.Routing
         /// </returns>
         /// <exception cref="ArgumentNullException">Возникает, если параметр <paramref name="module"/> равен null.</exception>
         [ApiReversible]
-        public ExecutionResultUrl GetUrl(ModuleCore module, int IdItem, int IdItemType, string UniqueKey = null)
+        public ExecutionResultUrl GetUrl<TModuleType>(ModuleCore<TModuleType> module, int IdItem, int IdItemType, string UniqueKey = null)
+            where TModuleType : ModuleCore<TModuleType>
         {
             var result = GetUrl(module, new int[] { IdItem }, IdItemType, UniqueKey);
             return new ExecutionResultUrl(result.IsSuccess, result.Message, result.IsSuccess ? result.Result[IdItem] : null);

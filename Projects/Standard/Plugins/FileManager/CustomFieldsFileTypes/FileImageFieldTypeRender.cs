@@ -1,7 +1,5 @@
-﻿using OnUtils.Application;
-using OnUtils.Application.Modules.Extensions.CustomFields.Data;
+﻿using OnUtils.Application.Modules.Extensions.CustomFields.Data;
 using OnUtils.Application.Modules.Extensions.CustomFields.Field;
-using OnUtils.Architecture.AppCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +7,12 @@ using System.Web.Mvc;
 
 namespace OnWeb.Plugins.FileManager.CustomFieldsFileTypes
 {
+    using Core;
     using Core.ModuleExtensions.CustomFields;
     using CoreBind.Razor;
 
-    class FileImageFieldTypeRender : CoreComponentBase<ApplicationCore>, ICustomFieldRender<FileImageFieldType>
+
+    class FileImageFieldTypeRender : CoreComponentBase, ICustomFieldRender<FileImageFieldType>
     {
         MvcHtmlString ICustomFieldRender<FileImageFieldType>.RenderHtmlEditor<TModel>(HtmlHelper<TModel> html, IField field, IDictionary<string, object> htmlAttributes, params object[] additionalParameters)
         {

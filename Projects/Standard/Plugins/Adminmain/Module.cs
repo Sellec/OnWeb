@@ -4,6 +4,8 @@ using System;
 
 namespace OnWeb.Plugins.Adminmain
 {
+    using Core.Modules;
+
     /// <summary>
     /// Модуль управления основными функциями.
     /// </summary>

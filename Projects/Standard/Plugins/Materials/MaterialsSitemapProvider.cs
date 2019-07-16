@@ -1,14 +1,13 @@
-﻿using OnUtils.Application;
-using OnUtils.Application.Items;
-using OnUtils.Architecture.AppCore;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace OnWeb.Plugins.Materials
 {
     using Adminmain.Services;
+    using Core;
+    using Core.Items;
 
-    class MaterialsSitemapProvider : CoreComponentBase<ApplicationCore>, ISitemapProvider
+    class MaterialsSitemapProvider : CoreComponentBase, ISitemapProvider
     {
         #region CoreComponentBase
         protected override void OnStart()

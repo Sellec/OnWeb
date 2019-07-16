@@ -8,7 +8,7 @@ namespace OnWeb.Plugins.Admin
 
     class Startup : IConfigureBindings
     {
-        void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
+        void IConfigureBindings<WebApplicationBase>.ConfigureBindings(IBindingsCollection<WebApplicationBase> bindingsCollection)
         {
             bindingsCollection.SetSingleton<ModuleAdmin, ModuleStandard>();
             bindingsCollection.SetTransient<IModuleController<ModuleAdmin>, ModuleAdminController>();

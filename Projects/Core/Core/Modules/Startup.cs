@@ -1,15 +1,18 @@
-﻿using OnUtils.Application;
-using OnUtils.Architecture.AppCore;
+﻿using OnUtils.Architecture.AppCore;
 using OnUtils.Architecture.AppCore.DI;
 
 namespace OnWeb.Core.Modules
 {
+    using Extensions.ExtensionUrl;
+    using Extensions.CustomFields;
+
     class Startup : IConfigureBindings
     {
-        void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
+        void IConfigureBindings<WebApplicationBase>.ConfigureBindings(IBindingsCollection<WebApplicationBase> bindingsCollection)
         {
             bindingsCollection.SetSingleton<ModuleControllerTypesManager>();
-            bindingsCollection.SetTransient<OnUtils.Application.Modules.Extensions.ExtensionUrl.ExtensionUrl, Extensions.ExtensionUrl.WebExtensionUrl>();
+            bindingsCollection.SetTransient<ExtensionUrl>();
+            bindingsCollection.SetTransient<ExtensionCustomsFieldsBase>();
         }
     }
 }

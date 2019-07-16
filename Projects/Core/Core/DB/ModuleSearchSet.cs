@@ -1,7 +1,6 @@
-using OnUtils.Application.Items;
-
 namespace OnWeb.Core.DB
 {
+    using Items;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
@@ -33,7 +32,7 @@ namespace OnWeb.Core.DB
             set
             {
                 _idModule = value;
-                Owner = OnUtils.Application.DeprecatedSingletonInstances.ModulesManager.GetModule(value);
+                Owner = OnUtils.Application.DeprecatedSingletonInstances.Get<WebApplicationBase>().GetModule(value);
             }
         }
 

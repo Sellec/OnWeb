@@ -13,6 +13,7 @@ using System.Web.Mvc;
 
 namespace OnWeb.Plugins.FileManager
 {
+    using Core.Modules;
     using DictionaryFiles = Dictionary<int, DB.File>;
 
     /// <summary>

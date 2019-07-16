@@ -9,7 +9,7 @@ namespace OnWeb.Plugins.WebCoreModule
         #region CoreComponentBase
         protected override void OnStart()
         {
-            AppCore.GetWebCoreModule().RunConfigurationCheck();
+            AppCore.WebCoreModule.RunConfigurationCheck();
         }
 
         protected override void OnStop()

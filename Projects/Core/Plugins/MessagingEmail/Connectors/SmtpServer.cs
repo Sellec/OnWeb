@@ -10,6 +10,7 @@ using System.Text;
 namespace OnWeb.Plugins.MessagingEmail.Connectors
 {
     using Core;
+    using Core.Messaging.Connectors;
 
     /// <summary>
     /// Предоставляет возможность отправки электронной почты через smtp-сервер. Поддерживается только <see cref="SmtpDeliveryMethod.Network"/>.
@@ -42,10 +43,10 @@ namespace OnWeb.Plugins.MessagingEmail.Connectors
 
         #region IConnectorBase<Message>
         /// <summary>
-        /// См. <see cref="IConnectorBase{TMessage}.Init(string)"/>.
+        /// См. <see cref="IConnectorBase{TAppCoreSelfReference, TMessage}.Init(string)"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Возникает, если коннектор уже был инициализирован.</exception>
-        bool IConnectorBase<EmailMessage>.Init(string connectorSettings)
+        bool IConnectorBase<WebApplicationBase, EmailMessage>.Init(string connectorSettings)
         {
             if (_client != null) throw new InvalidOperationException("Коннектор уже инициализирован.");
 
@@ -77,7 +78,7 @@ namespace OnWeb.Plugins.MessagingEmail.Connectors
             }
         }
 
-        void IConnectorBase<EmailMessage>.Send(ConnectorMessage<EmailMessage> message, IMessagingService service)
+        void IConnectorBase<WebApplicationBase, EmailMessage>.Send(ConnectorMessage<EmailMessage> message, IMessagingService<WebApplicationBase> service)
         {
             try
             {
@@ -91,7 +92,7 @@ namespace OnWeb.Plugins.MessagingEmail.Connectors
                     Body = message.MessageBody.Body?.ToString(),
                 };
 
-                var developerEmail = AppCore.GetWebConfig().DeveloperEmail;
+                var developerEmail = AppCore.WebConfig.DeveloperEmail;
                 if (Debug.IsDeveloper && string.IsNullOrEmpty(developerEmail)) return;
 
                 message.MessageBody.To.ForEach(x => mailMessage.To.Add(new MailAddress(Debug.IsDeveloper ? developerEmail : x.ContactData, string.IsNullOrEmpty(x.Name) ? x.ContactData : x.Name)));
@@ -171,7 +172,7 @@ namespace OnWeb.Plugins.MessagingEmail.Connectors
             return _client;
         }
 
-        string IConnectorBase<EmailMessage>.ConnectorName
+        string IConnectorBase<WebApplicationBase, EmailMessage>.ConnectorName
         {
             get => "SMTP-сервер";
         }

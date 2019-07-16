@@ -6,6 +6,9 @@ using System.Collections.Generic;
 
 namespace OnWeb.Plugins.Admin
 {
+    using Core.Modules;
+    using Core.Items;
+
     /// <summary>
     /// Модуль доступа в панель управления.
     /// </summary>
@@ -15,7 +18,7 @@ namespace OnWeb.Plugins.Admin
         /// <summary>
         /// Возвращает список меню для всех модулей системы с проверкой прав для текущего пользователя.
         /// </summary>
-        public Dictionary<ModuleCore, List<ItemBase>> GetAdminMenuList()
+        public Dictionary<IModuleCore, List<ItemBase>> GetAdminMenuList()
         {
             return GetAdminMenuList(AppCore.GetUserContextManager().GetCurrentUserContext());
         }
@@ -23,7 +26,7 @@ namespace OnWeb.Plugins.Admin
         /// <summary>
         /// Возвращает список меню для всех модулей системы с проверкой прав для пользователя, ассоциированного с указанным контекстом.
         /// </summary>
-        public virtual Dictionary<ModuleCore, List<ItemBase>> GetAdminMenuList(IUserContext userContext)
+        public virtual Dictionary<IModuleCore, List<ItemBase>> GetAdminMenuList(IUserContext userContext)
         {
             throw new NotImplementedException();
         }

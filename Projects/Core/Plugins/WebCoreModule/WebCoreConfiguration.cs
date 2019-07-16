@@ -11,7 +11,7 @@ namespace OnWeb.Plugins.WebCoreModule
     /// <summary>
     /// Класс конфигурации. При создании экземпляра объекта через метод Create ядра <see cref="WebApplicationBase"/> автоматически заполняется значениями настроек ядра.
     /// </summary>
-    public class WebCoreConfiguration : ModuleConfiguration<WebCoreModule>
+    public class WebCoreConfiguration : ModuleConfiguration<WebApplicationBase, WebCoreModule>
     {
         [Display(Name = "Название сайта"), Required(ErrorMessage = "Название сайта не может быть пустым"), MaxLength(200)]
         public string SiteFullName

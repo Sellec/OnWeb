@@ -16,7 +16,10 @@ using System.Web.Mvc;
 
 namespace OnWeb.Core.ModuleExtensions.CustomFields
 {
+    using Core.Modules;
     using CoreBind.Modules;
+    using Core.Modules.Extensions.CustomFields;
+    using Core.Types;
 
     /// <summary>
     /// Админский класс расширения пользовательских полей. 
@@ -25,15 +28,15 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
     public class ExtensionCustomsFieldsAdmin : ExtensionCustomsFieldsBase
     {
         #region Вспомогательное
-        public static NestedLinkSimple RelativeToModule(string url, string caption, ModuleCore module)
+        public static NestedLinkSimple RelativeToModule(string url, string caption, IModuleCore module)
         {
-            var moduleAdmin = module.AppCore.Get<Plugins.Admin.ModuleAdmin>();
+            var moduleAdmin = module.GetAppCore().Get<Plugins.Admin.ModuleAdmin>();
             return new NestedLinkSimple(caption, new Uri($"/{moduleAdmin.UrlName}/mnadmin/{module.UrlName}/{url}", UriKind.Relative));
         }
 
         public override NestedLinkCollection getAdminMenu()
         {
-            return new NestedLinkCollection(RelativeToModule("fields", "Управление полями", this.Module));
+            return new NestedLinkCollection(RelativeToModule("fields", "Управление полями", Module));
         }
 
         /// <summary>
@@ -62,7 +65,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
         {
             var itemsGroups = new Dictionary<ItemType, IDictionary<SchemeItem, string>>();
 
-            foreach (var itemType in this.Module.GetItemTypes())
+            foreach (var itemType in Module.GetItemTypes())
             {
                 var items = new Dictionary<SchemeItem, string>();
 
@@ -118,23 +121,23 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
         }
 
         [ModuleAction("fieldsItem")]
-        public ActionResult ContainerItem(int idSchemeItem = 0, int idSchemeItemType = ModuleCore.CategoryType)
+        public ActionResult ContainerItem(int idSchemeItem = 0, int idSchemeItemType = ModulesConstants.CategoryType)
         {
             var schemeItem = new SchemeItem(idSchemeItem, idSchemeItemType);
 
             using (var db = this.CreateUnitOfWork())
             {
-                var fields = db.CustomFieldsFields.Where(x => x.IdModule == Module.ID && x.Block == 0).ToDictionary(x => x.IdField, x => x);
+                var fields = db.CustomFieldsFields.Where(x => x.IdModule == Module.IdModule && x.Block == 0).ToDictionary(x => x.IdField, x => x);
 
                 var schemes = db.CustomFieldsSchemes.
-                    Where(x => x.IdModule == Module.ID && x.IdScheme > 0).
+                    Where(x => x.IdModule == Module.IdModule && x.IdScheme > 0).
                     OrderBy(x => x.NameScheme).
                     ToDictionary(x => (uint)x.IdScheme, x => new SchemeContainerItem.Scheme() { Name = x.NameScheme, Fields = new Dictionary<int, IField>() });
 
                 schemes[0] = new SchemeContainerItem.Scheme() { Name = "По-умолчанию", Fields = new Dictionary<int, IField>() };
 
                 var sql = (from datas in db.CustomFieldsSchemeDatas
-                           where datas.IdModule == Module.ID && datas.IdItemType == schemeItem.IdItemType && datas.IdSchemeItem == schemeItem.IdItem
+                           where datas.IdModule == Module.IdModule && datas.IdItemType == schemeItem.IdItemType && datas.IdSchemeItem == schemeItem.IdItem
                            group new { datas.IdField, datas.Order } by datas.IdScheme into gr
                            select new { IdScheme = gr.Key, Fields = gr.OrderBy(x => x.Order).Select(x => x.IdField).ToList() });
 
@@ -175,7 +178,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
                 using (var db = this.CreateUnitOfWork())
                 using (var scope = db.CreateScope())
                 {
-                    db.CustomFieldsSchemeDatas.Where(x => x.IdModule == this.Module.ID && x.IdSchemeItem == schemeItem.IdItem && x.IdItemType == schemeItem.IdItemType).Delete();
+                    db.CustomFieldsSchemeDatas.Where(x => x.IdModule == this.Module.IdModule && x.IdSchemeItem == schemeItem.IdItem && x.IdItemType == schemeItem.IdItemType).Delete();
 
                     int k = 0;
                     var modelPrepared = model != null ? model.Where(x => int.TryParse(x.Key, out k)).ToDictionary(x => uint.Parse(x.Key), x => new List<int>(x.Value)) : null;
@@ -195,7 +198,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
                             foreach (var field in pair.Value)
                                 db.CustomFieldsSchemeDatas.Add(new CustomFieldsSchemeData()
                                 {
-                                    IdModule = this.Module.ID,
+                                    IdModule = this.Module.IdModule,
                                     IdScheme = (int)pair.Key,
                                     IdField = field,
                                     IdSchemeItem = schemeItem.IdItem,
@@ -237,7 +240,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
                     {
                         var data = new CustomFieldsScheme()
                         {
-                            IdModule = this.Module.ID,
+                            IdModule = this.Module.IdModule,
                             NameScheme = schemeName
                         };
                         db.CustomFieldsSchemes.Add(data);
@@ -304,7 +307,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
                 {
                     data = db.CustomFieldsFields.Where(x => x.IdField == IdField).Include(x => x.data).FirstOrDefault();
                     if (data == null) throw new Exception("Такое поле не найдено в базе данных!");
-                    if (data.IdModule != this.Module.ID)
+                    if (data.IdModule != this.Module.IdModule)
                     {
                         var module = AppCore.GetModulesManager().GetModule(data.IdModule);
                         if (module == null) throw new Exception("Это поле относится к другому модулю.");
@@ -314,7 +317,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
             }
             else
             {
-                data = new CustomFieldsField() { IdFieldType = 0, IdModule = this.Module.ID };
+                data = new CustomFieldsField() { IdFieldType = 0, IdModule = Module.IdModule };
             }
 
             return Controller.display("ModuleExtensions/CustomFields/Design/FieldEdit.cshtml", new FieldEdit(data));
@@ -334,7 +337,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
                     {
                         data = db.CustomFieldsFields.Where(x => x.IdField == model.IdField).Include(x => x.data).FirstOrDefault();
                         if (data == null) throw new Exception("Такое поле не найдено в базе данных!");
-                        if (data.IdModule != this.Module.ID)
+                        if (data.IdModule != this.Module.IdModule)
                         {
                             var module = AppCore.GetModulesManager().GetModule(data.IdModule);
                             if (module == null) throw new Exception("Это поле относится к другому модулю.");
@@ -343,7 +346,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
                     }
                     else
                     {
-                        data = new CustomFieldsField() { IdFieldType = 0, IdModule = this.Module.ID };
+                        data = new CustomFieldsField() { IdFieldType = 0, IdModule = this.Module.IdModule };
                         db.CustomFieldsFields.Add(data);
                     }
 
@@ -453,7 +456,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
                 {
                     var data = db.CustomFieldsFields.Where(x => x.IdField == IdField).Include(x => x.data).FirstOrDefault();
                     if (data == null) throw new Exception("Такое поле не найдено в базе данных!");
-                    if (data.IdModule != this.Module.ID)
+                    if (data.IdModule != this.Module.IdModule)
                     {
                         var module = AppCore.GetModulesManager().GetModule(data.IdModule);
                         if (module == null) throw new Exception("Это поле относится к другому модулю.");

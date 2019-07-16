@@ -104,7 +104,7 @@ namespace OnWeb.CoreBind.Routing
                 if (isDefaultMethod && arguments.Count == 0) methodName = null;
 
                 var url = controllerTypeFromFactory.CreateRelativeUrl(module.UrlName, methodName, arguments.ToArray());
-                return includeAuthority ? new Uri(((WebApplicationBase)AppCore).ServerUrl, url) : new Uri(url, UriKind.Relative);
+                return includeAuthority ? new Uri(AppCore.ServerUrl, url) : new Uri(url, UriKind.Relative);
             }
             catch (HandledException ex)
             {

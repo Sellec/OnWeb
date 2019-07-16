@@ -18,6 +18,7 @@ namespace OnWeb.Plugins.Adminmain
     using CoreBind.Modules;
     using CoreBind.Routing;
     using Services;
+    using Core.Journaling;
     using WebCoreModule;
 
     /// <summary>
@@ -29,7 +30,7 @@ namespace OnWeb.Plugins.Adminmain
         public virtual ActionResult MainSettings()
         {
             var handler = AppCore.Get<ModuleControllerTypesManager>();
-            var model = new Model.AdminMainModelInfoPage(AppCore.Config, AppCore.GetWebConfig())
+            var model = new Model.AdminMainModelInfoPage(AppCore.Config, AppCore.WebConfig)
             {
                 ModulesList = (from p in AppCore.GetModulesManager().GetModules()
                                where handler.GetModuleControllerTypes(p.QueryType) != null
@@ -38,7 +39,7 @@ namespace OnWeb.Plugins.Adminmain
                                {
                                    Value = p.ID.ToString(),
                                    Text = p.Caption,
-                                   Selected = AppCore.GetWebConfig().IdModuleDefault == p.ID
+                                   Selected = AppCore.WebConfig.IdModuleDefault == p.ID
                                }).ToList()
             };
 
@@ -55,21 +56,21 @@ namespace OnWeb.Plugins.Adminmain
         public virtual JsonResult MainSettingsSave(Model.AdminMainModelInfoPage model)
         {
             var result = JsonAnswer();
-            CoreConfiguration cfgAppOld = null;
+            CoreConfiguration<WebApplicationBase> cfgAppOld = null;
             WebCoreConfiguration cfgWebOld = null;
 
             try
             {
                 if (ModelState.IsValid)
                 {
-                    cfgAppOld = AppCore.GetModulesManager().GetModule<CoreModule>().GetConfigurationManipulator().GetEditable<CoreConfiguration>();
+                    cfgAppOld = AppCore.GetModulesManager().GetModule<CoreModule<WebApplicationBase>>().GetConfigurationManipulator().GetEditable<CoreConfiguration<WebApplicationBase>>();
                     cfgWebOld = AppCore.GetModulesManager().GetModule<WebCoreModule>().GetConfigurationManipulator().GetEditable<WebCoreConfiguration>();
 
-                    var cfgApp = AppCore.GetModulesManager().GetModule<CoreModule>().GetConfigurationManipulator().GetEditable<CoreConfiguration>();
+                    var cfgApp = AppCore.GetModulesManager().GetModule<CoreModule<WebApplicationBase>>().GetConfigurationManipulator().GetEditable<CoreConfiguration<WebApplicationBase>>();
                     cfgApp.RoleGuest = model.AppCoreConfiguration.RoleGuest;
                     cfgApp.RoleUser = model.AppCoreConfiguration.RoleUser;
 
-                    var applyResult = AppCore.GetModulesManager().GetModule<CoreModule>().GetConfigurationManipulator().ApplyConfiguration(cfgApp);
+                    var applyResult = AppCore.GetModulesManager().GetModule<CoreModule<WebApplicationBase>>().GetConfigurationManipulator().ApplyConfiguration(cfgApp);
                     switch (applyResult.Item1)
                     {
                         case ApplyConfigurationResult.PermissionDenied:
@@ -144,7 +145,7 @@ namespace OnWeb.Plugins.Adminmain
             {
                 if (!result.Success)
                 {
-                    if (cfgAppOld != null) AppCore.GetModulesManager().GetModule<CoreModule>().GetConfigurationManipulator().ApplyConfiguration(cfgAppOld);
+                    if (cfgAppOld != null) AppCore.GetModulesManager().GetModule<CoreModule<WebApplicationBase>>().GetConfigurationManipulator().ApplyConfiguration(cfgAppOld);
                     if (cfgWebOld != null) AppCore.GetModulesManager().GetModule<WebCoreModule>().GetConfigurationManipulator().ApplyConfiguration(cfgWebOld);
                 }
             }
@@ -161,7 +162,7 @@ namespace OnWeb.Plugins.Adminmain
                 //Unregistered = (from p in AppCore.GetModulesManager().getModulesCandidates()
                 //                orderby p.Key.Info.ModuleCaption
                 //                select new Model.ModuleUnregistered(p.Key) { Info = p.Value }).ToList(),
-                Registered = (from p in AppCore.GetModulesManager().GetModules()
+                Registered = (from p in AppCore.GetModulesManager().GetModules().OfType<IModuleCore>()
                               orderby p.Caption
                               select new Model.Module(p)).ToList()
             };
@@ -223,11 +224,11 @@ namespace OnWeb.Plugins.Adminmain
         [MenuAction("Маршрутизация (ЧПУ)", "routing", Module.PERM_ROUTING)]
         public virtual ActionResult Routing()
         {
-            var model = new Model.Routing() { Modules = AppCore.GetModulesManager().GetModules().OrderBy(x => x.Caption).ToList() };
+            var model = new Model.Routing() { Modules = AppCore.GetModulesManager().GetModules().OfType<IModuleCore>().OrderBy(x => x.Caption).ToList() };
 
             using (var db = Module.CreateUnitOfWork())
             {
-                var modulesIdList = model.Modules.Select(x => x.ID).ToArray();
+                var modulesIdList = model.Modules.Select(x => x.IdModule).ToArray();
                 var query = db.Routes
                                 .Where(x => modulesIdList.Contains(x.IdModule))
                                 .GroupBy(x => new { x.IdModule, x.IdRoutingType })
@@ -238,8 +239,8 @@ namespace OnWeb.Plugins.Adminmain
 
                 var query2 = (new RoutingType.eTypes[] { RoutingType.eTypes.Main, RoutingType.eTypes.Additional, RoutingType.eTypes.Old })
                                 .ToDictionary(x => x,
-                                              x => model.Modules.ToDictionary(y => y.ID,
-                                                                                   y => query.ContainsKey(x) && query[x].ContainsKey(y.ID) ? query[x][y.ID] : 0));
+                                              x => model.Modules.ToDictionary(y => y.IdModule,
+                                                                                   y => query.ContainsKey(x) && query[x].ContainsKey(y.IdModule) ? query[x][y.IdModule] : 0));
 
                 model.RoutesMain = query2[RoutingType.eTypes.Main];
                 model.RoutesAdditional = query2[RoutingType.eTypes.Additional];
@@ -257,7 +258,7 @@ namespace OnWeb.Plugins.Adminmain
 
             if (module == null) throw new Exception($"Не получилось найти модуль с указанным идентификатором {IdModule}.");
 
-            var model = new Model.RoutingModule() { Module = module };
+            var model = new Model.RoutingModule() { Module = (IModuleCore)module };
 
             using (var db = Module.CreateUnitOfWork())
             {
@@ -275,7 +276,7 @@ namespace OnWeb.Plugins.Adminmain
                     return action.ActionName;
                 });
 
-                var modulesActions = AppCore.GetModulesManager().GetModules().Select(x => new
+                var modulesActions = AppCore.GetModulesManager().GetModules().OfType<IModuleCore>().Select(x => new
                 {
                     Module = x,
                     UserDescriptor = x.ControllerUser() != null ? new ReflectedControllerDescriptor(x.ControllerUser()) : null,
@@ -289,7 +290,7 @@ namespace OnWeb.Plugins.Adminmain
 
                 model.ModulesActions = modulesActions.
                     Select(x => new { Group = new SelectListGroup() { Name = x.Key.Caption }, Items = x.Value, Module = x.Key }).
-                    SelectMany(x => x.Items.Select(y => new SelectListItem() { Text = y.Value, Value = $"{x.Module.ID}_{y.Key}", Group = x.Group })).ToList();
+                    SelectMany(x => x.Items.Select(y => new SelectListItem() { Text = y.Value, Value = $"{x.Module.IdModule}_{y.Key}", Group = x.Group })).ToList();
 
                 model.Routes = db.Routes
                         .Where(x => x.IdModule == module.ID)

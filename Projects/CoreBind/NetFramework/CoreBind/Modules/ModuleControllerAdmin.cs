@@ -10,6 +10,10 @@ namespace OnWeb.CoreBind.Modules
     using Core.Modules;
     using CoreBind.Types;
     using Routing;
+    using Core.Journaling;
+    using Core.Configuration;
+    using Core.Items;
+    using Core.Modules;
 
     [ModuleController(ControllerTypeAdmin.TypeID)]
     public abstract class ModuleControllerAdmin<TModule, TConfigurationViewModel, TConfigurationSaveModel> : ModuleControllerUser<TModule>

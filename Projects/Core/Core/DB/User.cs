@@ -4,6 +4,7 @@ using OnUtils.Application.Modules;
 
 namespace OnWeb.Core.DB
 {
+    using Items;
     using System;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
@@ -29,11 +30,11 @@ namespace OnWeb.Core.DB
     }
 
     [Table("users")]
-    [ItemType(ModuleCore.ItemType)]
+    [ItemType(ModulesConstants.ItemType)]
     [System.Diagnostics.DebuggerDisplay("User: id={ID}")]
     public partial class User : ItemBase
     {
-        public User() : base(OnUtils.Application.DeprecatedSingletonInstances.ModulesManager.GetModule<Plugins.Customer.ModuleCustomer>())
+        public User() : base(OnUtils.Application.DeprecatedSingletonInstances.Get<WebApplicationBase>().GetModule<Plugins.Customer.ModuleCustomer>())
         {
 
         }

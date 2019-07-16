@@ -1,8 +1,4 @@
-﻿using OnUtils.Application.Items;
-using OnUtils.Application.Modules;
-using OnUtils.Application.Modules.Extensions.CustomFields;
-using OnUtils.Application.Modules.Extensions.ExtensionUrl;
-using OnUtils.Application.Types;
+﻿using OnUtils.Application.Modules;
 using OnUtils.Data;
 using System;
 using System.Collections.Generic;
@@ -10,6 +6,12 @@ using System.Linq;
 
 namespace OnWeb.Plugins.Materials
 {
+    using Core.Items;
+    using Core.Modules;
+    using Core.Modules.Extensions.CustomFields;
+    using Core.Modules.Extensions.ExtensionUrl;
+    using Core.Types;
+
     [ModuleCore("Контент", DefaultUrlName = "Content")]
     public class ModuleMaterials : ModuleCore<ModuleMaterials>, IUnitOfWorkAccessor<DB.DataLayerContext>
     {
@@ -79,7 +81,7 @@ namespace OnWeb.Plugins.Materials
 
         public override NestedLinkCollection GetItems(int IdItemType, params object[] _params)
         {
-            if (IdItemType == ItemType)
+            if (IdItemType == ModulesConstants.ItemType)
             {
                 using (var db = this.CreateUnitOfWork())
                 {

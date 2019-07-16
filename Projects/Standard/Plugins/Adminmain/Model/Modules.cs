@@ -1,13 +1,14 @@
-﻿using OnUtils.Application.Modules;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace OnWeb.Plugins.Adminmain.Model
 {
+    using Core.Modules;
+
     public class Module
     {
-        public Module(ModuleCore module)
+        public Module(IModuleCore module)
         {
-            Id = module.ID;
+            Id = module.IdModule;
             Caption = module.Caption;
             Type = module.QueryType.FullName;
             UniqueName = module.UniqueName.ToString();

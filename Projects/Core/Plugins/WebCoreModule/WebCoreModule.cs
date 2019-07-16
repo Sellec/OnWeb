@@ -13,7 +13,7 @@ namespace OnWeb.Plugins.WebCoreModule
     /// Интерфейс ядра системы для управления основными функциями.
     /// </summary>
     [ModuleCore("Ядро веб-системы")]
-    public sealed class WebCoreModule : ModuleCore<WebApplicationBase, WebCoreModule>, ICritical
+    public sealed class WebCoreModule : ModuleCore<WebCoreModule>, ICritical
     {
         internal static readonly Guid PermissionConfigurationSave = "perm_configSave".GenerateGuid();
 

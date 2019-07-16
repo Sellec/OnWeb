@@ -1,9 +1,9 @@
-﻿using OnUtils.Application.Items;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace OnWeb.Plugins.Adminmain.Services
 {
     using Core;
+    using Core.Items;
 
     /// <summary>
     /// Представляет провайдер объектов для создания карты сайта.

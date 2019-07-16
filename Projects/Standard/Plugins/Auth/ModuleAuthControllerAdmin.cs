@@ -1,10 +1,9 @@
-﻿using OnUtils.Application.Configuration;
-using OnUtils.Application.DB;
-using System;
+﻿using System;
 using System.Linq;
 
 namespace OnWeb.Plugins.Auth
 {
+    using Core.Configuration;
     using CoreBind.Modules;
     using Model;
 

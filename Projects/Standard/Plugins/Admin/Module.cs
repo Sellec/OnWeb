@@ -1,12 +1,15 @@
-﻿using OnUtils.Application.Items;
-using OnUtils.Application.Modules;
-using OnUtils.Application.Types;
+﻿using OnUtils.Application.Modules;
 using OnUtils.Application.Users;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace OnWeb.Plugins.Admin
 {
+    using AdminForModules.Menu;
+    using Core.Items;
+    using Core.Modules;
+    using Core.Types;
+
     /// <summary>
     /// См. <see cref="ModuleAdmin"/>.
     /// </summary>
@@ -15,11 +18,11 @@ namespace OnWeb.Plugins.Admin
         /// <summary>
         /// См. <see cref="ModuleAdmin.GetAdminMenuList(IUserContext)"/>.
         /// </summary>
-        public override Dictionary<ModuleCore, List<ItemBase>> GetAdminMenuList(IUserContext userContext)
+        public override Dictionary<IModuleCore, List<ItemBase>> GetAdminMenuList(IUserContext userContext)
         {
-            var modulesList = AppCore.GetModulesManager().GetModules();
-            var mods = new Dictionary<ModuleCore, List<ItemBase>>();
-            var mods_errors = new Dictionary<ModuleCore, List<ItemBase>>();
+            var modulesList = AppCore.GetModulesManager().GetModules().OfType<IModuleCore>();
+            var mods = new Dictionary<IModuleCore, List<ItemBase>>();
+            var mods_errors = new Dictionary<IModuleCore, List<ItemBase>>();
 
             foreach (var module in modulesList)
             {
@@ -29,7 +32,7 @@ namespace OnWeb.Plugins.Admin
                 }
                 else
                 {
-                    var links = (module as ModuleCore).GetAdminMenuItems();
+                    var links = (module as IMenuProvider)?.GetAdminMenuItemsBase();
                     if (links == null) links = new NestedLinkCollection();
 
                     if (links.Count > 0)
@@ -46,7 +49,7 @@ namespace OnWeb.Plugins.Admin
                 }
             }
 
-            var model = new Dictionary<ModuleCore, List<ItemBase>>();
+            var model = new Dictionary<IModuleCore, List<ItemBase>>();
             mods.Where(x => x.Value.Count > 0).OrderBy(x => x.Key.Caption).ForEach(x => model[x.Key] = x.Value);
             mods_errors.Where(x => x.Value.Count > 0).OrderBy(x => x.Key.Caption).ForEach(x => model[x.Key] = x.Value);
 

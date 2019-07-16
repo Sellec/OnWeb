@@ -18,6 +18,7 @@ namespace OnWeb.CoreBind.Providers
     using Core;
     using Core.Modules;
     using Routing;
+    using ModuleCore = ModuleCore<WebApplicationBase>;
 
     class TraceControllerProvider : CoreComponentBase, IComponentSingleton, IUnitOfWorkAccessor<Core.DB.CoreContext>, IControllerFactory
     {
@@ -44,7 +45,6 @@ namespace OnWeb.CoreBind.Providers
             requestContext.HttpContext.Items["TimeController"] = DateTime.Now;
 
             var isAjax = false;
-            ModuleCore module = null;
 
             // Проверка на авторизацию. Ловим случаи, когда авторизация не сработала в HttpApplication.
             var context = AppCore.GetUserContextManager().GetCurrentUserContext();
@@ -58,6 +58,8 @@ namespace OnWeb.CoreBind.Providers
                     AppCore.GetUserContextManager().SetCurrentUserContext(context);
                 }
             }
+
+            IModuleCore module = null;
 
             try
             {
@@ -93,11 +95,11 @@ namespace OnWeb.CoreBind.Providers
                  * Ищем модуль, к которому обращаются запросом.
                  * */
                 if (int.TryParse(moduleName, out int moduleId) && moduleId.ToString() == moduleName)
-                    module = AppCore.GetModulesManager().GetModule(moduleId);
+                    module = (IModuleCore)AppCore.GetModulesManager().GetModule(moduleId);
                 else if (Guid.TryParse(moduleName, out Guid uniqueName) && uniqueName.ToString() == moduleName)
-                    module = AppCore.GetModulesManager().GetModule(uniqueName);
+                    module = (IModuleCore)AppCore.GetModulesManager().GetModule(uniqueName);
                 else
-                    module = AppCore.GetModulesManager().GetModule(moduleName);
+                    module = (IModuleCore)AppCore.GetModulesManager().GetModule(moduleName);
 
                 if (module == null) throw new ErrorCodeException(HttpStatusCode.NotFound, $"Адрес '{moduleName}' не найден.");
 
@@ -127,8 +129,9 @@ namespace OnWeb.CoreBind.Providers
                 {
                     if (module == null)
                     {
-                        module = new Modules.Internal.ModuleInternalErrors();
-                        module.Start(AppCore);
+                        var moduleTmp = new Modules.Internal.ModuleInternalErrors();
+                        moduleTmp.Start(AppCore);
+                        module = moduleTmp;
                     }
 
                     var type = typeof(Modules.Internal.ModuleControllerInternalErrors<>).MakeGenericType(module.GetType());
@@ -147,7 +150,7 @@ namespace OnWeb.CoreBind.Providers
             }
         }
 
-        private IController CreateController(ControllerType controllerType, ModuleCore module, RouteValueDictionary routeValues)
+        private IController CreateController(ControllerType controllerType, IModuleCore module, RouteValueDictionary routeValues)
         {
             var controllerTypes = AppCore.Get<ModuleControllerTypesManager>().GetModuleControllerTypes(module.QueryType);
             var targetType = controllerTypes.GetValueOrDefault(controllerType.ControllerTypeID);
@@ -166,7 +169,7 @@ namespace OnWeb.CoreBind.Providers
             return null;
         }
 
-        private IController CreateController(ModuleCore module, Type controllerType, RouteValueDictionary routeValues)
+        private IController CreateController(IModuleCore module, Type controllerType, RouteValueDictionary routeValues)
         {
             var controller = (Modules.ModuleControllerBase)DependencyResolver.Current.GetService(controllerType);
             if (controller == null) throw new Exception($"Контроллер для модуля '{module.UrlName}' не найден.");

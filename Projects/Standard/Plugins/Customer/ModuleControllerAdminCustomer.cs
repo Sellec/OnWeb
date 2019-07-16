@@ -14,6 +14,7 @@ namespace OnWeb.Plugins.Customer
     using Core.DB;
     using CoreBind.Modules;
     using MessagingEmail;
+    using Core.Journaling;
 
     public class ModuleControllerAdminCustomer : ModuleControllerAdmin<ModuleCustomer>, IUnitOfWorkAccessor<CoreContext>
     {
@@ -508,7 +509,7 @@ namespace OnWeb.Plugins.Customer
                                         throw new Exception($"Возникли ошибки при сохранении разрешений для роли '{data.NameRole}'");
                                 }
 
-                                Module.RegisterEventForItem(data, EventType.Info, "Роль обновлена", $"Роль №{data.IdRole} '{data.NameRole}'");
+                                //Module.RegisterEventForItem(data, EventType.Info, "Роль обновлена", $"Роль №{data.IdRole} '{data.NameRole}'");
 
                                 trans.Complete();
 
@@ -551,7 +552,7 @@ namespace OnWeb.Plugins.Customer
                                 result.Message = "Удаление роли прошло успешно!";
                                 result.Success = true;
 
-                                Module.RegisterEventForItem(data, EventType.Info, "Роль удалена", $"Роль №{data.IdRole} '{data.NameRole}'");
+                                //Module.RegisterEventForItem(data, EventType.Info, "Роль удалена", $"Роль №{data.IdRole} '{data.NameRole}'");
 
                                 trans.Complete();
                             }

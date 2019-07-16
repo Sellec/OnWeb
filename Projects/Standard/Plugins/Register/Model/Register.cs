@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace OnWeb.Plugins.Register.Model
 {
     using Core.DB;
+    using Core.Items;
 
     [reCAPTCHA.Model]
     [ItemTypeAlias(typeof(User))]

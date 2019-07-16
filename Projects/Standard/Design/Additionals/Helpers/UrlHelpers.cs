@@ -1,6 +1,4 @@
-﻿using OnUtils.Application.Modules;
-using OnUtils.Utils;
-using OnWeb;
+﻿using OnUtils.Utils;
 using OnWeb.Core.Modules;
 using OnWeb.CoreBind.Modules;
 using OnWeb.CoreBind.Routing;
@@ -118,7 +116,7 @@ namespace System.Web.Mvc
         public static Uri CreateRoute(this UrlHelper helper, bool includeAuthority = false)
         {
             var appCore = helper.RequestContext.HttpContext.GetAppCore();
-            var module = appCore.GetModulesManager().GetModule(appCore.GetWebConfig().IdModuleDefault);
+            var module = appCore.GetModulesManager().GetModule(appCore.WebConfig.IdModuleDefault);
             if (module == null) return null;
 
             var controllerTypes = appCore.Get<ModuleControllerTypesManager>().GetModuleControllerTypes(module.QueryType);

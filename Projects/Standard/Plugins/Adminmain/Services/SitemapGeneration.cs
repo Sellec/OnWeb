@@ -1,5 +1,4 @@
-﻿using OnUtils.Application.Items;
-using OnUtils.Tasks;
+﻿using OnUtils.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +6,7 @@ using System.Linq;
 namespace OnWeb.Plugins.Adminmain.Services
 {
     using Core;
+    using Core.Items;
 
     public class SitemapGeneration : CoreComponentBase
     {

@@ -9,6 +9,7 @@ using System.Web.Routing;
 namespace OnWeb.Core.WebUtils
 {
     using CoreBind.Modules;
+    using Modules;
 
     /// <summary>
     /// </summary>
@@ -30,7 +31,8 @@ namespace OnWeb.Core.WebUtils
             }
         }
 
-        public static string RenderView(ModuleCore module, string template, object model = null)
+        public static string RenderView<TModule>(TModule module, string template, object model = null)
+            where TModule : ModuleCore<TModule>
         {
             try
             {

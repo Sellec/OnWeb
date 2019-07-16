@@ -10,20 +10,25 @@ namespace OnWeb.Plugins
 {
     using Core.Modules;
     using CoreBind.Routing;
+    using Core;
+    using Core.Configuration;
+    using Core.Items;
+    using Core.Types;
+
 
     static class Extensions
     {
-        public static Type ControllerUser(this ModuleCore module)
+        public static Type ControllerUser(this IModuleCore module)
         {
-            return module.AppCore.Get<ModuleControllerTypesManager>().GetModuleControllerTypes(module.QueryType).GetValueOrDefault(ControllerTypeDefault.TypeID);
+            return module.GetAppCore().Get<ModuleControllerTypesManager>().GetModuleControllerTypes(module.QueryType).GetValueOrDefault(ControllerTypeDefault.TypeID);
         }
 
-        public static Type ControllerAdmin(this ModuleCore module)
+        public static Type ControllerAdmin(this IModuleCore module)
         {
-            return module.AppCore.Get<ModuleControllerTypesManager>().GetModuleControllerTypes(module.QueryType).GetValueOrDefault(ControllerTypeAdmin.TypeID);
+            return module.GetAppCore().Get<ModuleControllerTypesManager>().GetModuleControllerTypes(module.QueryType).GetValueOrDefault(ControllerTypeAdmin.TypeID);
         }
 
-        public static NestedLinkCollection GetAdminMenuItems(this ModuleCore module)
+        public static NestedLinkCollection GetAdminMenuItems(this IModuleCore module)
         {
             var list = new NestedLinkCollection();
 
@@ -34,7 +39,7 @@ namespace OnWeb.Plugins
             {
                 if (module.ControllerAdmin() != null)
                 {
-                    var moduleAdmin = module.AppCore.Get<Admin.ModuleAdmin>();
+                    var moduleAdmin = module.GetAppCore().Get<Admin.ModuleAdmin>();
                     var methods = module.ControllerAdmin().GetMethods();
                     foreach (var method in methods)
                     {
@@ -53,10 +58,13 @@ namespace OnWeb.Plugins
 
                 foreach (var extension in module.GetExtensions())
                 {
-                    var extLinks = extension.getAdminMenu();
-                    if (extLinks != null)
+                    if (extension is Core.Modules.Extensions.CustomFields.ExtensionCustomsFieldsBase fields)
                     {
-                        list.AddRange(extLinks);
+                        var extLinks = fields.getAdminMenu();
+                        if (extLinks != null)
+                        {
+                            list.AddRange(extLinks);
+                        }
                     }
                 }
             }

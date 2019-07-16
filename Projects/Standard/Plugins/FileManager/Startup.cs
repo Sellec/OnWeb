@@ -10,7 +10,7 @@ namespace OnWeb.Plugins.FileManager
 
     class Startup : IConfigureBindings
     {
-        void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
+        void IConfigureBindings<WebApplicationBase>.ConfigureBindings(IBindingsCollection<WebApplicationBase> bindingsCollection)
         {
             bindingsCollection.SetSingleton<FileManager>();
             bindingsCollection.SetTransient<IModuleController<FileManager>, FileManagerController>();

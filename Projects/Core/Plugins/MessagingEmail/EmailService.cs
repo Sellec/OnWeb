@@ -39,7 +39,7 @@ namespace OnWeb.Plugins.MessagingEmail
 
         void IEmailService.SendMailToDeveloper(string subject, string body, ContentType contentType, List<int> files)
         {
-            ((IEmailService)this).SendMail("Почтовый робот сайта", GetNoReplyAddress(), AppCore.GetWebConfig().DeveloperEmail, AppCore.GetWebConfig().DeveloperEmail, null, null, subject, body, contentType, files);
+            ((IEmailService)this).SendMail("Почтовый робот сайта", GetNoReplyAddress(), AppCore.WebConfig.DeveloperEmail, AppCore.WebConfig.DeveloperEmail, null, null, subject, body, contentType, files);
         }
 
         /**
@@ -67,11 +67,11 @@ namespace OnWeb.Plugins.MessagingEmail
 
         private string GetNoReplyAddress()
         {
-            var address = AppCore.GetWebConfig().ReturnEmail;
+            var address = AppCore.WebConfig.ReturnEmail;
             if (!string.IsNullOrEmpty(address)) return address;
 
             address = "no-reply@localhost";
-            if (((WebApplicationBase)AppCore).ServerUrl != null) address = "no-reply@" + ((WebApplicationBase)AppCore).ServerUrl.Host;
+            if (AppCore.ServerUrl != null) address = "no-reply@" + AppCore.ServerUrl.Host;
 
             return address;
         }
@@ -82,7 +82,7 @@ namespace OnWeb.Plugins.MessagingEmail
                 "Почтовый робот сайта",
                 GetNoReplyAddress(),
                 "admin",
-                AppCore.GetWebConfig().CriticalMessagesEmail,
+                AppCore.WebConfig.CriticalMessagesEmail,
                 null, null,
                 subject,
                 body,

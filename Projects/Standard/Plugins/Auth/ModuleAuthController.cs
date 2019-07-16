@@ -210,11 +210,11 @@ namespace OnWeb.Plugins.Auth
                 {
                     if (!isPhone)
                     {
-                        if (!AppCore.GetWebConfig().userAuthorizeAllowed.In(eUserAuthorizeAllowed.EmailAndPhone, eUserAuthorizeAllowed.OnlyEmail)) ModelState.AddModelError(nameof(model.email), "К сожалению, в данный момент авторизация через адрес электронной почты отключена, восстановление пароля таким способом невозможно.");
+                        if (!AppCore.WebConfig.userAuthorizeAllowed.In(eUserAuthorizeAllowed.EmailAndPhone, eUserAuthorizeAllowed.OnlyEmail)) ModelState.AddModelError(nameof(model.email), "К сожалению, в данный момент авторизация через адрес электронной почты отключена, восстановление пароля таким способом невозможно.");
                     }
                     else if (isPhone)
                     {
-                        if (!AppCore.GetWebConfig().userAuthorizeAllowed.In(eUserAuthorizeAllowed.EmailAndPhone, eUserAuthorizeAllowed.OnlyPhone)) ModelState.AddModelError(nameof(model.phone), "К сожалению, в данный момент авторизация через номер телефона отключена, восстановление пароля таким образом невозможно.");
+                        if (!AppCore.WebConfig.userAuthorizeAllowed.In(eUserAuthorizeAllowed.EmailAndPhone, eUserAuthorizeAllowed.OnlyPhone)) ModelState.AddModelError(nameof(model.phone), "К сожалению, в данный момент авторизация через номер телефона отключена, восстановление пароля таким образом невозможно.");
                     }
                 }
 

@@ -10,10 +10,12 @@ using System.Linq;
 
 namespace OnWeb.Core.ServiceMonitor
 {
+    using Journaling;
+
     /// <summary>
     /// Монитор сервисов. Позволяет вносить и получать информацию о сервисах, о их состоянии, событиях и пр.
     /// </summary>
-    public class Monitor : CoreComponentBase<ApplicationCore>, IComponentSingleton<ApplicationCore>, IUnitOfWorkAccessor<UnitOfWork<Journal>>
+    public class Monitor : CoreComponentBase, IComponentSingleton, IUnitOfWorkAccessor<UnitOfWork<Journal>>
     {
         private static ConcurrentDictionary<Guid, JournalName> _servicesJournalsList = new ConcurrentDictionary<Guid, JournalName>();
         private static ConcurrentDictionary<Guid, ServiceInfo> _servicesList = new ConcurrentDictionary<Guid, ServiceInfo>();
@@ -148,6 +150,7 @@ namespace OnWeb.Core.ServiceMonitor
 namespace System
 {
     using ServiceMonitor = OnWeb.Core.ServiceMonitor;
+    using OnWeb.Core.Journaling;
 
     /// <summary>
     /// </summary>

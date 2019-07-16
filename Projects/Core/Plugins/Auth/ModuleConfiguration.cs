@@ -1,7 +1,7 @@
-﻿using OnUtils.Application.Configuration;
-
-namespace OnWeb.Plugins.Auth
+﻿namespace OnWeb.Plugins.Auth
 {
+    using Core.Configuration;
+
     public class ModuleConfiguration : ModuleConfiguration<ModuleAuth>
     {
         /// <summary>

@@ -29,7 +29,7 @@ namespace OnWeb
         /// <summary>
         /// См. <see cref="AppCore{TAppCore}.OnBindingsRequired(IBindingsCollection{TAppCore})"/>.
         /// </summary>
-        protected override void OnBindingsRequired(IBindingsCollection<ApplicationCore> bindingsCollection)
+        protected override void OnBindingsRequired(IBindingsCollection<WebApplicationBase> bindingsCollection)
         {
             base.OnBindingsRequired(bindingsCollection);
 
@@ -41,11 +41,11 @@ namespace OnWeb
                 return instance;
             });
             bindingsCollection.SetSingleton<RoutingManager>();
-            bindingsCollection.SetSingleton<UserContextManager, CoreBind.Users.UserContextManager>();
+            bindingsCollection.SetSingleton<UserContextManager<WebApplicationBase>, CoreBind.Users.UserContextManager>();
         }
 
         /// <summary>
-        /// См. <see cref="ApplicationBase.OnApplicationStart"/>.
+        /// См. <see cref="ApplicationCore{TAppCoreSelfReference}.OnApplicationStart"/>.
         /// </summary>
         protected override void OnApplicationStart()
         {
@@ -98,7 +98,7 @@ namespace OnWeb
                 (ResourceProvider)Get<Core.Storage.ResourceProvider>() 
             ));
 
-            var languageChecker = new LanguageRouteConstraint(Get<Manager>().GetLanguages()
+            var languageChecker = new LanguageRouteConstraint(Get<Manager<WebApplicationBase>>().GetLanguages()
                                                                             .Where(x => !string.IsNullOrEmpty(x.ShortName))
                                                                             .Select(x => x.ShortName).ToArray());
 

@@ -8,6 +8,8 @@ using System.Linq;
 
 namespace OnWeb.Plugins.MessagingEmail
 {
+    using Core.Configuration;
+
     using Model;
 
     class EMailController : CoreBind.Modules.ModuleControllerAdmin<EMailModule, Configuration, Configuration>
@@ -45,12 +47,12 @@ namespace OnWeb.Plugins.MessagingEmail
                 };
             }
 
-            var cfg = AppCore.Get<CoreModule>().GetConfigurationManipulator().GetEditable<CoreConfiguration>();
+            var cfg = AppCore.Get<CoreModule<WebApplicationBase>>().GetConfigurationManipulator().GetEditable<CoreConfiguration<WebApplicationBase>>();
 
             cfg.ConnectorsSettings = connectors.Values.ToList();
 
-            AppCore.Get<CoreModule>().GetConfigurationManipulator().ApplyConfiguration(cfg);
-            AppCore.Get<MessagingManager>().UpdateConnectorsFromSettings();
+            AppCore.Get<CoreModule<WebApplicationBase>>().GetConfigurationManipulator().ApplyConfiguration(cfg);
+            AppCore.Get<MessagingManager<WebApplicationBase>>().UpdateConnectorsFromSettings();
 
             return base.ConfigurationSaveCustom(formData, out outputMessage);
         }

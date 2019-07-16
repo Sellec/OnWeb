@@ -11,7 +11,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
 
     class Startup : IConfigureBindings, IExecuteStart
     {
-        void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
+        void IConfigureBindings<WebApplicationBase>.ConfigureBindings(IBindingsCollection<WebApplicationBase> bindingsCollection)
         {
             bindingsCollection.SetTransient<ExtensionCustomsFieldsAdmin>();
             bindingsCollection.SetTransient<ICustomFieldRender<HiddenSimpleMultiLineFieldType>, HiddenSimpleMultiLineFieldTypeRender>();
@@ -23,7 +23,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
             bindingsCollection.SetTransient<ICustomFieldRender<UnknownFieldType>, UnknownFieldTypeRender>();
         }
 
-        void IExecuteStart<ApplicationCore>.ExecuteStart(ApplicationCore core)
+        void IExecuteStart<WebApplicationBase>.ExecuteStart(WebApplicationBase core)
         {
             if (!ValueProviderFactories.Factories.Any(x => x is MetadataAndValues.FieldValueProviderFactory))
             {

@@ -8,7 +8,7 @@ namespace OnWeb.Plugins.Materials
 
     class Startup : IConfigureBindings
     {
-        void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
+        void IConfigureBindings<WebApplicationBase>.ConfigureBindings(IBindingsCollection<WebApplicationBase> bindingsCollection)
         {
             bindingsCollection.SetSingleton<ModuleMaterials>();
             bindingsCollection.AddTransient<IModuleController<ModuleMaterials>, ModuleController>();

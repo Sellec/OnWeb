@@ -45,6 +45,14 @@ namespace OnWeb
 
         #region Свойства
         /// <summary>
+        /// Возвращает основной веб-модуль приложения.
+        /// </summary>
+        public WebCoreModule WebCoreModule
+        {
+            get => Get<WebCoreModule>();
+        }
+
+        /// <summary>
         /// Основные настройки веб-приложения.
         /// </summary>
         public WebCoreConfiguration WebConfig

@@ -1,6 +1,4 @@
-﻿using OnUtils.Application.Modules;
-
-namespace OnWeb.Core.Modules
+﻿namespace OnWeb.Core.Modules
 {
     /// <summary>
     /// Представляет контроллер, предоставляющий методы для обработки запросов.

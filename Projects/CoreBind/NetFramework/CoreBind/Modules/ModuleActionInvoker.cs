@@ -9,7 +9,7 @@ using System.Web.Mvc.Async;
 
 namespace OnWeb.CoreBind.Modules
 {
-    using Core.Modules;
+    //using Core.Modules;
 
     class ModuleActionAsyncInvoker : AsyncControllerActionInvoker
     {
@@ -42,7 +42,7 @@ namespace OnWeb.CoreBind.Modules
             {
                 try
                 {
-                    var module = (ModuleCore)_controller.ModuleBase;
+                    var module = (ModuleCore<WebApplicationBase>)_controller.ModuleBase;
                     var extensions = module.GetExtensions();
                     foreach (var extension in extensions)
                     {
@@ -58,7 +58,7 @@ namespace OnWeb.CoreBind.Modules
                         if (method != null)
                         {
                             var attrs = method.GetCustomAttributes(true);
-                            if (extension.Attributes.IsAdminPart && _controller.ModuleBase.CheckPermission(module.AppCore.GetUserContextManager().GetCurrentUserContext(), ModulesConstants.PermissionManage) != CheckPermissionResult.Allowed)
+                            if (extension.Attributes.IsAdminPart && module.CheckPermission(module.AppCore.GetUserContextManager().GetCurrentUserContext(), ModulesConstants.PermissionManage) != CheckPermissionResult.Allowed)
                                 throw new Exception("Недостаточно прав!");
 
                             MethodInfo mm = null;
@@ -145,7 +145,7 @@ namespace OnWeb.CoreBind.Modules
             {
                 try
                 {
-                    var module = (ModuleCore)_controller.ModuleBase;
+                    var module = (ModuleCore<WebApplicationBase>)_controller.ModuleBase;
                     var extensions = module.GetExtensions();
                     foreach (var extension in extensions)
                     {
@@ -161,7 +161,7 @@ namespace OnWeb.CoreBind.Modules
                         if (method != null)
                         {
                             var attrs = method.GetCustomAttributes(true);
-                            if (extension.Attributes.IsAdminPart && _controller.ModuleBase.CheckPermission(module.AppCore.GetUserContextManager().GetCurrentUserContext(), ModulesConstants.PermissionManage) != CheckPermissionResult.Allowed)
+                            if (extension.Attributes.IsAdminPart && module.CheckPermission(module.AppCore.GetUserContextManager().GetCurrentUserContext(), ModulesConstants.PermissionManage) != CheckPermissionResult.Allowed)
                                 throw new Exception("Недостаточно прав!");
 
                             MethodInfo mm = null;

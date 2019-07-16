@@ -1,8 +1,6 @@
-using OnUtils.Application.Items;
-
 namespace OnWeb.Plugins.Materials.DB
 {
-
+    using Core.Items;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 

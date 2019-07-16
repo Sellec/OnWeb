@@ -6,6 +6,8 @@ using System.Web.Mvc;
 
 namespace OnWeb.Core.ModuleExtensions.CustomFields.MetadataAndValues
 {
+    using Core.Items;
+
     class FieldValueProvider : IValueProvider
     {
         private CoreBind.Modules.ModuleControllerBase _controllerContext;
@@ -32,7 +34,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.MetadataAndValues
                 int idField = 0;
                 if (!int.TryParse(prefixParts.Last().Replace("fieldValue_", ""), out idField)) return false;
 
-                var field = (_controllerContext.ModuleBase as ModuleCore)?.Fields?.GetFieldByID(idField);
+                var field = _controllerContext.ModuleBase?.Fields?.GetFieldByID(idField);
                 if (field == null) return false;
 
                 fieldOut = field;

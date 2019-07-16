@@ -7,6 +7,7 @@ using System.Linq;
 namespace OnWeb.Plugins.Auth
 {
     using Core.DB;
+    using Core.Modules;
 
     /// <summary>
     /// Модуль авторизации.
