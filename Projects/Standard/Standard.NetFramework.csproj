@@ -89,7 +89,7 @@
       <Version>3.2.7</Version>
     </PackageReference>
     <PackageReference Include="OnUtils.Application">
-      <Version>0.1.2.7</Version>
+      <Version>0.1.2.8</Version>
     </PackageReference>
     <PackageReference Include="OnUtils">
       <Version>0.1.2</Version>

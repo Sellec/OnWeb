@@ -9,7 +9,7 @@ namespace OnWeb
     /// <summary>
     /// Ядро веб-приложения.
     /// </summary>
-    public abstract class WebApplicationBase : ApplicationCore
+    public abstract class WebApplicationBase : ApplicationCore<WebApplicationBase>
     {
         class ConnectionStringResolver : IConnectionStringResolver
         {
