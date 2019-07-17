@@ -100,7 +100,8 @@
 }
 
 <script type='text/javascript'>
-    $(function(){
+    $(function () {
+        $('div#FileUploadField_Files_@containerID input.buttonDelete').unbind('click').click(function () { { $(this).parent().remove(); } });
         @containerID = $("#@containerID").requestFileUploadSingle(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(uploadOptions)));
         @(containerID).getElement().bind("requestFileUploadSingleAfter", function(e, result, message, data) {
             @(containerID).reset();
