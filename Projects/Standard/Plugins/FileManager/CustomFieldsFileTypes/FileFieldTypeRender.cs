@@ -108,8 +108,8 @@ namespace OnWeb.Plugins.FileManager.CustomFieldsFileTypes
                 }
             }
 
-            str += "</div>";
-           
+            str += $"</div><input type='hidden' name='fieldValue_{field.IdField}[]'>";
+
             return MvcHtmlString.Create(str);
         }
 
