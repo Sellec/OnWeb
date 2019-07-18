@@ -21,7 +21,7 @@
 <table width='100%'>
     <tr>
         <td style='vertical-align:top;width:570px;min-width:570px;'>
-            @{ var services = AppCore.Get<MessagingManager>().GetMessagingServices().OrderBy(x => x.ServiceName).ToList(); }
+            @{ var services = AppCore.Get<MessagingManager<WebApplicationBase>>().GetMessagingServices().OrderBy(x => x.ServiceName).ToList(); }
             <h4>Зарегистрированных сервисов: <span id="countRegistered">@services.Count</span></h4>
             <table class='tablesorter' width="100%">
                 <thead>

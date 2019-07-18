@@ -35,7 +35,7 @@ namespace OnWeb.CoreBind.Routing
         {
             public RoutesDefaultsWithLanguage(WebApplicationBase core) : base(core)
             {
-                Language = core.Get<Manager>().GetUserLanguage().ShortName;
+                Language = core.Get<Manager<WebApplicationBase>>().GetUserLanguage().ShortName;
             }
 
             public string Language

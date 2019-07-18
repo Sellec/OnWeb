@@ -1,8 +1,4 @@
-﻿using OnUtils.Application.Items;
-using OnUtils.Application.Modules;
-using OnUtils.Application.Modules.Extensions.CustomFields;
-using OnUtils.Application.Modules.Extensions.ExtensionUrl;
-using OnUtils.Application.Types;
+﻿using OnUtils.Application.Modules;
 using OnUtils.Data;
 using System;
 using System.Collections.Generic;
@@ -10,6 +6,12 @@ using System.Linq;
 
 namespace OnWeb.Plugins.Materials
 {
+    using Core.Items;
+    using Core.Modules;
+    using Core.Modules.Extensions.CustomFields;
+    using Core.Modules.Extensions.ExtensionUrl;
+    using Core.Types;
+
     [ModuleCore("Контент", DefaultUrlName = "Content")]
     public class ModuleMaterials : ModuleCore<ModuleMaterials>, IUnitOfWorkAccessor<DB.DataLayerContext>
     {
@@ -77,9 +79,9 @@ namespace OnWeb.Plugins.Materials
             }
         }
 
-        public override NestedLinkCollection GetItems(int IdItemType, params object[] _params)
+        public override NestedCollection GetItems(int IdItemType, params object[] _params)
         {
-            if (IdItemType == ItemType)
+            if (IdItemType == ModulesConstants.ItemType)
             {
                 using (var db = this.CreateUnitOfWork())
                 {
@@ -87,9 +89,9 @@ namespace OnWeb.Plugins.Materials
                              orderby p.name ascending
                              select p).ToList();
 
-                    f.ForEach(page => { page.Owner = this; });
+                   // f.ForEach(page => { page.Owner = this; });
 
-                    return new NestedLinkCollection(f);
+                    return new NestedCollection(f);
                     //return base.getItemsList(IdItemType, SortOrder, _params);
                 }
             }
@@ -98,7 +100,7 @@ namespace OnWeb.Plugins.Materials
 
         public override Uri GenerateLink(ItemBase item)
         {
-            if (item.Owner == this && item is DB.Page page) return new Uri(string.Format("/{0}", page.urlname), UriKind.Relative);
+            if (item.OwnerModule == this && item is DB.Page page) return new Uri(string.Format("/{0}", page.urlname), UriKind.Relative);
             return null;
         }
     }

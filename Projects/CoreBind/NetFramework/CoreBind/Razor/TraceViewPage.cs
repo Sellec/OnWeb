@@ -1,6 +1,4 @@
-﻿using OnUtils.Application;
-using OnUtils.Application.Modules;
-using OnUtils.Application.Users;
+﻿using OnUtils.Application.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +7,12 @@ using System.Web.Mvc.Html;
 
 namespace OnWeb.CoreBind.Razor
 {
+    using Core.Modules;
     using Plugins.WebCoreModule;
 
     public interface IModuleProvider
     {
-        ModuleCore Module { get; }
+        IModuleCore Module { get; }
     }
 
     public abstract class TraceViewPage<TModel> : WebViewPage<TModel>, IModuleProvider
@@ -105,23 +104,23 @@ namespace OnWeb.CoreBind.Razor
         /// </summary>
         public WebCoreConfiguration Config
         {
-            get => AppCore.GetWebConfig();
+            get => AppCore.WebConfig;
         }
 
         /// <summary>
         /// Возвращает объект ядра, в контексте которого запущено приложение.
         /// </summary>
-        public ApplicationCore AppCore
+        public WebApplicationBase AppCore
         {
-            get => Module.AppCore;
+            get => Module.GetAppCore();
         }
 
         /// <summary>
         /// Возвращает текущий модуль, вызывающий представление.
         /// </summary>
-        public ModuleCore Module
+        public IModuleCore Module
         {
-            get => ViewData["Module"] as ModuleCore;
+            get => (IModuleCore)ViewData["Module"];
         }
 
         /// <summary>

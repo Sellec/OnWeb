@@ -8,7 +8,7 @@ namespace OnWeb.Plugins.Default
 
     class Startup : IConfigureBindings
     {
-        void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
+        void IConfigureBindings<WebApplicationBase>.ConfigureBindings(IBindingsCollection<WebApplicationBase> bindingsCollection)
         {
             bindingsCollection.SetTransient<IModuleController<ModuleDefault>, ModuleDefaultController>();
         }

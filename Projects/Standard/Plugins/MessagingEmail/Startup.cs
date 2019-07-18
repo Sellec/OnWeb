@@ -6,9 +6,9 @@ namespace OnWeb.Plugins.MessagingEmail
 {
     using Core.Modules;
 
-    class Startup : IConfigureBindings<ApplicationCore>
+    class Startup : IConfigureBindings<WebApplicationBase>
     {
-        void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
+        void IConfigureBindings<WebApplicationBase>.ConfigureBindings(IBindingsCollection<WebApplicationBase> bindingsCollection)
         {
             bindingsCollection.SetSingleton<EMailModule>();
             bindingsCollection.SetTransient<IModuleController<EMailModule>, EMailController>();

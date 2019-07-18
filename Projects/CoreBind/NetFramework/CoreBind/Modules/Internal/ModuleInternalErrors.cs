@@ -1,7 +1,7 @@
-﻿using OnUtils.Application.Modules;
-
-namespace OnWeb.CoreBind.Modules.Internal
+﻿namespace OnWeb.CoreBind.Modules.Internal
 {
+    using Core.Modules;
+
     public class ModuleInternalErrors : ModuleCore<ModuleInternalErrors>
     {
         protected override void InitModuleCustom()

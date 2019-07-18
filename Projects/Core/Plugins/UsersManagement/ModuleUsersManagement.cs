@@ -9,6 +9,7 @@ using System.Linq;
 namespace OnWeb.Plugins.UsersManagement
 {
     using Core.DB;
+    using Core.Modules;
 
     /// <summary>
     /// Модуль управления данными пользователей и системой доступа.

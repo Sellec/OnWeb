@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using OnWeb.Core.Items;
+using System.Collections.Generic;
 
 namespace System.Web.Mvc.Html
 {
-    using OnUtils.Application.Items;
-    using IEnumerableItemBase = IEnumerable<OnUtils.Application.Items.ItemBase>;
+    using IEnumerableItemBase = IEnumerable<ItemBase>;
     using IEnumerableSelectListItem = IEnumerable<SelectListItem>;
 
     /// <summary>

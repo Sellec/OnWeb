@@ -1,6 +1,7 @@
 ﻿using OnUtils.Application;
 using OnUtils.Data;
 using System;
+using OnUtils.Application.Modules.CoreModule;
 
 namespace OnWeb
 {
@@ -9,7 +10,7 @@ namespace OnWeb
     /// <summary>
     /// Ядро веб-приложения.
     /// </summary>
-    public abstract class WebApplicationBase : ApplicationCore
+    public abstract class WebApplicationBase : ApplicationCore<WebApplicationBase>
     {
         class ConnectionStringResolver : IConnectionStringResolver
         {
@@ -44,6 +45,22 @@ namespace OnWeb
         }
 
         #region Свойства
+        /// <summary>
+        /// Возвращает модуль ядра приложения.
+        /// </summary>
+        public CoreModule<WebApplicationBase> AppCoreModule
+        {
+            get => Get<CoreModule<WebApplicationBase>>();
+        }
+
+        /// <summary>
+        /// Возвращает основной веб-модуль приложения.
+        /// </summary>
+        public WebCoreModule WebCoreModule
+        {
+            get => Get<WebCoreModule>();
+        }
+
         /// <summary>
         /// Основные настройки веб-приложения.
         /// </summary>

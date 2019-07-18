@@ -6,6 +6,8 @@ using System.Web.Routing;
 
 namespace OnWeb.CoreBind.Routing
 {
+    using Core.Modules;
+
     /// <summary>
     /// См. <see cref="ControllerType"/>. Обозначает контроллер для панели управления.
     /// </summary>
@@ -32,17 +34,17 @@ namespace OnWeb.CoreBind.Routing
         }
 
         /// <summary>
-        /// См. <see cref="ControllerType.ErrorCannotFindControllerTypeSpecified(ModuleCore, RouteValueDictionary)"/>.
+        /// См. <see cref="ControllerType.ErrorCannotFindControllerTypeSpecified(IModuleCore, RouteValueDictionary)"/>.
         /// </summary>
-        public override string ErrorCannotFindControllerTypeSpecified(ModuleCore module, RouteValueDictionary routeValues)
+        public override string ErrorCannotFindControllerTypeSpecified(IModuleCore module, RouteValueDictionary routeValues)
         {
             return string.Format("Модуль '{0}' не предоставляет доступ в панель управления.", module.Caption);
         }
 
         /// <summary>
-        /// См. <see cref="CheckPermissions(ModuleCore, RouteValueDictionary)"/>.
+        /// См. <see cref="CheckPermissions(IModuleCore, RouteValueDictionary)"/>.
         /// </summary>
-        public override bool CheckPermissions(ModuleCore module, RouteValueDictionary routeValues)
+        public override bool CheckPermissions(IModuleCore module, RouteValueDictionary routeValues)
         {
             //Проверка доступа к саму панель управления. Нет прав на модуле "Admin".
             var moduleAdmin = AppCore.GetModulesManager().GetModule<Plugins.Admin.ModuleAdmin>();

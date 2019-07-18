@@ -3,9 +3,13 @@ using OnUtils.Application.Modules;
 using OnUtils.Application.Modules.Extensions.CustomFields.Field;
 using System.Linq;
 using System.Web.Mvc;
+using OnUtils.Application.Modules.Extensions.CustomFields;
 
-namespace OnWeb.Core.ModuleExtensions.CustomFields.MetadataAndValues
+namespace OnWeb.Core.Modules.Extensions.CustomFields.MetadataAndValues
 {
+    using Core.Items;
+    using Core.Modules.Extensions.CustomFields;
+
     class FieldValueProvider : IValueProvider
     {
         private CoreBind.Modules.ModuleControllerBase _controllerContext;
@@ -23,16 +27,16 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields.MetadataAndValues
             var prefixParts = prefix.Split('.');
             if (prefixParts.Length == 0) return false;
 
-            if (prefixParts.Last() == nameof(ItemBase.Fields)) return true;
+            if (prefixParts.Last() == nameof(IItemBaseCustomFields.Fields)) return true;
 
             if (prefixParts.Length >= 2 &&
-                prefixParts[prefixParts.Length - 2] == nameof(ItemBase.Fields) &&
+                prefixParts[prefixParts.Length - 2] == nameof(IItemBaseCustomFields.Fields) &&
                 prefixParts.Last().StartsWith("fieldValue_"))
             {
                 int idField = 0;
                 if (!int.TryParse(prefixParts.Last().Replace("fieldValue_", ""), out idField)) return false;
 
-                var field = (_controllerContext.ModuleBase as ModuleCore)?.Fields?.GetFieldByID(idField);
+                var field = _controllerContext.ModuleBase?.Fields?.GetFieldByID(idField);
                 if (field == null) return false;
 
                 fieldOut = field;

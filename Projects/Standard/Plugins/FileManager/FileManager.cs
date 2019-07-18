@@ -13,6 +13,7 @@ using System.Web.Mvc;
 
 namespace OnWeb.Plugins.FileManager
 {
+    using Core.Modules;
     using DictionaryFiles = Dictionary<int, DB.File>;
 
     /// <summary>
@@ -76,7 +77,7 @@ namespace OnWeb.Plugins.FileManager
             ModelMetadataProviders.Current = new MVC.TraceModelMetadataProviderWithFiles();
         }
 
-        public Dictionary<string, Conversations.ConversationBase> Conversations { get; } = new Dictionary<string, Conversations.ConversationBase>();
+        //public Dictionary<string, Conversations.ConversationBase> Conversations { get; } = new Dictionary<string, Conversations.ConversationBase>();
 
         #region FileManager
         /// <summary>

@@ -1,0 +1,62 @@
+@model List<Plugins.Sitemap.SitemapItem>
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>@Url.ContentFullPath("")</loc>
+        <lastmod>@DateTime.Now.ToString("yyyy-MM-dd")</lastmod>
+    </url>
+    @foreach (var pair in Model)
+    {
+        <url>
+            <loc>@Url.ContentFullPath(pair.Location).Replace("&", "&amp;")</loc>
+            @if (pair.LastModificationTime.HasValue)
+            {
+                if (pair.LastModificationTime.Value.TimeOfDay.TotalSeconds > 0)
+                { <lastmod>@pair.LastModificationTime.Value.ToString("yyyy-MM-dd HH:mm:ss")</lastmod> }
+                else
+                { <lastmod>@pair.LastModificationTime.Value.ToString("yyyy-MM-dd")</lastmod> }
+            }
+            @if (pair.ChangeFrequency.HasValue)
+            {
+                var value = string.Empty;
+                switch (pair.ChangeFrequency.Value)
+                {
+                    case Sitemap.SitemapPriority.Always:
+                        value = "always";
+                        break;
+
+                    case Sitemap.SitemapPriority.Hourly:
+                        value = "hourly";
+                        break;
+
+                    case Sitemap.SitemapPriority.Daily:
+                        value = "daily";
+                        break;
+
+                    case Sitemap.SitemapPriority.Weekly:
+                        value = "weekly";
+                        break;
+
+                    case Sitemap.SitemapPriority.Monthly:
+                        value = "monthly";
+                        break;
+
+                    case Sitemap.SitemapPriority.Yearly:
+                        value = "yearly";
+                        break;
+
+                    case Sitemap.SitemapPriority.Never:
+                        value = "never";
+                        break;
+
+                }
+                <changefreq>@value</changefreq>
+            }
+            @if (pair.Priority.HasValue)
+            {
+                <priority>@Math.Min(1, Math.Max(0, pair.Priority.Value))</priority>
+            }
+        </url>
+    }
+</urlset>

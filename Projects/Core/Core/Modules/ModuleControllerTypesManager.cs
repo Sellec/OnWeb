@@ -7,8 +7,9 @@ using System.Reflection;
 
 namespace OnWeb.Core.Modules
 {
-    public class ModuleControllerTypesManager : CoreComponentBase, IModuleRegisteredHandler
+    public class ModuleControllerTypesManager : CoreComponentBase, IModuleRegisteredHandler<WebApplicationBase>
     {
+        private static MethodInfo _methodInfo = typeof(ModuleControllerTypesManager).GetMethod(nameof(OnModuleInitialized), BindingFlags.Instance | BindingFlags.NonPublic);
         private ConcurrentDictionary<Type, Dictionary<int, Type>> _moduleControllerTypesList = new ConcurrentDictionary<Type, Dictionary<int, Type>>();
 
         #region CoreComponentBase
@@ -22,7 +23,13 @@ namespace OnWeb.Core.Modules
         #endregion
 
         #region IModuleRegisteredHandler
-        public void OnModuleInitialized<TModuleType>(TModuleType module) where TModuleType : ModuleCore<TModuleType>
+        void IModuleRegisteredHandler<WebApplicationBase>.OnModuleInitialized<TModule>(TModule module)
+        {
+            if (typeof(IModuleCore).IsAssignableFrom(typeof(TModule)))
+                _methodInfo.MakeGenericMethod(typeof(TModule)).Invoke(this, new object[] { module });
+        }
+
+        private void OnModuleInitialized<TModuleType>(TModuleType module) where TModuleType : ModuleCore<TModuleType>
         {
             var controllerTypes = AppCore.GetBindedTypes<IModuleController<TModuleType>>();
 

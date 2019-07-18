@@ -1,6 +1,4 @@
-﻿using OnUtils.Application.Modules;
-using OnUtils.Application.Types;
-using System;
+﻿using System;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -8,15 +6,17 @@ namespace OnWeb.Plugins.Customer
 {
     using AdminForModules.Menu;
     using Core.DB;
+    using Core.Modules;
+    using Core.Types;
 
     /// <summary>
     /// См. <see cref="ModuleCustomer"/>.
     /// </summary>
     public class ModuleStandard : ModuleCustomer, IMenuProvider
     {
-        public static NestedLinkSimple RelativeToModule(string url, string caption, ModuleCore module)
+        public static NestedLinkSimple RelativeToModule(string url, string caption, IModuleCore module)
         {
-            var moduleAdmin = module.AppCore.Get<Admin.ModuleAdmin>();
+            var moduleAdmin = module.GetAppCore().Get<Admin.ModuleAdmin>();
             return new NestedLinkSimple(caption, new Uri($"/{moduleAdmin.UrlName}/mnadmin/{module.UrlName}/{url}", UriKind.Relative));
         }
 
@@ -35,7 +35,7 @@ namespace OnWeb.Plugins.Customer
 
             using (var db = new CoreContext())
             {
-                var countNewUsers = db.Users.Where(x => x.State == UserState.RegisterWaitForModerate).Count();
+                var countNewUsers = db.Users.Where(x => x.State == Core.DB.UserState.RegisterWaitForModerate).Count();
                 if (countNewUsers > 0) gr.Links.Add(RelativeToModule("users/2", $"Заявки на регистрацию ({countNewUsers})", this));
             }
 

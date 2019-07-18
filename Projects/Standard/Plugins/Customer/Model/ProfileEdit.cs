@@ -1,13 +1,17 @@
 ﻿using OnUtils.Application.Items;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using OnUtils.Application.Modules.Extensions.CustomFields;
+using OnUtils.Application.Modules.Extensions.CustomFields.Data;
+using System.Collections.ObjectModel;
 
 namespace OnWeb.Plugins.Customer.Model
 {
     using Core.DB;
+    using Core.Items;
 
     [ItemTypeAlias(typeof(User))]
-    public class ProfileEdit : ItemBase<ModuleCustomer>
+    public class ProfileEdit : ItemBase, IItemBaseCustomFields
     {
         public ProfileEdit()
         {
@@ -57,5 +61,13 @@ namespace OnWeb.Plugins.Customer.Model
             get;
             set;
         }
+
+        public DefaultSchemeWData Fields => FieldsBase;
+
+        public DefaultSchemeWData fields => fieldsBase;
+
+        public dynamic FieldsDynamic => FieldsDynamicBase;
+
+        public ReadOnlyDictionary<string, FieldData> fieldsNamed => fieldsNamedBase;
     }
 }

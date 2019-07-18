@@ -1,4 +1,4 @@
-﻿using OnUtils.Application;
+﻿using OnWeb;
 
 namespace System.Web.Mvc
 {
@@ -8,12 +8,12 @@ namespace System.Web.Mvc
     {
         const string EXTENSIONPREFIX = "HttpContextExtensions_";
 
-        public static ApplicationCore GetAppCore(this HttpContextBase context)
+        public static WebApplicationBase GetAppCore(this HttpContextBase context)
         {
-            return context.Items.Contains(EXTENSIONPREFIX + "ApplicationCore") ? (ApplicationCore)context.Items[EXTENSIONPREFIX + "ApplicationCore"] : null;
+            return context.Items.Contains(EXTENSIONPREFIX + "ApplicationCore") ? (WebApplicationBase)context.Items[EXTENSIONPREFIX + "ApplicationCore"] : null;
         }
 
-        public static void SetAppCore(this HttpContext context, ApplicationCore appCore)
+        public static void SetAppCore(this HttpContext context, WebApplicationBase appCore)
         {
             context.Items[EXTENSIONPREFIX + "ApplicationCore"] = appCore;
         }

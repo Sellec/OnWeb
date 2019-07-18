@@ -8,6 +8,8 @@ using System.Linq;
 
 namespace OnWeb.Plugins.MessagingEmail
 {
+    using Core.Configuration;
+
     using Model;
 
     class EMailController : CoreBind.Modules.ModuleControllerAdmin<EMailModule, Configuration, Configuration>
@@ -16,7 +18,7 @@ namespace OnWeb.Plugins.MessagingEmail
         {
             viewName = "ModuleSettings.cshtml";
 
-            var connectors = AppCore.Config.ConnectorsSettings.
+            var connectors = AppCore.AppConfig.ConnectorsSettings.
                 Where(x => x.ConnectorTypeName.StartsWith(typeof(Connectors.SmtpServer).Namespace)).
                 Select(x => new { x.ConnectorTypeName, Settings = JsonConvert.DeserializeObject<Connectors.SmtpServerSettings>(x.SettingsSerialized) }).
                 ToList();
@@ -28,7 +30,7 @@ namespace OnWeb.Plugins.MessagingEmail
 
         protected override ModuleConfiguration<EMailModule> ConfigurationSaveCustom(Configuration formData, out string outputMessage)
         {
-            var connectors = AppCore.Config.ConnectorsSettings.ToDictionary(x => x.ConnectorTypeName, x => x);
+            var connectors = AppCore.AppConfig.ConnectorsSettings.ToDictionary(x => x.ConnectorTypeName, x => x);
 
             connectors.Remove(typeof(Connectors.SmtpServer).FullName);
             if (formData.IsUseSmtp)
@@ -45,12 +47,12 @@ namespace OnWeb.Plugins.MessagingEmail
                 };
             }
 
-            var cfg = AppCore.Get<CoreModule>().GetConfigurationManipulator().GetEditable<CoreConfiguration>();
+            var cfg = AppCore.Get<CoreModule<WebApplicationBase>>().GetConfigurationManipulator().GetEditable<CoreConfiguration<WebApplicationBase>>();
 
             cfg.ConnectorsSettings = connectors.Values.ToList();
 
-            AppCore.Get<CoreModule>().GetConfigurationManipulator().ApplyConfiguration(cfg);
-            AppCore.Get<MessagingManager>().UpdateConnectorsFromSettings();
+            AppCore.Get<CoreModule<WebApplicationBase>>().GetConfigurationManipulator().ApplyConfiguration(cfg);
+            AppCore.Get<MessagingManager<WebApplicationBase>>().UpdateConnectorsFromSettings();
 
             return base.ConfigurationSaveCustom(formData, out outputMessage);
         }

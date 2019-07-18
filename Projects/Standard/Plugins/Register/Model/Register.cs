@@ -1,13 +1,17 @@
 ﻿using OnUtils.Application.Items;
+using OnUtils.Application.Modules.Extensions.CustomFields;
+using OnUtils.Application.Modules.Extensions.CustomFields.Data;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace OnWeb.Plugins.Register.Model
 {
     using Core.DB;
+    using Core.Items;
 
     [reCAPTCHA.Model]
     [ItemTypeAlias(typeof(User))]
-    public class Register : ItemBase<Customer.ModuleCustomer>
+    public class Register : ItemBase, IItemBaseCustomFields
     {
         /// <summary>
         /// </summary>
@@ -47,5 +51,13 @@ namespace OnWeb.Plugins.Register.Model
         [StringLength(64)]
         [Display(Name = "Пароль"), Required, DataType(DataType.Password)]
         public string password { get; set; }
+
+        public DefaultSchemeWData Fields => FieldsBase;
+
+        public DefaultSchemeWData fields => fieldsBase;
+
+        public dynamic FieldsDynamic => FieldsDynamicBase;
+
+        public ReadOnlyDictionary<string, FieldData> fieldsNamed => fieldsNamedBase;
     }
 }

@@ -3,6 +3,8 @@ using OnUtils.Data;
 
 namespace OnWeb.Plugins.EditableMenu
 {
+    using Core.Modules;
+
     /// <summary>
     /// Модуль управления редактируемыми меню.
     /// </summary>

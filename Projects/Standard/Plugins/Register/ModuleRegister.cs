@@ -12,6 +12,7 @@ using System.Web.Mvc;
 namespace OnWeb.Plugins.Register
 {
     using Core.DB;
+    using Core.Modules;
     using Core.Types;
     using CoreBind.Types;
     using MessagingEmail;
@@ -77,7 +78,7 @@ namespace OnWeb.Plugins.Register
                         var salt = StringsHelper.GenerateRandomString("abcdefghijklmnoprstuvxyzABCDEFGHIKLMNOPRSTUVXYZ0123456789", 5);
                         var stateConfirmation = DateTime.Now.Ticks.ToString().MD5();
 
-                        var regMode = AppCore.GetWebConfig().register_mode;
+                        var regMode = AppCore.WebConfig.register_mode;
 
                         if (data.State.HasValue)
                         {

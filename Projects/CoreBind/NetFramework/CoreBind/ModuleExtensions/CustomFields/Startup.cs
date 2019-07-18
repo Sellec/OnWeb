@@ -5,13 +5,13 @@ using OnUtils.Architecture.AppCore.DI;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace OnWeb.Core.ModuleExtensions.CustomFields
+namespace OnWeb.Core.Modules.Extensions.CustomFields
 {
-    using Core.ModuleExtensions.CustomFields.Field.FieldTypes;
+    using Core.Modules.Extensions.CustomFields.Field.FieldTypes;
 
     class Startup : IConfigureBindings, IExecuteStart
     {
-        void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
+        void IConfigureBindings<WebApplicationBase>.ConfigureBindings(IBindingsCollection<WebApplicationBase> bindingsCollection)
         {
             bindingsCollection.SetTransient<ExtensionCustomsFieldsAdmin>();
             bindingsCollection.SetTransient<ICustomFieldRender<HiddenSimpleMultiLineFieldType>, HiddenSimpleMultiLineFieldTypeRender>();
@@ -23,7 +23,7 @@ namespace OnWeb.Core.ModuleExtensions.CustomFields
             bindingsCollection.SetTransient<ICustomFieldRender<UnknownFieldType>, UnknownFieldTypeRender>();
         }
 
-        void IExecuteStart<ApplicationCore>.ExecuteStart(ApplicationCore core)
+        void IExecuteStart<WebApplicationBase>.ExecuteStart(WebApplicationBase core)
         {
             if (!ValueProviderFactories.Factories.Any(x => x is MetadataAndValues.FieldValueProviderFactory))
             {

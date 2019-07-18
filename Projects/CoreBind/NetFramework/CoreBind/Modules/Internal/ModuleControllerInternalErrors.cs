@@ -1,9 +1,10 @@
-﻿using OnUtils.Application.Modules;
-using System;
+﻿using System;
 using System.Web.Mvc;
 
 namespace OnWeb.CoreBind.Modules.Internal
 {
+    using Core.Modules;
+
     interface IModuleControllerInternalErrors
     {
         void SetException(Exception ex);

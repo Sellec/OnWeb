@@ -1,7 +1,7 @@
-﻿using OnUtils.Application.Types;
-
-namespace OnWeb.Plugins.AdminForModules.Menu
+﻿namespace OnWeb.Plugins.AdminForModules.Menu
 {
+    using Core.Types;
+
     // todo оценить нужность интерфейса.
     public interface IMenuProvider
     {

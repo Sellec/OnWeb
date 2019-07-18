@@ -1,5 +1,5 @@
 ﻿using OnUtils.Application.Modules.Extensions.CustomFields.Field;
-using OnWeb.Core.ModuleExtensions.CustomFields;
+using OnWeb.Core.Modules.Extensions.CustomFields;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -63,7 +63,7 @@ namespace System.Web.Mvc.Html
         public static MvcHtmlString EditorFor<TModel>(this HtmlHelper<TModel> html, IField field, IDictionary<string, object> htmlAttributes, params object[] additionalParameters)
         {
             var module = (html.ViewDataContainer as OnWeb.CoreBind.Razor.IModuleProvider)?.Module;
-            var appCore = module?.AppCore;
+            var appCore = module?.GetAppCore();
 
             var renderType = typeof(ICustomFieldRender<>).MakeGenericType(field.FieldType.GetType());
             var customFieldRender = appCore.Create<ICustomFieldRender<FieldType>>(renderType);

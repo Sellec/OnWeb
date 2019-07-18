@@ -1,14 +1,15 @@
-﻿using OnUtils.Application;
-using OnUtils.Application.Items;
-using OnUtils.Architecture.AppCore;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace OnWeb.Plugins.Materials
 {
-    using Adminmain.Services;
+    using Sitemap;
+    using Core;
+    using Core.Items;
+    using Core.Modules.Extensions.ExtensionUrl;
 
-    class MaterialsSitemapProvider : CoreComponentBase<ApplicationCore>, ISitemapProvider
+    class MaterialsSitemapProvider : CoreComponentBase, ISitemapProvider
     {
         #region CoreComponentBase
         protected override void OnStart()
@@ -23,7 +24,7 @@ namespace OnWeb.Plugins.Materials
         #region ISitemapProvider
         string ISitemapProvider.NameProvider => "Карта материалов и новостей";
 
-        IEnumerable<ItemBase> ISitemapProvider.GetItems()
+        List<SitemapItem> ISitemapProvider.GetItems()
         {
             var moduleMaterials = AppCore.Get<ModuleMaterials>();
 
@@ -39,11 +40,15 @@ namespace OnWeb.Plugins.Materials
                              where p.status > 0
                              select p).ToList();
 
-                var items = news.OfType<ItemBase>().Union(pages.OfType<ItemBase>());
+                var items = news.OfType<ItemBase>().Union(pages.OfType<ItemBase>()).OfType<IItemBaseUrl>();
 
-                items.ForEach(item => item.Owner = moduleMaterials);
+                //items.ForEach(item => item.OwnerModule = moduleMaterials);
 
-                return items;
+                return items.Select(x => new SitemapItem()
+                {
+                    Location = x.Url,
+                    LastModificationTime = (x as ItemBase).DateChangeBase >= DateTime.MinValue ? (DateTime?)((x as ItemBase).DateChangeBase) : null
+                }).ToList();
             }
         }
         #endregion

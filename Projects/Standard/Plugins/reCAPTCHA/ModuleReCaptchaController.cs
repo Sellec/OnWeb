@@ -1,7 +1,6 @@
-﻿using OnUtils.Application.Configuration;
-
-namespace OnWeb.Plugins.reCAPTCHA
+﻿namespace OnWeb.Plugins.reCAPTCHA
 {
+    using Core.Configuration;
     using Model;
 
     class ModuleReCaptchaController : CoreBind.Modules.ModuleControllerAdmin<ModuleReCaptcha, Configuration, Configuration>

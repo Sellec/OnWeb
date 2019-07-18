@@ -4,6 +4,8 @@ using System.Text;
 
 namespace OnWeb.Plugins.MessagingEmail
 {
+    using Core.Messaging;
+
     /// <summary>
     /// Представляет сервис отправки электронных писем (Email).
     /// </summary>

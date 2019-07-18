@@ -1,14 +1,17 @@
 ﻿using OnUtils.Application.DB;
 using OnUtils.Application.Items;
 using OnUtils.Application.Modules;
-using OnUtils.Application.Modules.Extensions.CustomFields;
-using OnUtils.Application.Modules.Extensions.ExtensionUrl;
 using OnUtils.Data;
 using System;
 using System.Collections.Generic;
 
 namespace OnWeb.Plugins.Customer
 {
+    using Core.Items;
+    using Core.Modules;
+    using Core.Modules.Extensions.CustomFields;
+    using Core.Modules.Extensions.ExtensionUrl;
+
     /// <summary>
     /// Модуль для управления пользователями и личным кабинетом.
     /// </summary>
@@ -20,13 +23,13 @@ namespace OnWeb.Plugins.Customer
         public const string PERM_VIEWHISTORY = "history";
 
         /// <summary>
-        /// См. <see cref="ModuleCore.InitModuleCustom"/>.
+        /// См. <see cref="OnUtils.Application.Modules.ModuleCore{TAppCoreSelfReference}.InitModuleCustom"/>.
         /// </summary>
         protected sealed override void InitModuleCustom()
         {
             base.InitModuleCustom();
 
-            //registerExtensionNeeded<Core.ModuleExtensions.CustomFields.ExtensionCustomsFields>();
+            //registerExtensionNeeded<Core.Modules.Extensions.CustomFields.ExtensionCustomsFields>();
             RegisterExtension<ExtensionCustomsFieldsBase>();
             RegisterExtension<ExtensionUrl>();
 
@@ -41,11 +44,11 @@ namespace OnWeb.Plugins.Customer
         protected abstract void RegisterModelValidators();
 
         /// <summary>
-        /// См. <see cref="ModuleCore.GenerateLink(ItemBase)"/>.
+        /// См. <see cref="ModuleCore{TSelfReference}.GenerateLink(ItemBase)"/>.
         /// </summary>
         public sealed override Uri GenerateLink(ItemBase item)
         {
-            if (item is UserBase || item is Core.DB.User) return new Uri(((WebApplicationBase)AppCore).ServerUrl, $"{UrlName}/user/{item.ID}");
+            if (item is Core.DB.User) return new Uri(AppCore.ServerUrl, $"{UrlName}/user/{item.ID}");
             //else if (item is Register.Model.Register) return new Uri(ApplicationCore.Instance.ServerUrl, $"{Name}/user/{item.ID}");
             //return base.GenerateLink(item);
 
@@ -53,7 +56,7 @@ namespace OnWeb.Plugins.Customer
         }
 
         /// <summary>
-        /// См. <see cref="ModuleCore.GetItemTypes"/>.
+        /// См. <see cref="OnUtils.Application.Modules.ModuleCore{TAppCoreSelfReference}.GetItemTypes"/>.
         /// </summary>
         public sealed override IEnumerable<ItemType> GetItemTypes()
         {

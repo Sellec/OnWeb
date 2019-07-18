@@ -1,8 +1,9 @@
-﻿using OnUtils.Application.Messaging;
-using System;
+﻿using System;
 
 namespace OnWeb.Plugins.MessagingSMS
 {
+    using Core.Messaging;
+
     /// <summary>
     /// Представляет сервис отправки СМС.
     /// </summary>

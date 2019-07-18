@@ -3,6 +3,7 @@ using OnUtils.Architecture.AppCore;
 using OnUtils.Utils;
 using System;
 using System.Collections.Generic;
+using OnUtils.Application.ServiceMonitor;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -104,7 +105,7 @@ namespace OnWeb.CoreBind.Routing
                 if (isDefaultMethod && arguments.Count == 0) methodName = null;
 
                 var url = controllerTypeFromFactory.CreateRelativeUrl(module.UrlName, methodName, arguments.ToArray());
-                return includeAuthority ? new Uri(((WebApplicationBase)AppCore).ServerUrl, url) : new Uri(url, UriKind.Relative);
+                return includeAuthority ? new Uri(AppCore.ServerUrl, url) : new Uri(url, UriKind.Relative);
             }
             catch (HandledException ex)
             {
@@ -119,27 +120,27 @@ namespace OnWeb.CoreBind.Routing
         }
 
         #region ServiceMonitor.IMonitoredService
-        Guid IMonitoredService.ServiceID
+        Guid IMonitoredService<WebApplicationBase>.ServiceID
         {
             get => _serviceID;
         }
 
-        string IMonitoredService.ServiceName
+        string IMonitoredService<WebApplicationBase>.ServiceName
         {
             get => "Менеджер адресов КЛАДР/ФИАС";
         }
 
-        string IMonitoredService.ServiceStatusDetailed
+        string IMonitoredService<WebApplicationBase>.ServiceStatusDetailed
         {
             get => string.Empty;
         }
 
-        bool IMonitoredService.IsSupportsCurrentStatusInfo
+        bool IMonitoredService<WebApplicationBase>.IsSupportsCurrentStatusInfo
         {
             get => false;
         }
 
-        ServiceStatus IMonitoredService.ServiceStatus
+        ServiceStatus IMonitoredService<WebApplicationBase>.ServiceStatus
         {
             get => throw new NotImplementedException();
         }

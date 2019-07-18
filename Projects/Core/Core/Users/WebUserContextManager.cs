@@ -12,6 +12,8 @@ using OnUtils.Application.Messaging;
 
 namespace OnWeb.Core.Users
 {
+    using Messaging;
+
     /// <summary>
     /// Менеджер, управляющий контекстами пользователей (см. <see cref="IUserContext"/>).
     /// Каждый поток приложения имеет ассоциированный контекст пользователя, от имени которого могут выполняться запросы и выполняться действия. 
@@ -200,7 +202,7 @@ namespace OnWeb.Core.Users
                 // Если Email
                 if (query == null && login.isEmail())
                 {
-                    switch (AppCore.GetWebConfig().userAuthorizeAllowed)
+                    switch (AppCore.WebConfig.userAuthorizeAllowed)
                     {
                         case eUserAuthorizeAllowed.Nothing:
                             return new ExecutionAuthResult(eAuthResult.AuthDisabled, "Авторизация запрещена.");
@@ -224,7 +226,7 @@ namespace OnWeb.Core.Users
                     var phone = PhoneBuilder.ParseString(login);
                     if (phone.IsCorrect)
                     {
-                        switch (AppCore.GetWebConfig().userAuthorizeAllowed)
+                        switch (AppCore.WebConfig.userAuthorizeAllowed)
                         {
                             case eUserAuthorizeAllowed.Nothing:
                                 return new ExecutionAuthResult(eAuthResult.AuthDisabled, "Авторизация запрещена.");
@@ -271,7 +273,7 @@ namespace OnWeb.Core.Users
                 }
                 else if (query.Count > 1)
                 {
-                    AppCore.Get<MessagingManager>().GetCriticalMessagesReceivers().ForEach(x => x.SendToAdmin("Одинаковые реквизиты входа!", "Найдено несколько пользователей с логином '" + login + "'"));
+                    AppCore.Get<MessagingManager<WebApplicationBase>>().GetCriticalMessagesReceivers().ForEach(x => x.SendToAdmin("Одинаковые реквизиты входа!", "Найдено несколько пользователей с логином '" + login + "'"));
                     return new ExecutionAuthResult(eAuthResult.MultipleFound, "Найдено несколько пользователей с логином '" + login + "'. Обратитесь к администратору для решения проблемы.");
                 }
                 else

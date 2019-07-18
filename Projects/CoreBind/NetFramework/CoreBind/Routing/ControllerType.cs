@@ -5,6 +5,7 @@ using System.Web.Routing;
 namespace OnWeb.CoreBind.Routing
 {
     using Core;
+    using Core.Modules;
 
     /// <summary>
     /// Описывает тип контроллера и предоставляет способ выбрать нужный тип контроллера во время обработки входящего запроса.
@@ -41,12 +42,12 @@ namespace OnWeb.CoreBind.Routing
         /// <summary>
         /// Возвращает ошибку, когда тип контроллера для модуля <paramref name="module"/> для запроса со значениями <paramref name="routeValues"/> не был найден.
         /// </summary>
-        public abstract string ErrorCannotFindControllerTypeSpecified(ModuleCore module, RouteValueDictionary routeValues);
+        public abstract string ErrorCannotFindControllerTypeSpecified(IModuleCore module, RouteValueDictionary routeValues);
 
         /// <summary>
         /// Проверяет, доступен ли вход в указанный тип контроллера для модуля <paramref name="module"/> для запроса со значениями <paramref name="routeValues"/>.
         /// </summary>
-        public abstract bool CheckPermissions(ModuleCore module, RouteValueDictionary routeValues);
+        public abstract bool CheckPermissions(IModuleCore module, RouteValueDictionary routeValues);
 
         /// <summary>
         /// Создает новый относительный url на основе переданных данных о модуле и методе.

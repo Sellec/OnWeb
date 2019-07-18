@@ -8,7 +8,7 @@ namespace OnWeb.Plugins.Register
 
     class Startup : IConfigureBindings
     {
-        void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
+        void IConfigureBindings<WebApplicationBase>.ConfigureBindings(IBindingsCollection<WebApplicationBase> bindingsCollection)
         {
             bindingsCollection.SetSingleton<ModuleRegister>();
             bindingsCollection.SetTransient<IModuleController<ModuleRegister>, ModuleRegisterController>();

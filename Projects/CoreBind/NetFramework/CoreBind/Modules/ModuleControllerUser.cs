@@ -1,5 +1,4 @@
-﻿using OnUtils.Application.Modules;
-using System;
+﻿using System;
 using System.Web.Mvc;
 
 namespace OnWeb.CoreBind.Modules
@@ -39,7 +38,7 @@ namespace OnWeb.CoreBind.Modules
             private set;
         }
 
-        internal override ModuleCore ModuleBase
+        internal override IModuleCore ModuleBase
         {
             get => Module;
         }

@@ -1,7 +1,7 @@
-﻿using OnUtils.Application.Modules;
-
-namespace OnWeb.Plugins.Lexicon
+﻿namespace OnWeb.Plugins.Lexicon
 {
+    using Core.Modules;
+
     /// <summary>
     /// Представляет модуль, предоставляющий функционал для работы с лексикой - склонение, формы слов и т.д.
     /// </summary>

@@ -1,14 +1,18 @@
 ﻿using OnUtils.Application.Items;
+using OnUtils.Application.Modules.Extensions.CustomFields;
+using OnUtils.Application.Modules.Extensions.CustomFields.Data;
 using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace OnWeb.Plugins.Register.Model
 {
     using Core.DB;
+    using Core.Items;
 
     [ItemTypeAlias(typeof(User))]
-    public class PreparedForRegister : ItemBase<Customer.ModuleCustomer>
+    public class PreparedForRegister : ItemBase, IItemBaseCustomFields
     {
         /// <summary>
         /// </summary>
@@ -90,5 +94,13 @@ namespace OnWeb.Plugins.Register.Model
         [StringLength(2000)]
         [Display(Name = "Комментарий администратора"), DataType(DataType.MultilineText)]
         public string CommentAdmin { get; set; }
+
+        public DefaultSchemeWData Fields => FieldsBase;
+
+        public DefaultSchemeWData fields => fieldsBase;
+
+        public dynamic FieldsDynamic => FieldsDynamicBase;
+
+        public ReadOnlyDictionary<string, FieldData> fieldsNamed => fieldsNamedBase;
     }
 }

@@ -1,5 +1,4 @@
-﻿using OnUtils.Application;
-using OnUtils.Application.Exceptions;
+﻿using OnUtils.Application.Exceptions;
 using OnUtils.Application.Journaling;
 using OnUtils.Application.Modules;
 using OnUtils.Application.Modules.Extensions;
@@ -16,12 +15,12 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Async;
-using System.Web.Mvc.Html;
 using System.Web.Routing;
 
 namespace OnWeb.CoreBind.Modules
 {
     using Core;
+    using Core.Journaling;
     using Core.Modules;
 
     /// <summary>
@@ -30,7 +29,7 @@ namespace OnWeb.CoreBind.Modules
     [ModuleController(Routing.ControllerTypeDefault.TypeID)]
     public abstract class ModuleControllerBase : Controller, IComponentTransient
     {
-        private class CoreComponentBaseImpl : CoreComponentBase<ApplicationCore>, IComponent<ApplicationCore>
+        private class CoreComponentBaseImpl : CoreComponentBase, IComponent
         {
             protected override void OnStart()
             {
@@ -77,7 +76,7 @@ namespace OnWeb.CoreBind.Modules
         /// <summary>
         /// См. <see cref="CoreComponentBase{TAppCore}.Start(TAppCore)"/>.
         /// </summary>
-        public void Start(ApplicationCore core)
+        public void Start(WebApplicationBase core)
         {
             _coreComponent.Start(core);
         }
@@ -101,7 +100,7 @@ namespace OnWeb.CoreBind.Modules
         /// <summary>
         /// См. <see cref="IComponent{TAppCore}.GetAppCore"/>.
         /// </summary>
-        public ApplicationCore GetAppCore()
+        public WebApplicationBase GetAppCore()
         {
             return _coreComponent.GetAppCore();
         }
@@ -181,7 +180,7 @@ namespace OnWeb.CoreBind.Modules
             var moduleActionAttribute = (filterContext?.ActionDescriptor as ReflectedActionDescriptor)?.MethodInfo?.GetCustomAttributes<ModuleActionAttribute>(true).FirstOrDefault();
             if (moduleActionAttribute != null && moduleActionAttribute.Permission != Guid.Empty)
             {
-                isAllowed = ModuleBase.CheckPermission(ModuleBase.AppCore.GetUserContextManager().GetCurrentUserContext(), moduleActionAttribute.Permission) == CheckPermissionResult.Allowed;
+                isAllowed = ModuleBase.CheckPermission(ModuleBase.GetAppCore().GetUserContextManager().GetCurrentUserContext(), moduleActionAttribute.Permission) == CheckPermissionResult.Allowed;
             }
 
             if (!isAllowed)
@@ -608,7 +607,7 @@ namespace OnWeb.CoreBind.Modules
 
         internal ActionResult ExtensionWrapper(object _extension, object _extensionMethod, params object[] _args)
         {
-            var extension = _extension as ModuleExtension;
+            var extension = _extension as ModuleExtension<WebApplicationBase>;
             var extensionMethod = _extensionMethod as MethodInfo;
 
             try
@@ -629,7 +628,7 @@ namespace OnWeb.CoreBind.Modules
         /// <summary>
         /// Для внутреннего использования. Some magic.
         /// </summary>
-        internal virtual ModuleCore ModuleBase
+        internal virtual IModuleCore ModuleBase
         {
             get => throw new NotImplementedException();
         }
@@ -637,7 +636,7 @@ namespace OnWeb.CoreBind.Modules
         /// <summary>
         /// Возвращает ядро приложения, в рамках которого запущен контроллер.
         /// </summary>
-        public ApplicationCore AppCore
+        public WebApplicationBase AppCore
         {
             get => GetAppCore();
         }

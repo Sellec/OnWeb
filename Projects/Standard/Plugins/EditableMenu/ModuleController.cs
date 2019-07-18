@@ -1,12 +1,14 @@
-﻿using OnUtils.Application.Items;
-using System;
+﻿using System;
 using System.Linq;
 using System.Web.Mvc;
 
 namespace OnWeb.Plugins.EditableMenu
 {
     using AdminForModules.Menu;
+    using Core.Items;
+    using Core.Modules;
     using CoreBind.Modules;
+    using Core.Modules.Extensions.ExtensionUrl;
 
     public class ModuleController : ModuleControllerAdmin<Module>
     {
@@ -31,7 +33,7 @@ namespace OnWeb.Plugins.EditableMenu
                 return View("EditableMenuEdit.cshtml", new Design.Model.EditableMenu()
                 {
                     Menu = menu,
-                    Modules = AppCore.GetModulesManager().GetModules().OrderBy(x => x.Caption).ToList()
+                    Modules = AppCore.GetModulesManager().GetModules().OfType<IModuleCore>().OrderBy(x => x.Caption).ToList()
                 });
             }
         }
@@ -47,13 +49,14 @@ namespace OnWeb.Plugins.EditableMenu
             {
                 if (!idModule.HasValue || idModule == 0) throw new Exception("Не указан модуль, для которого необходимо получить список ссылок.");
 
-                var module = AppCore.GetModulesManager().GetModule(idModule.Value);
+                var module = (IModuleCore)AppCore.GetModulesManager().GetModule(idModule.Value);
                 if (module == null) throw new Exception("Не удалось найти указанный модуль.");
 
                 var itemsAll = module.GetItemTypes().
                                 SelectMany(x => module.GetItems(x.IdItemType)).
+                                OfType<IItemBaseUrl>().
                                 OrderBy(x => x.Caption).
-                                ToDictionary(x => (x as ItemBase).Url.ToString(), x => x.Caption);
+                                ToDictionary(x => x.Url.ToString(), x => x.Caption);
 
 
                 data = itemsAll;

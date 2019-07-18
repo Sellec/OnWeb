@@ -4,13 +4,13 @@ using OnUtils.Architecture.AppCore.DI;
 
 namespace OnWeb.Plugins.FileManager
 {
-    using Core.ModuleExtensions.CustomFields;
+    using Core.Modules.Extensions.CustomFields;
     using Core.Modules;
     using CustomFieldsFileTypes;
 
     class Startup : IConfigureBindings
     {
-        void IConfigureBindings<ApplicationCore>.ConfigureBindings(IBindingsCollection<ApplicationCore> bindingsCollection)
+        void IConfigureBindings<WebApplicationBase>.ConfigureBindings(IBindingsCollection<WebApplicationBase> bindingsCollection)
         {
             bindingsCollection.SetSingleton<FileManager>();
             bindingsCollection.SetTransient<IModuleController<FileManager>, FileManagerController>();

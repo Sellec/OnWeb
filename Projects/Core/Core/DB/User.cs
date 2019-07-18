@@ -1,10 +1,14 @@
 using OnUtils.Application.DB;
 using OnUtils.Application.Items;
 using OnUtils.Application.Modules;
+using OnUtils.Application.Modules.Extensions.CustomFields;
 
 namespace OnWeb.Core.DB
 {
+    using Items;
+    using OnUtils.Application.Modules.Extensions.CustomFields.Data;
     using System;
+    using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
@@ -29,15 +33,10 @@ namespace OnWeb.Core.DB
     }
 
     [Table("users")]
-    [ItemType(ModuleCore.ItemType)]
+    [ItemType(ModulesConstants.ItemType)]
     [System.Diagnostics.DebuggerDisplay("User: id={ID}")]
-    public partial class User : ItemBase
+    public partial class User : ItemBase, IItemBaseCustomFields
     {
-        public User() : base(OnUtils.Application.DeprecatedSingletonInstances.ModulesManager.GetModule<Plugins.Customer.ModuleCustomer>())
-        {
-
-        }
-
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("id")]
@@ -125,10 +124,7 @@ namespace OnWeb.Core.DB
             set => DateChange = value.Timestamp();
         }
 
-        public override Uri Url
-        {
-            get => null;           
-        }
+        public override ModuleCore<WebApplicationBase> OwnerModule => base.OwnerModule;// OnUtils.Application.DeprecatedSingletonInstances.Get<WebApplicationBase>().GetModule<Plugins.Customer.ModuleCustomer>();
 
         public int IdUserChange { get; set; }
 
@@ -140,5 +136,12 @@ namespace OnWeb.Core.DB
         [Display(Name = "Комментарий администратора"), DataType(DataType.MultilineText)]
         public string CommentAdmin { get; set; }
 
+        public DefaultSchemeWData Fields => FieldsBase;
+
+        public DefaultSchemeWData fields => fieldsBase;
+
+        public dynamic FieldsDynamic => FieldsDynamicBase;
+
+        public ReadOnlyDictionary<string, FieldData> fieldsNamed => fieldsNamedBase;
     }
 }
