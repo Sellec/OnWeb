@@ -79,7 +79,7 @@ namespace OnWeb.Plugins.Materials
             }
         }
 
-        public override NestedLinkCollection GetItems(int IdItemType, params object[] _params)
+        public override NestedCollection GetItems(int IdItemType, params object[] _params)
         {
             if (IdItemType == ModulesConstants.ItemType)
             {
@@ -89,9 +89,9 @@ namespace OnWeb.Plugins.Materials
                              orderby p.name ascending
                              select p).ToList();
 
-                    f.ForEach(page => { page.Owner = this; });
+                   // f.ForEach(page => { page.Owner = this; });
 
-                    return new NestedLinkCollection(f);
+                    return new NestedCollection(f);
                     //return base.getItemsList(IdItemType, SortOrder, _params);
                 }
             }
@@ -100,7 +100,7 @@ namespace OnWeb.Plugins.Materials
 
         public override Uri GenerateLink(ItemBase item)
         {
-            if (item.Owner == this && item is DB.Page page) return new Uri(string.Format("/{0}", page.urlname), UriKind.Relative);
+            if (item.OwnerModule == this && item is DB.Page page) return new Uri(string.Format("/{0}", page.urlname), UriKind.Relative);
             return null;
         }
     }

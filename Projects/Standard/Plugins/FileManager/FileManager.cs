@@ -77,7 +77,7 @@ namespace OnWeb.Plugins.FileManager
             ModelMetadataProviders.Current = new MVC.TraceModelMetadataProviderWithFiles();
         }
 
-        public Dictionary<string, Conversations.ConversationBase> Conversations { get; } = new Dictionary<string, Conversations.ConversationBase>();
+        //public Dictionary<string, Conversations.ConversationBase> Conversations { get; } = new Dictionary<string, Conversations.ConversationBase>();
 
         #region FileManager
         /// <summary>

@@ -40,7 +40,7 @@ namespace OnWeb.Core.Modules
         /// <param name="IdItemType"></param>
         /// <param name="_params"></param>
         /// <returns></returns>
-        public virtual Types.NestedLinkCollection GetItems(int IdItemType, params object[] _params)
+        public virtual Types.NestedCollection GetItems(int IdItemType, params object[] _params)
         {
             return null;
         }

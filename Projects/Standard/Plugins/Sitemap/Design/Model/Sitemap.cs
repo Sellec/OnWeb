@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
-namespace OnWeb.Plugins.Adminmain.Design.Model
+namespace OnWeb.Plugins.Sitemap.Design.Model
 {
     /// <summary>
     /// Модель для представления Sitemap.cshtml.
@@ -22,7 +19,7 @@ namespace OnWeb.Plugins.Adminmain.Design.Model
     public class SitemapProvider
     {
         /// <summary>
-        /// См. <see cref="Services.ISitemapProvider.NameProvider"/>
+        /// См. <see cref="ISitemapProvider.NameProvider"/>
         /// </summary>
         public string NameProvider { get; set; }
 

@@ -2,12 +2,10 @@
 using OnUtils.Application.Items;
 using OnUtils.Application.Modules;
 using OnUtils.Application.Modules.Extensions;
-using OnUtils.Application.Modules.Extensions.CustomFields;
 using OnUtils.Application.Modules.Extensions.CustomFields.DB;
 using OnUtils.Application.Modules.Extensions.CustomFields.Field;
 using OnUtils.Application.Modules.Extensions.CustomFields.Model;
 using OnUtils.Application.Modules.Extensions.CustomFields.Scheme;
-using OnUtils.Application.Types;
 using OnUtils.Data;
 using System;
 using System.Collections.Generic;
@@ -16,10 +14,8 @@ using System.Web.Mvc;
 
 namespace OnWeb.Core.Modules.Extensions.CustomFields
 {
-    using Core.Modules;
-    using CoreBind.Modules;
-    using Core.Modules.Extensions.CustomFields;
     using Core.Types;
+    using CoreBind.Modules;
 
     /// <summary>
     /// Админский класс расширения пользовательских полей. 
@@ -28,15 +24,11 @@ namespace OnWeb.Core.Modules.Extensions.CustomFields
     public class ExtensionCustomsFieldsAdmin : ExtensionCustomsFieldsBase
     {
         #region Вспомогательное
-        public static NestedLinkSimple RelativeToModule(string url, string caption, IModuleCore module)
+        public NestedLinkCollection GetAdminMenu()
         {
-            var moduleAdmin = module.GetAppCore().Get<Plugins.Admin.ModuleAdmin>();
-            return new NestedLinkSimple(caption, new Uri($"/{moduleAdmin.UrlName}/mnadmin/{module.UrlName}/{url}", UriKind.Relative));
-        }
-
-        public override NestedLinkCollection getAdminMenu()
-        {
-            return new NestedLinkCollection(RelativeToModule("fields", "Управление полями", Module));
+            var moduleAdmin = Module.GetAppCore().Get<Plugins.Admin.ModuleAdmin>();
+            var collection = new NestedLinkCollection(new NestedLinkGroup("Управление полями", new NestedLinkSimple("Управление полями", new Uri($"/{moduleAdmin.UrlName}/mnadmin/{Module.UrlName}/fields", UriKind.Relative))));
+            return collection;
         }
 
         /// <summary>
@@ -76,7 +68,7 @@ namespace OnWeb.Core.Modules.Extensions.CustomFields
                 else
                 {
                     var _itemsPre = this.Module.GetItems(itemType.IdItemType);
-                    var _items = _itemsPre != null ? _itemsPre.GetSimplifiedHierarchy() : new NestedListCollectionSimplified();
+                    var _items = _itemsPre != null ? _itemsPre.GetSimplifiedHierarchy() : new NestedCollectionSimplified();
 
                     if (_items != null && _items.Count() > 0)
                         foreach (var res in _items)

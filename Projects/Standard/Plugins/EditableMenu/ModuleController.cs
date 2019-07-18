@@ -8,6 +8,7 @@ namespace OnWeb.Plugins.EditableMenu
     using Core.Items;
     using Core.Modules;
     using CoreBind.Modules;
+    using Core.Modules.Extensions.ExtensionUrl;
 
     public class ModuleController : ModuleControllerAdmin<Module>
     {
@@ -53,8 +54,9 @@ namespace OnWeb.Plugins.EditableMenu
 
                 var itemsAll = module.GetItemTypes().
                                 SelectMany(x => module.GetItems(x.IdItemType)).
+                                OfType<IItemBaseUrl>().
                                 OrderBy(x => x.Caption).
-                                ToDictionary(x => (x as ItemBase).Url.ToString(), x => x.Caption);
+                                ToDictionary(x => x.Url.ToString(), x => x.Caption);
 
 
                 data = itemsAll;

@@ -58,9 +58,9 @@ namespace OnWeb.Plugins
 
                 foreach (var extension in module.GetExtensions())
                 {
-                    if (extension is Core.Modules.Extensions.CustomFields.ExtensionCustomsFieldsBase fields)
+                    if (extension is Core.Modules.Extensions.CustomFields.ExtensionCustomsFieldsAdmin fields)
                     {
-                        var extLinks = fields.getAdminMenu();
+                        var extLinks = fields.GetAdminMenu();
                         if (extLinks != null)
                         {
                             list.AddRange(extLinks);

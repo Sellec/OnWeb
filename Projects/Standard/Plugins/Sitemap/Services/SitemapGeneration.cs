@@ -3,10 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OnWeb.Plugins.Adminmain.Services
+namespace OnWeb.Plugins.Sitemap.Services
 {
     using Core;
-    using Core.Items;
 
     public class SitemapGeneration : CoreComponentBase
     {
@@ -59,11 +58,11 @@ namespace OnWeb.Plugins.Adminmain.Services
                         return null;
                     }
                 }).Where(x => x != null).ToList();
-                var linksAll = providerList.SelectMany(x => x.GetItems() ?? new List<ItemBase>()).ToList();
+                var linksAll = providerList.SelectMany(x => x.GetItems() ?? new List<SitemapItem>()).ToList();
 
-                var moduleAdminmain = AppCore.GetModulesManager().GetModule<Module>();
+                var module = AppCore.GetModulesManager().GetModule<ModuleSitemap>();
 
-                var code = Core.WebUtils.RazorRenderHelper.RenderView(moduleAdminmain, "SitemapXml.cshtml", linksAll);
+                var code = Core.WebUtils.RazorRenderHelper.RenderView(module, "SitemapXml.cshtml", linksAll);
 
                 var path = System.IO.Path.Combine(OnUtils.LibraryEnumeratorFactory.LibraryDirectory, "sitemap.xml");
                 System.IO.File.WriteAllText(path, code);

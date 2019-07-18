@@ -89,10 +89,10 @@
       <Version>3.2.7</Version>
     </PackageReference>
     <PackageReference Include="OnUtils.Application">
-      <Version>0.1.2.11</Version>
+      <Version>0.1.2.16</Version>
     </PackageReference>
     <PackageReference Include="OnUtils">
-      <Version>0.1.2</Version>
+      <Version>0.1.3</Version>
     </PackageReference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -123,14 +123,15 @@
     <Compile Include="Design\Additionals\Helpers\PHPHelpers.cs" />
     <Compile Include="Design\Additionals\Helpers\UrlHelpers.cs" />
     <Compile Include="Design\Additionals\IntExtensions.cs" />
+    <Compile Include="Plugins\Sitemap\SitemapItem.cs" />
     <Compile Include="Plugins\reCAPTCHA\CaptchaExtension.cs" />
     <Compile Include="Design\Additionals\Plugins\EditableMenuExtension.cs" />
     <Compile Include="Design\Additionals\Plugins\Model\EditableMenu.cs" />
     <Compile Include="Plugins\AdminForModules\Menu\IAdminMenuProvider.cs" />
     <Compile Include="Plugins\AdminForModules\Menu\MenuAction.cs" />
-    <Compile Include="Plugins\Adminmain\Design\Model\Sitemap.cs" />
-    <Compile Include="Plugins\Adminmain\Services\ISitemapProvider.cs" />
-    <Compile Include="Plugins\Adminmain\Services\SitemapGeneration.cs" />
+    <Compile Include="Plugins\Sitemap\Design\Model\Sitemap.cs" />
+    <Compile Include="Plugins\Sitemap\ISitemapProvider.cs" />
+    <Compile Include="Plugins\Sitemap\Services\SitemapGeneration.cs" />
     <Compile Include="Plugins\Auth\Design\Model\Login.cs" />
     <Compile Include="Plugins\Auth\Design\Model\ModuleSettings.cs" />
     <Compile Include="Plugins\Auth\Design\Model\PasswordRestoreSend.cs" />
@@ -228,6 +229,10 @@
     <Compile Include="Plugins\Register\ModuleRegister.cs" />
     <Compile Include="Plugins\Register\ModuleRegisterController.cs" />
     <Compile Include="Plugins\Register\Startup.cs" />
+    <Compile Include="Plugins\Sitemap\ModuleController.cs" />
+    <Compile Include="Plugins\Sitemap\ModuleSitemap.cs" />
+    <Compile Include="Plugins\Sitemap\SitemapPriority.cs" />
+    <Compile Include="Plugins\Sitemap\Startup.cs" />
     <Compile Include="Plugins\Universal\PaginationHelper.cs" />
     <Compile Include="Plugins\Universal\Pagination\InfoCount.cs" />
     <Compile Include="Plugins\Universal\Pagination\ListViewOptions.cs" />
@@ -1974,7 +1979,7 @@
     <Content Include="Plugins\EditableMenu\Design\EditableMenuEdit.cshtml" />
     <Content Include="Plugins\Adminmain\Design\CoreSettings.cshtml" />
     <Content Include="Plugins\Adminmain\Design\Modules.cshtml" />
-    <Content Include="Plugins\Adminmain\Design\Sitemap.cshtml" />
+    <Content Include="Plugins\Sitemap\Design\Sitemap.cshtml" />
     <Content Include="Plugins\Adminmain\Design\JournalDetails.cshtml" />
     <Content Include="Plugins\Adminmain\Design\Journals.cshtml" />
     <Content Include="Plugins\Adminmain\Design\Messaging.cshtml" />
@@ -2021,7 +2026,7 @@
     <Content Include="Plugins\Customer\Design\customer_menu.cshtml" />
     <Content Include="Plugins\Register\Design\RegisterNotificationEmailConfirm.cshtml" />
     <Content Include="Plugins\Register\Design\RegisterNotificationEmailModerate.cshtml" />
-    <Content Include="Plugins\Adminmain\Design\SitemapXml.cshtml" />
+    <Content Include="Plugins\Sitemap\Design\SitemapXml.cshtml" />
     <Content Include="Plugins\MessagingEmail\Design\ModuleSettings.cshtml" />
     <Content Include="Plugins\reCAPTCHA\Design\ModuleSettings.cshtml" />
     <None Include="web.Debug.config">

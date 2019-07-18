@@ -18,17 +18,17 @@ namespace OnWeb.Plugins.Admin
         /// <summary>
         /// См. <see cref="ModuleAdmin.GetAdminMenuList(IUserContext)"/>.
         /// </summary>
-        public override Dictionary<IModuleCore, List<ItemBase>> GetAdminMenuList(IUserContext userContext)
+        public override Dictionary<IModuleCore, NestedLinkCollection> GetAdminMenuList(IUserContext userContext)
         {
             var modulesList = AppCore.GetModulesManager().GetModules().OfType<IModuleCore>();
-            var mods = new Dictionary<IModuleCore, List<ItemBase>>();
-            var mods_errors = new Dictionary<IModuleCore, List<ItemBase>>();
+            var mods = new Dictionary<IModuleCore, NestedLinkCollection>();
+            var mods_errors = new Dictionary<IModuleCore, string>();
 
             foreach (var module in modulesList)
             {
                 if (module.CheckPermission(userContext, ModulesConstants.PermissionManage) != CheckPermissionResult.Allowed)
                 {
-                    mods_errors.Add(module, new List<ItemBase>() { new NestedLinkSimple("Недостаточно прав") });
+                    mods_errors[module] = "Недостаточно прав";
                 }
                 else
                 {
@@ -39,19 +39,19 @@ namespace OnWeb.Plugins.Admin
                     {
                         if (module.CheckPermission(userContext, ModulesConstants.PermissionManage) == CheckPermissionResult.Allowed)
                         {
-                            mods.Add(module, links);
+                            mods[module] = links;
                         }
                         else
                         {
-                            mods_errors.Add(module, new List<ItemBase>() { new NestedLinkSimple("Недостаточно прав") });
+                            mods_errors[module] = "Недостаточно прав";
                         }
                     }
                 }
             }
 
-            var model = new Dictionary<IModuleCore, List<ItemBase>>();
+            var model = new Dictionary<IModuleCore, NestedLinkCollection>();
             mods.Where(x => x.Value.Count > 0).OrderBy(x => x.Key.Caption).ForEach(x => model[x.Key] = x.Value);
-            mods_errors.Where(x => x.Value.Count > 0).OrderBy(x => x.Key.Caption).ForEach(x => model[x.Key] = x.Value);
+            mods_errors.OrderBy(x => x.Key.Caption).ForEach(x => model[x.Key].Add(new NestedLinkSimple(x.Value)));
 
             return model;
         }

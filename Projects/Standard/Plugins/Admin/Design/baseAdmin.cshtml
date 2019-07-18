@@ -1,6 +1,7 @@
 ﻿@using Core.Items
 @using Core.Types
-@helper submodule(IList<ItemBase> links)
+@using Core.Modules.Extensions.ExtensionUrl
+@helper submodule(IList<IItemBaseUrl> links)
 {
     if (links != null)
     {

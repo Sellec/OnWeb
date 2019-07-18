@@ -1,12 +1,13 @@
 namespace OnWeb.Plugins.Materials.DB
 {
     using Core.Items;
+    using Core.Modules.Extensions.ExtensionUrl;
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
     [Table("News")]
-    public class News : ItemBase<ModuleMaterials>
+    public class News : ItemBase, IItemBaseUrl
     {
         public override int ID
         {
@@ -48,5 +49,8 @@ namespace OnWeb.Plugins.Materials.DB
 
         public bool Block { get; set; } = false;
 
+        public Uri Url => UrlBase;
+
+        public UrlSourceType UrlSourceType => UrlSourceTypeBase;
     }
 }

@@ -87,7 +87,7 @@ namespace OnWeb.Core.Modules
         /// <param name="idItemType"></param>
         /// <param name="_params"></param>
         /// <returns></returns>
-        NestedLinkCollection GetItems(int idItemType, params object[] _params);
+        NestedCollection GetItems(int idItemType, params object[] _params);
 
         #region Расширения
         /// <summary>

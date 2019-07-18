@@ -1,15 +1,22 @@
+using OnUtils.Application.Modules;
+
 namespace OnWeb.Core.DB
 {
+    using System;
     using Items;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using Core.Modules.Extensions.ExtensionUrl;
 
 #pragma warning disable CS1591 // todo внести комментарии.
     [Table("ModuleSearchSet")]
-    public partial class ModuleSearchSet : ItemBase
+    public partial class ModuleSearchSet : ItemBase, IItemBaseUrl
     {
         [NotMapped]
         private int _idModule = 0;
+
+        [NotMapped]
+        private Lazy<ModuleCore<WebApplicationBase>> _ownerModule = null;
 
         [Key]
         public int IdSearchSet { get; set; }
@@ -32,7 +39,7 @@ namespace OnWeb.Core.DB
             set
             {
                 _idModule = value;
-                Owner = OnUtils.Application.DeprecatedSingletonInstances.Get<WebApplicationBase>().GetModule(value);
+                _ownerModule = new Lazy<ModuleCore<WebApplicationBase>>(() => OnUtils.Application.DeprecatedSingletonInstances.Get<WebApplicationBase>().GetModule(value));
             }
         }
 
@@ -80,6 +87,12 @@ namespace OnWeb.Core.DB
             get => NameSearchSet;
             set => NameSearchSet = value;
         }
+
+        public override ModuleCore<WebApplicationBase> OwnerModule => base.OwnerModule;
+
+        public Uri Url => UrlBase;
+
+        public UrlSourceType UrlSourceType => UrlSourceTypeBase;
         #endregion
     }
 }

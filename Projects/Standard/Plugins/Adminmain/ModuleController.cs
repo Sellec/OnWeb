@@ -1,4 +1,5 @@
 ﻿using OnUtils.Application.Configuration;
+using OnUtils.Application.DB;
 using OnUtils.Application.Items;
 using OnUtils.Application.Journaling;
 using OnUtils.Application.Journaling.DB;
@@ -8,17 +9,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using OnUtils.Application.DB;
 
 namespace OnWeb.Plugins.Adminmain
 {
     using AdminForModules.Menu;
     using Core.DB;
+    using Core.Journaling;
     using Core.Modules;
     using CoreBind.Modules;
     using CoreBind.Routing;
-    using Services;
-    using Core.Journaling;
     using WebCoreModule;
 
     /// <summary>
@@ -168,57 +167,6 @@ namespace OnWeb.Plugins.Adminmain
             };
 
             return View("Modules.cshtml", model);
-        }
-            
-        [MenuAction("Sitemap", "sitemap", Module.PERM_SITEMAP)]
-        public ActionResult Sitemap()
-        {
-            var sitemapProviderTypes = AppCore.GetQueryTypes().Where(x => typeof(ISitemapProvider).IsAssignableFrom(x)).ToList();
-            var providerList = sitemapProviderTypes.Select(x =>
-            {
-                var p = new Design.Model.SitemapProvider()
-                {
-                    NameProvider = "",
-                    TypeName = x.FullName,
-                    IsCreatedNormally = false
-                };
-                try
-                {
-                    var pp = AppCore.Create<ISitemapProvider>(x);
-                    p.NameProvider = pp.NameProvider;
-                    p.IsCreatedNormally = true;
-                }
-                catch (Exception ex)
-                {
-                    p.TypeName = ex.ToString();
-                    p.IsCreatedNormally = false;
-                }
-                return p;
-            }).ToList();
-
-            return View("Sitemap.cshtml", new Design.Model.Sitemap() { ProviderList = providerList });
-        }
-
-        [ModuleAction("sitemap_save", Module.PERM_SITEMAP)]
-        public JsonResult SitemapGenerate()
-        {
-            var success = false;
-            var result = "";
-
-            try
-            {
-                Module.MarkSitemapGenerationToRun();
-
-                success = true;
-                result = "Процесс обновления карты сайта запущен.";
-            }
-            catch (Exception ex)
-            {
-                success = false;
-                result = ex.Message;
-            }
-
-            return ReturnJson(success, result);
         }
 
         [MenuAction("Маршрутизация (ЧПУ)", "routing", Module.PERM_ROUTING)]

@@ -3,14 +3,11 @@ using System.Collections.Generic;
 
 namespace OnWeb.Core.Types
 {
-    using Items;
-    using Modules.Extensions.ExtensionUrl;
-
 #pragma warning disable CS1591 // todo внести комментарии.
     /// <summary>
-    /// Содержимое <see cref="NestedLinkCollection"/> в уплощенной форме - без вложенной иерархии.
+    /// Содержимое <see cref="NestedCollection"/> в уплощенной форме - без вложенной иерархии.
     /// </summary>
-    public class NestedLinkCollectionSimplified : System.Collections.ObjectModel.Collection<KeyValuePair<IItemBaseUrl, string>>
+    public class NestedCollectionSimplified : System.Collections.ObjectModel.Collection<KeyValuePair<Items.ItemBase, string>>
     {
 
     }
@@ -18,42 +15,43 @@ namespace OnWeb.Core.Types
     /// <summary>
     /// Содержит ссылки и группы ссылок с неограниченной вложенностью.
     /// </summary>
-    public class NestedLinkCollection : List<IItemBaseUrl>
+    public class NestedCollection : List<Items.ItemBase>
     {
         /// <summary>
         /// Инициализирует пустой список.
         /// </summary>
-        public NestedLinkCollection()
+        public NestedCollection()
         { }
 
         /// <summary>
         /// Инициализирует список со значениями из <paramref name="source"/>.
         /// </summary>
-        public NestedLinkCollection(params IItemBaseUrl[] source) : base(source)
+        public NestedCollection(params Items.ItemBase[] source) : base(source)
         { }
 
         /// <summary>
         /// Инициализирует список со значениями из <paramref name="source"/>.
         /// </summary>
-        public NestedLinkCollection(IEnumerable<IItemBaseUrl> source) : base(source)
+        public NestedCollection(IEnumerable<Items.ItemBase> source) : base(source)
         { }
 
-        public NestedLinkCollectionSimplified GetSimplifiedHierarchy(string separator = " -> ")
+        public NestedCollectionSimplified GetSimplifiedHierarchy(string separator = " -> ")
         {
-            var items = new NestedLinkCollectionSimplified();
+            var items = new NestedCollectionSimplified();
 
-            Action<string, string, IEnumerable<IItemBaseUrl>> action = null;
+            Action<string, string, IEnumerable<Items.ItemBase>> action = null;
             action = (parent, _separator, source) =>
             {
                 if (source != null)
                     foreach (var item in source)
                     {
-                        if (item is NestedLinkGroup group)
+                        if (item is NestedGroup)
                         {
-                            items.Add(new KeyValuePair<IItemBaseUrl, string>(group.SourceItem, parent + item.Caption));
+                            var group = item as NestedGroup;
+                            items.Add(new KeyValuePair<Items.ItemBase, string>(group.SourceItem, parent + item.Caption));
                             action(item.Caption + _separator, _separator, group.Links);
                         }
-                        else items.Add(new KeyValuePair<IItemBaseUrl, string>(item, parent + item.Caption));
+                        else items.Add(new KeyValuePair<Items.ItemBase, string>(item, parent + item.Caption));
                     }
             };
 
@@ -65,19 +63,19 @@ namespace OnWeb.Core.Types
         /// <summary>
         /// Возвращает список элементов, отфильтрованных при помощи пользовательского фильтра <paramref name="itemFilter"/>.
         /// </summary>
-        public List<IItemBaseUrl> FindNodes(Func<IItemBaseUrl, bool> itemFilter)
+        public List<Items.ItemBase> FindNodes(Func<Items.ItemBase, bool> itemFilter)
         {
             if (itemFilter == null) throw new ArgumentNullException(nameof(itemFilter));
 
-            Action<List<IItemBaseUrl>> action = null;
-            var filtered = new List<IItemBaseUrl>();
+            Action<List<Items.ItemBase>> action = null;
+            var filtered = new List<Items.ItemBase>();
 
-            action = new Action<List<IItemBaseUrl>>(x =>
+            action = new Action<List<Items.ItemBase>>(x =>
             {
                 foreach (var item in x)
                 {
                     if (itemFilter(item)) filtered.AddIfNotExists(item);
-                    if (item is NestedLinkGroup group) action(group.Links);
+                    if (item is NestedGroup) action((item as NestedGroup).Links);
                 }
             });
 
@@ -90,15 +88,15 @@ namespace OnWeb.Core.Types
     /// <summary>
     /// Коллекция ссылок, при этом сам заголовок группы тоже может быть ссылкой. Например, ссылка на категорию.
     /// </summary>
-    public class NestedLinkGroup : ItemBase, IItemBaseUrl
+    public class NestedGroup : Items.ItemBase
     {
-        private IItemBaseUrl _groupItem = null;
+        private Items.ItemBase _groupItem = null;
 
-        public NestedLinkGroup(string caption, params IItemBaseUrl[] childs) : this(new NestedLinkSimple(caption), childs)
+        public NestedGroup(int id, string caption, params Items.ItemBase[] childs) : this(new NestedSimple(id, caption), childs)
         {
         }
 
-        public NestedLinkGroup(IItemBaseUrl groupItem, params IItemBaseUrl[] childs)
+        public NestedGroup(Items.ItemBase groupItem, params Items.ItemBase[] childs)
         {
             if (groupItem == null) throw new ArgumentNullException(nameof(groupItem));
             _groupItem = groupItem;
@@ -108,28 +106,27 @@ namespace OnWeb.Core.Types
         /// <summary>
         /// Вложенные ссылки.
         /// </summary>
-        public List<IItemBaseUrl> Links { get; } = new List<IItemBaseUrl>();
+        public List<Items.ItemBase> Links { get; } = new List<Items.ItemBase>();
 
         public override int ID
         {
             get => _groupItem.ID;
-            set { }
+            set => _groupItem.ID = value;
         }
 
         public override string Caption
         {
             get => _groupItem.Caption;
-            set { }
+            set => _groupItem.Caption = value;
         }
 
-        public Uri Url
+        public override DateTime DateChangeBase
         {
-            get => _groupItem.Url;
+            get => _groupItem.DateChangeBase;
+            set => _groupItem.DateChangeBase = value;
         }
 
-        UrlSourceType IItemBaseUrl.UrlSourceType { get; }
-
-        public IItemBaseUrl SourceItem
+        public Items.ItemBase SourceItem
         {
             get => _groupItem;
         }
@@ -138,21 +135,17 @@ namespace OnWeb.Core.Types
     /// <summary>
     /// Простая ссылка.
     /// </summary>
-    public class NestedLinkSimple : ItemBase, IItemBaseUrl
+    public class NestedSimple : Items.ItemBase
     {
-        public NestedLinkSimple(string caption, Uri url = null)
+        public NestedSimple(int id, string caption)
         {
+            ID = id;
             Caption = caption;
-            Url = url;
         }
 
         public override int ID { get; set; }
 
         public override string Caption { get; set; }
-
-        public Uri Url { get; }
-
-        UrlSourceType IItemBaseUrl.UrlSourceType { get; }
     }
 }
 

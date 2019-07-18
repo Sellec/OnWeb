@@ -3,10 +3,12 @@ using OnUtils.Application.Modules;
 using OnUtils.Application.Modules.Extensions.CustomFields.Field;
 using System.Linq;
 using System.Web.Mvc;
+using OnUtils.Application.Modules.Extensions.CustomFields;
 
 namespace OnWeb.Core.Modules.Extensions.CustomFields.MetadataAndValues
 {
     using Core.Items;
+    using Core.Modules.Extensions.CustomFields;
 
     class FieldValueProvider : IValueProvider
     {
@@ -25,10 +27,10 @@ namespace OnWeb.Core.Modules.Extensions.CustomFields.MetadataAndValues
             var prefixParts = prefix.Split('.');
             if (prefixParts.Length == 0) return false;
 
-            if (prefixParts.Last() == nameof(ItemBase.Fields)) return true;
+            if (prefixParts.Last() == nameof(IItemBaseCustomFields.Fields)) return true;
 
             if (prefixParts.Length >= 2 &&
-                prefixParts[prefixParts.Length - 2] == nameof(ItemBase.Fields) &&
+                prefixParts[prefixParts.Length - 2] == nameof(IItemBaseCustomFields.Fields) &&
                 prefixParts.Last().StartsWith("fieldValue_"))
             {
                 int idField = 0;

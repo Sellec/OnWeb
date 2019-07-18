@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace OnWeb.Plugins.Adminmain.Services
+namespace OnWeb.Plugins.Sitemap
 {
     using Core;
-    using Core.Items;
 
     /// <summary>
     /// Представляет провайдер объектов для создания карты сайта.
@@ -18,6 +17,6 @@ namespace OnWeb.Plugins.Adminmain.Services
         /// <summary>
         /// Возвращает список объектов для карты сайта.
         /// </summary>
-        IEnumerable<ItemBase> GetItems();
+        List<SitemapItem> GetItems();
     }
 }
