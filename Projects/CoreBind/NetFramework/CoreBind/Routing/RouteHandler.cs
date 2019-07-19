@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ using System.Web.Routing;
 namespace OnWeb.CoreBind.Routing
 {
     using Core.DB;
+    using Core.Routing;
 
     class RouteHandler : MvcRouteHandler, IRouteConstraint
     {
@@ -119,10 +121,12 @@ namespace OnWeb.CoreBind.Routing
                 var module = _core.GetModulesManager().GetModule(route.IdModule);
                 if (module != null)
                 {
-                    var arguments = Newtonsoft.Json.JsonConvert.DeserializeObject<IEnumerable<Core.Routing.ActionArgument>>(route.Arguments, new Newtonsoft.Json.JsonSerializerSettings()
-                    {
-                        Error = (s, e) => e.ErrorContext.Handled = true
-                    });
+                    var arguments = !string.IsNullOrEmpty(route.Arguments) ? 
+                        JsonConvert.DeserializeObject<IEnumerable<ActionArgument>>(route.Arguments, new JsonSerializerSettings()
+                        {
+                            Error = (s, e) => e.ErrorContext.Handled = true
+                        }) : 
+                        null;
 
                     requestContext.RouteData.Values["controller"] = module.UrlName;
                     requestContext.RouteData.Values["action"] = route.Action;

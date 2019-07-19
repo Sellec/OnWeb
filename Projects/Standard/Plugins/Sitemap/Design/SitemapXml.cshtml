@@ -8,55 +8,49 @@
     </url>
     @foreach (var pair in Model)
     {
-        <url>
-            <loc>@Url.ContentFullPath(pair.Location).Replace("&", "&amp;")</loc>
-            @if (pair.LastModificationTime.HasValue)
+    <url>
+        <loc>@Url.ContentFullPath(pair.Location).Replace("&", "&amp;")</loc>
+        @if (pair.LastModificationTime.HasValue)
+        {<text>		<lastmod>@pair.LastModificationTime.Value.ToString(pair.LastModificationTime.Value.TimeOfDay.TotalSeconds > 0 ? "yyyy-MM-dd HH:mm:ss" : "yyyy-MM-dd")</lastmod></text>}
+
+        @if (pair.ChangeFrequency.HasValue)
+        {
+            var value = string.Empty;
+            switch (pair.ChangeFrequency.Value)
             {
-                if (pair.LastModificationTime.Value.TimeOfDay.TotalSeconds > 0)
-                { <lastmod>@pair.LastModificationTime.Value.ToString("yyyy-MM-dd HH:mm:ss")</lastmod> }
-                else
-                { <lastmod>@pair.LastModificationTime.Value.ToString("yyyy-MM-dd")</lastmod> }
+                case Sitemap.SitemapPriority.Always:
+                    value = "always";
+                    break;
+
+                case Sitemap.SitemapPriority.Hourly:
+                    value = "hourly";
+                    break;
+
+                case Sitemap.SitemapPriority.Daily:
+                    value = "daily";
+                    break;
+
+                case Sitemap.SitemapPriority.Weekly:
+                    value = "weekly";
+                    break;
+
+                case Sitemap.SitemapPriority.Monthly:
+                    value = "monthly";
+                    break;
+
+                case Sitemap.SitemapPriority.Yearly:
+                    value = "yearly";
+                    break;
+
+                case Sitemap.SitemapPriority.Never:
+                    value = "never";
+                    break;
+
             }
-            @if (pair.ChangeFrequency.HasValue)
-            {
-                var value = string.Empty;
-                switch (pair.ChangeFrequency.Value)
-                {
-                    case Sitemap.SitemapPriority.Always:
-                        value = "always";
-                        break;
+            <text>		<changefreq>@value</changefreq></text>}
 
-                    case Sitemap.SitemapPriority.Hourly:
-                        value = "hourly";
-                        break;
-
-                    case Sitemap.SitemapPriority.Daily:
-                        value = "daily";
-                        break;
-
-                    case Sitemap.SitemapPriority.Weekly:
-                        value = "weekly";
-                        break;
-
-                    case Sitemap.SitemapPriority.Monthly:
-                        value = "monthly";
-                        break;
-
-                    case Sitemap.SitemapPriority.Yearly:
-                        value = "yearly";
-                        break;
-
-                    case Sitemap.SitemapPriority.Never:
-                        value = "never";
-                        break;
-
-                }
-                <changefreq>@value</changefreq>
-            }
-            @if (pair.Priority.HasValue)
-            {
-                <priority>@Math.Min(1, Math.Max(0, pair.Priority.Value))</priority>
-            }
-        </url>
+        @if (pair.Priority.HasValue)
+        {<text>		<priority>@Math.Min(1, Math.Max(0, pair.Priority.Value))</priority></text>}
+    </url>
     }
 </urlset>
