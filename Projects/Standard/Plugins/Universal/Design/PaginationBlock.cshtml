@@ -7,8 +7,10 @@
 <div class="pagination-block clearfix">
     <div class="pagination-count">
         <div class="pagination-count__text">
-            @Model.infoCount.objectsPerPage из @Model.infoCount.all@if (Model.pages.pages > 1)
-            {<text> (с @Model.infoCount.start по @(Model.infoCount.start + Model.infoCount.objectsPerPage - 1))</text>}
+            @if (Model.pages.pages == 0) { <text>Ничего не найдено</text>}
+            else if (Model.pages.pages == 1) { <text>Всего @Model.infoCount.all @Model.infoCount.all.Decliner("результат", "результата", "результатов")</text>}
+            else { <text>@Model.infoCount.objectsPerPage из @Model.infoCount.all@if (Model.pages.pages > 1)
+            {<text> (с @Model.infoCount.start по @(Model.infoCount.start + Model.infoCount.objectsPerPage - 1))</text>}</text>}
         </div>
     </div>
     <div class="pagination">

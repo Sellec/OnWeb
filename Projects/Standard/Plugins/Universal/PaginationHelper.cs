@@ -120,7 +120,7 @@ namespace OnWeb.Plugins.Universal.Pagination
                 startPosition = (currentPage - 1) * numberPerPage;
 
                 //Считаем количество страниц.
-                var countPages = Math.Max(1, (int)Math.Ceiling(1.0 * itemsCount / numberPerPage));
+                var countPages = itemsCount == 0 ? 0 : Math.Max(1, (int)Math.Ceiling(1.0 * itemsCount / numberPerPage));
 
                 if (startPosition >= itemsCount)
                 {
