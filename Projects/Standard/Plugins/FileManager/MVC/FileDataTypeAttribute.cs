@@ -50,7 +50,7 @@ namespace System.ComponentModel.DataAnnotations
         {
             if (files != null && files.Count() > 0)
             {
-                var filesGrouped = files.GroupBy(x => x).Select(x => x.Key);
+                var filesGrouped = files.GroupBy(x => x).Select(x => x.Key).Where(x => x != 0);
 
                 using (var db = new UnitOfWork<File>())
                 {
