@@ -4,7 +4,7 @@ using OnUtils.Architecture.AppCore.DI;
 
 namespace OnWeb.Plugins.FileManager
 {
-    using Core.Modules.Extensions.CustomFields;
+    using Plugins.ItemsCustomize;
     using Core.Modules;
     using CustomFieldsFileTypes;
 

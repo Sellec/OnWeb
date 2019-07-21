@@ -9,7 +9,6 @@ namespace OnWeb.Core
         void IConfigureBindings<WebApplicationBase>.ConfigureBindings(IBindingsCollection<WebApplicationBase> bindingsCollection)
         {
             bindingsCollection.SetSingleton<Journaling.JournalingManager>();
-            bindingsCollection.SetSingleton<Routing.UrlManager>();
             bindingsCollection.SetSingleton<ServiceMonitor.Monitor>();
             bindingsCollection.SetSingleton<Users.IEntitiesManager, Users.EntitiesManager>();
             bindingsCollection.SetSingleton<Users.WebUserContextManager>();

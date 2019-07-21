@@ -7,7 +7,7 @@ namespace OnWeb.Plugins.Materials
     using Sitemap;
     using Core;
     using Core.Items;
-    using Core.Modules.Extensions.ExtensionUrl;
+    using Plugins.Routing;
 
     class MaterialsSitemapProvider : CoreComponentBase, ISitemapProvider
     {
@@ -40,7 +40,7 @@ namespace OnWeb.Plugins.Materials
                              where p.status > 0
                              select p).ToList();
 
-                var items = news.OfType<ItemBase>().Union(pages.OfType<ItemBase>()).OfType<IItemBaseUrl>();
+                var items = news.OfType<ItemBase>().Union(pages.OfType<ItemBase>()).OfType<IItemRouted>();
 
                 //items.ForEach(item => item.OwnerModule = moduleMaterials);
 

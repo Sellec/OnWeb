@@ -9,8 +9,6 @@ namespace OnWeb.Plugins.Customer
 {
     using Core.Items;
     using Core.Modules;
-    using Core.Modules.Extensions.CustomFields;
-    using Core.Modules.Extensions.ExtensionUrl;
 
     /// <summary>
     /// Модуль для управления пользователями и личным кабинетом.
@@ -29,13 +27,11 @@ namespace OnWeb.Plugins.Customer
         {
             base.InitModuleCustom();
 
-            //registerExtensionNeeded<Core.Modules.Extensions.CustomFields.ExtensionCustomsFields>();
-            RegisterExtension<ExtensionCustomsFieldsBase>();
-            RegisterExtension<ExtensionUrl>();
-
             RegisterPermission(PERM_MANAGEUSERS, "Управление пользователями");
             RegisterPermission(PERM_MANAGEROLES, "Управление ролями");
             RegisterPermission(PERM_VIEWHISTORY, "Просмотр истории");
+
+            AppCore.Get<ItemsManager<WebApplicationBase>>().RegisterModuleItemType<Core.DB.User, ModuleCustomer>();
         }
 
         /// <summary>
@@ -53,20 +49,6 @@ namespace OnWeb.Plugins.Customer
             //return base.GenerateLink(item);
 
             return null;
-        }
-
-        /// <summary>
-        /// См. <see cref="OnUtils.Application.Modules.ModuleCore{TAppCoreSelfReference}.GetItemTypes"/>.
-        /// </summary>
-        public sealed override IEnumerable<ItemType> GetItemTypes()
-        {
-            var type = new ItemType()
-            {
-                IdItemType = ItemTypeFactory.ItemType.IdItemType,
-                NameItemType = "Пользователь",
-                UniqueKey = ItemTypeFactory.ItemType.UniqueKey
-            };
-            return type.ToEnumerable();
         }
 
         /// <summary>

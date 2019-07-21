@@ -29,8 +29,5 @@ namespace OnWeb.Core.DB
         public IRepository<SubscriptionEmail> SubscriptionEmail { get; }
         public IRepository<SubscriptionRole> SubscriptionRole { get; }
         public IRepository<SubscriptionHistory> SubscriptionHistory { get; }
-
-        public IRepository<Routing> Routing { get; }
-        public IRepository<RoutingType> RoutingType { get; }
     }
 }

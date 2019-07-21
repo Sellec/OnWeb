@@ -1,12 +1,10 @@
-using OnUtils.Application.DB;
-using OnUtils.Application.Items;
 using OnUtils.Application.Modules;
-using OnUtils.Application.Modules.Extensions.CustomFields;
+using OnUtils.Application.Modules.ItemsCustomize;
+using OnUtils.Application.Modules.ItemsCustomize.Data;
 
 namespace OnWeb.Core.DB
 {
     using Items;
-    using OnUtils.Application.Modules.Extensions.CustomFields.Data;
     using System;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
@@ -33,9 +31,9 @@ namespace OnWeb.Core.DB
     }
 
     [Table("users")]
-    [ItemType(ModulesConstants.ItemType)]
+    [DisplayName("Пользователь")]
     [System.Diagnostics.DebuggerDisplay("User: id={ID}")]
-    public partial class User : ItemBase, IItemBaseCustomFields
+    public partial class User : ItemBase, IItemCustomized
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

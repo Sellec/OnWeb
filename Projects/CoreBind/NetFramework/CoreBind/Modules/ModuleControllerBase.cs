@@ -1,7 +1,6 @@
 ﻿using OnUtils.Application.Exceptions;
 using OnUtils.Application.Journaling;
 using OnUtils.Application.Modules;
-using OnUtils.Application.Modules.Extensions;
 using OnUtils.Architecture.AppCore;
 using System;
 using System.Collections.Concurrent;
@@ -567,61 +566,6 @@ namespace OnWeb.CoreBind.Modules
 
             RegisterEventWithCode(HttpStatusCode.NotAcceptable, message, msg, ex);
         }
-        #endregion
-
-        #region Extension wrapper
-        internal ActionResult ExtensionWrapper_0(object _extension, object _extensionMethod)
-        {
-            return ExtensionWrapper(_extension, _extensionMethod);
-        }
-
-        internal ActionResult ExtensionWrapper_1<T1>(object _extension, object _extensionMethod, T1 t1)
-        {
-            return ExtensionWrapper(_extension, _extensionMethod, new object[] { t1 });
-        }
-
-        internal ActionResult ExtensionWrapper_2<T1, T2>(object _extension, object _extensionMethod, T1 t1, T2 t2)
-        {
-            return ExtensionWrapper(_extension, _extensionMethod, new object[] { t1, t2 });
-        }
-
-        internal ActionResult ExtensionWrapper_3<T1, T2, T3>(object _extension, object _extensionMethod, T1 t1, T2 t2, T3 t3)
-        {
-            return ExtensionWrapper(_extension, _extensionMethod, new object[] { t1, t2, t3 });
-        }
-
-        internal ActionResult ExtensionWrapper_4<T1, T2, T3, T4>(object _extension, object _extensionMethod, T1 t1, T2 t2, T3 t3, T4 t4)
-        {
-            return ExtensionWrapper(_extension, _extensionMethod, new object[] { t1, t2, t3, t4 });
-        }
-
-        internal ActionResult ExtensionWrapper_5<T1, T2, T3, T4, T5>(object _extension, object _extensionMethod, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5)
-        {
-            return ExtensionWrapper(_extension, _extensionMethod, new object[] { t1, t2, t3, t4, t5 });
-        }
-
-        internal ActionResult ExtensionWrapper_6<T1, T2, T3, T4, T5, T6>(object _extension, object _extensionMethod, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6)
-        {
-            return ExtensionWrapper(_extension, _extensionMethod, new object[] { t1, t2, t3, t4, t5, t6 });
-        }
-
-        internal ActionResult ExtensionWrapper(object _extension, object _extensionMethod, params object[] _args)
-        {
-            var extension = _extension as ModuleExtension<WebApplicationBase>;
-            var extensionMethod = _extensionMethod as MethodInfo;
-
-            try
-            {
-                var result = extensionMethod.Invoke(extension, _args) as ActionResult;
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(string.Format("Ошибка в методе '{0}': {1}", extensionMethod.Name, ex.Message));
-                throw ex;
-            }
-        }
-
         #endregion
 
         #region Свойства

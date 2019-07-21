@@ -1,0 +1,249 @@
+﻿@using Plugins.ItemsCustomize.Model
+@model SchemeContainerItem
+@{ var moduleAdmin = AppCore.Get<Admin.ModuleAdmin>(); }
+
+<script type="text/javascript" src="/data/js/jquery.mjs.nestedSortable.js"></script>
+<script type='text/javascript'>
+
+    var Fields = @Model.Schemes.jsobject();
+
+    $(document).ready(function() {
+
+        //Добавить схему.
+        $('#scheme_add').unbind().click(function () {
+            var name = prompt("Введите название схемы: ");
+            if (name != null && name.length > 0) {
+                showResult();
+                $.requestJSON("/@moduleAdmin.UrlName/madmin/@Module.UrlName/fields_scheme_add", { 'schemeName': name }, function (result, message, id) {
+                    if (result == JsonResult.OK)
+                    {
+                        $('select#fieldsScheme').append($("<option selected></option>").attr("value", id).text('Дополнительная: ' + name + ' (#id ' + id + ')'));
+                        Fields[id] = {Name : name, Fields : []};
+
+                        $('select#fieldsScheme').attr('size', $('select#fieldsScheme option').length);
+                    }
+
+                    if (message.length > 0) showResult(message);
+                });
+            }
+        });
+
+        //Удалить схему.
+        $('#scheme_remove').unbind().click(function () {
+            if ($('select#fieldsScheme').val() != '-' && confirm('Вы действительно хотите удалить схему "' + $('select#fieldsScheme option:selected').text() + '"?')) {
+                showResult();
+                $('select#fieldsScheme').attr('disabled', true);
+
+                $.requestJSON("/@moduleAdmin.UrlName/madmin/@Module.UrlName/fields_scheme_delete/" + $('select#fieldsScheme').val(), null, function (result, message) {
+                    if (result == JsonResult.OK) $('select#fieldsScheme option:selected').remove();
+                    if (message.length > 0) showResult(message);
+
+                    $('select#fieldsScheme').removeAttr('disabled');
+                });
+            }
+        });
+
+        $("input#scheme_check_all").click(function(){
+            $("div#valuesForCustomize ol.sortable input").attr("checked", true);
+        });
+
+        $("input#scheme_uncheck_all").click(function(){
+            $("div#valuesForCustomize ol.sortable input").removeAttr("checked");
+        });
+
+
+        $('#field_toscheme').unbind().click(function(){
+            //if (!$(this).is(':disabled'))
+            {
+                $('#fields_for_select option:selected').each(function(){
+                    valuesForCustomizeAdd($(this).val());
+                });
+            }
+        });
+
+        $('#fields_for_select').unbind().dblclick(function(){
+            $('#field_toscheme').click();
+        });
+
+        $("#fieldsScheme").unbind().change(function(){
+            if (Fields[$(this).val()] != undefined)
+            {
+                if ($(this).val() == 0)
+                {
+                    $('#field_toscheme').attr('disabled', false);
+                    $("li.schemeMain input.schemeCheck").hide();
+                    //$("li.schemeMain .deleteMenu").show();
+
+                    $("input#scheme_remove").hide();
+
+                    $("div#valuesForCustomize ol.sortable").nestedSortable('enable');
+                }
+                else
+                {
+                    $('#field_toscheme').attr('disabled', true);
+                    $("li.schemeMain input.schemeCheck").show().attr('checked', false);
+                    //$("li.schemeMain .deleteMenu").hide();
+                    $("div#valuesForCustomize ol.sortable").nestedSortable('disable');
+
+                    $("input#scheme_remove").show();
+
+                    for (var i in Fields[$(this).val()].Fields)
+                        $("li.schemeMain_" + Fields[$(this).val()].Fields[i].IdField + " input.schemeCheck").attr('checked', true);
+                }
+            }
+        });
+
+        $("input#fieldsSave").unbind().click(function(){
+            try
+            {
+                $("img.dF3dw342w").remove();
+                $(this).after("<img style='margin-left:10px;' src='/data/img/loading.gif' class='dF3dw342w'>");
+
+                console.log("123");
+
+                var fields = {};
+                for (var i in Fields)
+                {
+                    fields[i] = new Array();
+                    for (var j in Fields[i].Fields) fields[i][fields[i].length] = Fields[i].Fields[j].IdField;
+                }
+
+                $.requestJSON("/@moduleAdmin.UrlName/madmin/@Module.UrlName/fieldsItemSave/@Model.SchemeItem.IdItem/@Model.SchemeItem.IdItemType", fields, function(result, message){
+                    $("img.dF3dw342w").remove();
+
+                    if (message.length > 0)
+                    {
+                        $("#action_result").html(message);
+                        endAnim($("#action_result"));
+                    }
+                });
+            }
+            catch (err) { alert(err); }
+        });
+
+        $('div#valuesForCustomize ol.sortable').nestedSortable({
+            forcePlaceholderSize: true,
+            handle: 'div',
+            helper:    'clone',
+            items: 'li',
+            opacity: .6,
+            placeholder: 'placeholder',
+            revert: 250,
+            tabSize: 25,
+            tolerance: 'pointer',
+            toleranceElement: '> div',
+            maxLevels: 1,
+            isTree: true,
+            expandOnHover: 700,
+            startCollapsed: false,
+            protectRoot: true,
+        }).bind( "sortupdate", function(event, ui) {
+            if (Fields[0] == undefined) Fields[0] = {Name : 'По-умолчанию', Fields : []};
+            Fields[0].Fields = new Array();
+            $("li.schemeMain").each(function(){
+                Fields[0].Fields[Fields[0].Fields.length] = FieldsAll[$(this).data('IdField')];
+            });
+        });
+
+        if (undefined != Fields[0])
+        {
+            var fields = Fields[0].Fields;
+            for (var i in fields)
+            {
+                var field = fields[i];
+                valuesForCustomizeAdd(field.IdField);
+            }
+        }
+
+        $("select#fieldsScheme").val($("select#fieldsScheme option:first").val()).change();
+        $('select#fieldsScheme').attr('size', $('select#fieldsScheme option').length);
+    });
+
+    function valuesForCustomizeAdd(IdField)
+    {
+        if ($(".schemeMain_" + IdField).length > 0) return;
+
+        var dd = $("#SourceItemToCopy").clone();
+        dd.removeAttr('id').find('.itemTitle').text($("select#fields_for_select option[value='" + IdField + "']").text());
+        dd.addClass('schemeMain').addClass('schemeMain_' + IdField).data('IdField', IdField);
+        dd.find('label').attr('for', 'inputId_' + IdField);
+        dd.find('input[type=checkbox]').attr('id', 'inputId_' + IdField);
+
+        $('div#valuesForCustomize ol.sortable').append(dd);
+        $('.deleteMenu', dd).click(function(){
+            $(this).parents('li').first().remove();
+            $("div#valuesForCustomize ol.sortable").trigger('sortupdate');
+        });
+
+        $('.schemeCheck', dd).change(function(){
+            var IdScheme = $("select#fieldsScheme").val();
+            if (IdScheme > 0 && IdScheme != undefined)
+            {
+                Fields[IdScheme].Fields = new Array();
+                $($("div#valuesForCustomize ol.sortable .schemeMain input:checked")).each(function(){
+                    Fields[IdScheme].Fields[Fields[IdScheme].Fields.length] = FieldsAll[$(this).closest('.schemeMain').data('IdField')];
+                });
+            }
+        });
+
+        if ($("#fieldsScheme").val() == 0) $("input.schemeCheck", dd).hide();
+        else $("input.schemeCheck", dd).show();
+
+        $("div#valuesForCustomize ol.sortable").trigger('sortupdate');
+    }
+
+</script>
+
+<table id="items_results" class='admtable' style="width:1000px;">
+    <tr>
+        <th style="width:350px;">Схема полей:</th>
+        <th>Поля полной схемы (проба): </th>
+    </tr>
+    <tr>
+        <td>
+            1. Для добавления поля в полную схему выберите его в списке права и нажмите "В схему".<br>
+            2. Для удаления поля из полной схемы щелкните по нему два раза.<br>
+            3. Чтобы настроить дополнительную схему, выберите её из списка ниже и в списке полей полной схемы выделите необходимые.<br><Br>
+
+            *Полная схема - все поля, которые относятся к выбранному объекту. Эти поля показываются в полном просмотре. Для полной схемы доступно добавление, удаление и перемещение полей.<br><br>
+            *Дополнительная схема - в этой схеме может быть только часть полей из полной схемы для тех случаев, когда надо выбрать ограниченный объем данных. Для дополнительной схемы можно только выбрать часть полей, присутствующих в полной схеме, без возможности перемещения.<br><br>
+
+            Список схем:<br>
+            <select id='fieldsScheme' size='7' style='width:100%;'>
+                <option value='0'>Настройка полной схемы</option>
+                @foreach (var pair in Model.Schemes)
+                {
+                    if (pair.Key > 0)
+                    {
+                        <option value='@pair.Key'>Дополнительная: @pair.Value.Name (#id @pair.Key)</option>}
+                }
+            </select>
+
+            <br><br>
+            <input type='button' class="button" value="Сохранить" id="fieldsSave">
+            <input type='button' class='button' id='scheme_add' value='Новая схема'>
+            <input type='button' class='button' id='scheme_remove' value='Удалить схему'>
+            <input type='button' class='button' id='scheme_check_all' value='Выделить все поля'>
+            <input type='button' class='button' id='scheme_uncheck_all' value='Сбросить все поля'>
+        </td>
+        <td>
+            <div style='display:none;'>
+                <li style="display: list-item;" id="SourceItemToCopy">
+                    <div class="menuDiv">
+                        <input type='checkbox' class='schemeCheck'>
+                        <label class="itemTitle" for=""></label>
+                        <span title="Click to delete item." class="deleteMenu ui-icon ui-icon-closethick"></span>
+                    </div>
+                </li>
+            </div>
+
+
+            <div id="valuesForCustomize">
+                <ol class="sortable ui-sortable"></ol>
+            </div>
+
+
+        </td>
+    </tr>
+</table>
+

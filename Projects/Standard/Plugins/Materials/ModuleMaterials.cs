@@ -8,19 +8,11 @@ namespace OnWeb.Plugins.Materials
 {
     using Core.Items;
     using Core.Modules;
-    using Core.Modules.Extensions.CustomFields;
-    using Core.Modules.Extensions.ExtensionUrl;
     using Core.Types;
 
     [ModuleCore("Контент", DefaultUrlName = "Content")]
     public class ModuleMaterials : ModuleCore<ModuleMaterials>, IUnitOfWorkAccessor<DB.DataLayerContext>
     {
-        protected override void InitModuleCustom()
-        {
-            RegisterExtension<ExtensionUrl>();
-            RegisterExtension<ExtensionCustomsFieldsBase>();
-        }
-
         public override IReadOnlyDictionary<ItemBase, Uri> GenerateLinks(IEnumerable<ItemBase> items)
         {
             var news = items.Where(x => x is DB.News).ToDictionary(x => x, x => new Uri("/" + UrlName + "/news/" + x.ID, UriKind.Relative));
@@ -28,21 +20,6 @@ namespace OnWeb.Plugins.Materials
 
             return news.Union(pages).ToDictionary(x => x.Key, x => x.Value);
         }
-
-        //public override IList<AdminMenuItem> getAdminMenuItems()
-        //{
-        //    var items = new List<AdminMenuItem>();
-        //    //items.Add(new AdminMenuItemLink("Основные настройки", new Uri("index"));
-        //    //items.Add(new AdminMenuItemLink("Основные настройки", "index"));
-        //    //items.Add(new AdminMenuItemLink("Основные настройки", "index"));
-        //    //items.Add(new AdminMenuItemLink("Основные настройки", "index"));
-        //    //items.Add(new AdminMenuItemLink("Основные настройки", "index"));
-        //    //items.Add(new AdminMenuItemLink("Основные настройки", "index"));
-        //    //items.Add(new AdminMenuItemLink("Основные настройки", "index"));
-        //    //items.Add(new AdminMenuItemLink("Основные настройки", "index"));
-        //    //items.Add(new AdminMenuItemLink("Основные настройки", "index"));
-        //    return items;
-        //}
 
         public IList<DB.Page> getPagesList()
         {
@@ -77,25 +54,6 @@ namespace OnWeb.Plugins.Materials
                 Debug.Logs(ex.Message);
                 return null;
             }
-        }
-
-        public override NestedCollection GetItems(int IdItemType, params object[] _params)
-        {
-            if (IdItemType == ModulesConstants.ItemType)
-            {
-                using (var db = this.CreateUnitOfWork())
-                {
-                    var f = (from p in db.Pages
-                             orderby p.name ascending
-                             select p).ToList();
-
-                   // f.ForEach(page => { page.Owner = this; });
-
-                    return new NestedCollection(f);
-                    //return base.getItemsList(IdItemType, SortOrder, _params);
-                }
-            }
-            return null;
         }
 
         public override Uri GenerateLink(ItemBase item)

@@ -6,11 +6,11 @@ namespace OnWeb.Core.DB
     using Items;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using Core.Modules.Extensions.ExtensionUrl;
+    using Plugins.Routing;
 
 #pragma warning disable CS1591 // todo внести комментарии.
     [Table("ModuleSearchSet")]
-    public partial class ModuleSearchSet : ItemBase, IItemBaseUrl
+    public partial class ModuleSearchSet : ItemBase, IItemRouted
     {
         [NotMapped]
         private int _idModule = 0;

@@ -1,7 +1,5 @@
 ﻿using OnUtils.Application.DB;
 using OnUtils.Application.Modules;
-using OnUtils.Application.Modules.Extensions;
-using OnUtils.Application.Modules.Extensions.CustomFields;
 using OnUtils.Application.Users;
 using System;
 using System.Collections.Generic;
@@ -77,9 +75,9 @@ namespace OnWeb.Core.Modules
         #endregion
 
         /// <summary>
-        /// См. <see cref="OnUtils.Application.Modules.ModuleCore{TAppCoreSelfReference}.GetItemTypes"/>.
+        /// См. <see cref="ModuleCore{TAppCoreSelfReference, TSelfReference}.GetItemTypes"/>.
         /// </summary>
-        IEnumerable<ItemType> GetItemTypes();
+        List<ItemType> GetItemTypes();
 
         /// <summary>
         /// Возвращает список идентификатор=название указанного типа для текущего модуля. Например, это может быть список категорий.
@@ -88,17 +86,5 @@ namespace OnWeb.Core.Modules
         /// <param name="_params"></param>
         /// <returns></returns>
         NestedCollection GetItems(int idItemType, params object[] _params);
-
-        #region Расширения
-        /// <summary>
-        /// Возвращает список подключенных расширений.
-        /// </summary>
-        List<ModuleExtension<WebApplicationBase>> GetExtensions();
-
-        /// <summary>
-        /// Предоставляет доступ к расширению настраиваемых полей.
-        /// </summary>
-        ExtensionCustomsFieldsBase<WebApplicationBase> Fields { get; }
-        #endregion
     }
 }

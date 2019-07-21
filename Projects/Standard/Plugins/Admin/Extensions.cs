@@ -32,7 +32,7 @@ namespace OnWeb.Plugins
         {
             var list = new NestedLinkCollection();
 
-            var itemsInternal = (module as AdminForModules.Menu.IMenuProvider)?.GetAdminMenuItemsBase();
+            var itemsInternal = (module as AdminForModules.Menu.IMenuProvider)?.GetModuleAdminMenuLinks();
             if (itemsInternal != null) list.AddRange(itemsInternal);
 
             try
@@ -52,18 +52,6 @@ namespace OnWeb.Plugins
 
                             var link = new NestedLinkSimple(attr.Caption, new Uri($"/{moduleAdmin.UrlName}/mnadmin/{module.UrlName}/{(string.IsNullOrEmpty(attr.Alias) ? method.Name : attr.Alias)}", UriKind.Relative));
                             list.Add(link);
-                        }
-                    }
-                }
-
-                foreach (var extension in module.GetExtensions())
-                {
-                    if (extension is Core.Modules.Extensions.CustomFields.ExtensionCustomsFieldsAdmin fields)
-                    {
-                        var extLinks = fields.GetAdminMenu();
-                        if (extLinks != null)
-                        {
-                            list.AddRange(extLinks);
                         }
                     }
                 }
