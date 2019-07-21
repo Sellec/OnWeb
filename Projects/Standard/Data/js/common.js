@@ -502,9 +502,9 @@ $(function ()
                     targetContent = target.find(".popup__content:eq(0)"),
                     targetButtonsPanel = target.find(".popup__buttons:eq(0)"),
                     config = $.extend(this.config, defaults, setts),
-                    isSet = $(this).data("showDialog") == true;
+                    isSet = $(this).data("showDialog") === true;
 
-                if (settings == "destroy" || settings == "close")
+                if (settings === "destroy" || settings === "close")
                 {
                     thisObject.data("showDialog", null);
                     if (isSet)
@@ -536,7 +536,7 @@ $(function ()
                         }
 
                         //Ищем основной контейнер, внутрь которого будет вставлен целевой див.
-                        if (target.length == 0) throw "Не найден диалоговый элемент.";
+                        if (target.length === 0) throw "Не найден диалоговый элемент.";
                         else if (target.length > 1) throw "Диалоговых элементов больше одного.";
                         
                         //Две кнопки, которые должны высветиться на форме. Либо одна из двух. Короче, какие кнопки высветили - такие значения дали переменным. Нет кнопки отмены - buttonCancel сделать null.
@@ -544,47 +544,47 @@ $(function ()
                         var buttonCancel = null;
 
                         //Обрабатываем типы кнопок.
-                        if (buttonsType == ShowDialogButtons.OK) {
+                        if (buttonsType === ShowDialogButtons.OK) {
                             //Только кнопка ОК.
                             //TODO - скрыть остальные кнопки.
                             buttonOK = $('<span class="popup__buttons-element popup__button-OK">ОК</span>'); //TODO тут должна присваиваться кнопка ОК.
                             buttonCancel = null;
                         }
-                        else if (buttonsType == ShowDialogButtons.YESNO) {
+                        else if (buttonsType === ShowDialogButtons.YESNO) {
                             //Кнопки "Да" и "Нет". 
                             //TODO - скрыть остальные кнопки.
                             buttonOK = $('<span class="popup__buttons-element popup__button-YES">Да</span>');     //TODO тут должна присваиваться кнопка Да.
                             buttonCancel = $('<span class="popup__buttons-element popup__button-NO">Нет</span>'); //TODO тут должна присваиваться кнопка Нет.
                         }
-                        else if (buttonsType == ShowDialogButtons.OKCANCEL) {
+                        else if (buttonsType === ShowDialogButtons.OKCANCEL) {
                             //Кнопки "ОК" и "Отменить". 
                             //TODO - скрыть остальные кнопки.
                             buttonOK = $('<span class="popup__buttons-element popup__button-OK">ОК</span>');     //TODO тут должна присваиваться кнопка ОК.
                             buttonCancel = $('<span class="popup__buttons-element popup__button-OK">Отменить</span>'); //TODO тут должна присваиваться кнопка Отменить.
                         }
-                        else if (buttonsType == ShowDialogButtons.SAVECANCEL) {
+                        else if (buttonsType === ShowDialogButtons.SAVECANCEL) {
                             //Кнопки "Сохранить" и "Отменить". 
                             //TODO - скрыть остальные кнопки.
                             buttonOK = $('<span class="popup__buttons-element popup__button-SAVE">Сохранить</span>');     //TODO тут должна присваиваться кнопка Сохранить.
                             buttonCancel = $('<span class="popup__buttons-element popup__button-CANCEL">Отменить</span>'); //TODO тут должна присваиваться кнопка Отменить.
                         }
-                        else if (buttonsType == ShowDialogButtons.NOBUTTONS) {
+                        else if (buttonsType === ShowDialogButtons.NOBUTTONS) {
                             //Без кнопок
                             buttonOK = null;
                             buttonCancel = null;
                         }
 
                         //Очищаем панель кнопок
-                        targetButtonsPanel.html("")
+                        targetButtonsPanel.html("");
                         
                         //Размещаем кнопки и привязываем события к ним
-                        if (buttonOK != null && $(buttonOK).length > 0)
+                        if (buttonOK !== null && $(buttonOK).length > 0)
 						{
                             targetButtonsPanel.append(buttonOK);
                             $(buttonOK).click(function ()
                             {
                                 if ($.isFunction(config.success))
-                                    if ($.proxy(config.success, thisObject)() == false)
+                                    if ($.proxy(config.success, thisObject)() === false)
                                         return;
 
 								//Закрытие окна
@@ -594,12 +594,12 @@ $(function ()
 							});
 						}
 
-                        if (buttonCancel != null && $(buttonCancel).length > 0)
+                        if (buttonCancel !== null && $(buttonCancel).length > 0)
 						{
                             targetButtonsPanel.append(buttonCancel);
 							$(buttonCancel).click(function () {
-								if ($.isFunction(config.cancel)) 
-								    if ($.proxy(config.cancel, thisObject)() == false)
+                                if ($.isFunction(config.cancel))
+                                    if ($.proxy(config.cancel, thisObject)() === false)
 										return;
 							
 								//Закрытие окна
@@ -609,7 +609,7 @@ $(function ()
 						}
 
                         var copiedContent = thisObject;//.clone(true);
-                        targetContent.append(copiedContent);
+                        targetContent.append(copiedContent.show());
 
                         thisObject.data("showDialog", true);
 						
@@ -628,8 +628,10 @@ $(function ()
                             closeEffect: { type: "none" },
                             beforeClose: function () {
                                 if ($.isFunction(config.cancel))
-                                    if ($.proxy(config.cancel, thisObject)() == false)
+                                    if ($.proxy(config.cancel, thisObject)() === false)
                                         return false;
+
+                                $("body").append(copiedContent.hide());
 
                                 //Закрытие окна
                                 thisObject.data("showDialog", null);
