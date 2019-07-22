@@ -16,21 +16,24 @@ namespace OnWeb.Plugins.ItemsCustomize.Model
         {
             if (source == null) throw new ArgumentNullException(nameof(source));
 
-            this.IdField = source.IdField;
-            this.name = source.name;
-            this.nameAlt = source.nameAlt;
-            this.alias = source.alias;
-            this.formatCheck = source.formatCheck;
-            this.IdFieldType = source.IdFieldType;
-            this.size = source.size;
-            this.IsValueRequired = source.IsValueRequired;
-            this.IdValueType = source.IdValueType;
-            this.field_data = source.field_data;
-            this.status = source.status;
-            this.Block = source.Block;
-            this.nameEnding = source.nameEnding;
-            this.data = source.data;
+            IdModule = source.IdModule;
+            IdField = source.IdField;
+            name = source.name;
+            nameAlt = source.nameAlt;
+            alias = source.alias;
+            formatCheck = source.formatCheck;
+            IdFieldType = source.IdFieldType;
+            size = source.size;
+            IsValueRequired = source.IsValueRequired;
+            IdValueType = source.IdValueType;
+            field_data = source.field_data;
+            status = source.status;
+            Block = source.Block;
+            nameEnding = source.nameEnding;
+            data = source.data;
         }
+
+        public int IdModule { get; set; }
 
         public int IdField { get; set; }
 

@@ -25,6 +25,7 @@
     {
         try
         {
+            $("input[name='@Html.NameOf(x => x.IdModule)']").val(itemData.@Html.NameOf(x => x.IdModule));
             $("input[name='@Html.NameOf(x => x.IdField)']").val(itemData.@Html.NameOf(x => x.IdField));
             $("#EditLabel").text(itemData.@Html.NameOf(x => x.IdField) == 0 ? "Добавление поля" : "Редактирование поля '" + itemData.@Html.NameOf(x => x.name) + "'");
 
@@ -130,6 +131,7 @@
 
 <form action='/@moduleAdmin.UrlName/madmin/@Module.UrlName/fieldSave' method='post' id='form_ae'>
     @Html.HiddenFor(x => x.IdField)
+    @Html.HiddenFor(x => x.IdModule)
     <h2 id="EditLabel">Редактирование поля</h2>
     <table width='400' id="fields_results" class="admtable">
         <tr>

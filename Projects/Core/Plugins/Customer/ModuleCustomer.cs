@@ -30,8 +30,6 @@ namespace OnWeb.Plugins.Customer
             RegisterPermission(PERM_MANAGEUSERS, "Управление пользователями");
             RegisterPermission(PERM_MANAGEROLES, "Управление ролями");
             RegisterPermission(PERM_VIEWHISTORY, "Просмотр истории");
-
-            AppCore.Get<ItemsManager<WebApplicationBase>>().RegisterModuleItemType<Core.DB.User, ModuleCustomer>();
         }
 
         /// <summary>

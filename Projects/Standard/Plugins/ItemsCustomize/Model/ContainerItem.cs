@@ -13,6 +13,8 @@ namespace OnWeb.Plugins.ItemsCustomize.Model
             public Dictionary<int, IField> Fields;
         }
 
+        public int IdModule { get; set; }
+
         public SchemeItem SchemeItem;
 
         public Dictionary<uint, Scheme> Schemes = new Dictionary<uint, Scheme>();

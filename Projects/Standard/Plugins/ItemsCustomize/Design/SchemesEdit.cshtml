@@ -95,7 +95,7 @@
             if (val != null)
             {
                 val = val.split('_', 2);
-                $('div#fields_ae').html("<img src='/data/img/loading.gif'>").requestLoad("/@moduleAdmin.UrlName/madmin/@Module.UrlName/fieldsItem/" + val[0] + "/" + val[1], null, function (result, message) {
+                $('div#fields_ae').html("<img src='/data/img/loading.gif'>").requestLoad("/@moduleAdmin.UrlName/madmin/@Module.UrlName/ContainerItem/@Model.IdModule/" + val[0] + "/" + val[1], null, function (result, message) {
                     if (message.length > 0) alert(message);
                 });
             }
@@ -105,12 +105,12 @@
         $('#field_add').click(function (e) {
             e.preventDefault();
 
-            $("#fields_ae").html("<img src='/data/img/loading.gif'>").requestLoad('/@moduleAdmin.UrlName/madmin/@Module.UrlName/fieldEdit', null, function(){});
+            $("#fields_ae").html("<img src='/data/img/loading.gif'>").requestLoad('/@moduleAdmin.UrlName/madmin/@Module.UrlName/fieldEdit/@Model.IdModule/0', null, function(){});
         });
 
         //Редактировать поле.
         $('#field_edit').click(function () {
-            $("#fields_ae").html("<img src='/data/img/loading.gif'>").requestLoad('/@moduleAdmin.UrlName/madmin/@Module.UrlName/fieldEdit/' + $('#fields_for_select option:selected:first').val(), null, function(){});
+            $("#fields_ae").html("<img src='/data/img/loading.gif'>").requestLoad('/@moduleAdmin.UrlName/madmin/@Module.UrlName/fieldEdit/@Model.IdModule/' + $('#fields_for_select option:selected:first').val(), null, function(){});
         });
 
         //Удалить поле.
