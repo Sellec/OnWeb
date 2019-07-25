@@ -1,7 +1,7 @@
 ﻿@using Core.Items
 @using Core.Types
-@using Core.Modules.Extensions.ExtensionUrl
-@helper submodule(IList<IItemBaseUrl> links)
+@using Plugins.Routing
+@helper submodule(IList<IItemRouted> links)
 {
     if (links != null)
     {

@@ -1,8 +1,8 @@
 ﻿using OnUtils.Application.Items;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using OnUtils.Application.Modules.Extensions.CustomFields;
-using OnUtils.Application.Modules.Extensions.CustomFields.Data;
+using OnUtils.Application.Modules.ItemsCustomize;
+using OnUtils.Application.Modules.ItemsCustomize.Data;
 using System.Collections.ObjectModel;
 
 namespace OnWeb.Plugins.Customer.Model
@@ -11,7 +11,7 @@ namespace OnWeb.Plugins.Customer.Model
     using Core.Items;
 
     [ItemTypeAlias(typeof(User))]
-    public class ProfileEdit : ItemBase, IItemBaseCustomFields
+    public class ProfileEdit : ItemBase, IItemCustomized
     {
         public ProfileEdit()
         {

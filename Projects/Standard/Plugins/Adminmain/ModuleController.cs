@@ -13,11 +13,11 @@ using System.Web.Mvc;
 namespace OnWeb.Plugins.Adminmain
 {
     using AdminForModules.Menu;
-    using Core.DB;
     using Core.Journaling;
     using Core.Modules;
     using CoreBind.Modules;
     using CoreBind.Routing;
+    using Routing.DB;
     using WebCoreModule;
 
     /// <summary>
@@ -174,10 +174,10 @@ namespace OnWeb.Plugins.Adminmain
         {
             var model = new Model.Routing() { Modules = AppCore.GetModulesManager().GetModules().OfType<IModuleCore>().OrderBy(x => x.Caption).ToList() };
 
-            using (var db = Module.CreateUnitOfWork())
+            using (var db = new UnitOfWork<Routing>())// Module.CreateUnitOfWork())
             {
                 var modulesIdList = model.Modules.Select(x => x.IdModule).ToArray();
-                var query = db.Routes
+                var query = db.Repo1
                                 .Where(x => modulesIdList.Contains(x.IdModule))
                                 .GroupBy(x => new { x.IdModule, x.IdRoutingType })
                                 .Select(x => new { x.Key.IdModule, x.Key.IdRoutingType, Count = x.Count() })
@@ -208,9 +208,9 @@ namespace OnWeb.Plugins.Adminmain
 
             var model = new Model.RoutingModule() { Module = (IModuleCore)module };
 
-            using (var db = Module.CreateUnitOfWork())
+            using (var db = new UnitOfWork<Routing, RoutingType>())// Module.CreateUnitOfWork())
             {
-                model.RoutingTypes = db.RouteTypes.OrderBy(x => x.NameTranslationType).Select(x => new SelectListItem() { Value = x.IdTranslationType.ToString(), Text = x.NameTranslationType }).ToList();
+                model.RoutingTypes = db.Repo2.OrderBy(x => x.NameTranslationType).Select(x => new SelectListItem() { Value = x.IdTranslationType.ToString(), Text = x.NameTranslationType }).ToList();
 
                 var moduleActionAttributeType = typeof(ModuleActionAttribute);
                 var moduleActionGetDisplayName = new Func<ActionDescriptor, string>(action =>
@@ -240,7 +240,7 @@ namespace OnWeb.Plugins.Adminmain
                     Select(x => new { Group = new SelectListGroup() { Name = x.Key.Caption }, Items = x.Value, Module = x.Key }).
                     SelectMany(x => x.Items.Select(y => new SelectListItem() { Text = y.Value, Value = $"{x.Module.IdModule}_{y.Key}", Group = x.Group })).ToList();
 
-                model.Routes = db.Routes
+                model.Routes = db.Repo1
                         .Where(x => x.IdModule == module.ID)
                         .OrderBy(x => x.IdRoutingType)
                         .ToList()

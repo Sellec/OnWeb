@@ -1,6 +1,6 @@
 ﻿using OnUtils.Application.Items;
-using OnUtils.Application.Modules.Extensions.CustomFields;
-using OnUtils.Application.Modules.Extensions.CustomFields.Data;
+using OnUtils.Application.Modules.ItemsCustomize;
+using OnUtils.Application.Modules.ItemsCustomize.Data;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -12,7 +12,7 @@ namespace OnWeb.Plugins.Register.Model
     using Core.Items;
 
     [ItemTypeAlias(typeof(User))]
-    public class PreparedForRegister : ItemBase, IItemBaseCustomFields
+    public class PreparedForRegister : ItemBase, IItemCustomized
     {
         /// <summary>
         /// </summary>

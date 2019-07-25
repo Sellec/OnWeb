@@ -1,6 +1,6 @@
 ﻿using OnUtils.Application.Items;
-using OnUtils.Application.Modules.Extensions.CustomFields;
-using OnUtils.Application.Modules.Extensions.CustomFields.Data;
+using OnUtils.Application.Modules.ItemsCustomize;
+using OnUtils.Application.Modules.ItemsCustomize.Data;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -11,7 +11,7 @@ namespace OnWeb.Plugins.Register.Model
 
     [reCAPTCHA.Model]
     [ItemTypeAlias(typeof(User))]
-    public class Register : ItemBase, IItemBaseCustomFields
+    public class Register : ItemBase, IItemCustomized
     {
         /// <summary>
         /// </summary>

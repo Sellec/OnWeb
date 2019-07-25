@@ -89,7 +89,7 @@
       <Version>3.2.7</Version>
     </PackageReference>
     <PackageReference Include="OnUtils.Application">
-      <Version>0.1.2.16</Version>
+      <Version>0.1.2.26</Version>
     </PackageReference>
     <PackageReference Include="OnUtils">
       <Version>0.1.3</Version>
@@ -123,6 +123,12 @@
     <Compile Include="Design\Additionals\Helpers\PHPHelpers.cs" />
     <Compile Include="Design\Additionals\Helpers\UrlHelpers.cs" />
     <Compile Include="Design\Additionals\IntExtensions.cs" />
+    <Compile Include="Plugins\ItemsCustomize\Model\ContainerItem.cs" />
+    <Compile Include="Plugins\ItemsCustomize\Model\FieldEdit.cs" />
+    <Compile Include="Plugins\ItemsCustomize\Model\Fields.cs" />
+    <Compile Include="Plugins\ItemsCustomize\ModuleController.cs" />
+    <Compile Include="Plugins\ItemsCustomize\ModuleItemsCustomize.cs" />
+    <Compile Include="Plugins\ItemsCustomize\Startup.cs" />
     <Compile Include="Plugins\Sitemap\SitemapItem.cs" />
     <Compile Include="Plugins\reCAPTCHA\CaptchaExtension.cs" />
     <Compile Include="Design\Additionals\Plugins\EditableMenuExtension.cs" />
@@ -1937,13 +1943,13 @@
     <None Include="Data\js\eckeditor\plugins\pastefromexcel\.editorconfig">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
-    <None Include="ModuleExtensions\CustomFields\Design\FieldEdit.cshtml">
+    <None Include="Plugins\ItemsCustomize\Design\FieldEdit.cshtml">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
-    <None Include="ModuleExtensions\CustomFields\Design\Item.cshtml">
+    <None Include="Plugins\ItemsCustomize\Design\Item.cshtml">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
-    <None Include="ModuleExtensions\CustomFields\Design\SchemesEdit.cshtml">
+    <None Include="Plugins\ItemsCustomize\Design\SchemesEdit.cshtml">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Include="Data\img\loading.gif" />

@@ -9,8 +9,6 @@ namespace OnWeb.Core.Modules
     {
         IReadOnlyDictionary<ItemBase, Uri> GenerateLinks(IEnumerable<ItemBase> items);
 
-        Extensions.ExtensionUrl.ExtensionUrl Urls { get; }
-
         int IdModule { get; }
     }
 }

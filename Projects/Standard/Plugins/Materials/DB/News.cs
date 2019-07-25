@@ -1,13 +1,13 @@
 namespace OnWeb.Plugins.Materials.DB
 {
     using Core.Items;
-    using Core.Modules.Extensions.ExtensionUrl;
+    using Plugins.Routing;
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
     [Table("News")]
-    public class News : ItemBase, IItemBaseUrl
+    public class News : ItemBase, IItemRouted
     {
         public override int ID
         {

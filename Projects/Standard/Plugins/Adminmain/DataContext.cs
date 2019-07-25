@@ -3,7 +3,7 @@ using OnUtils.Data;
 
 namespace OnWeb.Plugins.Adminmain
 {
-    using Core.DB;
+    using Routing.DB;
 
     /// <summary>
     /// Контекст для доступа к данным.

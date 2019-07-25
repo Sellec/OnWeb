@@ -9,7 +9,7 @@ using System.Web.Mvc;
 namespace OnWeb.Plugins.Materials
 {
     using AdminForModules.Menu;
-    using Core.Routing;
+    using Plugins.Routing;
     using CoreBind.Modules;
 
     /// <summary>

@@ -18,7 +18,6 @@ namespace OnWeb.Plugins.Customer
 
         void IExecuteStart<WebApplicationBase>.ExecuteStart(WebApplicationBase core)
         {
-            core.Get<ModuleCustomer>().RegisterExtension<Core.Modules.Extensions.CustomFields.ExtensionCustomsFieldsAdmin>();
             core.Get<ItemsManager<WebApplicationBase>>().RegisterModuleItemType<ProfileEdit, ModuleCustomer>();
             core.Get<ItemsManager<WebApplicationBase>>().RegisterModuleItemType<PreparedForRegister, ModuleCustomer>();
             core.Get<ItemsManager<WebApplicationBase>>().RegisterModuleItemType<Register, ModuleCustomer>();

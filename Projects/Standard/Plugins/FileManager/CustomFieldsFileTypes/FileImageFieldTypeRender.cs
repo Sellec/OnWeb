@@ -1,5 +1,5 @@
-﻿using OnUtils.Application.Modules.Extensions.CustomFields.Data;
-using OnUtils.Application.Modules.Extensions.CustomFields.Field;
+﻿using OnUtils.Application.Modules.ItemsCustomize.Data;
+using OnUtils.Application.Modules.ItemsCustomize.Field;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +8,8 @@ using System.Web.Mvc;
 namespace OnWeb.Plugins.FileManager.CustomFieldsFileTypes
 {
     using Core;
-    using Core.Modules.Extensions.CustomFields;
+    using Plugins.ItemsCustomize;
     using CoreBind.Razor;
-
 
     class FileImageFieldTypeRender : CoreComponentBase, ICustomFieldRender<FileImageFieldType>
     {

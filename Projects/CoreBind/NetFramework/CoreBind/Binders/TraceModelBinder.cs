@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using OnUtils.Application.Modules.ItemsCustomize;
+using OnUtils.Application.Modules.ItemsCustomize.Data;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Web.Mvc;
-using OnUtils.Application.Modules.Extensions.CustomFields.Data;
-using OnUtils.Application.Modules.Extensions.CustomFields;
 
 
 namespace OnWeb.CoreBind.Binders
 {
     /// <summary>
-    /// Представляет стандартную реализацию привязки модели с поддержкой пользовательских полей (<see cref="ExtensionCustomsFieldsBase"/>.
+    /// Представляет стандартную реализацию привязки модели с поддержкой пользовательских полей (<see cref="ModuleItemsCustomize{TAppCoreSelfReference}"/>.
     /// </summary>
     class TraceModelBinder : DefaultModelBinder
     {

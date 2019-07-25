@@ -7,7 +7,7 @@ namespace OnWeb.CoreBind.Modules
     using Core.Modules;
 
     /// <summary>
-    /// Базовый класс контроллера. Должен использоваться для создания контроллеров для модулей, основанных на <see cref="ModuleCore"/>. 
+    /// Базовый класс контроллера. Должен использоваться для создания контроллеров для модулей, основанных на <see cref="ModuleCore{TSelfReference}"/>. 
     /// Переопределяет часть стандартного функционала и предлагает другие методы вместо стандартных (см., например, <see cref="ModuleControllerBase.OnBeforeExecution(ActionExecutingContext)"/>).
     /// </summary>
     public abstract class ModuleControllerUser<TModule> : ModuleControllerBase, IModuleController<TModule>

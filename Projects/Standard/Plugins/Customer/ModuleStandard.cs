@@ -20,7 +20,7 @@ namespace OnWeb.Plugins.Customer
             return new NestedLinkSimple(caption, new Uri($"/{moduleAdmin.UrlName}/mnadmin/{module.UrlName}/{url}", UriKind.Relative));
         }
 
-        NestedLinkCollection IMenuProvider.GetAdminMenuItemsBase()
+        NestedLinkCollection IMenuProvider.GetModuleAdminMenuLinks()
         {
             var items = new NestedLinkCollection(
                 RelativeToModule("users", "Пользователи", this),
