@@ -1,5 +1,4 @@
-﻿using OnUtils.Application.Exceptions;
-using OnUtils.Data;
+﻿using OnUtils.Data;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -9,6 +8,7 @@ using System.Web.Mvc;
 namespace OnWeb.Plugins.Register
 {
     using Core.DB;
+    using Core.Exceptions;
     using Core.Types;
     using CoreBind.Modules;
 

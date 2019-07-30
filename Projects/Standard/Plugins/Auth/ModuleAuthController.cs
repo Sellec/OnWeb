@@ -1,5 +1,4 @@
 ﻿using OnUtils.Application;
-using OnUtils.Application.Exceptions;
 using OnUtils.Application.Journaling;
 using OnUtils.Application.Modules;
 using System;
@@ -10,6 +9,7 @@ using System.Web.Mvc;
 namespace OnWeb.Plugins.Auth
 {
     using Core.DB;
+    using Core.Exceptions;
     using Core.Users;
     using CoreBind.Modules;
     using MessagingEmail;

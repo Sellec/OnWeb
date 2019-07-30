@@ -1,5 +1,4 @@
 ﻿using OnUtils.Application;
-using OnUtils.Application.Exceptions;
 using OnUtils.Application.Journaling;
 using OnUtils.Application.Modules;
 using OnUtils.Data;
@@ -16,9 +15,9 @@ using System.Web.SessionState;
 namespace OnWeb.CoreBind.Providers
 {
     using Core;
+    using Core.Exceptions;
     using Core.Modules;
     using Routing;
-    using ModuleCore = ModuleCore<WebApplicationBase>;
 
     class TraceControllerProvider : CoreComponentBase, IComponentSingleton, IUnitOfWorkAccessor<Core.DB.CoreContext>, IControllerFactory
     {

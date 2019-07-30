@@ -1,5 +1,4 @@
-﻿using OnUtils.Application.Exceptions;
-using OnUtils.Application.Journaling;
+﻿using OnUtils.Application.Journaling;
 using OnUtils.Application.Modules;
 using OnUtils.Architecture.AppCore;
 using System;
@@ -19,6 +18,7 @@ using System.Web.Routing;
 namespace OnWeb.CoreBind.Modules
 {
     using Core;
+    using Core.Exceptions;
     using Core.Journaling;
     using Core.Modules;
 
