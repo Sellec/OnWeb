@@ -19,7 +19,7 @@ namespace OnWeb.Core.Items
         {
             if (!(this is IItemRouted)) return;
 
-            var moduleLink = ExtensionUrl._moduleLink;
+            var moduleLink = ModuleRouting._moduleLink;
             if (_routingUrlMain == null && moduleLink != null)
             {
                 moduleLink.RegisterToQuery(this);
@@ -50,7 +50,7 @@ namespace OnWeb.Core.Items
             {
                 if (!(this is IItemRouted)) throw new InvalidOperationException($"Для доступа к расширению адресов необходимо наследовать интерфейс '{typeof(IItemRouted).FullName}'.");
 
-                var moduleLink = ExtensionUrl._moduleLink;
+                var moduleLink = ModuleRouting._moduleLink;
                 if (_routingUrlMain == null && moduleLink != null)
                 {
                     moduleLink.RegisterToQuery(this);

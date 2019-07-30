@@ -13,12 +13,12 @@ namespace OnWeb.Plugins.Routing
 
 #pragma warning disable CS1591 // todo внести комментарии.
     [ModuleCore("Маршрутизация")]
-    public class ExtensionUrl : ModuleCore<ExtensionUrl>
+    public class ModuleRouting : ModuleCore<ModuleRouting>
     {
-        internal static ExtensionUrl _moduleLink = null;
+        internal static ModuleRouting _moduleLink = null;
         private readonly object _syncRoot = new object();
 
-        public ExtensionUrl()
+        public ModuleRouting()
         {
             Task.Delay(60000).ContinueWith(t => TimerCallback());
         }
@@ -198,6 +198,10 @@ namespace OnWeb.Plugins.Routing
 
             var keys = itemsSet.Keys.ToList();
             var result = urlManager.GetUrl(keys.Select(x => x.ID), idItemType, RoutingConstants.MAINKEY);
+            if (!result.IsSuccess)
+            {
+                result = urlManager.GetUrl(keys.Select(x => x.ID), idItemType, RoutingConstants.MAINKEY);
+            }
             if (!result.IsSuccess)
             {
                 Debug.WriteLine("ItemBase.GetForQuery({0}): {1}", idItemType, result.Message);
