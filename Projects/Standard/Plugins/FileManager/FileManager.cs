@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Transactions;
 using System.Web.Mvc;
 
@@ -46,6 +47,8 @@ namespace OnWeb.Plugins.FileManager
     {
         private static FileManager _thisModule = null;
 
+        /// <summary>
+        /// </summary>
         protected override void InitModuleCustom()
         {
             _thisModule = this;
@@ -101,6 +104,82 @@ namespace OnWeb.Plugins.FileManager
             {
                 result = null;
                 this.RegisterEvent(EventType.Error, "Ошибка получения файла", $"Идентификатор файла: {idFile}.", null, ex);
+                return NotFound.Error;
+            }
+        }
+
+        /// <summary>
+        /// Пытается получить файл на основе выражения для поиска.
+        /// </summary>
+        /// <param name="searchExpression">Выражение, используемое для поиска подходящего файла.</param>
+        /// <param name="result">В случае успеха содержит данные о первом подходящем файле.</param>
+        /// <returns>Возвращает результат поиска файла.</returns>
+        /// <exception cref="ArgumentNullException">Возникает, если <paramref name="searchExpression"/> равен null.</exception>
+        /// <exception cref="ArgumentException">Возникает, если <paramref name="searchExpression"/> содержит некорректное выражение.</exception>
+        [ApiReversible]
+        public NotFound TryGetFile(Expression<Func<DB.File, bool>> searchExpression, out DB.File result)
+        {
+            if (searchExpression == null) throw new ArgumentNullException(nameof(searchExpression));
+
+            try
+            {
+                using (var db = this.CreateUnitOfWork())
+                {
+                    try
+                    {
+                        var query = db.Repo1.Where(searchExpression).FirstOrDefault();
+                        result = query;
+                    }
+                    catch (NotSupportedException ex)
+                    {
+                        throw new ArgumentException("Некорректное выражение", nameof(searchExpression));
+                    }
+                    return result != null ? NotFound.Success : NotFound.NotFound;
+                }
+            }
+            catch (ArgumentException) { throw; }
+            catch (Exception ex)
+            {
+                result = null;
+                this.RegisterEvent(EventType.Error, "Ошибка получения файла", $"Выражение поиска: {searchExpression.ToString()}.", null, ex);
+                return NotFound.Error;
+            }
+        }
+
+        /// <summary>
+        /// Пытается получить список файлов на основе выражения для поиска.
+        /// </summary>
+        /// <param name="searchExpression">Выражение, используемое для поиска подходящих файлов.</param>
+        /// <param name="result">В случае успеха содержит данные обо всех найденных файлах.</param>
+        /// <returns>Возвращает результат поиска файлов.</returns>
+        /// <exception cref="ArgumentNullException">Возникает, если <paramref name="searchExpression"/> равен null.</exception>
+        /// <exception cref="ArgumentException">Возникает, если <paramref name="searchExpression"/> содержит некорректное выражение.</exception>
+        [ApiReversible]
+        public NotFound TryGetFiles(Expression<Func<DB.File, bool>> searchExpression, out List<DB.File> result)
+        {
+            if (searchExpression == null) throw new ArgumentNullException(nameof(searchExpression));
+
+            try
+            {
+                using (var db = this.CreateUnitOfWork())
+                {
+                    try
+                    {
+                        var query = db.Repo1.Where(searchExpression);
+                        result = query.ToList();
+                    }
+                    catch (NotSupportedException ex)
+                    {
+                        throw new ArgumentException("Некорректное выражение", nameof(searchExpression));
+                    }
+                    return result != null && result.Count > 0 ? NotFound.Success : NotFound.NotFound;
+                }
+            }
+            catch (ArgumentException) { throw; }
+            catch (Exception ex)
+            {
+                result = null;
+                this.RegisterEvent(EventType.Error, "Ошибка получения файлов", $"Выражение поиска: {searchExpression.ToString()}.", null, ex);
                 return NotFound.Error;
             }
         }

@@ -8,7 +8,7 @@ namespace OnWeb.Plugins.Default
     {
         public override ActionResult Index()
         {
-            return display("Index.cshtml");
+            return View("Index.cshtml");
         }
     }
 }
