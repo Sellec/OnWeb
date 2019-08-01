@@ -49,20 +49,9 @@ namespace OnWeb.Plugins.MessagingEmail
         * @param string     $subject
         * @param string     $body
         */
-        public bool sendMailSubscription(int IdSubscription, string subject, string body, ContentType contentType)
+        void IEmailService.SendMailSubscription(int idSubscription, string subject, string body, ContentType contentType)
         {
-            try
-            {
-                //todo setError(null);
-                var result = AppCore.Get<ISubscriptionsManager>().send(IdSubscription, subject, body, contentType);
-                //todo if (!result) setError(SubscriptionsManager.getError());
-                return result;
-            }
-            catch (Exception ex)
-            {
-                //todo setError(ex.Message);
-                return false;
-            }
+            AppCore.Get<ISubscriptionsManager>().send(idSubscription, subject, body, contentType);
         }
 
         private string GetNoReplyAddress()

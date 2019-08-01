@@ -198,23 +198,6 @@ namespace OnWeb.Plugins.Customer
 
                                     Module.RegisterEventForItem(data, EventType.Info, "Редактирование данных", $"Пользователь №{data.IdUser} '" + data.ToString() + "'");
 
-                                    //                            if (!($res = $this->mExtensions['fields"]->savePostData($IdUser)))
-                                    //                    {
-                                    //$result = $res;
-                                    //$success = false;
-                                    //                            }
-
-                                    //                             if ($success)
-                                    //{
-                                    //                                 if (isset(Request.Form["user_changepass"]) && Request.Form["user_changepass"] == 2 && !(strlen(@Request.Form["user_password"]) == 0))
-                                    //                                 {
-                                    //		$exts = $this->getUserManager()->getExtensionsWithMethod('userPassChange');
-                                    //                                     foreach ( $exts as $k =>$v) $v->userPassChange($IdUser, Request.Form["user_password"]);
-
-                                    //		$success = true;
-                                    //                                 }
-                                    //                             }
-
                                     if (result.Success)
                                     {
                                         {

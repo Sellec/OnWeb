@@ -33,5 +33,7 @@ namespace OnWeb.Plugins.MessagingEmail
         /// <returns></returns>
         void SendMail(string name_from, string email_from, string name_to, string email_to, Encoding data_charset, Encoding send_charset, string subject, string body, ContentType contentType, List<int> files = null);
 
+        void SendMailSubscription(int idSubscription, string subject, string body, ContentType contentType);
+
     }
 }

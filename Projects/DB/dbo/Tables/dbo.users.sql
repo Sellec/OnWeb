@@ -37,6 +37,8 @@
 
 
 
+
+
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_SSMA_SOURCE', @value = N'fabrikae_fabrikanew.users', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'users';
 
@@ -91,24 +93,36 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-	SET IDENTITY_INSERT dbo.[UserBase] ON;
+	--BEGIN TRY
+	--	SET IDENTITY_INSERT dbo.[UserBase] ON;
+	--END TRY
+	--BEGIN CATCH
+	--END CATCH
 
-    -- Insert statements for trigger here
-	INSERT INTO [dbo].[UserBase] ([IdUser], [IsSuperuser], [DateChange], [IdUserChange], [UniqueKey])
-	SELECT i.[id], CASE WHEN i.[Superuser] = 0 THEN 0 ELSE 1 END, dateadd(second, i.[DateChange], '1970-01-01'), i.[IdUserChange], i.[UniqueKey]
-	FROM inserted i
-	LEFT JOIN [UserBase] u ON i.id = u.IdUser
-	WHERE u.IdUser IS NULL
+	BEGIN TRY
+		-- Insert statements for trigger here
+		INSERT INTO [dbo].[UserBase] ([IdUser], [IsSuperuser], [DateChange], [IdUserChange], [UniqueKey])
+		SELECT i.[id], CASE WHEN i.[Superuser] = 0 THEN 0 ELSE 1 END, dateadd(second, i.[DateChange], '1970-01-01'), i.[IdUserChange], i.[UniqueKey]
+		FROM inserted i
+		LEFT JOIN [UserBase] u ON i.id = u.IdUser
+		WHERE u.IdUser IS NULL
 
-	UPDATE dbo.[UserBase]
-	SET 
-		[IsSuperuser] = CASE WHEN i.[Superuser] = 0 THEN 0 ELSE 1 END, 
-		[DateChange] = dateadd(second, i.[DateChange], '1970-01-01'), 
-		[IdUserChange] = i.[IdUserChange],
-		[UniqueKey] = i.[UniqueKey]
-	FROM inserted i
-	INNER JOIN dbo.[UserBase] u ON i.id = u.IdUser
+		UPDATE dbo.[UserBase]
+		SET 
+			[IsSuperuser] = CASE WHEN i.[Superuser] = 0 THEN 0 ELSE 1 END, 
+			[DateChange] = dateadd(second, i.[DateChange], '1970-01-01'), 
+			[IdUserChange] = i.[IdUserChange],
+			[UniqueKey] = i.[UniqueKey]
+		FROM inserted i
+		INNER JOIN dbo.[UserBase] u ON i.id = u.IdUser
+	END TRY
+	BEGIN CATCH
+	END CATCH
 
-	SET IDENTITY_INSERT dbo.[User] OFF;
+	--BEGIN TRY
+	--	SET IDENTITY_INSERT dbo.[User] OFF;
+	--END TRY
+	--BEGIN CATCH
+	--END CATCH
 
 END

@@ -1,5 +1,6 @@
 ﻿using OnUtils.Application.Journaling;
 using OnUtils.Application.Modules;
+using OnUtils.Application.Users;
 using OnUtils.Architecture.AppCore;
 using System;
 using System.Collections.Concurrent;
@@ -583,6 +584,14 @@ namespace OnWeb.CoreBind.Modules
         public WebApplicationBase AppCore
         {
             get => GetAppCore();
+        }
+
+        /// <summary>
+        /// Возвращает контекст доступа, ассоциированный с пользователем, от имени которого обрабатывается текущий запрос.
+        /// </summary>
+        public IUserContext UserContext
+        {
+            get => AppCore.GetUserContextManager().GetCurrentUserContext();
         }
         #endregion
     }
