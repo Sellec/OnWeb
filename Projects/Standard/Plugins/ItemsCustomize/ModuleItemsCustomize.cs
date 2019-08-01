@@ -1,5 +1,4 @@
 ﻿using OnUtils.Application.DB;
-using OnUtils.Application.Modules;
 using OnUtils.Application.Modules.ItemsCustomize;
 using OnUtils.Application.Modules.ItemsCustomize.DB;
 using OnUtils.Application.Modules.ItemsCustomize.Scheme;

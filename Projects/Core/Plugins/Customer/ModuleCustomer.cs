@@ -1,9 +1,6 @@
 ﻿using OnUtils.Application.DB;
-using OnUtils.Application.Items;
-using OnUtils.Application.Modules;
 using OnUtils.Data;
 using System;
-using System.Collections.Generic;
 
 namespace OnWeb.Plugins.Customer
 {

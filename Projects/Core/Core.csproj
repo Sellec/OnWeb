@@ -37,10 +37,13 @@
     <OutputPath>bin\Release</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Core\Modules\Extensions\**" />
     <Compile Remove="OnUtils.Application\**" />
     <Compile Remove="Plugins\ModuleRegister\**" />
+    <EmbeddedResource Remove="Core\Modules\Extensions\**" />
     <EmbeddedResource Remove="OnUtils.Application\**" />
     <EmbeddedResource Remove="Plugins\ModuleRegister\**" />
+    <None Remove="Core\Modules\Extensions\**" />
     <None Remove="OnUtils.Application\**" />
     <None Remove="Plugins\ModuleRegister\**" />
   </ItemGroup>
@@ -66,7 +69,6 @@
     <PackageReference Include="Ude.NetStandard" Version="1.1.0" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Core\Modules\Extensions\" />
     <Folder Include="Plugins\ItemsCustomize\" />
   </ItemGroup>
   <Target Name="CopyDuplicate" AfterTargets="Build">

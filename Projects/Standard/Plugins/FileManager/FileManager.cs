@@ -1,7 +1,6 @@
 ﻿using MimeDetective;
 using OnUtils.Application;
 using OnUtils.Application.Journaling;
-using OnUtils.Application.Modules;
 using OnUtils.Data;
 using OnUtils.Tasks;
 using System;

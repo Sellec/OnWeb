@@ -1,5 +1,4 @@
-﻿using OnUtils.Application.Modules;
-using OnUtils.Application.Users;
+﻿using OnUtils.Application.Users;
 using OnUtils.Data;
 using System;
 using System.Linq;

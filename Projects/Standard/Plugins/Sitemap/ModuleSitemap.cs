@@ -1,6 +1,4 @@
-﻿using OnUtils.Tasks;
-using System;
-using OnUtils.Application.Modules;
+﻿using System;
 
 namespace OnWeb.Plugins.Sitemap
 {

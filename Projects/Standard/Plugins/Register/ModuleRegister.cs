@@ -1,6 +1,5 @@
 ﻿using OnUtils.Application;
 using OnUtils.Application.Journaling;
-using OnUtils.Application.Modules;
 using OnUtils.Data;
 using OnUtils.Data.Validation;
 using OnUtils.Utils;

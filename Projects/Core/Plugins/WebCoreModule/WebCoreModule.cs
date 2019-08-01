@@ -1,9 +1,8 @@
-﻿using OnUtils.Architecture.AppCore;
+﻿using OnUtils.Application;
+using OnUtils.Application.Journaling;
+using OnUtils.Architecture.AppCore;
 using OnUtils.Data;
 using System;
-using OnUtils.Application.Modules;
-using OnUtils.Application.Journaling;
-using OnUtils.Application;
 
 namespace OnWeb.Plugins.WebCoreModule
 {

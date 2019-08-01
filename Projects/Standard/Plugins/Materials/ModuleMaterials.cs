@@ -1,5 +1,4 @@
-﻿using OnUtils.Application.Modules;
-using OnUtils.Data;
+﻿using OnUtils.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +7,6 @@ namespace OnWeb.Plugins.Materials
 {
     using Core.Items;
     using Core.Modules;
-    using Core.Types;
 
     [ModuleCore("Контент", DefaultUrlName = "Content")]
     public class ModuleMaterials : ModuleCore<ModuleMaterials>, IUnitOfWorkAccessor<DB.DataLayerContext>

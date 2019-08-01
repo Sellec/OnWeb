@@ -1,6 +1,4 @@
-﻿using OnUtils.Application.Modules;
-
-namespace OnWeb.Plugins.reCAPTCHA
+﻿namespace OnWeb.Plugins.reCAPTCHA
 {
     using Core.Modules;
 
