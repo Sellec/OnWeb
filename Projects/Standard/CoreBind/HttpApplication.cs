@@ -3,7 +3,7 @@
     /// <summary>
     /// Представляет приложение ASP.NET, умеющее инициализировать OnWeb.
     /// </summary>
-    public class HttpApplication : HttpApplicationBase
+    public abstract class HttpApplication : HttpApplicationBase
     {
 
     }

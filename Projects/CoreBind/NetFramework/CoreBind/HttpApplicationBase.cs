@@ -33,32 +33,63 @@ namespace OnWeb.CoreBind
         }
 
         #region "Virtual"
+        /// <summary>
+        /// Вызывается во время запуска приложения до создания ядра приложения.
+        /// </summary>
         protected virtual void OnBeforeApplicationStart()
         {
         }
 
+        /// <summary>
+        /// Вызывается во время запуска приложения после создания и инициализации ядра приложения.
+        /// </summary>
         protected virtual void OnAfterApplicationStart()
         {
         }
 
+        /// <summary>
+        /// Вызывается во время начала обработки входящего запроса.
+        /// </summary>
         protected virtual void OnBeginRequest()
         {
         }
 
+        /// <summary>
+        /// Вызывается после обработки входящего запроса.
+        /// </summary>
         protected virtual void OnEndRequest()
         {
         }
 
+        /// <summary>
+        /// Вызывается при возникновении необработанной ошибки в приложении.
+        /// </summary>
         protected virtual void OnError(Exception ex)
         {
         }
 
-        protected virtual string ConnectionString
+        /// <summary>
+        /// Вызывается при остановке приложения до остановки ядра приложения.
+        /// </summary>
+        protected virtual void OnApplicationStopping()
         {
-            get
-            {
-                return "";
-            }
+
+        }
+
+        /// <summary>
+        /// Вызывается при остановке приложения после остановки ядра приложения.
+        /// </summary>
+        protected virtual void OnApplicationStopped()
+        {
+
+        }
+
+        /// <summary>
+        /// Возвращает строку подключения для приложения.
+        /// </summary>
+        protected abstract string ConnectionString
+        {
+            get;
         }
 
         #endregion
@@ -310,38 +341,43 @@ namespace OnWeb.CoreBind
             Core.WebUtils.QueryLogHelper.ClearQueries();
         }
 
-        /// <summary>
-        /// </summary>
-        public void Application_PostRequestHandlerExecute(object sender, EventArgs e)
+        internal void Application_PostRequestHandlerExecute(object sender, EventArgs e)
         {
             UpdateSessionCookieExpiration();
         }
 
         internal void Application_Disposed(Object sender, EventArgs e)
         {
-            try
-            {
-                Debug.WriteLine($"Application_Disposed({_unique}, {GetType().AssemblyQualifiedName})");
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Application_Disposed({_unique}, {GetType().AssemblyQualifiedName}): {ex.ToString()}");
-            }
+            //try
+            //{
+            //    Debug.WriteLine($"Application_Disposed({_unique}, {GetType().AssemblyQualifiedName})");
+            //}
+            //catch (Exception ex)
+            //{
+            //    Debug.WriteLine($"Application_Disposed({_unique}, {GetType().AssemblyQualifiedName}): {ex.ToString()}");
+            //}
         }
 
         internal void Application_End(Object sender, EventArgs e)
         {
+            try { OnUtils.Tasks.TasksManager.DeleteAllTasks(); } catch { }
+            try { OnApplicationStopping(); } catch { }
+
             try
             {
-                Debug.WriteLine($"Application_End({_unique}, {GetType().AssemblyQualifiedName})");
+                var appCore = _applicationCore;
+                _applicationCore = null;
+                appCore.Stop();
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Application_End({_unique}, {GetType().AssemblyQualifiedName}): {ex.ToString()}");
+                Debug.WriteLine($"Error stopping application core: {ex.ToString()}");
             }
 
-            OnUtils.Tasks.TasksManager.DeleteAllTasks();
+            try { OnApplicationStopped(); } catch { }
+            try { OnUtils.Tasks.TasksManager.DeleteAllTasks(); } catch { }
         }
+        #endregion
 
         private void UpdateSessionCookieExpiration()
         {
@@ -375,7 +411,6 @@ namespace OnWeb.CoreBind
             _instancesCount--;
             base.Dispose();
         }
-        #endregion
 
         #region Свойства
         /// <summary>
