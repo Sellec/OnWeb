@@ -186,11 +186,11 @@ namespace OnWeb.CoreBind
                     _applicationCoreStarted = false;
                 }
 
+                if (!_applicationCore.IsServerUrlHasBeenSet && _urlFirst != null)
+                    _applicationCore.ServerUrl = new UriBuilder(_urlFirst.Scheme, _urlFirst.Host, _urlFirst.Port).Uri;
+
                 if (!_applicationCoreStarted)
                 {
-                    if (!_applicationCore.IsServerUrlHasBeenSet && _urlFirst != null)
-                        _applicationCore.ServerUrl = new UriBuilder(_urlFirst.Scheme, _urlFirst.Host, _urlFirst.Port).Uri;
-
                     _applicationCore.Start();
 
                     try
