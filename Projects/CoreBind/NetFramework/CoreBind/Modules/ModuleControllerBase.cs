@@ -29,7 +29,7 @@ namespace OnWeb.CoreBind.Modules
     [ModuleController(Routing.ControllerTypeDefault.TypeID)]
     public abstract class ModuleControllerBase : Controller, IComponentTransient
     {
-        private class CoreComponentBaseImpl : CoreComponentBase, IComponent
+        private class CoreComponentBaseImpl : CoreComponentBase
         {
             protected override void OnStart()
             {
@@ -74,11 +74,11 @@ namespace OnWeb.CoreBind.Modules
 
         #region ICoreComponent
         /// <summary>
-        /// См. <see cref="CoreComponentBase{TAppCore}.Start(TAppCore)"/>.
+        /// См. <see cref="IComponentStartable{TAppCore}.Start(TAppCore)"/>.
         /// </summary>
         public void Start(WebApplicationBase core)
         {
-            _coreComponent.Start(core);
+            ((IComponentStartable)_coreComponent).Start(core);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace OnWeb.CoreBind.Modules
         /// </summary>
         public void Stop()
         {
-            _coreComponent.Stop();
+            ((IComponent)_coreComponent).Stop();
         }
 
         /// <summary>

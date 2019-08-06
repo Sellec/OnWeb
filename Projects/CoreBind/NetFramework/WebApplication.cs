@@ -11,6 +11,7 @@ using System.Web.Routing;
 
 namespace OnWeb
 {
+    using Core;
     using CoreBind.Providers;
     using CoreBind.Routing;
 
@@ -53,7 +54,7 @@ namespace OnWeb
             * Инициализация провайдера контроллеров.
             */
             var controllerProvider = new TraceControllerProvider(ControllerBuilder.Current.GetControllerFactory());
-            controllerProvider.Start(this);
+            ((IComponentStartable)controllerProvider).Start(this);
             ControllerBuilder.Current.SetControllerFactory(controllerProvider);
 
             if (!(ModelMetadataProviders.Current is TraceModelMetadataProvider))

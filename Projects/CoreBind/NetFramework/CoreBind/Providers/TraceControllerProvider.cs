@@ -129,7 +129,7 @@ namespace OnWeb.CoreBind.Providers
                     if (module == null)
                     {
                         var moduleTmp = new Modules.Internal.ModuleInternalErrors();
-                        moduleTmp.Start(AppCore);
+                        ((IComponentStartable)moduleTmp).Start(AppCore);
                         module = moduleTmp;
                     }
 

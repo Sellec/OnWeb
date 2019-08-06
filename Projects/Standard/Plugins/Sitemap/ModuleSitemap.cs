@@ -2,6 +2,7 @@
 
 namespace OnWeb.Plugins.Sitemap
 {
+    using Core;
     using Core.Modules;
     using Services;
 
@@ -25,14 +26,14 @@ namespace OnWeb.Plugins.Sitemap
         protected override void OnModuleStart()
         {
             _sitemapService = new SitemapGeneration();
-            _sitemapService.Start(AppCore);
+            ((IComponentStartable)_sitemapService).Start(AppCore);
         }
 
         /// <summary>
         /// </summary>
         protected override void OnModuleStop()
         {
-            _sitemapService?.Stop();
+            if (_sitemapService is IComponent component) component.Stop();
             _sitemapService = null;
         }
 

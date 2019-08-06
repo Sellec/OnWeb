@@ -30,7 +30,7 @@ namespace OnWeb.CoreBind.Routing
         protected sealed override void OnStart()
         {
             var controllerTypes = new List<ControllerType>() { new ControllerTypeDefault(), new ControllerTypeAdmin() };
-            controllerTypes.ForEach(x => x.Start(AppCore));
+            controllerTypes.OfType<IComponentStartable>().ForEach(x => x.Start(AppCore));
             controllerTypes.ForEach(x => ControllerTypeFactory.Add(x));
         }
 

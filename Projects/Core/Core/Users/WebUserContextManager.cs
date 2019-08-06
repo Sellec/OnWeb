@@ -1,4 +1,6 @@
-﻿using OnUtils;
+﻿using OnUtils.Application;
+using OnUtils.Application.Journaling;
+using OnUtils.Application.Messaging;
 using OnUtils.Application.Users;
 using OnUtils.Data;
 using System;
@@ -6,14 +8,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Transactions;
-using OnUtils.Application;
-using OnUtils.Application.Journaling;
-using OnUtils.Application.Messaging;
 
 namespace OnWeb.Core.Users
 {
-    using Messaging;
-
     /// <summary>
     /// Менеджер, управляющий контекстами пользователей (см. <see cref="IUserContext"/>).
     /// Каждый поток приложения имеет ассоциированный контекст пользователя, от имени которого могут выполняться запросы и выполняться действия. 
@@ -138,7 +135,7 @@ namespace OnWeb.Core.Users
                     AppCore.Get<UsersManager>().getUsers(new Dictionary<int, DB.User>() { { id, res } });
 
                     var context = new UserContext(res, true);
-                    context.Start(AppCore);
+                    ((IComponentStartable)context).Start(AppCore);
 
                     var permissionsResult = AppCore.GetUserContextManager().GetPermissions(context.IdUser);
                     if (!permissionsResult.IsSuccess)
