@@ -8,7 +8,7 @@ namespace OnWeb.Plugins.Materials
 
     class Startup : IConfigureBindings, IExecuteStart
     {
-        void IConfigureBindings<WebApplicationBase>.ConfigureBindings(IBindingsCollection<WebApplicationBase> bindingsCollection)
+        void IConfigureBindings<WebApplication>.ConfigureBindings(IBindingsCollection<WebApplication> bindingsCollection)
         {
             bindingsCollection.SetSingleton<ModuleMaterials>();
             bindingsCollection.AddTransient<IModuleController<ModuleMaterials>, ModuleController>();
@@ -16,10 +16,10 @@ namespace OnWeb.Plugins.Materials
             bindingsCollection.SetTransient<MaterialsSitemapProvider>();
         }
 
-        void IExecuteStart<WebApplicationBase>.ExecuteStart(WebApplicationBase core)
+        void IExecuteStart<WebApplication>.ExecuteStart(WebApplication core)
         {
-            core.Get<ItemsManager<WebApplicationBase>>().RegisterModuleItemType<DB.News, ModuleMaterials>();
-            core.Get<ItemsManager<WebApplicationBase>>().RegisterModuleItemType<DB.Page, ModuleMaterials>();
+            core.Get<ItemsManager<WebApplication>>().RegisterModuleItemType<DB.News, ModuleMaterials>();
+            core.Get<ItemsManager<WebApplication>>().RegisterModuleItemType<DB.Page, ModuleMaterials>();
         }
     }
 }

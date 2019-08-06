@@ -17,7 +17,7 @@ namespace OnWeb.CoreBind
     {
         private static object SyncRootStart = new object();
         private static volatile int _instancesCount = 0;
-        private static WebApplication _applicationCore = null;
+        private static WebApplicationAspNetMvc _applicationCore = null;
         private static bool _applicationCoreStarted = false;
         private static Uri _urlFirst = null;
         private static Guid _unique = Guid.NewGuid();
@@ -123,7 +123,7 @@ namespace OnWeb.CoreBind
 
                     var physicalApplicationPath = Server.MapPath("~");
 
-                    _applicationCore = new WebApplication(physicalApplicationPath, ConnectionString);
+                    _applicationCore = new WebApplicationAspNetMvc(physicalApplicationPath, ConnectionString);
                     _applicationCoreStarted = false;
                 }
             }
@@ -182,7 +182,7 @@ namespace OnWeb.CoreBind
 
                     var physicalApplicationPath = Server.MapPath("~");
 
-                    _applicationCore = new WebApplication(physicalApplicationPath, ConnectionString);
+                    _applicationCore = new WebApplicationAspNetMvc(physicalApplicationPath, ConnectionString);
                     _applicationCoreStarted = false;
                 }
 
@@ -424,7 +424,7 @@ namespace OnWeb.CoreBind
         /// <summary>
         /// Возвращает ядро приложения.
         /// </summary>
-        public WebApplicationBase AppCore
+        public WebApplication AppCore
         {
             get => _applicationCore;
         }

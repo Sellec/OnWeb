@@ -55,21 +55,21 @@ namespace OnWeb.Plugins.Adminmain
         public virtual JsonResult MainSettingsSave(Model.AdminMainModelInfoPage model)
         {
             var result = JsonAnswer();
-            CoreConfiguration<WebApplicationBase> cfgAppOld = null;
+            CoreConfiguration<WebApplication> cfgAppOld = null;
             WebCoreConfiguration cfgWebOld = null;
 
             try
             {
                 if (ModelState.IsValid)
                 {
-                    cfgAppOld = AppCore.AppCoreModule.GetConfigurationManipulator().GetEditable<CoreConfiguration<WebApplicationBase>>();
+                    cfgAppOld = AppCore.AppCoreModule.GetConfigurationManipulator().GetEditable<CoreConfiguration<WebApplication>>();
                     cfgWebOld = AppCore.GetModulesManager().GetModule<WebCoreModule>().GetConfigurationManipulator().GetEditable<WebCoreConfiguration>();
 
-                    var cfgApp = AppCore.GetModulesManager().GetModule<CoreModule<WebApplicationBase>>().GetConfigurationManipulator().GetEditable<CoreConfiguration<WebApplicationBase>>();
+                    var cfgApp = AppCore.GetModulesManager().GetModule<CoreModule<WebApplication>>().GetConfigurationManipulator().GetEditable<CoreConfiguration<WebApplication>>();
                     cfgApp.RoleGuest = model.AppCoreConfiguration.RoleGuest;
                     cfgApp.RoleUser = model.AppCoreConfiguration.RoleUser;
 
-                    var applyResult = AppCore.GetModulesManager().GetModule<CoreModule<WebApplicationBase>>().GetConfigurationManipulator().ApplyConfiguration(cfgApp);
+                    var applyResult = AppCore.GetModulesManager().GetModule<CoreModule<WebApplication>>().GetConfigurationManipulator().ApplyConfiguration(cfgApp);
                     switch (applyResult.Item1)
                     {
                         case ApplyConfigurationResult.PermissionDenied:
@@ -144,7 +144,7 @@ namespace OnWeb.Plugins.Adminmain
             {
                 if (!result.Success)
                 {
-                    if (cfgAppOld != null) AppCore.GetModulesManager().GetModule<CoreModule<WebApplicationBase>>().GetConfigurationManipulator().ApplyConfiguration(cfgAppOld);
+                    if (cfgAppOld != null) AppCore.GetModulesManager().GetModule<CoreModule<WebApplication>>().GetConfigurationManipulator().ApplyConfiguration(cfgAppOld);
                     if (cfgWebOld != null) AppCore.GetModulesManager().GetModule<WebCoreModule>().GetConfigurationManipulator().ApplyConfiguration(cfgWebOld);
                 }
             }

@@ -5,7 +5,7 @@ namespace OnWeb.Plugins.Routing
 {
     class Startup : IConfigureBindings
     {
-        void IConfigureBindings<WebApplicationBase>.ConfigureBindings(IBindingsCollection<WebApplicationBase> bindingsCollection)
+        void IConfigureBindings<WebApplication>.ConfigureBindings(IBindingsCollection<WebApplication> bindingsCollection)
         {
             bindingsCollection.SetSingleton<ModuleRouting>();
             bindingsCollection.SetSingleton<UrlManager>();

@@ -270,7 +270,7 @@ namespace OnWeb.Core.Users
                 }
                 else if (query.Count > 1)
                 {
-                    AppCore.Get<MessagingManager<WebApplicationBase>>().GetCriticalMessagesReceivers().ForEach(x => x.SendToAdmin("Одинаковые реквизиты входа!", "Найдено несколько пользователей с логином '" + login + "'"));
+                    AppCore.Get<MessagingManager<WebApplication>>().GetCriticalMessagesReceivers().ForEach(x => x.SendToAdmin("Одинаковые реквизиты входа!", "Найдено несколько пользователей с логином '" + login + "'"));
                     return new ExecutionAuthResult(eAuthResult.MultipleFound, "Найдено несколько пользователей с логином '" + login + "'. Обратитесь к администратору для решения проблемы.");
                 }
                 else

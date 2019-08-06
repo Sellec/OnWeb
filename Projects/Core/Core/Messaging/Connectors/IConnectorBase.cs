@@ -6,7 +6,7 @@ namespace OnWeb.Core.Messaging.Connectors
     /// <summary>
     /// Представляет коннектор к сервису отправки или получения сообщений.
     /// </summary>
-    public interface IConnectorBase<TMessage> : IConnectorBase<WebApplicationBase, TMessage>
+    public interface IConnectorBase<TMessage> : IConnectorBase<WebApplication, TMessage>
         where TMessage : MessageBase, new()
     {
     }

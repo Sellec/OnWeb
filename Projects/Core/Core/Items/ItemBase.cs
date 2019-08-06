@@ -10,7 +10,7 @@ namespace OnWeb.Core.Items
     /// Некоторые же части движка работают ТОЛЬКО с объектами, унаследованными от ItemBase (например, расширение CustomFields). 
     /// Поддерживает атрибут <see cref="ConstructorInitializerAttribute"/> для методов класса.
     /// </summary>
-    public abstract partial class ItemBase : ItemBase<WebApplicationBase>
+    public abstract partial class ItemBase : ItemBase<WebApplication>
     {
         internal IModuleCoreInternal OwnerModuleWeb
         {

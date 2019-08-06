@@ -16,7 +16,7 @@ namespace System.ComponentModel.DataAnnotations
             if (!(value is int)) return new ValidationResult("В качестве идентификатора модуля должен выступать номер.");
             var moduleID = (int)value;
 
-            var module = DeprecatedSingletonInstances.Get<WebApplicationBase>().GetModule(moduleID);
+            var module = DeprecatedSingletonInstances.Get<WebApplication>().GetModule(moduleID);
             if (module == null) return new ValidationResult($"Модуль с идентификатором {moduleID} не найден.");
 
             return ValidationResult.Success;

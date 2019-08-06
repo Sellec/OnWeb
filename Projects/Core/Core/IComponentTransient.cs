@@ -5,7 +5,7 @@ namespace OnWeb.Core
     /// <summary>
     /// Представляет общий интерфейс компонента ядра, для которого в ядре может существовать множество экземпляров.
     /// </summary>
-    public interface IComponentTransient : IComponentTransient<WebApplicationBase>, IComponent, IComponentStartable
+    public interface IComponentTransient : IComponentTransient<WebApplication>, IComponent, IComponentStartable
     {
     }
 }

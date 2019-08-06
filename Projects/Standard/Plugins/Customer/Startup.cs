@@ -10,17 +10,17 @@ namespace OnWeb.Plugins.Customer
 
     class Startup : IConfigureBindings, IExecuteStart
     {
-        void IConfigureBindings<WebApplicationBase>.ConfigureBindings(IBindingsCollection<WebApplicationBase> bindingsCollection)
+        void IConfigureBindings<WebApplication>.ConfigureBindings(IBindingsCollection<WebApplication> bindingsCollection)
         {
             bindingsCollection.SetSingleton<ModuleCustomer, ModuleStandard>();
             bindingsCollection.SetTransient<IModuleController<ModuleCustomer>>(typeof(ModuleControllerCustomer), typeof(ModuleControllerAdminCustomer));
         }
 
-        void IExecuteStart<WebApplicationBase>.ExecuteStart(WebApplicationBase core)
+        void IExecuteStart<WebApplication>.ExecuteStart(WebApplication core)
         {
-            core.Get<ItemsManager<WebApplicationBase>>().RegisterModuleItemType<ProfileEdit, ModuleCustomer>();
-            core.Get<ItemsManager<WebApplicationBase>>().RegisterModuleItemType<PreparedForRegister, ModuleCustomer>();
-            core.Get<ItemsManager<WebApplicationBase>>().RegisterModuleItemType<Register, ModuleCustomer>();
+            core.Get<ItemsManager<WebApplication>>().RegisterModuleItemType<ProfileEdit, ModuleCustomer>();
+            core.Get<ItemsManager<WebApplication>>().RegisterModuleItemType<PreparedForRegister, ModuleCustomer>();
+            core.Get<ItemsManager<WebApplication>>().RegisterModuleItemType<Register, ModuleCustomer>();
         }
     }
 }

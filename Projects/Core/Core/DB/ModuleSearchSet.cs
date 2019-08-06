@@ -16,7 +16,7 @@ namespace OnWeb.Core.DB
         private int _idModule = 0;
 
         [NotMapped]
-        private Lazy<ModuleCore<WebApplicationBase>> _ownerModule = null;
+        private Lazy<ModuleCore<WebApplication>> _ownerModule = null;
 
         [Key]
         public int IdSearchSet { get; set; }
@@ -39,7 +39,7 @@ namespace OnWeb.Core.DB
             set
             {
                 _idModule = value;
-                _ownerModule = new Lazy<ModuleCore<WebApplicationBase>>(() => OnUtils.Application.DeprecatedSingletonInstances.Get<WebApplicationBase>().GetModule(value));
+                _ownerModule = new Lazy<ModuleCore<WebApplication>>(() => OnUtils.Application.DeprecatedSingletonInstances.Get<WebApplication>().GetModule(value));
             }
         }
 
@@ -88,7 +88,7 @@ namespace OnWeb.Core.DB
             set => NameSearchSet = value;
         }
 
-        public override ModuleCore<WebApplicationBase> OwnerModule => base.OwnerModule;
+        public override ModuleCore<WebApplication> OwnerModule => base.OwnerModule;
 
         public Uri Url => UrlBase;
 

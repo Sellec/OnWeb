@@ -31,7 +31,7 @@ namespace OnWeb.Plugins.ItemsCustomize
             var module = AppCore.GetModulesManager().GetModule(idModule.Value) as IModuleCore;
             if (module == null) throw new Exception("Модуль не найден.");
 
-            AppCore.Get<ModuleItemsCustomize<WebApplicationBase>>().UpdateCache();
+            AppCore.Get<ModuleItemsCustomize<WebApplication>>().UpdateCache();
 
             var schemes = Module.GetSchemeList(idModule.Value);
             var schemeItems = Module.GetSchemeItemsList(idModule.Value);
@@ -51,7 +51,7 @@ namespace OnWeb.Plugins.ItemsCustomize
                     FieldsList = fields,
                     SchemeItems = schemeItems,
                     Schemes = schemes,
-                    AllowSchemesManage = Module.CheckPermission(ModuleItemsCustomize<WebApplicationBase>.PERM_EXTFIELDS_ALLOWMANAGE) == CheckPermissionResult.Allowed
+                    AllowSchemesManage = Module.CheckPermission(ModuleItemsCustomize<WebApplication>.PERM_EXTFIELDS_ALLOWMANAGE) == CheckPermissionResult.Allowed
                 });
             }
         }
@@ -165,7 +165,7 @@ namespace OnWeb.Plugins.ItemsCustomize
                     result.Message = "Сохранение расположения полей прошло успешно.";
                     result.Success = true;
                 }
-                AppCore.Get<ModuleItemsCustomize<WebApplicationBase>>().UpdateCache();
+                AppCore.Get<ModuleItemsCustomize<WebApplication>>().UpdateCache();
             }
             catch (Exception ex) { result.Message = ex.Message; }
 
@@ -204,7 +204,7 @@ namespace OnWeb.Plugins.ItemsCustomize
                             result.Message = "Схема добавлена.";
                             result.Success = true;
                             result.Data = (uint)data.IdScheme;
-                            AppCore.Get<ModuleItemsCustomize<WebApplicationBase>>().UpdateCache();
+                            AppCore.Get<ModuleItemsCustomize<WebApplication>>().UpdateCache();
                         }
                         else result.Message = "По неизвестной причине схему не получилось добавить.";
                     }
@@ -239,7 +239,7 @@ namespace OnWeb.Plugins.ItemsCustomize
                             result.Message = "Схема удалена.";
                             result.Success = true;
                             scope.Commit();
-                            AppCore.Get<ModuleItemsCustomize<WebApplicationBase>>().UpdateCache();
+                            AppCore.Get<ModuleItemsCustomize<WebApplication>>().UpdateCache();
                         }
                         else result.Message = "По неизвестной причине схему не получилось удалить.";
                     }

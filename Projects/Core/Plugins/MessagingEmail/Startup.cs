@@ -5,7 +5,7 @@ namespace OnWeb.Plugins.MessagingEmail
 {
     class Startup : IConfigureBindings
     {
-        void IConfigureBindings<WebApplicationBase>.ConfigureBindings(IBindingsCollection<WebApplicationBase> bindingsCollection)
+        void IConfigureBindings<WebApplication>.ConfigureBindings(IBindingsCollection<WebApplication> bindingsCollection)
         {
             bindingsCollection.SetSingleton<IEmailService, EmailService>();
             bindingsCollection.SetTransient<Connectors.SmtpServer>();

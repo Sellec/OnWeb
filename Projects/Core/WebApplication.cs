@@ -9,12 +9,13 @@ namespace OnWeb
 
     /// <summary>
     /// Ядро веб-приложения.
+    /// Не предполагается создание пользовательских экземпляров приложения, следует пользоваться абстрактной версией для создания ссылок.
     /// </summary>
-    public abstract class WebApplicationBase : ApplicationCore<WebApplicationBase>
+    public abstract class WebApplication : ApplicationCore<WebApplication>
     {
         class ConnectionStringResolver : IConnectionStringResolver
         {
-            internal WebApplicationBase _core = null;
+            internal WebApplication _core = null;
 
             string IConnectionStringResolver.ResolveConnectionStringForDataContext(Type[] entityTypes)
             {
@@ -26,8 +27,10 @@ namespace OnWeb
 
         /// <summary>
         /// </summary>
-        public WebApplicationBase(string physicalApplicationPath, string connectionString) : base(physicalApplicationPath)
+        public WebApplication(string physicalApplicationPath, string connectionString) : base(physicalApplicationPath)
         {
+            if (!GetType().Assembly.FullName.EndsWith("")) throw new InvalidProgramException("");
+
             try
             {
                 ConnectionString = connectionString;
@@ -48,9 +51,9 @@ namespace OnWeb
         /// <summary>
         /// Возвращает модуль ядра приложения.
         /// </summary>
-        public CoreModule<WebApplicationBase> AppCoreModule
+        public CoreModule<WebApplication> AppCoreModule
         {
-            get => Get<CoreModule<WebApplicationBase>>();
+            get => Get<CoreModule<WebApplication>>();
         }
 
         /// <summary>

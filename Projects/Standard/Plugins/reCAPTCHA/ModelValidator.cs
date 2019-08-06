@@ -9,10 +9,10 @@ namespace OnWeb.Plugins.reCAPTCHA
 {
     class ModelValidator : System.Web.Mvc.ModelValidator
     {
-        private WebApplicationBase _appCore;
+        private WebApplication _appCore;
         private readonly string _privateKey;
 
-        public ModelValidator(WebApplicationBase appCore, string privateKey, ModelMetadata metadata, ControllerContext controllerContext) : base(metadata, controllerContext)
+        public ModelValidator(WebApplication appCore, string privateKey, ModelMetadata metadata, ControllerContext controllerContext) : base(metadata, controllerContext)
         {
             _appCore = appCore;
             _privateKey = privateKey;

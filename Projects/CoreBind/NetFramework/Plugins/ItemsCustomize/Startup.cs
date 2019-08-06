@@ -10,7 +10,7 @@ namespace OnWeb.Plugins.ItemsCustomize
 
     class Startup : IConfigureBindings, IExecuteStart
     {
-        void IConfigureBindings<WebApplicationBase>.ConfigureBindings(IBindingsCollection<WebApplicationBase> bindingsCollection)
+        void IConfigureBindings<WebApplication>.ConfigureBindings(IBindingsCollection<WebApplication> bindingsCollection)
         {
             bindingsCollection.SetTransient<ICustomFieldRender<HiddenSimpleMultiLineFieldType>, HiddenSimpleMultiLineFieldTypeRender>();
             bindingsCollection.SetTransient<ICustomFieldRender<HiddenSingleLineFieldType>, HiddenSingleLineFieldTypeRender>();
@@ -21,7 +21,7 @@ namespace OnWeb.Plugins.ItemsCustomize
             bindingsCollection.SetTransient<ICustomFieldRender<UnknownFieldType>, UnknownFieldTypeRender>();
         }
 
-        void IExecuteStart<WebApplicationBase>.ExecuteStart(WebApplicationBase core)
+        void IExecuteStart<WebApplication>.ExecuteStart(WebApplication core)
         {
             if (!ValueProviderFactories.Factories.Any(x => x is MetadataAndValues.FieldValueProviderFactory))
             {

@@ -120,27 +120,27 @@ namespace OnWeb.CoreBind.Routing
         }
 
         #region ServiceMonitor.IMonitoredService
-        Guid IMonitoredService<WebApplicationBase>.ServiceID
+        Guid IMonitoredService<WebApplication>.ServiceID
         {
             get => _serviceID;
         }
 
-        string IMonitoredService<WebApplicationBase>.ServiceName
+        string IMonitoredService<WebApplication>.ServiceName
         {
             get => "Менеджер адресов КЛАДР/ФИАС";
         }
 
-        string IMonitoredService<WebApplicationBase>.ServiceStatusDetailed
+        string IMonitoredService<WebApplication>.ServiceStatusDetailed
         {
             get => string.Empty;
         }
 
-        bool IMonitoredService<WebApplicationBase>.IsSupportsCurrentStatusInfo
+        bool IMonitoredService<WebApplication>.IsSupportsCurrentStatusInfo
         {
             get => false;
         }
 
-        ServiceStatus IMonitoredService<WebApplicationBase>.ServiceStatus
+        ServiceStatus IMonitoredService<WebApplication>.ServiceStatus
         {
             get => throw new NotImplementedException();
         }

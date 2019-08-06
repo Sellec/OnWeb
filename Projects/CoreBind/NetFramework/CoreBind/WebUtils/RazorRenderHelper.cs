@@ -47,7 +47,7 @@ namespace OnWeb.Core.WebUtils
                 using (var sw = new System.IO.StringWriter())
                 {
                     var filename = "/";
-                    var uri = (module?.AppCore as WebApplicationBase)?.ServerUrl?.ToString() ?? "http://localhost/";
+                    var uri = (module?.AppCore as WebApplication)?.ServerUrl?.ToString() ?? "http://localhost/";
                     var context = HttpContext.Current ?? new HttpContext(new HttpRequest(filename, uri, ""), new HttpResponse(new StringWriter()));
 
                     var contextWrapper = new HttpContextWrapper(context);

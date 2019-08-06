@@ -31,7 +31,7 @@ namespace OnWeb.Plugins.ItemsCustomize.MetadataAndValues
                 int idField = 0;
                 if (!int.TryParse(prefixParts.Last().Replace("fieldValue_", ""), out idField)) return false;
 
-                var field = _controllerContext.AppCore.Get<ModuleItemsCustomize<WebApplicationBase>>().GetFieldByID(idField);
+                var field = _controllerContext.AppCore.Get<ModuleItemsCustomize<WebApplication>>().GetFieldByID(idField);
                 if (field == null) return false;
 
                 fieldOut = field;

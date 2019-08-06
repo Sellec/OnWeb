@@ -88,7 +88,7 @@ namespace OnWeb.Plugins.Routing
         /// </summary>
         protected sealed override void OnStart()
         {
-            AppCore.Get<JournalingManager<WebApplicationBase>>().RegisterJournalTyped<UrlManager>("Журнал менеджера адресов");
+            AppCore.Get<JournalingManager<WebApplication>>().RegisterJournalTyped<UrlManager>("Журнал менеджера адресов");
         }
 
         /// <summary>

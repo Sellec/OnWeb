@@ -5,7 +5,7 @@ namespace OnWeb.Core
     /// <summary>
     /// Представляет общий интерфейс компонента ядра.
     /// </summary>
-    public interface IComponent: IComponent<WebApplicationBase>
+    public interface IComponent: IComponent<WebApplication>
     {
     }
 }

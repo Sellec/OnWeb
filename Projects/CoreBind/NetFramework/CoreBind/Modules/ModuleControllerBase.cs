@@ -76,7 +76,7 @@ namespace OnWeb.CoreBind.Modules
         /// <summary>
         /// См. <see cref="IComponentStartable{TAppCore}.Start(TAppCore)"/>.
         /// </summary>
-        public void Start(WebApplicationBase core)
+        public void Start(WebApplication core)
         {
             ((IComponentStartable)_coreComponent).Start(core);
         }
@@ -100,7 +100,7 @@ namespace OnWeb.CoreBind.Modules
         /// <summary>
         /// См. <see cref="IComponent{TAppCore}.GetAppCore"/>.
         /// </summary>
-        public WebApplicationBase GetAppCore()
+        public WebApplication GetAppCore()
         {
             return _coreComponent.GetAppCore();
         }
@@ -581,7 +581,7 @@ namespace OnWeb.CoreBind.Modules
         /// <summary>
         /// Возвращает ядро приложения, в рамках которого запущен контроллер.
         /// </summary>
-        public WebApplicationBase AppCore
+        public WebApplication AppCore
         {
             get => GetAppCore();
         }

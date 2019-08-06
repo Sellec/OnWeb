@@ -110,7 +110,7 @@ namespace OnWeb.CoreBind.Razor
         /// <summary>
         /// Возвращает объект ядра, в контексте которого запущено приложение.
         /// </summary>
-        public WebApplicationBase AppCore
+        public WebApplication AppCore
         {
             get => Module.GetAppCore();
         }

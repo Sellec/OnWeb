@@ -7,7 +7,7 @@ namespace OnWeb.CoreBind.Routing
     {
         class RoutesDefaults
         {
-            public RoutesDefaults(WebApplicationBase core)
+            public RoutesDefaults(WebApplication core)
             {
                 var moduleID = core.WebConfig.IdModuleDefault;
                 var module = core.GetModulesManager().GetModule(moduleID) ?? core.GetModulesManager().GetModule<Plugins.Default.ModuleDefault>();
@@ -33,9 +33,9 @@ namespace OnWeb.CoreBind.Routing
 
         class RoutesDefaultsWithLanguage : RoutesDefaults
         {
-            public RoutesDefaultsWithLanguage(WebApplicationBase core) : base(core)
+            public RoutesDefaultsWithLanguage(WebApplication core) : base(core)
             {
-                Language = core.Get<Manager<WebApplicationBase>>().GetUserLanguage().ShortName;
+                Language = core.Get<Manager<WebApplication>>().GetUserLanguage().ShortName;
             }
 
             public string Language
@@ -44,10 +44,10 @@ namespace OnWeb.CoreBind.Routing
             }
         }
 
-        private readonly WebApplicationBase _core = null;
+        private readonly WebApplication _core = null;
         private readonly bool _defaultsWithLanguage;
 
-        public RouteWithDefaults(WebApplicationBase core, string url, bool defaultsWithLanguage, RouteValueDictionary constraints, RouteValueDictionary dataTokens, IRouteHandler routeHandler)
+        public RouteWithDefaults(WebApplication core, string url, bool defaultsWithLanguage, RouteValueDictionary constraints, RouteValueDictionary dataTokens, IRouteHandler routeHandler)
             : base(url, new RouteValueDictionary(defaultsWithLanguage ? new RoutesDefaultsWithLanguage(core) : new RoutesDefaults(core)), constraints, dataTokens, routeHandler)
         {
             _core = core;

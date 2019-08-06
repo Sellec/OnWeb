@@ -39,7 +39,7 @@ namespace OnWeb.Core.ServiceMonitor
         /// <param name="serviceStatusDetailed">Детализированное состояние сервиса.</param>
         public void RegisterServiceStateWithoutJournal(IMonitoredService service, ServiceStatus serviceStatus, string serviceStatusDetailed = null)
         {
-            AppCore.Get<Monitor<WebApplicationBase>>().RegisterServiceStateWithoutJournal(service, serviceStatus, serviceStatusDetailed);
+            AppCore.Get<Monitor<WebApplication>>().RegisterServiceStateWithoutJournal(service, serviceStatus, serviceStatusDetailed);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace OnWeb.Core.ServiceMonitor
         /// <param name="exception">Ошибки, если были зарегистрированы.</param>
         public void RegisterServiceState(IMonitoredService service, ServiceStatus serviceStatus, string serviceStatusDetailed = null, Exception exception = null)
         {
-            AppCore.Get<Monitor<WebApplicationBase>>().RegisterServiceState(service, serviceStatus, serviceStatusDetailed, exception);
+            AppCore.Get<Monitor<WebApplication>>().RegisterServiceState(service, serviceStatus, serviceStatusDetailed, exception);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace OnWeb.Core.ServiceMonitor
         /// <param name="exception">См. <see cref="JournalingManager.RegisterEvent"/>.</param>
         public void RegisterServiceEvent(IMonitoredService service, EventType eventType, string eventInfo, string eventInfoDetailed = null, Exception exception = null)
         {
-            AppCore.Get<Monitor<WebApplicationBase>>().RegisterServiceEvent(service, eventType, eventInfo, eventInfoDetailed, exception);
+            AppCore.Get<Monitor<WebApplication>>().RegisterServiceEvent(service, eventType, eventInfo, eventInfoDetailed, exception);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace OnWeb.Core.ServiceMonitor
         /// </summary>
         public IEnumerable<Journal> GetServiceJournal(IMonitoredService service)
         {
-            return AppCore.Get<Monitor<WebApplicationBase>>().GetServiceJournal(service);
+            return AppCore.Get<Monitor<WebApplication>>().GetServiceJournal(service);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace OnWeb.Core.ServiceMonitor
         /// </summary>
         public IEnumerable<Journal> GetServiceJournal(Guid serviceID)
         {
-            return AppCore.Get<Monitor<WebApplicationBase>>().GetServiceJournal(serviceID);
+            return AppCore.Get<Monitor<WebApplication>>().GetServiceJournal(serviceID);
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace OnWeb.Core.ServiceMonitor
         /// </summary>
         public IDictionary<Guid, ServiceInfo> GetServicesList()
         {
-            return AppCore.Get<Monitor<WebApplicationBase>>().GetServicesList();
+            return AppCore.Get<Monitor<WebApplication>>().GetServicesList();
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace OnWeb.Core.ServiceMonitor
         /// <returns>Объект с данными сервиса или null, если сервис не найден.</returns>
         public ServiceInfo GetService(Guid serviceID)
         {
-            return AppCore.Get<Monitor<WebApplicationBase>>().GetService(serviceID);
+            return AppCore.Get<Monitor<WebApplication>>().GetService(serviceID);
         }
     }
 }

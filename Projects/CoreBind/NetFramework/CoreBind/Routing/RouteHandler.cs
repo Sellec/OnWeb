@@ -15,9 +15,9 @@ namespace OnWeb.CoreBind.Routing
     class RouteHandler : MvcRouteHandler, IRouteConstraint
     {
         private ConcurrentDictionary<string, Routing> _dbCache = new ConcurrentDictionary<string, Routing>();
-        private readonly WebApplicationBase _core = null;
+        private readonly WebApplication _core = null;
 
-        public RouteHandler(WebApplicationBase core)
+        public RouteHandler(WebApplication core)
         {
             _core = core;
         }

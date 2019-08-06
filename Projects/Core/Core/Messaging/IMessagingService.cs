@@ -5,7 +5,7 @@ namespace OnWeb.Core.Messaging
     /// <summary>
     /// Описывает сервис отправки/приема сообщений для веб-приложения.
     /// </summary>
-    public interface IMessagingService : IMessagingService<WebApplicationBase>
+    public interface IMessagingService : IMessagingService<WebApplication>, IComponent, IComponentStartable
     {
     }
 }

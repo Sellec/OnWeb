@@ -38,7 +38,7 @@ namespace OnWeb.CoreBind._Initialize
                             var utilsAssembly = utilsInjectorType.Assembly;
                             var applicationAssembly = typeof(ApplicationCore<>).Assembly;
                             var mvcAssembly = typeof(System.Web.Mvc.ActionResult).Assembly;
-                            var webCoreAssembly = typeof(WebApplicationBase).Assembly;
+                            var webCoreAssembly = typeof(WebApplication).Assembly;
                             var webAssembly = webInjectorType.Assembly;
 
                             //var webAssemblyReferences = webAssembly.GetReferencedAssemblies().Select(x => System.Reflection.Assembly.Load(x.FullName)).ToList();

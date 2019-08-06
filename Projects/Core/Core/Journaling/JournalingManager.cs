@@ -11,7 +11,7 @@ namespace OnWeb.Core.Journaling
     using ExecutionResultJournalData = OnUtils.ExecutionResult<Journal>;
     using ExecutionResultJournalDataList = OnUtils.ExecutionResult<List<Journal>>;
     using ExecutionResultJournalName = OnUtils.ExecutionResult<JournalName>;
-    using JournalingManagerApp = JournalingManager<WebApplicationBase>;
+    using JournalingManagerApp = JournalingManager<WebApplication>;
 
     /// <summary>
     /// Представляет менеджер системных журналов. Позволяет создавать журналы, как привязанные к определенным типам, так и вручную, и регистрировать в них события.

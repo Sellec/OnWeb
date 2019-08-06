@@ -9,11 +9,11 @@ namespace OnWeb.Plugins.Adminmain.Model
 
     public class AdminMainModelInfoPage
     {
-        public AdminMainModelInfoPage() : this(new CoreConfiguration<WebApplicationBase>(), new WebCoreConfiguration())
+        public AdminMainModelInfoPage() : this(new CoreConfiguration<WebApplication>(), new WebCoreConfiguration())
         {
         }
 
-        public AdminMainModelInfoPage(CoreConfiguration<WebApplicationBase> appCoreConfiguration, WebCoreConfiguration webCoreConfiguration)
+        public AdminMainModelInfoPage(CoreConfiguration<WebApplication> appCoreConfiguration, WebCoreConfiguration webCoreConfiguration)
         {
             AppCoreConfiguration = appCoreConfiguration;
             WebCoreConfiguration = webCoreConfiguration;
@@ -23,7 +23,7 @@ namespace OnWeb.Plugins.Adminmain.Model
 
         public List<SelectListItem> ModulesList { get; set; } = new List<SelectListItem>();
 
-        public CoreConfiguration<WebApplicationBase> AppCoreConfiguration { get; }
+        public CoreConfiguration<WebApplication> AppCoreConfiguration { get; }
 
         public WebCoreConfiguration WebCoreConfiguration { get; }
     }

@@ -7,9 +7,9 @@ namespace OnWeb.Plugins.Customer
 
     class Startup : IExecuteStart
     {
-        void IExecuteStart<WebApplicationBase>.ExecuteStart(WebApplicationBase core)
+        void IExecuteStart<WebApplication>.ExecuteStart(WebApplication core)
         {
-            core.Get<ItemsManager<WebApplicationBase>>().RegisterModuleItemType<User, ModuleCustomer>();
+            core.Get<ItemsManager<WebApplication>>().RegisterModuleItemType<User, ModuleCustomer>();
         }
     }
 }

@@ -9,7 +9,7 @@ namespace OnWeb.CoreBind
 
     class Startup : IConfigureBindings
     {
-        void IConfigureBindings<WebApplicationBase>.ConfigureBindings(IBindingsCollection<WebApplicationBase> bindingsCollection)
+        void IConfigureBindings<WebApplication>.ConfigureBindings(IBindingsCollection<WebApplication> bindingsCollection)
         {
             bindingsCollection.SetSingleton<ModuleAuth, Module2>();
             bindingsCollection.SetSingleton<SessionBinder>();

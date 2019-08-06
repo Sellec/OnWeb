@@ -46,7 +46,7 @@ namespace OnWeb.Plugins.MessagingEmail.Connectors
         /// См. <see cref="IConnectorBase{TAppCoreSelfReference, TMessage}.Init(string)"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Возникает, если коннектор уже был инициализирован.</exception>
-        bool IConnectorBase<WebApplicationBase, EmailMessage>.Init(string connectorSettings)
+        bool IConnectorBase<WebApplication, EmailMessage>.Init(string connectorSettings)
         {
             if (_client != null) throw new InvalidOperationException("Коннектор уже инициализирован.");
 
@@ -78,7 +78,7 @@ namespace OnWeb.Plugins.MessagingEmail.Connectors
             }
         }
 
-        void IConnectorBase<WebApplicationBase, EmailMessage>.Send(ConnectorMessage<EmailMessage> message, IMessagingService<WebApplicationBase> service)
+        void IConnectorBase<WebApplication, EmailMessage>.Send(ConnectorMessage<EmailMessage> message, IMessagingService<WebApplication> service)
         {
             try
             {
@@ -172,7 +172,7 @@ namespace OnWeb.Plugins.MessagingEmail.Connectors
             return _client;
         }
 
-        string IConnectorBase<WebApplicationBase, EmailMessage>.ConnectorName
+        string IConnectorBase<WebApplication, EmailMessage>.ConnectorName
         {
             get => "SMTP-сервер";
         }

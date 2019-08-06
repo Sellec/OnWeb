@@ -8,13 +8,13 @@ namespace OnWeb.Plugins.reCAPTCHA
 
     class Startup : IExecuteStart, IConfigureBindings
     {
-        void IConfigureBindings<WebApplicationBase>.ConfigureBindings(IBindingsCollection<WebApplicationBase> bindingsCollection)
+        void IConfigureBindings<WebApplication>.ConfigureBindings(IBindingsCollection<WebApplication> bindingsCollection)
         {
             bindingsCollection.SetSingleton<ModuleReCaptcha>();
             bindingsCollection.SetTransient<IModuleController<ModuleReCaptcha>, ModuleReCaptchaController>();
         }
 
-        void IExecuteStart<WebApplicationBase>.ExecuteStart(WebApplicationBase core)
+        void IExecuteStart<WebApplication>.ExecuteStart(WebApplication core)
         {
             ModelValidatorProviders.Providers.Insert(0, new ModelValidatorProvider(core));
         }

@@ -7,7 +7,7 @@ namespace OnWeb.Plugins.Sitemap
 
     class Startup : IConfigureBindings
     {
-        void IConfigureBindings<WebApplicationBase>.ConfigureBindings(IBindingsCollection<WebApplicationBase> bindingsCollection)
+        void IConfigureBindings<WebApplication>.ConfigureBindings(IBindingsCollection<WebApplication> bindingsCollection)
         {
             bindingsCollection.SetSingleton<ModuleSitemap>();
             bindingsCollection.AddTransient<IModuleController<ModuleSitemap>, ModuleController>();

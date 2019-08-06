@@ -12,7 +12,7 @@ namespace OnWeb.Core.Modules
     /// Базовый класс для всех веб-модулей. Обязателен при реализации любых модулей, т.к. при задании привязок в DI проверяется наследование именно от этого класса.
     /// </summary>
     /// <typeparam name="TSelfReference">Должен ссылаться сам на себя.</typeparam>
-    public abstract class ModuleCore<TSelfReference> : ModuleCore<WebApplicationBase, TSelfReference>, IModuleCoreInternal, IModuleCore
+    public abstract class ModuleCore<TSelfReference> : ModuleCore<WebApplication, TSelfReference>, IModuleCoreInternal, IModuleCore
         where TSelfReference : ModuleCore<TSelfReference>
     {
         /// <summary>

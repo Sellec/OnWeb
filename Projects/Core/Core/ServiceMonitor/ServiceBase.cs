@@ -4,7 +4,7 @@ using OnUtils.Application.ServiceMonitor;
 namespace OnWeb.Core.ServiceMonitor
 {
 #pragma warning disable CS1591 // todo внести комментарии.
-    public abstract class ServiceBase : ServiceBase<WebApplicationBase>, IMonitoredService
+    public abstract class ServiceBase : ServiceBase<WebApplication>, IMonitoredService
     {
         public ServiceBase()
         {

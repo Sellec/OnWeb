@@ -8,7 +8,7 @@ namespace OnWeb.Core.Configuration
     /// Предоставляет доступ к настройкам модуля TModule.
     /// </summary>
     /// <typeparam name="TModule">Должен быть query-типом модуля, зарегистрированным в привязках типов.</typeparam>
-    public class ModuleConfiguration<TModule> : ModuleConfiguration<WebApplicationBase, TModule>
+    public class ModuleConfiguration<TModule> : ModuleConfiguration<WebApplication, TModule>
         where TModule : ModuleCore<TModule>
     {
     }

@@ -5,7 +5,7 @@ namespace OnWeb.Core
     /// <summary>
     /// Представляет интерфейс запускаемого компонента ядра.
     /// </summary>
-    public interface IComponentStartable : IComponentStartable<WebApplicationBase>
+    public interface IComponentStartable : IComponentStartable<WebApplication>
     {
     }
 }
