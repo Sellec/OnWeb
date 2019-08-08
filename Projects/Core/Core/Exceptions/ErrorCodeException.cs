@@ -8,17 +8,19 @@ namespace OnWeb.Core.Exceptions
     /// </summary>
     public class ErrorCodeException : HandledException
     {
-        public ErrorCodeException(string message) : this(0, message)
-        {
-        }
-
+        /// <summary>
+        /// Создает новый экземпляр с указанным кодом ошибки и сообщением.
+        /// </summary>
         public ErrorCodeException(HttpStatusCode code, string message) : this(code, message, null)
         {
         }
 
+        /// <summary>
+        /// Создает новый экземпляр с указанным кодом ошибки, сообщением и вложенным исключением.
+        /// </summary>
         public ErrorCodeException(HttpStatusCode code, string message, Exception innerException) : base(message, innerException)
         {
-            this.Code = code;
+            Code = code;
         }
 
         /// <summary>

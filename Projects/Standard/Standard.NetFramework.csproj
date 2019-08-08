@@ -89,7 +89,7 @@
       <Version>3.2.7</Version>
     </PackageReference>
     <PackageReference Include="OnUtils.Application">
-      <Version>0.1.2.33</Version>
+      <Version>0.1.2.34</Version>
     </PackageReference>
     <PackageReference Include="OnUtils">
       <Version>0.1.5</Version>
@@ -111,7 +111,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CoreBind\HttpApplication.cs" />
     <Compile Include="Design\Additionals\ClassicStructures\PhotoList.cs" />
     <Compile Include="Design\Additionals\Extension\ButtonHtmlExtensions.cs" />
     <Compile Include="Design\Additionals\Extension\DropDownListHtmlExtensions.cs" />

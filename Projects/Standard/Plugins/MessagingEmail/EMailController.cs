@@ -40,7 +40,9 @@ namespace OnWeb.Plugins.MessagingEmail
                     ConnectorTypeName = typeof(Connectors.SmtpServer).FullName,
                     SettingsSerialized = JsonConvert.SerializeObject(new Connectors.SmtpServerSettings()
                     {
-                        Server = Uri.TryCreate(formData?.Smtp?.Server, UriKind.Absolute, out var uri2) ? uri2 : null,
+                        Server = formData?.Smtp?.Server,
+                        IsSecure = formData?.Smtp?.IsSecure ?? false,
+                        Port = formData?.Smtp?.Port,
                         Login = formData?.Smtp?.Login,
                         Password = formData?.Smtp?.Password
                     })

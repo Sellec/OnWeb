@@ -54,15 +54,13 @@ namespace OnWeb.Plugins.MessagingEmail.Connectors
             {
                 var settings = !string.IsNullOrEmpty(connectorSettings) ? JsonConvert.DeserializeObject<SmtpServerSettings>(connectorSettings) : new SmtpServerSettings();
 
-                if (settings.Server == null) return false;
-                if (!settings.Server.IsAbsoluteUri) return false;
-                if (settings.Server.Scheme != "http" && settings.Server.Scheme != "https") return false;
+                if (string.IsNullOrEmpty(settings.Server)) return false;
 
                 var client = new SmtpClient()
                 {
-                    Host = settings.Server.Host,
-                    Port = !settings.Server.IsDefaultPort ? settings.Server.Port : (settings.Server.Scheme == "http" ? 80 : (settings.Server.Scheme == "https" ? 587 : 0)),
-                    EnableSsl = settings.Server.Scheme == "https",
+                    Host = settings.Server,
+                    Port = settings.Port.HasValue ? settings.Port.Value : (settings.IsSecure ? 587 : 80),
+                    EnableSsl = settings.IsSecure,
                     DeliveryMethod = SmtpDeliveryMethod.Network,
                     Credentials = new System.Net.NetworkCredential(settings.Login, settings.Password),
                 };
@@ -105,7 +103,7 @@ namespace OnWeb.Plugins.MessagingEmail.Connectors
                 catch (SmtpException ex)
                 {
                     var canBeResend = true;
-                    service.RegisterServiceEvent(EventType.Error, "Gmail - ошибка отправки письма", null, ex);
+                    service.RegisterServiceEvent(EventType.Error, "SMTP - ошибка отправки письма", null, ex);
                     //if (ex.Message.Contains("Message rejected: Email address is not verified"))
                     //{
                     //    var match = System.Text.RegularExpressions.Regex.Match(ex.Message, "Message rejected: Email address is not verified. The following identities failed the check in region ([^:]+): (.+)");

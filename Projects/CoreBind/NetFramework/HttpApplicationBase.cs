@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OnUtils.Architecture.AppCore;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
@@ -8,8 +9,11 @@ using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 
-namespace OnWeb.CoreBind
+namespace OnWeb
 {
+    using CoreBind.Binders;
+    using CoreBind.Providers;
+
     /// <summary>
     /// Представляет приложение ASP.NET, умеющее инициализировать OnWeb.
     /// </summary>
@@ -104,8 +108,8 @@ namespace OnWeb.CoreBind
             GlobalFilters.Filters.Add(new HandleErrorAttribute());
             GlobalFilters.Filters.Add(new External.ActionParameterAlias.ParameterAliasAttributeGlobal());
 
-            ModelBinders.Binders.Add(typeof(Binders.JsonDictionary), new Binders.JsonDictionaryModelBinder());
-            ModelBinders.Binders.DefaultBinder = new Binders.TraceModelBinder();
+            ModelBinders.Binders.Add(typeof(JsonDictionary), new JsonDictionaryModelBinder());
+            ModelBinders.Binders.DefaultBinder = new TraceModelBinder();
 
             lock (SyncRootStart)
             {
@@ -290,8 +294,11 @@ namespace OnWeb.CoreBind
         internal void Application_AcquireRequestState(object sender, EventArgs e)
         {
             Context.Items["TimeRequestState"] = DateTime.Now;
-            var context = _applicationCore.Get<Providers.SessionBinder>().RestoreUserContextFromRequest();
-            if (context != null) _applicationCore.GetUserContextManager().SetCurrentUserContext(context);
+            if (_applicationCore.GetState() == CoreComponentState.Started)
+            {
+                var context = _applicationCore.Get<SessionBinder>().RestoreUserContextFromRequest();
+                if (context != null) _applicationCore.GetUserContextManager().SetCurrentUserContext(context);
+            }
         }
 
         internal void Application_EndRequest(Object sender, EventArgs e)
@@ -325,9 +332,12 @@ namespace OnWeb.CoreBind
             }
             _requestSpecificDisposables = null;
 
-            Providers.TraceSessionStateProvider.SaveUnsavedSessionItem();
+            TraceSessionStateProvider.SaveUnsavedSessionItem();
 
-            _applicationCore.GetUserContextManager().ClearCurrentUserContext();
+            if (_applicationCore.GetState() == CoreComponentState.Started)
+            {
+                _applicationCore.GetUserContextManager().ClearCurrentUserContext();
+            }
 
             var queries2 = Core.WebUtils.QueryLogHelper.GetQueries();
             if (queries2.Count > 0)
@@ -367,7 +377,7 @@ namespace OnWeb.CoreBind
             {
                 var appCore = _applicationCore;
                 _applicationCore = null;
-                appCore.Stop();
+                if (appCore.GetState() == CoreComponentState.Started) appCore.Stop();
             }
             catch (Exception ex)
             {

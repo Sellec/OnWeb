@@ -24,7 +24,7 @@
             }
             $("select." + className).attr("size", 1);
 
-            $("input[type=checkbox]." + className).change(function () {
+            $("input[type=checkbox][name=@Html.NameFor(x => x.IsUseSmtp)]." + className).change(function () {
                 if ($(this).is(":checked")) {
                     $("." + className).not("[type=checkbox]").each(function () {
                         $(this).val("");
@@ -51,6 +51,20 @@
         <td>
             @Html.TextBoxFor(x => x.Smtp.Server, smtpAttributes)
             @Html.ValidationMessageFor(x => x.Smtp.Server)
+        </td>
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(x => x.Smtp.IsSecure)</td>
+        <td>
+            @Html.CheckBoxFor(x => x.Smtp.IsSecure, smtpAttributes)
+            @Html.ValidationMessageFor(x => x.Smtp.IsSecure)
+        </td>
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(x => x.Smtp.Port)</td>
+        <td>
+            @Html.TextBoxFor(x => x.Smtp.Port, smtpAttributes)
+            @Html.ValidationMessageFor(x => x.Smtp.Port)
         </td>
     </tr>
     <tr>

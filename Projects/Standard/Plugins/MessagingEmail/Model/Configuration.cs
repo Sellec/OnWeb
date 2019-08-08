@@ -16,6 +16,8 @@ namespace OnWeb.Plugins.MessagingEmail.Model
             Smtp = new SmtpServerSettings()
             {
                 Server = smtp?.Server?.ToString(),
+                IsSecure = smtp?.IsSecure ?? false,
+                Port = smtp?.Port,
                 Login = smtp?.Login,
                 Password = smtp?.Password
             };

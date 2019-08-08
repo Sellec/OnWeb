@@ -10,7 +10,17 @@ namespace OnWeb.Plugins.MessagingEmail.Connectors
         /// <summary>
         /// Адрес сервера.
         /// </summary>
-        public Uri Server { get; set; }
+        public string Server { get; set; }
+
+        /// <summary>
+        /// Указывает, следует ли использовать SSL.
+        /// </summary>
+        public bool IsSecure { get; set; }
+
+        /// <summary>
+        /// Порт подключения. Если не задан, то при <see cref="IsSecure"/> равном false используется порт 80, при <see cref="IsSecure"/> равном true используется порт 587.
+        /// </summary>
+        public int? Port { get; set; }
 
         /// <summary>
         /// Логин для подключения к smtp-серверу.

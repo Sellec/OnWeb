@@ -13,8 +13,20 @@ namespace OnWeb.Plugins.MessagingEmail.Model
         [Display(Name = "Адрес smtp-сервера")]
         [Required]
         [MaxLength(200)]
-        [DataType(DataType.Url)]
         public string Server { get; set; }
+
+        /// <summary>
+        /// См. <see cref="Connectors.SmtpServerSettings.IsSecure"/>
+        /// </summary>
+        [Display(Name = "Использовать подключение по SSL?")]
+        [Required]
+        public bool IsSecure { get; set; }
+
+        /// <summary>
+        /// См. <see cref="Connectors.SmtpServerSettings.Port"/>
+        /// </summary>
+        [Display(Name = "Порт подключения (необязателен для заполнения. По-умолчанию для небезопасного подключения используется порт 80, для безопасного 587)")]
+        public int? Port { get; set; }
 
         /// <summary>
         /// См. <see cref="Connectors.SmtpServerSettings.Login"/>
