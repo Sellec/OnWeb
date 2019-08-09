@@ -3,6 +3,8 @@ using System.Linq;
 
 namespace System.Web.Mvc
 {
+    /// <summary>
+    /// </summary>
     public static class ModelStateDictionaryExtension
     {
         /// <summary>

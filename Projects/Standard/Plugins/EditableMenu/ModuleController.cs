@@ -2,13 +2,13 @@
 using System.Linq;
 using System.Web.Mvc;
 
-namespace OnWeb.Plugins.EditableMenu
+namespace OnWeb.Modules.EditableMenu
 {
     using AdminForModules.Menu;
     using Core.Items;
     using Core.Modules;
-    using CoreBind.Modules;
-    using Plugins.Routing;
+    using Core.Modules;
+    using Modules.Routing;
 
     public class ModuleController : ModuleControllerAdmin<Module>
     {

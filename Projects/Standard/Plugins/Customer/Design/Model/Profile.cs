@@ -1,4 +1,4 @@
-﻿namespace OnWeb.Plugins.Customer.Design.Model
+﻿namespace OnWeb.Modules.Customer.Design.Model
 {
     using Core.DB;
 

@@ -1,8 +1,8 @@
 ﻿using System.Web.Mvc;
 
-namespace OnWeb.Plugins.Default
+namespace OnWeb.Modules.Default
 {
-    using CoreBind.Modules;
+    using Core.Modules;
 
     public class ModuleDefaultController : ModuleControllerUser<ModuleDefault>
     {

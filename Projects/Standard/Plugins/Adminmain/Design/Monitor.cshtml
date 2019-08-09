@@ -21,7 +21,7 @@
 <table width='100%'>
     <tr>
         <td style='vertical-align:top;width:970px;min-width:970px;'>
-            @{ var services = AppCore.Get<Core.ServiceMonitor.Monitor>().GetServicesList(); }
+            @{ var services = AppCore.Get<ServiceMonitor.Monitor>().GetServicesList(); }
             <h4>Зарегистрированных сервисов: <span id="countRegistered">@services.Count</span></h4>
             <table class='tablesorter' width="100%">
                 <thead>

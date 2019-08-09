@@ -11,7 +11,7 @@ using System.Linq.Expressions;
 using System.Transactions;
 using System.Web.Mvc;
 
-namespace OnWeb.Plugins.FileManager
+namespace OnWeb.Modules.FileManager
 {
     using Core.Modules;
     using DictionaryFiles = Dictionary<int, DB.File>;

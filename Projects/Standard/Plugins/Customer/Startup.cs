@@ -2,7 +2,7 @@
 using OnUtils.Architecture.AppCore;
 using OnUtils.Architecture.AppCore.DI;
 
-namespace OnWeb.Plugins.Customer
+namespace OnWeb.Modules.Customer
 {
     using Core.Modules;
     using Model;

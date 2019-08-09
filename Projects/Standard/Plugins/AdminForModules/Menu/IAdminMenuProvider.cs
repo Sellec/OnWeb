@@ -1,6 +1,6 @@
-﻿namespace OnWeb.Plugins.AdminForModules.Menu
+﻿namespace OnWeb.Modules.AdminForModules.Menu
 {
-    using Core.Types;
+    using Types;
 
     /// <summary>
     /// Если модуль реализует данный интерфейс, то при получении списка меню для панели управления используется результат вызова <see cref="GetModuleAdminMenuLinks"/>.

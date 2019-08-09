@@ -6,7 +6,7 @@ using System.Linq;
 namespace OnWeb.Core.Modules
 {
     using Items;
-    using Plugins.Routing;
+    using global::OnWeb.Modules.Routing;
 
     /// <summary>
     /// Базовый класс для всех веб-модулей. Обязателен при реализации любых модулей, т.к. при задании привязок в DI проверяется наследование именно от этого класса.

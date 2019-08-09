@@ -92,7 +92,7 @@ namespace OnWeb.CoreBind.Razor
 
                             if (WebConfigurationManager.GetSection(HostSection.SectionName) is HostSection hostSection)
                             {
-                                hostSection.FactoryType = typeof(RazorHostFactory).AssemblyQualifiedName;
+                                hostSection.FactoryType = typeof(CustomMvcWebRazorHostFactory).AssemblyQualifiedName;
                             }
                         }
                         catch (Exception ex)

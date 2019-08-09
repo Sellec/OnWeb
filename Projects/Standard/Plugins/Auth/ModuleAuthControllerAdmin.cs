@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 
-namespace OnWeb.Plugins.Auth
+namespace OnWeb.Modules.Auth
 {
     using Core.Configuration;
-    using CoreBind.Modules;
+    using Core.Modules;
     using Model;
 
     public class ModuleAuthControllerAdmin : ModuleControllerAdmin<ModuleAuth, Design.Model.ModuleSettings, Configuration>

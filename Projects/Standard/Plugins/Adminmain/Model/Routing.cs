@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace OnWeb.Plugins.Adminmain.Model
+namespace OnWeb.Modules.Adminmain.Model
 {
     using Core.Modules;
 

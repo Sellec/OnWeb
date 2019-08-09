@@ -2,7 +2,7 @@
 using OnUtils.Architecture.AppCore;
 using OnUtils.Architecture.AppCore.DI;
 
-namespace OnWeb.Plugins.EditableMenu
+namespace OnWeb.Modules.EditableMenu
 {
     using Core.Modules;
 

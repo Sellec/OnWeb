@@ -7,11 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OnWeb.Plugins.ItemsCustomize
+namespace OnWeb.Modules.ItemsCustomize
 {
     using AdminForModules.Menu;
     using Core.Modules;
-    using Core.Types;
+    using Types;
 
     /// <summary>
     /// Веб-версия модуля <see cref="ModuleItemsCustomize{TAppCoreSelfReference}"/>. Это нужно, чтобы появилась возможность создавать контроллеры для модуля. 

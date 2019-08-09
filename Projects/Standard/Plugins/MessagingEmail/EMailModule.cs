@@ -1,4 +1,4 @@
-﻿namespace OnWeb.Plugins.MessagingEmail
+﻿namespace OnWeb.Modules.MessagingEmail
 {
     using Core.Modules;
 

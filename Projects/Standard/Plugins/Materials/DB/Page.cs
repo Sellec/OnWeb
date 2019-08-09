@@ -1,4 +1,4 @@
-namespace OnWeb.Plugins.Materials.DB
+namespace OnWeb.Modules.Materials.DB
 {
     using Core.Items;
     using System.ComponentModel.DataAnnotations;

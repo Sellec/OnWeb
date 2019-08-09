@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace OnWeb.Plugins.Sitemap.Design.Model
+namespace OnWeb.Modules.Sitemap.Design.Model
 {
     /// <summary>
     /// Модель для представления Sitemap.cshtml.

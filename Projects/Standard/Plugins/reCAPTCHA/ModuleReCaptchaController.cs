@@ -1,9 +1,9 @@
-﻿namespace OnWeb.Plugins.reCAPTCHA
+﻿namespace OnWeb.Modules.reCAPTCHA
 {
     using Core.Configuration;
     using Model;
 
-    class ModuleReCaptchaController : CoreBind.Modules.ModuleControllerAdmin<ModuleReCaptcha, Configuration, Configuration>
+    class ModuleReCaptchaController : Core.Modules.ModuleControllerAdmin<ModuleReCaptcha, Configuration, Configuration>
     {
         protected override void ConfigurationViewFill(Configuration viewModelForFill, out string viewName)
         {

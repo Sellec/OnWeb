@@ -7,9 +7,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace OnWeb.Plugins.FileManager
+namespace OnWeb.Modules.FileManager
 {
-    using CoreBind.Modules;
+    using Core.Modules;
 
     public class FileManagerController : ModuleControllerUser<FileManager>
     {
@@ -101,7 +101,9 @@ namespace OnWeb.Plugins.FileManager
                     var rootDirectory = System.Web.Hosting.HostingEnvironment.MapPath("/");
 
                     byte[] fileBytes = System.IO.File.ReadAllBytes(Path.Combine(rootDirectory, file.PathFile));
-                    return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, file.NameFile);
+                    var result = File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, file.NameFile);
+                    Response.Headers["Content-Length"] = fileBytes.Length.ToString();
+                    return result;
                 }
             }
             catch (Exception ex)

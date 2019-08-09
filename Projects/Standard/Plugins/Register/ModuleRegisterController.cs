@@ -5,12 +5,12 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 
-namespace OnWeb.Plugins.Register
+namespace OnWeb.Modules.Register
 {
     using Core.DB;
-    using Core.Exceptions;
-    using Core.Types;
-    using CoreBind.Modules;
+    using Core.Modules;
+    using Exceptions;
+    using Types;
 
     public class ModuleRegisterController : ModuleControllerUser<ModuleRegister>
     {

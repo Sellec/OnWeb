@@ -1,7 +1,7 @@
 ﻿using OnUtils.Architecture.AppCore;
 using OnUtils.Architecture.AppCore.DI;
 
-namespace OnWeb.Plugins.ItemsCustomize
+namespace OnWeb.Modules.ItemsCustomize
 {
     using Core.Modules;
 

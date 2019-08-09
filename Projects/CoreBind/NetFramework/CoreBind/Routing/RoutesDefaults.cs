@@ -3,6 +3,8 @@ using System.Web.Routing;
 
 namespace OnWeb.CoreBind.Routing
 {
+    using Core.Modules;
+
     public class RouteWithDefaults : Route
     {
         class RoutesDefaults
@@ -10,7 +12,7 @@ namespace OnWeb.CoreBind.Routing
             public RoutesDefaults(WebApplication core)
             {
                 var moduleID = core.WebConfig.IdModuleDefault;
-                var module = core.GetModulesManager().GetModule(moduleID) ?? core.GetModulesManager().GetModule<Plugins.Default.ModuleDefault>();
+                var module = core.GetModulesManager().GetModule(moduleID) ?? core.GetModulesManager().GetModule<Modules.Default.ModuleDefault>();
 
                 Controller = module.IdModule.ToString();
             }
@@ -22,7 +24,7 @@ namespace OnWeb.CoreBind.Routing
 
             public string Action
             {
-                get => nameof(Modules.ModuleControllerUser<Plugins.WebCoreModule.WebCoreModule>.Index);
+                get => nameof(ModuleControllerUser<Modules.WebCoreModule.WebCoreModule>.Index);
             }
 
             public System.Web.Mvc.UrlParameter Url

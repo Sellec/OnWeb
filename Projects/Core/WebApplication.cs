@@ -5,7 +5,7 @@ using OnUtils.Application.Modules.CoreModule;
 
 namespace OnWeb
 {
-    using Plugins.WebCoreModule;
+    using Modules.WebCoreModule;
 
     /// <summary>
     /// Ядро веб-приложения.

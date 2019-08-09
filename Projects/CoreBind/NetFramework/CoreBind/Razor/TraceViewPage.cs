@@ -8,7 +8,7 @@ using System.Web.Mvc.Html;
 namespace OnWeb.CoreBind.Razor
 {
     using Core.Modules;
-    using Plugins.WebCoreModule;
+    using Modules.WebCoreModule;
 
     public interface IModuleProvider
     {

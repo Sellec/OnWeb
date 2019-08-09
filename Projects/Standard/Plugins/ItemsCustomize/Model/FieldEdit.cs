@@ -3,7 +3,7 @@ using OnUtils.Application.Modules.ItemsCustomize.Field;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace OnWeb.Plugins.ItemsCustomize.Model
+namespace OnWeb.Modules.ItemsCustomize.Model
 {
 #pragma warning disable CS1591 // todo внести комментарии.
     public class FieldEdit

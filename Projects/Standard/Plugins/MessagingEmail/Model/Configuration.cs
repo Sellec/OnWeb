@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace OnWeb.Plugins.MessagingEmail.Model
+namespace OnWeb.Modules.MessagingEmail.Model
 {
-    public class Configuration : CoreBind.Modules.Configuration.SaveModel
+    public class Configuration : Core.Modules.Configuration.SaveModel
     {
         [Display(Name = "Использовать отдельный SMTP-сервер для отправки почты?")]
         public bool IsUseSmtp { get; set; }

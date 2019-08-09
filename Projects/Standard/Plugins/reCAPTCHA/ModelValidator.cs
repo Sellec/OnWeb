@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Web.Mvc;
 
-namespace OnWeb.Plugins.reCAPTCHA
+namespace OnWeb.Modules.reCAPTCHA
 {
     class ModelValidator : System.Web.Mvc.ModelValidator
     {

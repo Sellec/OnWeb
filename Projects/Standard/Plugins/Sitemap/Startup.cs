@@ -1,7 +1,7 @@
 ﻿using OnUtils.Architecture.AppCore;
 using OnUtils.Architecture.AppCore.DI;
 
-namespace OnWeb.Plugins.Sitemap
+namespace OnWeb.Modules.Sitemap
 {
     using Core.Modules;
 

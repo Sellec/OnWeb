@@ -1,6 +1,6 @@
 ﻿//using System;
 
-//namespace OnWeb.Plugins.FileManager.Conversations
+//namespace OnWeb.Modules.FileManager.Conversations
 //{
 //    using Core;
 //    using Core.Configuration;

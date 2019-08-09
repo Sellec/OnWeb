@@ -2,7 +2,7 @@
 using OnUtils.Architecture.AppCore;
 using OnUtils.Architecture.AppCore.DI;
 
-namespace OnWeb.Plugins.Default
+namespace OnWeb.Modules.Default
 {
     using Core.Modules;
 

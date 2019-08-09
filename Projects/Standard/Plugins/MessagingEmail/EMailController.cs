@@ -6,13 +6,13 @@ using OnUtils.Application.Modules.CoreModule;
 using System;
 using System.Linq;
 
-namespace OnWeb.Plugins.MessagingEmail
+namespace OnWeb.Modules.MessagingEmail
 {
     using Core.Configuration;
 
     using Model;
 
-    class EMailController : CoreBind.Modules.ModuleControllerAdmin<EMailModule, Configuration, Configuration>
+    class EMailController : Core.Modules.ModuleControllerAdmin<EMailModule, Configuration, Configuration>
     {
         protected override void ConfigurationViewFill(Configuration viewModelForFill, out string viewName)
         {

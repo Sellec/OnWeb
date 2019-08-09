@@ -1,11 +1,10 @@
-﻿using OnUtils.Application;
-using OnUtils.Architecture.AppCore;
+﻿using OnUtils.Architecture.AppCore;
 using OnUtils.Architecture.AppCore.DI;
 
 namespace OnWeb.CoreBind
 {
     using CoreBind.Providers;
-    using Plugins.Auth;
+    using Modules.Auth;
 
     class Startup : IConfigureBindings
     {

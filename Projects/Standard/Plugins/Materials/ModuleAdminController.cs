@@ -6,11 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace OnWeb.Plugins.Materials
+namespace OnWeb.Modules.Materials
 {
     using AdminForModules.Menu;
-    using Plugins.Routing;
-    using CoreBind.Modules;
+    using Modules.Routing;
+    using Core.Modules;
 
     /// <summary>
     /// Представляет контроллер для панели управления.

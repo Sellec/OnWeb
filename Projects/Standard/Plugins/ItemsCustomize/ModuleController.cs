@@ -11,11 +11,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace OnWeb.Plugins.ItemsCustomize
+namespace OnWeb.Modules.ItemsCustomize
 {
-    using Core.Types;
+    using Types;
     using Core.Modules;
-    using CoreBind.Modules;
+    using Core.Modules;
     using Model;
 
     /// <summary>

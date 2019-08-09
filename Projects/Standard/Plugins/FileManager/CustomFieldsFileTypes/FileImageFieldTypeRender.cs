@@ -5,10 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace OnWeb.Plugins.FileManager.CustomFieldsFileTypes
+namespace OnWeb.Modules.FileManager.CustomFieldsFileTypes
 {
     using Core;
-    using Plugins.ItemsCustomize;
+    using Modules.ItemsCustomize;
     using CoreBind.Razor;
 
     class FileImageFieldTypeRender : CoreComponentBase, ICustomFieldRender<FileImageFieldType>

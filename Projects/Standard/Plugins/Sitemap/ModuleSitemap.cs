@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OnWeb.Plugins.Sitemap
+namespace OnWeb.Modules.Sitemap
 {
     using Core;
     using Core.Modules;

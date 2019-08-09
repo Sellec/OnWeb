@@ -2,7 +2,7 @@
 using OnUtils.Architecture.AppCore.DI;
 using System.Web.Mvc;
 
-namespace OnWeb.Plugins.reCAPTCHA
+namespace OnWeb.Modules.reCAPTCHA
 {
     using Core.Modules;
 

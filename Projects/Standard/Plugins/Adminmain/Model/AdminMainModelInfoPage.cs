@@ -3,7 +3,7 @@ using OnUtils.Application.DB;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
-namespace OnWeb.Plugins.Adminmain.Model
+namespace OnWeb.Modules.Adminmain.Model
 {
     using WebCoreModule;
 

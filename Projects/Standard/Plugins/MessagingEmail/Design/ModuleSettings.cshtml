@@ -6,33 +6,36 @@
 
 @section scripts {
     <script type='text/javascript'>
+        var blockCheckerClass = "js-block-checker";
         $(document).ready(function () {
             InitSettings("@(smtpAttributes.@class)");
         });
 
         function InitSettings(className) {
-            if ($("input[type=checkbox]." + className).is(":checked")) {
-                $("." + className).not("[type=checkbox]").each(function () {
+            $("input[type=checkbox]." + className).first().addClass(blockCheckerClass);
+
+            if ($("input[type=checkbox]." + className + "." + blockCheckerClass).is(":checked")) {
+                $("." + className).not("." + blockCheckerClass).each(function () {
                     $(this).closest('tr').show();
                 });
             }
             else {
-                $("." + className).not("[type=checkbox]").each(function () {
+                $("." + className).not("." + blockCheckerClass).each(function () {
                     $(this).val("-");
                     $(this).closest('tr').hide();
                 });
             }
             $("select." + className).attr("size", 1);
 
-            $("input[type=checkbox][name=@Html.NameFor(x => x.IsUseSmtp)]." + className).change(function () {
+            $("input[type=checkbox]." + className + "." + blockCheckerClass).change(function () {
                 if ($(this).is(":checked")) {
-                    $("." + className).not("[type=checkbox]").each(function () {
+                    $("." + className).not("." + blockCheckerClass).each(function () {
                         $(this).val("");
                         $(this).closest('tr').show();
                     });
                 }
                 else {
-                    $("." + className).not("[type=checkbox]").each(function () {
+                    $("." + className).not("." + blockCheckerClass).each(function () {
                         $(this).val("-");
                         $(this).closest('tr').hide();
                     });

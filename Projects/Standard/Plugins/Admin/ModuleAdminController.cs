@@ -1,9 +1,9 @@
 ﻿using OnUtils.Application.Modules;
 using System.Web.Mvc;
 
-namespace OnWeb.Plugins.Admin
+namespace OnWeb.Modules.Admin
 {
-    using CoreBind.Modules;
+    using Core.Modules;
 
     public sealed class ModuleAdminController : ModuleControllerUser<ModuleAdmin>
     {

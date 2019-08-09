@@ -14,7 +14,7 @@ namespace OnWeb.Core.Users
     /// <summary>
     /// Менеджер, управляющий контекстами пользователей (см. <see cref="IUserContext"/>).
     /// Каждый поток приложения имеет ассоциированный контекст пользователя, от имени которого могут выполняться запросы и выполняться действия. 
-    /// Более подробно см. <see cref="UserContextManager.GetCurrentUserContext"/> / <see cref="UserContextManager.SetCurrentUserContext(IUserContext)"/> / <see cref="UserContextManager.ClearCurrentUserContext"/>.
+    /// Более подробно см. <see cref="UserContextManager{TAppCoreSelfReference}.GetCurrentUserContext"/> / <see cref="UserContextManager{TAppCoreSelfReference}.SetCurrentUserContext(IUserContext)"/> / <see cref="UserContextManager{TAppCoreSelfReference}.ClearCurrentUserContext"/>.
     /// </summary>
     public class WebUserContextManager : CoreComponentBase, IComponentSingleton, IUnitOfWorkAccessor<DB.CoreContext>
     {
@@ -91,7 +91,7 @@ namespace OnWeb.Core.Users
             var id = 0;
             userContext = null;
             resultReason = null;
-            Plugins.Auth.ModuleConfiguration authConfig = null;
+            OnWeb.Modules.Auth.ModuleConfiguration authConfig = null;
 
             using (var db = new DB.CoreContext())
             using (var scope = db.CreateScope(TransactionScopeOption.RequiresNew))
@@ -119,7 +119,7 @@ namespace OnWeb.Core.Users
 
                 try
                 {
-                    authConfig = AppCore.Get<Plugins.Auth.ModuleAuth>()?.GetConfiguration<Plugins.Auth.ModuleConfiguration>();
+                    authConfig = AppCore.Get<OnWeb.Modules.Auth.ModuleAuth>()?.GetConfiguration<OnWeb.Modules.Auth.ModuleConfiguration>();
 
                     var checkLoginResult = CheckLogin(IdUser, user, password, db, out var res);
                     if (!checkLoginResult.IsSuccess)

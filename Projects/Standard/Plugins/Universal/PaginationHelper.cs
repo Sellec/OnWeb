@@ -4,10 +4,10 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 
-namespace OnWeb.Plugins.Universal.Pagination
+namespace OnWeb.Modules.Universal.Pagination
 {
-    using Core.Exceptions;
-    using CoreBind.Modules;
+    using Core.Modules;
+    using Exceptions;
 
     public abstract class PaginationHelper<TController, TItemSource, TItemView>
         where TController : ModuleControllerBase

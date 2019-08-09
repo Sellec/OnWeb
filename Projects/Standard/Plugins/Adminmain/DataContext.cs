@@ -1,7 +1,7 @@
 ﻿using OnUtils.Application.DB;
 using OnUtils.Data;
 
-namespace OnWeb.Plugins.Adminmain
+namespace OnWeb.Modules.Adminmain
 {
     using Routing.DB;
 

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OnWeb.Plugins.FileManager.CustomFieldsFileTypes
+namespace OnWeb.Modules.FileManager.CustomFieldsFileTypes
 {
     public class FileImageFieldType : FileFieldType
     {

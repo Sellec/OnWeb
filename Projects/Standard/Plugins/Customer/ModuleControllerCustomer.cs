@@ -7,10 +7,10 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace OnWeb.Plugins.Customer
+namespace OnWeb.Modules.Customer
 {
     using Core.DB;
-    using CoreBind.Modules;
+    using Core.Modules;
     using FileManager;
 
     public class ModuleControllerCustomer : ModuleControllerUser<ModuleCustomer>

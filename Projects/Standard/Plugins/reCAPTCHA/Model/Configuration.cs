@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace OnWeb.Plugins.reCAPTCHA.Model
+namespace OnWeb.Modules.reCAPTCHA.Model
 {
-    public class Configuration : CoreBind.Modules.Configuration.SaveModel
+    public class Configuration : Core.Modules.Configuration.SaveModel
     {
         /// <summary>
         /// См. <see cref="ModuleReCaptchaConfiguration.IsEnabledValidation"/>

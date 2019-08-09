@@ -6,7 +6,7 @@ namespace OnWeb.Core.DB
     using Items;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using Plugins.Routing;
+    using global::OnWeb.Modules.Routing;
 
 #pragma warning disable CS1591 // todo внести комментарии.
     [Table("ModuleSearchSet")]

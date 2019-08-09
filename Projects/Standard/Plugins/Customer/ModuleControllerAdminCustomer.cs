@@ -9,12 +9,12 @@ using System.Linq;
 using System.Transactions;
 using System.Web.Mvc;
 
-namespace OnWeb.Plugins.Customer
+namespace OnWeb.Modules.Customer
 {
     using Core.DB;
-    using CoreBind.Modules;
+    using Core.Modules;
+    using Journaling;
     using MessagingEmail;
-    using Core.Journaling;
 
     public class ModuleControllerAdminCustomer : ModuleControllerAdmin<ModuleCustomer>, IUnitOfWorkAccessor<CoreContext>
     {
@@ -355,7 +355,7 @@ namespace OnWeb.Plugins.Customer
                     var data = db.Users.Where(u => u.IdUser == IdUser).FirstOrDefault();
                     if (data == null) throw new Exception("Неправильно указан пользователь!");
 
-                    Response.SetCookie("LogonSuperuserAs", IdUser.ToString(), DateTime.Now.AddDays(365), "/");
+                    Response.SetCookie(new System.Web.HttpCookie("LogonSuperuserAs", IdUser.ToString()) { Expires = DateTime.Now.AddDays(365), Domain = "/" });
                     return new RedirectResult("/");
                 }
             }

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace OnWeb.Plugins.MessagingEmail.Model
+namespace OnWeb.Modules.MessagingEmail.Model
 {
     /// <summary>
     /// Хранит настройки подключения к smtp-серверу.

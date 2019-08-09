@@ -12,13 +12,13 @@ namespace System.Web.Mvc
         {
             var attrs = HtmlHelper.AnonymousObjectToHtmlAttributes(htmlAttributes);
 
-            if (helper.ViewContext.Controller is OnWeb.CoreBind.Modules.ModuleControllerBase controller)
+            if (helper.ViewContext.Controller is OnWeb.Core.Modules.ModuleControllerBase controller)
             {
                 var appCore = controller.AppCore;
                 if (appCore != null)
                 {
-                    var module = appCore.Get<OnWeb.Plugins.reCAPTCHA.ModuleReCaptcha>();
-                    var cfg = module?.GetConfiguration<OnWeb.Plugins.reCAPTCHA.ModuleReCaptchaConfiguration>();
+                    var module = appCore.Get<OnWeb.Modules.reCAPTCHA.ModuleReCaptcha>();
+                    var cfg = module?.GetConfiguration<OnWeb.Modules.reCAPTCHA.ModuleReCaptchaConfiguration>();
                     if (cfg != null && cfg.IsEnabledValidation && !string.IsNullOrEmpty(cfg.PublicKey))
                     {
                         var tagBuilder = new TagBuilder("button");

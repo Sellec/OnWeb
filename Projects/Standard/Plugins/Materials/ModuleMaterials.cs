@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OnWeb.Plugins.Materials
+namespace OnWeb.Modules.Materials
 {
     using Core.Items;
     using Core.Modules;

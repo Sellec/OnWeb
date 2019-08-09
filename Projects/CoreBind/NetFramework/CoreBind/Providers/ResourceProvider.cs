@@ -8,6 +8,8 @@ using System.Web.Routing;
 
 namespace OnWeb.CoreBind.Providers
 {
+    using Core.Modules;
+
     class ResourceProvider : Core.Storage.ResourceProvider, IViewEngine, IRouteHandler
     {
         private IViewEngine _previousViewEngine = null;
@@ -20,10 +22,10 @@ namespace OnWeb.CoreBind.Providers
         #region RazorViewEngine
         internal string GetModuleNameFromContext(ControllerContext controllerContext)
         {
-            if (controllerContext != null && controllerContext.Controller != null && controllerContext.Controller is Modules.ModuleControllerBase)
+            if (controllerContext != null && controllerContext.Controller != null && controllerContext.Controller is ModuleControllerBase)
             {
-                var module = (controllerContext.Controller as Modules.ModuleControllerBase).ModuleBase;
-                if (module != null) return module.QueryType.Namespace.Replace(typeof(OnWeb.Plugins.NamespaceAnchor).Namespace, "").TrimStart('.');
+                var module = (controllerContext.Controller as ModuleControllerBase).ModuleBase;
+                if (module != null) return module.QueryType.Namespace.Replace(typeof(OnWeb.Modules.NamespaceAnchor).Namespace, "").TrimStart('.');
             }
 
             return null;

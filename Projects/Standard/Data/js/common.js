@@ -403,7 +403,7 @@ $(function ()
         };
 
         var defaultsFileUploadHardCoded = {
-            url: requestMethods.prepareUrl("/c8b7eccc-4a84-edf6-1e60-e8fa820f4141/UploadFile"),
+            url: requestMethods.prepareUrl("/c7168ad3-1aa8-0b36-aa47-75163eed6383/UploadFile"),
             returnType: 'json',
         };
 

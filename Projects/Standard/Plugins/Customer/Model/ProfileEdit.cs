@@ -5,7 +5,7 @@ using OnUtils.Application.Modules.ItemsCustomize;
 using OnUtils.Application.Modules.ItemsCustomize.Data;
 using System.Collections.ObjectModel;
 
-namespace OnWeb.Plugins.Customer.Model
+namespace OnWeb.Modules.Customer.Model
 {
     using Core.DB;
     using Core.Items;

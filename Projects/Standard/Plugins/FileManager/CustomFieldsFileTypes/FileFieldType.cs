@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection.Emit;
 
-namespace OnWeb.Plugins.FileManager.CustomFieldsFileTypes
+namespace OnWeb.Modules.FileManager.CustomFieldsFileTypes
 {
     using DB;
 

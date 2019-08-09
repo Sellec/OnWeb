@@ -6,12 +6,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace OnWeb.Plugins.Auth
+namespace OnWeb.Modules.Auth
 {
     using Core.DB;
-    using Core.Exceptions;
+    using Core.Modules;
     using Core.Users;
-    using CoreBind.Modules;
+    using Exceptions;
     using MessagingEmail;
 
     public class ModuleAuthController : ModuleControllerUser<ModuleAuth>

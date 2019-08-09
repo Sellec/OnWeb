@@ -6,14 +6,14 @@ using System.Linq;
 using System.Reflection;
 using System.Web.Routing;
 
-namespace OnWeb.Plugins
+namespace OnWeb.Modules
 {
     using Core.Modules;
     using CoreBind.Routing;
     using Core;
     using Core.Configuration;
     using Core.Items;
-    using Core.Types;
+    using Types;
 
 
     static class Extensions

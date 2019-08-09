@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Web.Mvc;
 
-namespace OnWeb.Plugins.Sitemap
+namespace OnWeb.Modules.Sitemap
 {
     using AdminForModules.Menu;
-    using CoreBind.Modules;
+    using Core.Modules;
 
     /// <summary>
     /// Представляет контроллер для панели управления.

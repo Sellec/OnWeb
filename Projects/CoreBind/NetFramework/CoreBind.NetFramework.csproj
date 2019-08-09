@@ -45,7 +45,7 @@
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>D:\Projects\TraceStudio\SigningKeys\OnUtils.snk</AssemblyOriginatorKeyFile>
@@ -69,42 +69,39 @@
   <ItemGroup>
     <Compile Include="WebApplicationAspNetMvc.cs" />
     <Compile Include="HttpApplicationBase.cs" />
-    <Compile Include="Plugins\ItemsCustomize\Startup.cs" />
-    <Compile Include="CoreBind\Modules\Configuration\SaveModel.cs" />
-    <Compile Include="CoreBind\Modules\Configuration\ViewModel.cs" />
-    <Compile Include="CoreBind\Modules\CustomReflectedActionDescriptor.cs" />
-    <Compile Include="CoreBind\Modules\ModuleControllerUser.cs" />
+    <Compile Include="Modules\ItemsCustomize\Startup.cs" />
+    <Compile Include="Core\Modules\Configuration\SaveModel.cs" />
+    <Compile Include="Core\Modules\Configuration\ViewModel.cs" />
+    <Compile Include="Core\Modules\CustomReflectedActionDescriptor.cs" />
+    <Compile Include="Core\Modules\ModuleControllerUser.cs" />
     <Compile Include="CoreBind\Providers\ResourceProvider.cs" />
     <Compile Include="CoreBind\Providers\SessionBinder.cs" />
     <Compile Include="CoreBind\Routing\ControllerTypeAdmin.cs" />
-    <Compile Include="CoreBind\Modules\ModuleControllerAdmin.cs" />
+    <Compile Include="Core\Modules\ModuleControllerAdmin.cs" />
     <Compile Include="CoreBind\Routing\ModuleControllerDefaultAttribute.cs" />
-    <Compile Include="CoreBind\Users\UserContextManager.cs" />
-    <Compile Include="CoreBind\_Initialize\WebRazorHostFactoryInjector.cs" />
-    <Compile Include="CoreBind\_Initialize\WebInitializer.cs" />
+    <Compile Include="_Initialize\WebRazorHostFactoryInjector.cs" />
+    <Compile Include="_Initialize\WebInitializer.cs" />
     <Compile Include="CoreBind\Razor\TraceViewPage.cs" />
     <Compile Include="CoreBind\Binders\JsonDictionaryModelBinder.cs" />
     <Compile Include="CoreBind\Binders\TraceModelBinder.cs" />
-    <Compile Include="CoreBind\Exceptions\ActionResultException.cs" />
     <Compile Include="CoreBind\Extensions\ModelMetadataExtension.cs" />
     <Compile Include="CoreBind\Extensions\ModelStateDictionaryExtension.cs" />
-    <Compile Include="CoreBind\Extensions\ResponseException.cs" />
-    <Compile Include="Plugins\ItemsCustomize\Extensions\HtmlHelperExtension.cs" />
-    <Compile Include="Plugins\ItemsCustomize\MetadataAndValues\FieldModelMetadata.cs" />
-    <Compile Include="Plugins\ItemsCustomize\MetadataAndValues\FieldValueProvider.cs" />
-    <Compile Include="Plugins\ItemsCustomize\MetadataAndValues\FieldValueProviderFactory.cs" />
-    <Compile Include="Plugins\ItemsCustomize\MetadataAndValues\FieldValueProviderResult.cs" />
-    <Compile Include="CoreBind\_Initialize\ModuleInitializer.cs" />
-    <Compile Include="CoreBind\Modules\Internal\ModuleControllerInternalErrors.cs" />
-    <Compile Include="CoreBind\Modules\Internal\ModuleInternalErrors.cs" />
-    <Compile Include="CoreBind\Modules\ModuleActionAttribute.cs" />
-    <Compile Include="CoreBind\Modules\ModuleActionInvoker.cs" />
-    <Compile Include="CoreBind\Modules\ModuleControllerBase.cs" />
-    <Compile Include="CoreBind\Razor\RazorBuildProvider.cs" />
-    <Compile Include="CoreBind\Razor\RazorHost.cs" />
-    <Compile Include="CoreBind\Razor\RazorHostFactory.cs" />
+    <Compile Include="Modules\ItemsCustomize\Extensions\HtmlHelperExtension.cs" />
+    <Compile Include="Modules\ItemsCustomize\MetadataAndValues\FieldModelMetadata.cs" />
+    <Compile Include="Modules\ItemsCustomize\MetadataAndValues\FieldValueProvider.cs" />
+    <Compile Include="Modules\ItemsCustomize\MetadataAndValues\FieldValueProviderFactory.cs" />
+    <Compile Include="Modules\ItemsCustomize\MetadataAndValues\FieldValueProviderResult.cs" />
+    <Compile Include="_Initialize\ModuleInitializer.cs" />
+    <Compile Include="Core\Modules\Internal\ModuleControllerInternalErrors.cs" />
+    <Compile Include="Core\Modules\Internal\ModuleInternalErrors.cs" />
+    <Compile Include="Core\Modules\ModuleActionAttribute.cs" />
+    <Compile Include="Core\Modules\ModuleActionInvoker.cs" />
+    <Compile Include="Core\Modules\ModuleControllerBase.cs" />
+    <Compile Include="CoreBind\Razor\CustomRazorBuildProvider.cs" />
+    <Compile Include="CoreBind\Razor\CustomMvcWebPageRazorHost.cs" />
+    <Compile Include="CoreBind\Razor\CustomMvcWebRazorHostFactory.cs" />
     <Compile Include="CoreBind\Razor\WebStartup.cs" />
-    <Compile Include="Plugins\Auth\Module2.cs" />
+    <Compile Include="Modules\Auth\Module2.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CoreBind\Providers\EmbeddedResourceProvider.cs" />
@@ -127,12 +124,11 @@
     <Compile Include="CoreBind\Routing\RoutingManager.cs" />
     <Compile Include="CoreBind\Routing\RouteHandler.cs" />
     <Compile Include="CoreBind\Routing\RoutesDefaults.cs" />
-    <Compile Include="CoreBind\Types\NSJsonResult.cs" />
-    <Compile Include="CoreBind\Types\RequestAnswerType.cs" />
-    <Compile Include="CoreBind\Types\ResultWData.cs" />
-    <Compile Include="CoreBind\WebCore\Types\RequestSpecificItem.cs" />
-    <Compile Include="CoreBind\WebUtils\RazorRenderHelper.cs" />
-    <Compile Include="CoreBind\WebUtils\TypeHelper.cs" />
+    <Compile Include="Types\NSJsonResult.cs" />
+    <Compile Include="Types\RequestAnswerType.cs" />
+    <Compile Include="Types\ResultWData.cs" />
+    <Compile Include="WebUtils\RazorRenderHelper.cs" />
+    <Compile Include="WebUtils\TypeHelper.cs" />
     <Compile Include="Utils\External\ActionParameterAlias\ActionParameterAlias.cs" />
     <Compile Include="Utils\External\ActionParameterAlias\ParameterAliasAttributeGlobal.cs" />
     <Compile Include="Utils\External\ActionParameterAlias\ParameterAliasValueProvider.cs" />
@@ -191,6 +187,9 @@
     <PackageReference Include="OnUtils.Tasks.MomentalThreading">
       <Version>0.1.1.5</Version>
     </PackageReference>
+    <PackageReference Include="StrongNamer">
+      <Version>0.0.8</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CoreBind\Razor\RazorResources.resx">
@@ -202,8 +201,6 @@
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CoreBind\AspNet\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

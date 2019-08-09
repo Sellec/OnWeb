@@ -212,7 +212,7 @@ namespace OnWeb
                 }
             }
 
-            Core.WebUtils.QueryLogHelper.QueryLogEnabled = true;
+            WebUtils.QueryLogHelper.QueryLogEnabled = true;
             Context.Items["TimeRequestStart"] = DateTime.Now;
 
             HttpContext.Current.SetAppCore(_applicationCore);
@@ -305,7 +305,7 @@ namespace OnWeb
         {
             Context.Items["TimeRequestEnd"] = DateTime.Now;
 
-            var queries = Core.WebUtils.QueryLogHelper.GetQueries();
+            var queries = WebUtils.QueryLogHelper.GetQueries();
             if (queries.Count > 0)
             {
             }
@@ -339,7 +339,7 @@ namespace OnWeb
                 _applicationCore.GetUserContextManager().ClearCurrentUserContext();
             }
 
-            var queries2 = Core.WebUtils.QueryLogHelper.GetQueries();
+            var queries2 = WebUtils.QueryLogHelper.GetQueries();
             if (queries2.Count > 0)
             {
             }
@@ -347,8 +347,8 @@ namespace OnWeb
             {
             }
 
-            Core.WebUtils.QueryLogHelper.QueryLogEnabled = false;
-            Core.WebUtils.QueryLogHelper.ClearQueries();
+            WebUtils.QueryLogHelper.QueryLogEnabled = false;
+            WebUtils.QueryLogHelper.ClearQueries();
         }
 
         internal void Application_PostRequestHandlerExecute(object sender, EventArgs e)

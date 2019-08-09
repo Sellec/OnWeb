@@ -1,6 +1,6 @@
-﻿namespace OnWeb.Plugins.Auth.Model
+﻿namespace OnWeb.Modules.Auth.Model
 {
-    public class Configuration : CoreBind.Modules.Configuration.SaveModel
+    public class Configuration : Core.Modules.Configuration.SaveModel
     {
         public void ApplyConfiguration(ModuleConfiguration source)
         {

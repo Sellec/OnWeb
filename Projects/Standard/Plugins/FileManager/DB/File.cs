@@ -1,4 +1,4 @@
-namespace OnWeb.Plugins.FileManager.DB
+namespace OnWeb.Modules.FileManager.DB
 {
     using System;
     using System.ComponentModel.DataAnnotations;

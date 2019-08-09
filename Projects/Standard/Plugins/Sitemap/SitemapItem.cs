@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OnWeb.Plugins.Sitemap
+namespace OnWeb.Modules.Sitemap
 {
     /// <summary>
     /// Описывает один адрес для карты сайта.

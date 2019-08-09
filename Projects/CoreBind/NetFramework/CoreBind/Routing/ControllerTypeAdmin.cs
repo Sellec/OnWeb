@@ -47,7 +47,7 @@ namespace OnWeb.CoreBind.Routing
         public override bool CheckPermissions(IModuleCore module, RouteValueDictionary routeValues)
         {
             //Проверка доступа к саму панель управления. Нет прав на модуле "Admin".
-            var moduleAdmin = AppCore.GetModulesManager().GetModule<Plugins.Admin.ModuleAdmin>();
+            var moduleAdmin = AppCore.GetModulesManager().GetModule<Modules.Admin.ModuleAdmin>();
             if (moduleAdmin != null)
             {
                 if (moduleAdmin.CheckPermission(ModulesConstants.PermissionManage) != CheckPermissionResult.Allowed)

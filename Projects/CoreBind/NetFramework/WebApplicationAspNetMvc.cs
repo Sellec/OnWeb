@@ -42,7 +42,6 @@ namespace OnWeb
                 return instance;
             });
             bindingsCollection.SetSingleton<RoutingManager>();
-            bindingsCollection.SetSingleton<UserContextManager<WebApplication>, CoreBind.Users.UserContextManager>();
         }
 
         /// <summary>
@@ -106,7 +105,7 @@ namespace OnWeb
             var routingHandler = new RouteHandler(this);
 
             // Маршруты админки идут перед универсальными.
-            var moduleAdmin = Get<Plugins.Admin.ModuleAdmin>();
+            var moduleAdmin = Get<Modules.Admin.ModuleAdmin>();
 
             routes.Add("AdminRoute1", new RouteWithDefaults(
                 this,

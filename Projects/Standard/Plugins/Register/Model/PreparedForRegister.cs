@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace OnWeb.Plugins.Register.Model
+namespace OnWeb.Modules.Register.Model
 {
     using Core.DB;
     using Core.Items;

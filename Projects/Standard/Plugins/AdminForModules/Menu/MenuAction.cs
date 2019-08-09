@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace OnWeb.Plugins.AdminForModules.Menu
+namespace OnWeb.Modules.AdminForModules.Menu
 {
-    using CoreBind.Modules;
+    using Core.Modules;
 
     /// <summary>
     /// Указывает, что метод должен быть отражен в меню модуля в панели управления.

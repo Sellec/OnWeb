@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OnWeb.Plugins.Materials
+namespace OnWeb.Modules.Materials
 {
     using Sitemap;
     using Core;
     using Core.Items;
-    using Plugins.Routing;
+    using Modules.Routing;
 
     class MaterialsSitemapProvider : CoreComponentBase, ISitemapProvider
     {

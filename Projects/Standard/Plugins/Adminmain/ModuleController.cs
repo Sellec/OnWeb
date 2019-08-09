@@ -10,13 +10,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace OnWeb.Plugins.Adminmain
+namespace OnWeb.Modules.Adminmain
 {
     using AdminForModules.Menu;
-    using Core.Journaling;
     using Core.Modules;
-    using CoreBind.Modules;
     using CoreBind.Routing;
+    using Journaling;
     using Routing.DB;
     using WebCoreModule;
 
@@ -285,7 +284,7 @@ namespace OnWeb.Plugins.Adminmain
             {
                 if (!serviceGuid.HasValue) throw new Exception("Не указан идентификатор сервиса.");
 
-                var serviceJournal = AppCore.Get<Core.ServiceMonitor.Monitor>().GetServiceJournal(serviceGuid.Value);
+                var serviceJournal = AppCore.Get<ServiceMonitor.Monitor>().GetServiceJournal(serviceGuid.Value);
                 return View("MonitorJournal.cshtml", serviceJournal.ToList());
             }
             catch (Exception ex)

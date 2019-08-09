@@ -1,6 +1,6 @@
 ﻿using OnUtils.Data;
 
-namespace OnWeb.Plugins.Materials.DB
+namespace OnWeb.Modules.Materials.DB
 {
     public partial class DataLayerContext : UnitOfWorkBase
     {

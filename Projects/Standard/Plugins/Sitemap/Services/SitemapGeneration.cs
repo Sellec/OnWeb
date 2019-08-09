@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OnWeb.Plugins.Sitemap.Services
+namespace OnWeb.Modules.Sitemap.Services
 {
     using Core;
 
@@ -62,7 +62,7 @@ namespace OnWeb.Plugins.Sitemap.Services
 
                 var module = AppCore.GetModulesManager().GetModule<ModuleSitemap>();
 
-                var code = Core.WebUtils.RazorRenderHelper.RenderView(module, "SitemapXml.cshtml", linksAll);
+                var code = WebUtils.RazorRenderHelper.RenderView(module, "SitemapXml.cshtml", linksAll);
 
                 var path = System.IO.Path.Combine(OnUtils.LibraryEnumeratorFactory.LibraryDirectory, "sitemap.xml");
                 System.IO.File.WriteAllText(path, code);

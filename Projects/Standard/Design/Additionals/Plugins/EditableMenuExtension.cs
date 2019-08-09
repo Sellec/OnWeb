@@ -3,8 +3,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 
 using OnUtils.Data;
-using OnWeb.Plugins.EditableMenu.DB;
-using OnWeb.CoreBind.Modules;
+using OnWeb.Modules.EditableMenu.DB;
+using OnWeb.Core.Modules;
 using OnWeb.Design.Additionals.Plugins.Model;
 
 namespace System.Web.Mvc

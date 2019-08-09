@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace OnWeb.Plugins.Sitemap
+namespace OnWeb.Modules.Sitemap
 {
     using Core;
 

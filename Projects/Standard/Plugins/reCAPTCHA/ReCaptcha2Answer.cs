@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace OnWeb.Plugins.reCAPTCHA
+namespace OnWeb.Modules.reCAPTCHA
 {
     class ReCaptcha2Answer
     {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Web.Mvc;
 
-namespace OnWeb.Plugins.Developing
+namespace OnWeb.Modules.Developing
 {
-    using CoreBind.Modules;
+    using Core.Modules;
 
     public class ModuleDevelopingController : ModuleControllerUser<ModuleDeveloping>
     {

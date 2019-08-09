@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace OnWeb.Plugins.EditableMenu.Design.Model
+namespace OnWeb.Modules.EditableMenu.Design.Model
 {
     using Core.Modules;
 

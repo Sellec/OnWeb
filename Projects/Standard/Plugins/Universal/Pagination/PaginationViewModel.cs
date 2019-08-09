@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace OnWeb.Plugins.Universal.Pagination
+namespace OnWeb.Modules.Universal.Pagination
 {
     /// <summary>
     /// Если модель, передаваемая в представление, наследует от этого типа, то есть возможность использовать некоторые дополнительные возможности.

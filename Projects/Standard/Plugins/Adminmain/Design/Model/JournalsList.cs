@@ -2,7 +2,7 @@
 using OnUtils.Application.Journaling.DB;
 using System;
 
-namespace OnWeb.Plugins.Adminmain.Design.Model
+namespace OnWeb.Modules.Adminmain.Design.Model
 {
     public class JournalsList
     {

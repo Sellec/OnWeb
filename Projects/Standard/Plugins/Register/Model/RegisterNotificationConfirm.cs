@@ -1,4 +1,4 @@
-﻿namespace OnWeb.Plugins.Register.Model
+﻿namespace OnWeb.Modules.Register.Model
 {
     using Core.DB;
 

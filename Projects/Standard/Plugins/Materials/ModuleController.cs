@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Web.Mvc;
 
-namespace OnWeb.Plugins.Materials
+namespace OnWeb.Modules.Materials
 {
-    using CoreBind.Modules;
+    using Core.Modules;
 
     /// <summary>
     /// Представляет контроллер для панели управления.

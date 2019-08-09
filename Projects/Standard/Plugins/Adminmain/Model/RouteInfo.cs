@@ -1,8 +1,8 @@
-﻿namespace OnWeb.Plugins.Adminmain.Model
+﻿namespace OnWeb.Modules.Adminmain.Model
 {
     public class RouteInfo
     {
-        public Plugins.Routing.DB.Routing Route;
+        public OnWeb.Modules.Routing.DB.Routing Route;
         public string ItemName;
     }
 }

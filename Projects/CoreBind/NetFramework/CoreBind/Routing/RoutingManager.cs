@@ -1,21 +1,19 @@
-﻿using OnUtils.Application.Modules;
+﻿using OnUtils.Application.Journaling;
+using OnUtils.Application.ServiceMonitor;
 using OnUtils.Architecture.AppCore;
 using OnUtils.Utils;
 using System;
 using System.Collections.Generic;
-using OnUtils.Application.ServiceMonitor;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Web.Mvc;
-using Journaling = OnUtils.Application.Journaling;
 
 namespace OnWeb.CoreBind.Routing
 {
     using Core;
     using Core.Modules;
-    using Core.ServiceMonitor;
-    using CoreBind.Modules;
+    using ServiceMonitor;
 
     /// <summary>
     /// Предоставляет функции для работы с маршрутизацией.
@@ -45,7 +43,7 @@ namespace OnWeb.CoreBind.Routing
         /// Возвращает относительный или абсолютный url (см. <paramref name="includeAuthority"/>) на основе контроллера с типом <typeparamref name="TModuleController"/> и метода, вызванного в лямбда-выражении <paramref name="expression"/>.
         /// </summary>
         /// <typeparam name="TModule">Тип модуля.</typeparam>
-        /// <typeparam name="TModuleController">Тип контроллера, относящийся к модулю <typeparamref name="TModule"/>. Проверяются зарегистрированные типы контроллеров (<see cref="ModuleCore.ControllerTypes"/>) в модуле <typeparamref name="TModule"/> и проверяется нахождение типа <typeparamref name="TModuleController"/> в цепочках наследования.</typeparam>
+        /// <typeparam name="TModuleController">Тип контроллера, относящийся к модулю <typeparamref name="TModule"/>. Проверяются зарегистрированные типы контроллеров (<see cref="ModuleControllerTypesManager"/>) в модуле <typeparamref name="TModule"/> и проверяется нахождение типа <typeparamref name="TModuleController"/> в цепочках наследования.</typeparam>
         /// <param name="expression">Выражение, содержащее вызов метода контроллера, к которому следует построить маршрут. Все аргументы вызываемого метода должны быть указаны. Если аргумент указывается как null, то он игнорируется. Если аргумент задан явно, то он передается в адресе.</param>
         /// <param name="includeAuthority">Если равно true, то формируется абсолютный url, включающий в себя адрес сервера.</param>
         /// <returns>Возвращает сформированный url или генерирует исключение.</returns>
@@ -100,7 +98,7 @@ namespace OnWeb.CoreBind.Routing
                     return $"{value}";
                 }).ToList();
 
-                var defaultMethod = methodCall.Method.DeclaringType.GetMethod(nameof(ModuleControllerUser<Plugins.WebCoreModule.WebCoreModule>.Index), BindingFlags.Public | BindingFlags.Instance, null, new Type[] { }, null);
+                var defaultMethod = methodCall.Method.DeclaringType.GetMethod(nameof(ModuleControllerUser<OnWeb.Modules.WebCoreModule.WebCoreModule>.Index), BindingFlags.Public | BindingFlags.Instance, null, new Type[] { }, null);
                 var isDefaultMethod = defaultMethod == methodCall.Method;
                 if (isDefaultMethod && arguments.Count == 0) methodName = null;
 
@@ -109,12 +107,12 @@ namespace OnWeb.CoreBind.Routing
             }
             catch (HandledException ex)
             {
-                this.RegisterServiceEvent(Journaling.EventType.Error, "Ошибка создания переадресации", null, ex.InnerException);
+                this.RegisterServiceEvent(EventType.Error, "Ошибка создания переадресации", null, ex.InnerException);
                 throw ex.InnerException;
             }
             catch (Exception ex)
             {
-                this.RegisterServiceEvent(Journaling.EventType.Error, "Ошибка создания переадресации", null, ex);
+                this.RegisterServiceEvent(EventType.Error, "Ошибка создания переадресации", null, ex);
                 throw new HandledException("Ошибка переадресации", ex);
             }
         }

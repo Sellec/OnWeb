@@ -1,4 +1,4 @@
-﻿namespace OnWeb.Plugins.Auth.Model
+﻿namespace OnWeb.Modules.Auth.Model
 {
     [reCAPTCHA.Model]
     public class AuthLoginData

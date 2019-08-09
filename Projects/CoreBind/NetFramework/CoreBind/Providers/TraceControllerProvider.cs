@@ -1,6 +1,5 @@
 ﻿using OnUtils.Application;
 using OnUtils.Application.Journaling;
-using OnUtils.Application.Modules;
 using OnUtils.Data;
 using System;
 using System.Collections.Generic;
@@ -15,8 +14,9 @@ using System.Web.SessionState;
 namespace OnWeb.CoreBind.Providers
 {
     using Core;
-    using Core.Exceptions;
     using Core.Modules;
+    using Core.Modules.Internal;
+    using Exceptions;
     using Routing;
 
     class TraceControllerProvider : CoreComponentBase, IComponentSingleton, IUnitOfWorkAccessor<Core.DB.CoreContext>, IControllerFactory
@@ -53,7 +53,7 @@ namespace OnWeb.CoreBind.Providers
                 context = sessionBinder.RestoreUserContextFromRequest();
                 if (context != null && !context.IsGuest)
                 {
-                    AppCore.Get<Plugins.Auth.ModuleAuth>()?.RegisterEvent(EventType.CriticalError, "Нарушение процесса авторизации", null);
+                    AppCore.Get<OnWeb.Modules.Auth.ModuleAuth>()?.RegisterEvent(EventType.CriticalError, "Нарушение процесса авторизации", null);
                     AppCore.GetUserContextManager().SetCurrentUserContext(context);
                 }
             }
@@ -128,14 +128,14 @@ namespace OnWeb.CoreBind.Providers
                 {
                     if (module == null)
                     {
-                        var moduleTmp = new Modules.Internal.ModuleInternalErrors();
+                        var moduleTmp = new ModuleInternalErrors();
                         ((IComponentStartable)moduleTmp).Start(AppCore);
                         module = moduleTmp;
                     }
 
-                    var type = typeof(Modules.Internal.ModuleControllerInternalErrors<>).MakeGenericType(module.GetType());
+                    var type = typeof(ModuleControllerInternalErrors<>).MakeGenericType(module.GetType());
                     var controller = CreateController(module, type, requestContext.RouteData.Values);
-                    (controller as Modules.Internal.IModuleControllerInternalErrors).SetException(ex);
+                    (controller as IModuleControllerInternalErrors).SetException(ex);
                     // todo (controller as Modules.ModuleController).IsAdminController = isErrorAdmin;
 
                     HttpContext.Current.Items["RequestContextController"] = controller;
@@ -170,7 +170,7 @@ namespace OnWeb.CoreBind.Providers
 
         private IController CreateController(IModuleCore module, Type controllerType, RouteValueDictionary routeValues)
         {
-            var controller = (Modules.ModuleControllerBase)DependencyResolver.Current.GetService(controllerType);
+            var controller = (ModuleControllerBase)DependencyResolver.Current.GetService(controllerType);
             if (controller == null) throw new Exception($"Контроллер для модуля '{module.UrlName}' не найден.");
 
             controller.Start(AppCore);
@@ -185,10 +185,10 @@ namespace OnWeb.CoreBind.Providers
             {
                 foreach (var mm in methods)
                 {
-                    var attrs = mm.GetCustomAttributes(typeof(Modules.ModuleActionAttribute), true);
+                    var attrs = mm.GetCustomAttributes(typeof(ModuleActionAttribute), true);
                     if (attrs != null && attrs.Length > 0)
                     {
-                        var attr = attrs.First() as Modules.ModuleActionAttribute;
+                        var attr = attrs.First() as ModuleActionAttribute;
                         if (attr.Alias == action)
                         {
                             routeValues["action"] = mm.Name;

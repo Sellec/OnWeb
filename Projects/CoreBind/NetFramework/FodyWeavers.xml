@@ -3,7 +3,6 @@
   <Costura CreateTemporaryAssemblies="true">
     <IncludeAssemblies>
       Madaa.Lib.Win.Services
-      Mime-Detective
       PhoneNumbers
       Ude.NetStandard
     </IncludeAssemblies>

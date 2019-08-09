@@ -1,4 +1,4 @@
-﻿namespace OnWeb.Plugins.EditableMenu.DB
+﻿namespace OnWeb.Modules.EditableMenu.DB
 {
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;

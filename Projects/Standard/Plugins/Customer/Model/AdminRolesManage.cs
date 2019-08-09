@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace OnWeb.Plugins.Customer.Model
+namespace OnWeb.Modules.Customer.Model
 {
     public class AdminRolesManage
     {

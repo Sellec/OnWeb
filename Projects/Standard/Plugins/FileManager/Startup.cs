@@ -2,9 +2,9 @@
 using OnUtils.Architecture.AppCore;
 using OnUtils.Architecture.AppCore.DI;
 
-namespace OnWeb.Plugins.FileManager
+namespace OnWeb.Modules.FileManager
 {
-    using Plugins.ItemsCustomize;
+    using Modules.ItemsCustomize;
     using Core.Modules;
     using CustomFieldsFileTypes;
 

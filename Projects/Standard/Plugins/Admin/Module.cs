@@ -3,12 +3,10 @@ using OnUtils.Application.Users;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OnWeb.Plugins.Admin
+namespace OnWeb.Modules.Admin
 {
-    using AdminForModules.Menu;
-    using Core.Items;
     using Core.Modules;
-    using Core.Types;
+    using Types;
 
     /// <summary>
     /// См. <see cref="ModuleAdmin"/>.

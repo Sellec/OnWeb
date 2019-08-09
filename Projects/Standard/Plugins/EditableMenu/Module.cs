@@ -1,6 +1,6 @@
 ﻿using OnUtils.Data;
 
-namespace OnWeb.Plugins.EditableMenu
+namespace OnWeb.Modules.EditableMenu
 {
     using Core.Modules;
 

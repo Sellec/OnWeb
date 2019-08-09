@@ -49,17 +49,22 @@ namespace OnWeb.Core.Storage
             /*
              * Пути поиска ресурсов. Каждый путь смешивается с каждым корневым путем при поиске.
              * */
+            this.AddResourceDir("Modules/Module{module}/DesignModified/");
+            this.AddResourceDir("Modules/Module{module}/Design/");
+            this.AddResourceDir("Modules/{module}/DesignModified/");
+            this.AddResourceDir("Modules/{module}/Design/");
+            this.AddResourceDir("Modules/Design/");
+            this.AddResourceDir("Modules/");
+
+            /*
+             * Устаревшие пути
+             * */
             this.AddResourceDir("Plugins/Module{module}/DesignModified/");
             this.AddResourceDir("Plugins/Module{module}/Design/");
             this.AddResourceDir("Plugins/{module}/DesignModified/");
             this.AddResourceDir("Plugins/{module}/Design/");
             this.AddResourceDir("Plugins/Design/");
             this.AddResourceDir("Plugins/");
-
-            this.AddResourceDir("Modules/{module}/DesignModified/");
-            this.AddResourceDir("Modules/{module}/Design/");
-            this.AddResourceDir("Modules/Design/");
-            this.AddResourceDir("Modules/");
 
             this.AddResourceDir("data/temp_modified/");
 

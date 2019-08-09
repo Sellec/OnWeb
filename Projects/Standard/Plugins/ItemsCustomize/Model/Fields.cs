@@ -3,7 +3,7 @@ using OnUtils.Application.Modules.ItemsCustomize.Field;
 using OnUtils.Application.Modules.ItemsCustomize.Scheme;
 using System.Collections.Generic;
 
-namespace OnWeb.Plugins.ItemsCustomize.Model
+namespace OnWeb.Modules.ItemsCustomize.Model
 {
     using Core.Modules;
 

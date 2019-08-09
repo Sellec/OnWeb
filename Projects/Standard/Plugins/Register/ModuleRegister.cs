@@ -8,13 +8,12 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace OnWeb.Plugins.Register
+namespace OnWeb.Modules.Register
 {
     using Core.DB;
     using Core.Modules;
-    using Core.Types;
-    using CoreBind.Types;
     using MessagingEmail;
+    using Types;
     using UsersManagement;
 
     [ModuleCore("Регистрация", DefaultUrlName = "Register")]
@@ -153,7 +152,7 @@ namespace OnWeb.Plugins.Register
                                         data.name,
                                         data.email,
                                         "Регистрация на сайте",
-                                        Core.WebUtils.RazorRenderHelper.RenderView(this, "RegisterNotificationEmailImmediately.cshtml", query),
+                                        WebUtils.RazorRenderHelper.RenderView(this, "RegisterNotificationEmailImmediately.cshtml", query),
                                         ContentType.Html
                                     );
 
@@ -169,7 +168,7 @@ namespace OnWeb.Plugins.Register
                                         data.name,
                                         data.email,
                                         "Регистрация на сайте",
-                                        Core.WebUtils.RazorRenderHelper.RenderView(this, "RegisterNotificationEmailConfirm.cshtml", new Model.RegisterNotificationConfirm() { Data = query, ConfirmationCode = query.StateConfirmation }),
+                                        WebUtils.RazorRenderHelper.RenderView(this, "RegisterNotificationEmailConfirm.cshtml", new Model.RegisterNotificationConfirm() { Data = query, ConfirmationCode = query.StateConfirmation }),
                                         ContentType.Html
                                     );
 
@@ -182,7 +181,7 @@ namespace OnWeb.Plugins.Register
                                         data.name,
                                         data.email,
                                         "Регистрация на сайте",
-                                        Core.WebUtils.RazorRenderHelper.RenderView(this, "RegisterNotificationEmailModerate.cshtml", query),
+                                        WebUtils.RazorRenderHelper.RenderView(this, "RegisterNotificationEmailModerate.cshtml", query),
                                         ContentType.Html
                                     );
 
@@ -191,7 +190,7 @@ namespace OnWeb.Plugins.Register
                                 var usersToNotify = AppCore.Get<ModuleUsersManagement>().GetUsersByRolePermission<ModuleUsersManagement>(ModuleUsersManagement.PermissionReceiveRegisterModeratorNotifications);
                                 if (usersToNotify.Count > 0)
                                 {
-                                    var mailAdmin = Core.WebUtils.RazorRenderHelper.RenderView(this, "RegisterNotificationEmailAdmin.cshtml", query);
+                                    var mailAdmin = WebUtils.RazorRenderHelper.RenderView(this, "RegisterNotificationEmailAdmin.cshtml", query);
                                     usersToNotify.
                                         Where(x => !string.IsNullOrEmpty(x.email)).
                                         ForEach(x => AppCore.Get<IEmailService>().SendMailFromSite(x.email, x.email, "Новая заявка на регистрацию", mailAdmin, ContentType.Html));

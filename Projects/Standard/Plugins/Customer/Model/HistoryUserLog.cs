@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace OnWeb.Plugins.Customer.Model
+namespace OnWeb.Modules.Customer.Model
 {
     using Core.DB;
 

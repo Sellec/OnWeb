@@ -1,4 +1,4 @@
-﻿namespace OnWeb.Plugins.Auth.Design.Model
+﻿namespace OnWeb.Modules.Auth.Design.Model
 {
     using Core.DB;
 

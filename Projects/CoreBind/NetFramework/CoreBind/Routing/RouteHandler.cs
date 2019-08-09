@@ -9,8 +9,8 @@ using System.Web.Routing;
 
 namespace OnWeb.CoreBind.Routing
 {
-    using Plugins.Routing;
-    using Plugins.Routing.DB;
+    using Modules.Routing;
+    using Modules.Routing.DB;
 
     class RouteHandler : MvcRouteHandler, IRouteConstraint
     {

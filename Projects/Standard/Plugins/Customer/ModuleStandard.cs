@@ -2,12 +2,12 @@
 using System.Linq;
 using System.Web.Mvc;
 
-namespace OnWeb.Plugins.Customer
+namespace OnWeb.Modules.Customer
 {
     using AdminForModules.Menu;
     using Core.DB;
     using Core.Modules;
-    using Core.Types;
+    using Types;
 
     /// <summary>
     /// См. <see cref="ModuleCustomer"/>.

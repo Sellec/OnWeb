@@ -1,7 +1,7 @@
-namespace OnWeb.Plugins.Materials.DB
+namespace OnWeb.Modules.Materials.DB
 {
     using Core.Items;
-    using Plugins.Routing;
+    using Modules.Routing;
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;

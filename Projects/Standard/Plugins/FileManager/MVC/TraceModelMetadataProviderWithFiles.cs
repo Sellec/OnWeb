@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace OnWeb.Plugins.FileManager.MVC
+namespace OnWeb.Modules.FileManager.MVC
 {
     using CoreBind.Providers;
 

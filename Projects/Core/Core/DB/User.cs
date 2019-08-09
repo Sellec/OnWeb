@@ -122,7 +122,7 @@ namespace OnWeb.Core.DB
             set => DateChange = value.Timestamp();
         }
 
-        public override ModuleCore<WebApplication> OwnerModule => base.OwnerModule;// OnUtils.Application.DeprecatedSingletonInstances.Get<WebApplicationBase>().GetModule<Plugins.Customer.ModuleCustomer>();
+        public override ModuleCore<WebApplication> OwnerModule => base.OwnerModule;
 
         public int IdUserChange { get; set; }
 

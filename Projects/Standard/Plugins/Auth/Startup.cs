@@ -2,7 +2,7 @@
 using OnUtils.Architecture.AppCore;
 using OnUtils.Architecture.AppCore.DI;
 
-namespace OnWeb.Plugins.Auth
+namespace OnWeb.Modules.Auth
 {
     using Core.Modules;
 
