@@ -71,11 +71,6 @@ namespace OnWeb.Modules.FileManager
             TasksManager.SetTask(typeof(FileManager).FullName + "_" + nameof(GCCollect) + "_minutely1", Cron.MinuteInterval(1), () => GCCollectStatic());
 #endif
 
-            /*
-             * Регулярная проверка новых слов в лексическом менеджере.
-             * */
-            TasksManager.SetTask(typeof(Lexicon.LexiconManager).FullName + "_" + nameof(Lexicon.LexiconManager.PrepareNewWords) + "_minutely2", Cron.MinuteInterval(2), () => LexiconNewWordsStatic());
-
             ModelMetadataProviders.Current = new MVC.TraceModelMetadataProviderWithFiles();
         }
 
@@ -539,14 +534,6 @@ namespace OnWeb.Modules.FileManager
                 this.RegisterEvent(EventType.CriticalError, $"Ошибка обслуживания индексов", null, ex);
                 Debug.WriteLine("FileManager.Module.MaintenanceIndexes: {0}", ex.Message);
             }
-        }
-        #endregion
-
-        #region Lexicon new words
-        [ApiReversible]
-        public static void LexiconNewWordsStatic()
-        {
-            _thisModule.AppCore.Get<Lexicon.LexiconManager>().PrepareNewWords();
         }
         #endregion
 

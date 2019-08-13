@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>OnWeb.Modules.Lexicon</AssemblyName>
+    <Version>0.1.0</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSymbols>True</IncludeSymbols>
+    <IncludeSource>True</IncludeSource>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Authors>Sellec</Authors>
+    <Company>Sellec</Company>
+    <Copyright>Copyright © Петров Дмитрий 2019 (Sellec)</Copyright>
+    <Description>Модуль, добавляющий возможность склонять слова.</Description>
+    <RootNamespace>OnWeb.Modules.Lexicon</RootNamespace>
+    <PackageLicenseUrl>https://github.com/Sellec/OnWeb/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Sellec/OnWeb</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Sellec/OnWeb</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageIconUrl>http://tracestudio.ru/favicon.ico</PackageIconUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="OnUtils" Version="0.1.5" />
+    <PackageReference Include="OnUtils.Application" Version="0.1.2.41" />
+    <PackageReference Include="OnWeb" Version="0.1.4.18" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /y &quot;$(TargetDir)..\*.nupkg&quot; &quot;$(SolutionDir)..\Build\&quot;" />
+  </Target>
+
+</Project>

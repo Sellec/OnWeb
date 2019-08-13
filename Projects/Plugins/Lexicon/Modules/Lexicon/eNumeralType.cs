@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnWeb.Modules.Lexicon
+﻿namespace OnWeb.Modules.Lexicon
 {
     /// <summary>
     /// Обозначает тип числительного слова.

@@ -26,7 +26,7 @@
     <PackageProjectUrl>https://github.com/Sellec/OnWeb</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Sellec/OnWeb</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>bin\Debug\OnWeb.Core.xml</DocumentationFile>
@@ -74,5 +74,8 @@
   <Target Name="CopyDuplicate" AfterTargets="Build">
     <Exec Command="rmdir /Q /S &quot;$(TargetDir.TrimEnd('\\'))2&quot;" />
     <Exec Command="xcopy /y /s &quot;$(TargetDir)*&quot; &quot;$(TargetDir.TrimEnd('\\'))_2\&quot;" />
+  </Target>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /y &quot;$(TargetDir)..\*.nupkg&quot; &quot;$(SolutionDir)..\Build\&quot;" />
   </Target>
 </Project>

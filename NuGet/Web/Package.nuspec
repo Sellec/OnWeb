@@ -2,7 +2,7 @@
 <package >
   <metadata minClientVersion="3.3.0">
     <id>OnWeb</id>
-    <version>0.1.4.16</version>
+    <version>0.1.4.19</version>
     <authors>Sellec</authors>
     <owners>Sellec</owners>
     <description>
@@ -18,7 +18,14 @@
     <copyright>Copyright © Петров Дмитрий 2016 (Sellec)</copyright>
     <tags>ASP.Net MVC, ASP.Net Core, .Net 4.5+</tags>
     <dependencies>
-      <group>
+      <group targetFramework="netstandard2.0">
+        <!-- common -->
+        <dependency id="OnUtils" version="0.1.5" />
+        <dependency id="OnUtils.Application" version="0.1.2.41" />
+        <dependency id="OnUtils.Data.EntityFramework" version="0.1.4" />
+        <dependency id="OnUtils.Tasks.MomentalThreading" version="0.1.1.5" />
+        <dependency id="Newtonsoft.Json" version="12.0.1" />
+        <dependency id="System.ComponentModel.Annotations" version="4.5.0" />
       </group>
       <group targetFramework="net461">
         <!-- common -->
@@ -55,7 +62,7 @@
       </group>
     </dependencies>
     <contentFiles>
-      <files include="**/*" buildAction="Content" copyToOutput="true" flatten="false" />
+      <files include="**/*" buildAction="None" copyToOutput="true" flatten="false" />
     </contentFiles>
   </metadata>
   <files>
