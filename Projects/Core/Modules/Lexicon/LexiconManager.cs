@@ -33,6 +33,7 @@ namespace OnWeb.Modules.Lexicon
         }
 
         private static Lazy<OnlineMorpher> _morpher = new Lazy<OnlineMorpher>();
+        private Dictionary<string, WordCase> _cache = null;
 
         #region CoreComponentBase
         /// <summary>
@@ -40,6 +41,7 @@ namespace OnWeb.Modules.Lexicon
         protected sealed override void OnStart()
         {
             AppCore.Get<JournalingManager>().RegisterJournalTyped<LexiconManager>("Журнал лексического менеджера");
+            UpdateCache();
         }
 
         /// <summary>
@@ -48,10 +50,6 @@ namespace OnWeb.Modules.Lexicon
         {
         }
         #endregion
-
-        static LexiconManager()
-        {
-        }
 
         //private static string GetWordCase(string word, int count, Func<WordCase, string> wordCaseCallback, string wordDefault = null)
         //{
@@ -143,14 +141,14 @@ namespace OnWeb.Modules.Lexicon
         /// <returns></returns>
         public Request Get(string word)
         {
-            return Get(new Request() { Word = word }.ToEnumerable()).FirstOrDefault();
+            return Get(new List<Request>() { new Request() { Word = word } }).FirstOrDefault();
         }
 
         /// <summary>
         /// Обрабатывает список запросов на получение форм слов.
         /// </summary>
         /// <returns>Возвращает переданный список запросов, для успешно обработанных запросов заполняется свойство <see cref="Request.Result"/>.</returns>
-        public IEnumerable<Request> Get(IEnumerable<Request> requestList)
+        public IEnumerable<Request> Get(List<Request> requestList)
         {
             try
             {
@@ -158,18 +156,34 @@ namespace OnWeb.Modules.Lexicon
 
                 using (var db = this.CreateUnitOfWork())
                 {
-                    IQueryable<WordCase> query = null;
+                    var results = new List<WordCase>();
+
+                    var cache = _cache;
+
                     foreach (var request in requestList)
                     {
-                        var q = db.Repo1.Where(x => x.NominativeSingle == request.Word);
-                        query = query != null ? query.Union(q) : q;
+                        if (cache != null)
+                        {
+                            if (cache.TryGetValue(request.Word, out var value))
+                            {
+                                results.Add(value);
+                                continue;
+                            }
+                        }
+
+                        var result = db.Repo1.Where(x => x.NominativeSingle == request.Word).FirstOrDefault();
+                        if (result != null)
+                        {
+                            if (cache != null) cache[result.NominativeSingle] = result;
+                            results.Add(result);
+                            continue;
+                        }
                     }
 
-                    var results = query.ToList();
-
-                    foreach(var res in results)
+                    foreach (var res in results)
                     {
-                        requestList.Where(x => x.Word == res.NominativeSingle).ForEach(x => x.Result = res);
+                        var requests = requestList.Where(x => x.Word == res.NominativeSingle);
+                        requests.ForEach(x => x.Result = res);
                     }
 
                     var upsertFields = new List<UpsertField>();
@@ -186,7 +200,8 @@ namespace OnWeb.Modules.Lexicon
                             var list = numeralTypesList.ToDictionary(x => x, x => _morpher.Value.GetNumeralResult(request.Word, x));
 
                             if (request.Result == null)
-                                request.Result = new WordCase() {
+                                request.Result = new WordCase()
+                                {
                                     NominativeSingle = request.Word,
                                     IsNewSingle = true,
                                     IsNewTwo = true,
@@ -284,6 +299,31 @@ namespace OnWeb.Modules.Lexicon
             }
 
             return null;
+        }
+
+        private void UpdateCache()
+        {
+            try
+            {
+                int cacheLimitAllowed = 50000;
+                var cache = new Dictionary<string, WordCase>();
+                using (var db = new DB.DataContext())
+                {
+                    for (int i = 0; i <= cacheLimitAllowed; i += 5000)
+                    {
+                        var query = db.WordCase.Where(x => !x.IsNewSingle).OrderBy(x => x.NominativeSingle).Skip(i).Take(5000);
+                        var rows = query.ToList();
+                        rows.ForEach(x => cache[x.NominativeSingle] = x);
+                        if (rows.Count < 5000) break;
+                    }
+                }
+
+                _cache = cache;
+            }
+            catch (Exception ex)
+            {
+                this.RegisterEvent(EventType.Error, "Ошибка заполнения кеша", null, ex);
+            }
         }
 
         /// <summary>
@@ -407,9 +447,10 @@ namespace OnWeb.Modules.Lexicon
                             ex
                         );
             }
+
+            UpdateCache();
         }
-
-
     }
 }
+
 
