@@ -1,14 +1,12 @@
-@model Adminmain.Model.Modules
-@{ var moduleAdmin = AppCore.Get<Admin.ModuleAdmin>(); }
+@using OnWeb.Modules.Admin
+@using OnWeb.Modules.Adminmain.Model
+@model Modules
+@{ var moduleAdmin = this.GetAppCore().Get<ModuleAdmin>(); }
 
 <script type='text/javascript'>
- alert(err); }
-
     $(document).ready(function(){
         $("#block").hide();
-
         changeTitle('');
-
     });
 </script>
 <h2></h2>

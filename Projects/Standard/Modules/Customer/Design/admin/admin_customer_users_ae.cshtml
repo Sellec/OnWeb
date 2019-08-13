@@ -32,11 +32,11 @@
         $('form#form_ae').requestJSON({
             before: function(){ stAnim($("#action_result")); },
             after: function(result, message, id){
-                if (id > 0 && id != @Model.User.IdUser) window.location = "/admin/mnadmin/@Module.UrlName/userEdit/" + id;
+                if (id > 0 && id != @Model.User.IdUser) window.location = "/admin/mnadmin/@this.GetModule().UrlName/userEdit/" + id;
                 $("#action_result").html(message);
                 endAnim($("#action_result"));
 
-                if (result == JsonResult.OK) $('form#form_ae').attr('action', '/admin/madmin/@Module.UrlName/usersSave/' + id);
+                if (result == JsonResult.OK) $('form#form_ae').attr('action', '/admin/madmin/@this.GetModule().UrlName/usersSave/' + id);
             }
         });
 
@@ -83,7 +83,7 @@ else
     <tr>
         <td>
 
-            <form action='/admin/madmin/@Module.UrlName/usersSave/@Model.User.IdUser' method='post' id='form_ae'>
+            <form action='/admin/madmin/@this.GetModule().UrlName/usersSave/@Model.User.IdUser' method='post' id='form_ae'>
                 @Html.HiddenFor(x => x.User.IdUser)
                 <table width='900' id="items_results" class="admtable">
                     <tr>

@@ -50,7 +50,7 @@
             {
                 if (confirm('Вы действительно хотите удалить роль "' + data.NameRole + '"?'))
                 {
-                    $.requestJSON('/admin/madmin/@Module.UrlName/roleDelete/' + data.IdRole, null, function(result, message){
+                    $.requestJSON('/admin/madmin/@this.GetModule().UrlName/roleDelete/' + data.IdRole, null, function(result, message){
                         if (result == JsonResult.OK)
                         {
                             delete Roles[data.IdRole];
@@ -146,7 +146,7 @@
         </td>
         <td id='roleTable' style='padding-left:20px;vertical-align:top;'>
 
-            <form method='post' id='roleForm' action="/admin/madmin/@Module.UrlName/roleSave">
+            <form method='post' id='roleForm' action="/admin/madmin/@this.GetModule().UrlName/roleSave">
                 <input type='hidden' name='IdRole'>
                 <table id='roleTable' style="width:700px;" class='tablesorter'>
                     <thead>

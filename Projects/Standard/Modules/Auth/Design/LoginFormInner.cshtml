@@ -1,10 +1,10 @@
-@using Auth
-@using Register
-@using Core.Users
-@model Auth.Design.Model.Login
+@using OnWeb.Modules.Auth
+@using OnWeb.Modules.Register
+@using OnWeb.Core.Users
+@model OnWeb.Modules.Auth.Design.Model.Login
 @{
-    var moduleAuth = AppCore.Get<ModuleAuth>();
-    var moduleReg = AppCore.Get<ModuleRegister>();
+    var moduleAuth = this.GetAppCore().Get<ModuleAuth>();
+    var moduleReg = this.GetAppCore().Get<ModuleRegister>();
 }
 
 <script type="text/javascript">
@@ -29,7 +29,7 @@
                 {
                     <div class="login-result nopadding" style="background-color: salmon;"><p>Внимание, на сайте отсутствует суперпользователь. Пожалуйста, перейдите на страницу регистрации и зарегистрируйте новую учетную запись, которая будет оформлена как суперпользователь и немедленно активирована.</p></div>
                 }
-                <div class="nopadding"><p>@Html.Raw(Config.site_loginfo)</p></div>
+                <div class="nopadding"><p>@Html.Raw(this.GetConfig().site_loginfo)</p></div>
                 @if (!string.IsNullOrEmpty(Model?.Result))
                 {
                     <div class="login-result">
@@ -43,9 +43,9 @@
                 }
                 <div class="login-form__row">
                     @{
-                        var placeholder = (Config.userAuthorizeAllowed == eUserAuthorizeAllowed.EmailAndPhone ? "Адрес электронной почты или номер телефона" :
-                                            (Config.userAuthorizeAllowed == eUserAuthorizeAllowed.OnlyEmail ? "Адрес электронной почты" :
-                                            (Config.userAuthorizeAllowed == eUserAuthorizeAllowed.OnlyPhone ? "Номер телефона" : "")));
+                        var placeholder = (this.GetConfig().userAuthorizeAllowed == eUserAuthorizeAllowed.EmailAndPhone ? "Адрес электронной почты или номер телефона" :
+                                            (this.GetConfig().userAuthorizeAllowed == eUserAuthorizeAllowed.OnlyEmail ? "Адрес электронной почты" :
+                                            (this.GetConfig().userAuthorizeAllowed == eUserAuthorizeAllowed.OnlyPhone ? "Номер телефона" : "")));
                     }
                     <input name='login' type='text' class='style-input' placeholder='@placeholder' /><br />
                     @Html.ValidationMessage("login")

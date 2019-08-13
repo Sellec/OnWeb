@@ -1,5 +1,5 @@
 @model List<Materials.DB.News>
-@{ var moduleAdmin = AppCore.Get<Admin.ModuleAdmin>(); }
+@{ var moduleAdmin = this.GetAppCore().Get<Admin.ModuleAdmin>(); }
 
 <script type='text/javascript'>
     $(document).ready(function(){
@@ -9,7 +9,7 @@
 
         $("input.EditItem").click(function ()
         {
-            $("#containerForLoading").html("<img src='/data/img/loading.gif'>").requestLoad("/@moduleAdmin.UrlName/madmin/@Module.UrlName/NewsEdit/" + $(this).data("id"), null, function (result, message)
+            $("#containerForLoading").html("<img src='/data/img/loading.gif'>").requestLoad("/@moduleAdmin.UrlName/madmin/@this.GetModule().UrlName/NewsEdit/" + $(this).data("id"), null, function (result, message)
             {
                 if (message.length > 0) alert(message);
             });
@@ -17,7 +17,7 @@
 
         $("input#AddNew").click(function ()
         {
-            $("#containerForLoading").html("<img src='/data/img/loading.gif'>").requestLoad("/@moduleAdmin.UrlName/madmin/@Module.UrlName/NewsEdit/0", null, function (result, message)
+            $("#containerForLoading").html("<img src='/data/img/loading.gif'>").requestLoad("/@moduleAdmin.UrlName/madmin/@this.GetModule().UrlName/NewsEdit/0", null, function (result, message)
             {
                 if (message.length > 0) alert(message);
             });
@@ -28,7 +28,7 @@
             if (confirm("Вы точно уверены, что хотите удалить эту новость?"))
             {
                 var row = $(this).closest('tr');
-                $.requestJSON("/@moduleAdmin.UrlName/madmin/@Module.UrlName/NewsDelete/" + $(this).data("id"), null, function (result, message)
+                $.requestJSON("/@moduleAdmin.UrlName/madmin/@this.GetModule().UrlName/NewsDelete/" + $(this).data("id"), null, function (result, message)
                 {
                     if (message.length > 0) alert(message);
                     if (result == JsonResult.OK) row.remove();

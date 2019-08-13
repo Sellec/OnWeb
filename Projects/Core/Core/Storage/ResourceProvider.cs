@@ -81,6 +81,16 @@ namespace OnWeb.Core.Storage
             this.AddResourceDir("data/{resource}/");
 
             this.AddResourceDir("");
+
+            OnStartProvider();
+        }
+
+        /// <summary>
+        /// Выполняется при запуске.
+        /// </summary>
+        protected virtual void OnStartProvider()
+        {
+
         }
         #endregion
 

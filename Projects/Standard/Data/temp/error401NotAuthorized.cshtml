@@ -1,9 +1,9 @@
-@using Auth
-@using Register
+@using OnWeb.Modules.Auth
+@using OnWeb.Modules.Register
 @model Exception
 @{ 
     Layout = "baseCommon.cshtml";
-    Title = "Отсутствует доступ к странице";
+    this.SetTitle("Отсутствует доступ к странице");
 }
 
 @section breadcrumbs {
@@ -35,12 +35,12 @@
                     }
                 </div>
 
-                @if (CurrentUserContext.IsGuest)
+                @if (this.GetCurrentUserContext().IsGuest)
                 {
                     <form action='@(Url.CreateRoute<ModuleAuth, ModuleAuthController>(x => x.Login(null)))' method='post' id="enter_login">
                         @Html.Hidden("urlFrom", Url.RequestContext.HttpContext.Request.Url.PathAndQuery)
 
-                        <div class="nopadding"><p>@Html.Raw(Config.site_loginfo)</p></div>
+                        <div class="nopadding"><p>@Html.Raw(this.GetConfig().site_loginfo)</p></div>
 
                         <div class="login-form__row">
                             <input name='login' type='text' class='style-input' placeholder='Электронная почта' />

@@ -1,6 +1,8 @@
-@model Adminmain.Model.AdminMainModelInfoPage
+@using OnWeb.Modules.Admin
+@using OnWeb.Modules.Adminmain.Model
+@model AdminMainModelInfoPage
 @{ 
-    var moduleAdmin = AppCore.Get<Admin.ModuleAdmin>();
+    var moduleAdmin = this.GetAppCore().Get<ModuleAdmin>();
     var roleList = Model.Roles.Select(x => new SelectListItem() { Value = x.IdRole.ToString(), Text = x.NameRole });
 }
 
@@ -42,8 +44,8 @@
             CKEDITOR.instances.help_info.updateElement();
         });
 
-        $("select[name=register_mode]").val('@Config.register_mode');
-        $("select[name=userAuthorizeAllowed]").val('@Config.userAuthorizeAllowed');
+        $("select[name=register_mode]").val('@this.GetConfig().register_mode');
+        $("select[name=userAuthorizeAllowed]").val('@this.GetConfig().userAuthorizeAllowed');
     });
 </script>
 <style>
@@ -57,7 +59,7 @@
 <table width='100%'>
     <tr>
         <td>
-            <form action='/@moduleAdmin.UrlName/madmin/@Module.UrlName/info_save' method='post' id='form_info'>
+            <form action='/@moduleAdmin.UrlName/madmin/@this.GetModule().UrlName/info_save' method='post' id='form_info'>
                 <h2>Общие параметры:</h2>
 
                 <div>

@@ -82,7 +82,7 @@
                 <select name='ModuleName' size='10' style="width:270px; ">
                     @foreach (var module in Model.Modules)
                     {
-                        <option value='@Module.IdModule'>@module.Caption</option>}
+                        <option value='@this.GetModule().IdModule'>@module.Caption</option>}
                 </select>
                 <input type='submit' value='Получить меню' id='getmenu'>
             </form>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
@@ -8,7 +9,33 @@ using System.Web.Routing;
 
 namespace OnWeb.CoreBind.Providers
 {
+    using System.Web.WebPages;
     using Core.Modules;
+
+    class c : IVirtualPathFactory
+    {
+        private IVirtualPathFactory _previous = null;
+
+        public c(IVirtualPathFactory previous)
+        {
+            _previous = previous;
+        }
+
+        object IVirtualPathFactory.CreateInstance(string virtualPath)
+        {
+            return _previous.CreateInstance(virtualPath);
+        }
+
+        bool IVirtualPathFactory.Exists(string virtualPath)
+        {
+            var result = _previous.Exists(virtualPath);
+            if (!result)
+            { }
+            else
+            { }
+            return result;
+        }
+    }
 
     class ResourceProvider : Core.Storage.ResourceProvider, IViewEngine, IRouteHandler
     {
@@ -17,6 +44,22 @@ namespace OnWeb.CoreBind.Providers
         public ResourceProvider(IViewEngine previousViewEngine)
         {
             _previousViewEngine = previousViewEngine;
+        }
+
+        protected override void OnStartProvider()
+        {
+            var property = typeof(VirtualPathFactoryManager).GetProperty("Instance", BindingFlags.NonPublic | BindingFlags.Static);
+            if (property != null)
+            {
+                var member = typeof(VirtualPathFactoryManager).GetField("_virtualPathFactories", BindingFlags.NonPublic | BindingFlags.Instance);
+                if (member != null)
+                {
+                    var instance = (VirtualPathFactoryManager)property.GetValue(null);
+                    var list = (LinkedList<IVirtualPathFactory>)member.GetValue(instance);
+                    var factory = list.First.Value;
+                    VirtualPathFactoryManager.RegisterVirtualPathFactory(new c(factory));
+                }
+            }
         }
 
         #region RazorViewEngine
@@ -43,7 +86,7 @@ namespace OnWeb.CoreBind.Providers
                 var res = new ViewEngineResult(CreateView(controllerContext, viewNamePath, masterNamePath ?? masterName), this);
                 return res;
             }
-            
+
             var result = _previousViewEngine.FindView(controllerContext, viewName, masterName, useCache);
             return result;
         }
@@ -138,7 +181,7 @@ namespace OnWeb.CoreBind.Providers
 
             return new Handler();
         }
-#endregion
+        #endregion
 
         #region Прекомпиляция
         [System.Diagnostics.DebuggerNonUserCode]
@@ -244,4 +287,3 @@ namespace OnWeb.CoreBind.Providers
         #endregion
     }
 }
-

@@ -1,5 +1,5 @@
 @model Sitemap.Design.Model.Sitemap
-@{ var moduleAdmin = AppCore.Get<Admin.ModuleAdmin>(); }
+@{ var moduleAdmin = this.GetAppCore().Get<Admin.ModuleAdmin>(); }
 
 <script type='text/javascript'>
     $(document).ready(function () {
@@ -47,6 +47,6 @@
         </tr>
     }
 </table>
-<form action='/@moduleAdmin.UrlName/madmin/@Module.UrlName/SitemapGenerate' method='post' id='form_ae'>
+<form action='/@moduleAdmin.UrlName/madmin/@this.GetModule().UrlName/SitemapGenerate' method='post' id='form_ae'>
     <input type='submit' id='conf_submit' value='Обновить карту сайта'> <img src="/data/img/loading.gif" alt="" id="loading_img">
 </form>

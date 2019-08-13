@@ -75,11 +75,11 @@ $(document).ready(function(){
   <td style="vertical-align:middle;"></td>
   <td style="vertical-align:middle;"></td>
   <td style="vertical-align:middle;">
-   <a href='/admin/mnadmin/@Module.UrlName/users_edit/' target='_blank' class='user_link'>Редактировать</a><br>
-   <a href='/admin/mnadmin/@Module.UrlName/rolesDelegate/' target='_blank' class='user_link'>Права доступа</a><br>
-   <a href='/admin/madmin/@Module.UrlName/users_delete/' class='user_delete'>Удалить</a><br>
-   @if (CurrentUserContext.IsSuperuser == true)
-   { <a href='/admin/madmin/@Module.UrlName/userAs/' class='user_link'>Зайти от имени</a><br> }
+   <a href='/admin/mnadmin/@this.GetModule().UrlName/users_edit/' target='_blank' class='user_link'>Редактировать</a><br>
+   <a href='/admin/mnadmin/@this.GetModule().UrlName/rolesDelegate/' target='_blank' class='user_link'>Права доступа</a><br>
+   <a href='/admin/madmin/@this.GetModule().UrlName/users_delete/' class='user_delete'>Удалить</a><br>
+   @if (this.GetCurrentUserContext().IsSuperuser == true)
+   { <a href='/admin/madmin/@this.GetModule().UrlName/userAs/' class='user_link'>Зайти от имени</a><br> }
   </td>
   <td style="vertical-align:middle;"></td>
  </tr>

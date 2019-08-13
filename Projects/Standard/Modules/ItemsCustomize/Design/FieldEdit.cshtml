@@ -1,7 +1,7 @@
 @using OnUtils.Application.Modules.ItemsCustomize.Field
 @using ItemsCustomize.Model
 @model FieldEdit
-@{ var moduleAdmin = AppCore.Get<Admin.ModuleAdmin>(); }
+@{ var moduleAdmin = this.GetAppCore().Get<Admin.ModuleAdmin>(); }
 
 <script type='text/javascript'>
     function select_type(type) {
@@ -129,7 +129,7 @@
     });
 </script>
 
-<form action='/@moduleAdmin.UrlName/madmin/@Module.UrlName/fieldSave' method='post' id='form_ae'>
+<form action='/@moduleAdmin.UrlName/madmin/@this.GetModule().UrlName/fieldSave' method='post' id='form_ae'>
     @Html.HiddenFor(x => x.IdField)
     @Html.HiddenFor(x => x.IdModule)
     <h2 id="EditLabel">Редактирование поля</h2>

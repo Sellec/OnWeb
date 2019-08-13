@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace System.Web.Mvc.Html
 {
+    /// <summary>
+    /// Html-расширения для настраиваемых полей.
+    /// </summary>
     public static class HtmlHelperExtension
     {
         #region LabelFor
@@ -62,7 +65,8 @@ namespace System.Web.Mvc.Html
 
         public static MvcHtmlString EditorFor<TModel>(this HtmlHelper<TModel> html, IField field, IDictionary<string, object> htmlAttributes, params object[] additionalParameters)
         {
-            var module = (html.ViewDataContainer as OnWeb.CoreBind.Razor.IModuleProvider)?.Module;
+            var module = html.ViewDataContainer.GetModule();
+            if (module == null) throw new InvalidProgramException();
             var appCore = module?.GetAppCore();
 
             var renderType = typeof(ICustomFieldRender<>).MakeGenericType(field.FieldType.GetType());

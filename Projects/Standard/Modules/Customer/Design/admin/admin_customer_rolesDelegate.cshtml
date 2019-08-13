@@ -79,7 +79,7 @@
 
                 //if (User == null && User == undefined) throw new Error("Пользователь не выбран.");
 
-                $.requestJSON('/admin/madmin/@Module.UrlName/rolesDelegateSave/', {Roles : UsersRoles}, function(result, message){
+                $.requestJSON('/admin/madmin/@this.GetModule().UrlName/rolesDelegateSave/', {Roles : UsersRoles}, function(result, message){
                     if (message != null && message.length > 0) $("#delegateTableResult").html(message);
                 });
             }

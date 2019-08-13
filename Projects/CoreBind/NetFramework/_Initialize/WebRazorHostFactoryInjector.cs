@@ -27,8 +27,8 @@ namespace OnWeb._Initialize
                     return;
                 }
                 var fieldValue = field.GetValue(null) as ConcurrentDictionary<string, Func<System.Web.WebPages.Razor.WebRazorHostFactory>>;
-                if (fieldValue.Count > 0) fieldValue[fieldValue.ElementAt(0).Key] = () => new CustomMvcWebRazorHostFactory();
-                else fieldValue.TryAdd("System.Web.Mvc.MvcWebRazorHostFactory, System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35", () => new CustomMvcWebRazorHostFactory());
+                //if (fieldValue.Count > 0) fieldValue[fieldValue.ElementAt(0).Key] = () => new CustomMvcWebRazorHostFactory();
+                //else fieldValue.TryAdd("System.Web.Mvc.MvcWebRazorHostFactory, System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35", () => new CustomMvcWebRazorHostFactory());
 
                 field = hostType.GetField("TypeFactory", BindingFlags.GetField | BindingFlags.NonPublic | BindingFlags.Static);
                 if (field == null)
@@ -38,7 +38,7 @@ namespace OnWeb._Initialize
                 }
 
                 if (field == null) Debug.WriteLine("WebRazorHostFactoryInjector.LoadIntoHost: field 'TypeFactory' not found");
-                field.SetValue(null, new Func<string, Type>(s => typeof(CustomMvcWebRazorHostFactory)));
+                //field.SetValue(null, new Func<string, Type>(s => typeof(CustomMvcWebRazorHostFactory)));
 
                 Debug.WriteLine("WebRazorHostFactoryInjector.LoadIntoHost success");
             }

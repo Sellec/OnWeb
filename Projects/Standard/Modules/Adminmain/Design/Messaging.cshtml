@@ -1,5 +1,7 @@
 @using OnUtils.Application.Messaging
-@{ var moduleAdmin = AppCore.Get<Admin.ModuleAdmin>(); }
+@using OnWeb
+@using OnWeb.Modules.Admin
+@{ var moduleAdmin = this.GetAppCore().Get<ModuleAdmin>(); }
 
 <script type='text/javascript'>
     $(document).ready(function(){
@@ -9,7 +11,7 @@
 
         $("input.ShowJournal").click(function ()
         {
-            $("#containerForLoading").html("<img src='/data/img/loading.gif'>").requestLoad("/@moduleAdmin.UrlName/madmin/@Module.UrlName/MonitorJournal/" + $(this).data("guid"), null, function (result, message)
+            $("#containerForLoading").html("<img src='/data/img/loading.gif'>").requestLoad("/@moduleAdmin.UrlName/madmin/@this.GetModule().UrlName/MonitorJournal/" + $(this).data("guid"), null, function (result, message)
             {
                 if (message.length > 0) alert(message);
             });
@@ -21,7 +23,7 @@
 <table width='100%'>
     <tr>
         <td style='vertical-align:top;width:570px;min-width:570px;'>
-            @{ var services = AppCore.Get<MessagingManager<WebApplication>>().GetMessagingServices().OrderBy(x => x.ServiceName).ToList(); }
+            @{ var services = this.GetAppCore().Get<MessagingManager<WebApplication>>().GetMessagingServices().OrderBy(x => x.ServiceName).ToList(); }
             <h4>Зарегистрированных сервисов: <span id="countRegistered">@services.Count</span></h4>
             <table class='tablesorter' width="100%">
                 <thead>

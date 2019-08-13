@@ -1,5 +1,5 @@
 @model Materials.DB.News
-@{ var moduleAdmin = AppCore.Get<Admin.ModuleAdmin>(); }
+@{ var moduleAdmin = this.GetAppCore().Get<Admin.ModuleAdmin>(); }
 
 <script type='text/javascript'>
     $(document).ready(function () {
@@ -51,7 +51,7 @@ else
     <tr></tr>
     <tr>
         <td width='400'>
-            <form action='/@moduleAdmin.UrlName/madmin/@Module.UrlName/NewsSave' method='post' id='form_ae'>
+            <form action='/@moduleAdmin.UrlName/madmin/@this.GetModule().UrlName/NewsSave' method='post' id='form_ae'>
                 <input type="hidden" name="id" value="@Model.id" />
                 Заголовок новости:&nbsp;<input type='text' name='name' size='40' maxlength='200' value='@Model.name'><br><br>
 

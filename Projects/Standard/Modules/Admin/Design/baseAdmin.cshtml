@@ -1,5 +1,7 @@
-﻿@using Routing
-@using Types
+﻿@using OnWeb
+@using OnWeb.Modules.Admin
+@using OnWeb.Modules.Routing
+@using OnWeb.Types
 @helper submodule(IList<IItemRouted> links)
 {
     if (links != null)
@@ -38,9 +40,9 @@ else
     <html>
     <head>
         <title>
-            @Title
+            @this.GetTitle()
             @RenderSection("title", false)
-            @{ var title = " | " + Config.SiteFullName; }
+            @{ var title = " | " + this.GetConfig().SiteFullName; }
             @title
         </title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -205,7 +207,7 @@ else
                 <li class='padd'><a href='/' target='_blank' class=''>Главная страница</a></li>
                 <li>↓ <a href='' class='open_all'>Раскрыть меню</a></li>
                 <li>↑ <a href='' class='close_all'>Свернуть меню</a></li>
-                <li class='admin_login'><a href='/admin' title=''>@CurrentUserContext.GetData()</a></li>
+                <li class='admin_login'><a href='/admin' title=''>@this.GetCurrentUserContext().GetData()</a></li>
             </ul>
         </div>
         <div id="right_panel">
@@ -213,8 +215,8 @@ else
                 <div class="wrapper h40"></div>
                 <ul>
                     @{
-                        var moduleAdmin = AppCore.GetModulesManager().GetModule<Admin.ModuleAdmin>();
-                        var menu = moduleAdmin.GetAdminMenuList(CurrentUserContext);
+                        var moduleAdmin = this.GetAppCore().GetModulesManager().GetModule<ModuleAdmin>();
+                        var menu = moduleAdmin.GetAdminMenuList(this.GetCurrentUserContext());
                     }
                     @if (menu != null)
                     {

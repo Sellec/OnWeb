@@ -1,5 +1,7 @@
-@using Adminmain
-@{ var moduleAdmin = AppCore.Get<Admin.ModuleAdmin>(); }
+@using OnWeb.Modules.Admin
+@using OnWeb.Modules.Adminmain
+@using OnWeb.ServiceMonitor
+@{ var moduleAdmin = this.GetAppCore().Get<ModuleAdmin>(); }
 
 <script type='text/javascript'>
     $(document).ready(function(){
@@ -21,7 +23,7 @@
 <table width='100%'>
     <tr>
         <td style='vertical-align:top;width:970px;min-width:970px;'>
-            @{ var services = AppCore.Get<ServiceMonitor.Monitor>().GetServicesList(); }
+            @{ var services = this.GetAppCore().Get<Monitor>().GetServicesList(); }
             <h4>Зарегистрированных сервисов: <span id="countRegistered">@services.Count</span></h4>
             <table class='tablesorter' width="100%">
                 <thead>

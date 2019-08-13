@@ -1,13 +1,15 @@
-@model Core.Modules.Configuration.SaveModel
+@using OnWeb.Modules
+@using OnWeb.Modules.Admin
+@model OnWeb.Core.Modules.Configuration.SaveModel
 @{ 
-    Layout = nameof(Admin) + "/Design/baseAdmin.cshtml";
-    var moduleAdmin = AppCore.Get<Admin.ModuleAdmin>();
+    Layout = nameof(OnWeb.Modules.Admin) + "/Design/baseAdmin.cshtml";
+    var moduleAdmin = this.GetAppCore().Get<ModuleAdmin>();
 }
 
 <script type='text/javascript'>
 $(document).ready(function(){
     $("#block").hide();
-    changeTitle("Редактирование модуля: @Module.Caption (@Module.UrlName)");
+    changeTitle("Редактирование модуля: @this.GetModule().Caption (@this.GetModule().UrlName)");
     $(".i_adminmenu ul").show();
 
     $("#loading_img, #res").hide();
@@ -22,7 +24,7 @@ $(document).ready(function(){
 });
 </script>
 @RenderSection("scripts", false)
-<form id="config_form" action="/@moduleAdmin.UrlName/madmin/@Module.IdModule/ConfigurationSave" method="post">
+<form id="config_form" action="/@moduleAdmin.UrlName/madmin/@this.GetModule().IdModule/ConfigurationSave" method="post">
     <table width='100%' id='table_results' class='admtable'>
         <tr>
             <th style="min-width:150px;" width='50%'>Параметр</th>
@@ -30,23 +32,23 @@ $(document).ready(function(){
         </tr>
         <tr>
             <td>Название модуля (заголовок):</td>
-            <td><b>@Module.Caption</b></td>
+            <td><b>@this.GetModule().Caption</b></td>
         </tr>
         <tr>
             <td>Query-тип модуля и использованная реализация:</td>
-            <td><b>@Module.QueryType.FullName -> @Module.GetType().FullName</b></td>
+            <td><b>@this.GetModule().QueryType.FullName -> @this.GetModule().GetType().FullName</b></td>
         </tr>
         <tr class="registered">
             <td>ID модуля:</td>
-            <td><b>@Module.IdModule</b></td>
+            <td><b>@this.GetModule().IdModule</b></td>
         </tr>
         <tr class="registered">
             <td>Уникальное имя модуля:</td>
-            <td><b>@Module.UniqueName</b></td>
+            <td><b>@this.GetModule().UniqueName</b></td>
         </tr>
         <tr class="registered">
             <td>Использующееся URL-доступное имя модуля:</td>
-            <td><b>@Module.UrlName</b></td>
+            <td><b>@this.GetModule().UrlName</b></td>
         </tr>
         <tr>
             <td>@Html.LabelFor(x => x.UrlName)</td>

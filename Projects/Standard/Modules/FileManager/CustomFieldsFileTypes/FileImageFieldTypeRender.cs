@@ -43,11 +43,10 @@ namespace OnWeb.Modules.FileManager.CustomFieldsFileTypes
             var uploadOptions = optionsFromAttributes as IDictionary<string, object>;
             uploadOptions["formData"] = new { moduleName = "" };
 
-            if (html.ViewDataContainer is IModuleProvider)
-            {
-                var module = (html.ViewDataContainer as IModuleProvider).Module;
-                if (module != null) uploadOptions["formData"] = new { moduleName = module.UrlName };
-            }
+            var module = html.ViewDataContainer.GetModule();
+            if (module == null) throw new InvalidProgramException();
+            if (module != null) uploadOptions["formData"] = new { moduleName = module.UrlName };
+
             uploadOptions["multiple"] = field.IsMultipleValues;
 
             return RenderHtmlEditorInternal<TModel>(html, field, label, containerID, uploadOptions, presentOptions);

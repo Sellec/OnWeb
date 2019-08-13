@@ -1,12 +1,12 @@
-@using Admin
-@using Auth
-@using Customer
+@using OnWeb.Modules.Admin
+@using OnWeb.Modules.Auth
+@using OnWeb.Modules.Customer
 @using OnUtils.Application.Modules
-@model Auth.Design.Model.Login
+@model OnWeb.Modules.Auth.Design.Model.Login
 @{
     Layout = "baseAuth.cshtml";
-    Title = !CurrentUserContext.IsGuest ? "Управление профилем" : "Войти в систему";
-    var moduleAdmin = AppCore.Get<Admin.ModuleAdmin>();
+    this.SetTitle(!this.GetCurrentUserContext().IsGuest ? "Управление профилем" : "Войти в систему");
+    var moduleAdmin = this.GetAppCore().Get<ModuleAdmin>();
 }
 
 @section breadcrumbs {
@@ -25,9 +25,9 @@
 
 <div class="login-block">
     <div class="cover">
-        @if (!CurrentUserContext.IsGuest != true)
+        @if (!this.GetCurrentUserContext().IsGuest != true)
         {
-            @RenderPartial("LoginFormInner.cshtml")
+            this.RenderPartial("LoginFormInner.cshtml");
         }
         else
         {
@@ -38,7 +38,7 @@
 
                     <div class="reg_info">
                         <ul class="user-login-panel">
-                            @if (moduleAdmin?.CheckPermission(CurrentUserContext, ModulesConstants.PermissionManage) == CheckPermissionResult.Allowed)
+                            @if (moduleAdmin?.CheckPermission(this.GetCurrentUserContext(), ModulesConstants.PermissionManage) == CheckPermissionResult.Allowed)
                             { <li><a href="/@moduleAdmin.UrlName" title="Панель администратора" target="_blank"><strong>Управление сайтом</strong></a></li> }
                             @* <li><img src="/data/img/design/man.png" alt=""><a href='/profilepchange_usual' title='Сменить пароль'>Сменить пароль</a></li> *@
                             <li><a href="@(Url.CreateRoute<ModuleCustomer, ModuleControllerCustomer>())" title="Личный кабинет">Личный кабинет</a></li>

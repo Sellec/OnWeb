@@ -1,6 +1,8 @@
 @using OnUtils.Application.Journaling
-@model List<Adminmain.Design.Model.JournalsList>
-@{ var moduleAdmin = AppCore.Get<Admin.ModuleAdmin>(); }
+@using OnWeb.Modules.Admin
+@using OnWeb.Modules.Adminmain.Design.Model
+@model List<JournalsList>
+@{ var moduleAdmin = this.GetAppCore().Get<ModuleAdmin>(); }
 
 <script type='text/javascript'>
     $(document).ready(function(){
@@ -10,7 +12,7 @@
 
         $("input.ShowJournal").click(function ()
         {
-            $("#containerForLoading").html("<img src='/data/img/loading.gif'>").requestLoad("/@moduleAdmin.UrlName/madmin/@Module.UrlName/JournalDetails/" + $(this).data("id"), null, function (result, message)
+            $("#containerForLoading").html("<img src='/data/img/loading.gif'>").requestLoad("/@moduleAdmin.UrlName/madmin/@this.GetModule().UrlName/JournalDetails/" + $(this).data("id"), null, function (result, message)
             {
                 if (message.length > 0) alert(message);
             });

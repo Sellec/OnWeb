@@ -1,6 +1,6 @@
 ﻿@using ItemsCustomize.Model
 @model SchemeContainerItem
-@{ var moduleAdmin = AppCore.Get<Admin.ModuleAdmin>(); }
+@{ var moduleAdmin = this.GetAppCore().Get<Admin.ModuleAdmin>(); }
 
 <script type="text/javascript" src="/data/js/jquery.mjs.nestedSortable.js"></script>
 <script type='text/javascript'>
@@ -14,7 +14,7 @@
             var name = prompt("Введите название схемы: ");
             if (name != null && name.length > 0) {
                 showResult();
-                $.requestJSON("/@moduleAdmin.UrlName/madmin/@Module.UrlName/fields_scheme_add/@Model.IdModule", { 'schemeName': name }, function (result, message, id) {
+                $.requestJSON("/@moduleAdmin.UrlName/madmin/@this.GetModule().UrlName/fields_scheme_add/@Model.IdModule", { 'schemeName': name }, function (result, message, id) {
                     if (result == JsonResult.OK)
                     {
                         $('select#fieldsScheme').append($("<option selected></option>").attr("value", id).text('Дополнительная: ' + name + ' (#id ' + id + ')'));
@@ -34,7 +34,7 @@
                 showResult();
                 $('select#fieldsScheme').attr('disabled', true);
 
-                $.requestJSON("/@moduleAdmin.UrlName/madmin/@Module.UrlName/fields_scheme_delete/" + $('select#fieldsScheme').val(), null, function (result, message) {
+                $.requestJSON("/@moduleAdmin.UrlName/madmin/@this.GetModule().UrlName/fields_scheme_delete/" + $('select#fieldsScheme').val(), null, function (result, message) {
                     if (result == JsonResult.OK) $('select#fieldsScheme option:selected').remove();
                     if (message.length > 0) showResult(message);
 
@@ -108,7 +108,7 @@
                     for (var j in Fields[i].Fields) fields[i][fields[i].length] = Fields[i].Fields[j].IdField;
                 }
 
-                $.requestJSON("/@moduleAdmin.UrlName/madmin/@Module.UrlName/fieldsItemSave/@Model.IdModule/@Model.SchemeItem.IdItem/@Model.SchemeItem.IdItemType", fields, function(result, message){
+                $.requestJSON("/@moduleAdmin.UrlName/madmin/@this.GetModule().UrlName/fieldsItemSave/@Model.IdModule/@Model.SchemeItem.IdItem/@Model.SchemeItem.IdItemType", fields, function(result, message){
                     $("img.dF3dw342w").remove();
 
                     if (message.length > 0)
