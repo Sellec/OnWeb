@@ -1,6 +1,7 @@
-@model Auth.Design.Model.ModuleSettings
+@using OnWeb.Modules.Auth.Design.Model
+@model ModuleSettings
 @{ 
-    Layout = "AdminForModules/Design/baseModuleEdit.cshtml";
+    Layout = "~/AdminForModules/Design/baseModuleEdit.cshtml";
     var eventTypeList = Model.EventTypes.Select(x => new SelectListItem() { Value = x.IdEventType.ToString(), Text = x.NameEventType });
 }
 

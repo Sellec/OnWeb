@@ -1,8 +1,9 @@
-@using Materials
-@model List<Materials.DB.News>
+@using OnWeb.Modules.Materials
+@using OnWeb.Modules.Materials.DB
+@model List<News>
 @{ 
     Layout = "~/baseMaterial.cshtml";
-    Title = "Новости";
+    this.SetTitle("Новости");
 }
 
 @section breadcrumbs {

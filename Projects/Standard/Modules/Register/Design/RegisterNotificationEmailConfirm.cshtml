@@ -1,5 +1,6 @@
-@using Register
-@model Register.Model.RegisterNotificationConfirm
+@using OnWeb.Modules.Register
+@using OnWeb.Modules.Register.Model
+@model RegisterNotificationConfirm
 
 Уважаемый посетитель!<br />
 Вы успешно зарегистрировались на сайте. Для активации учетной записи вам необходимо перейти по <a href='@Url.ContentFullPath(Url.CreateRoute<ModuleRegister, ModuleRegisterController>(x => x.Confirm(Model.Data.IdUser, Model.ConfirmationCode), true))'>ссылке</a>.<br /><br />

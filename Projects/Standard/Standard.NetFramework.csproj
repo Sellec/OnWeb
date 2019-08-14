@@ -2028,7 +2028,9 @@
     <Content Include="Modules\Materials\Design\NewsList.cshtml" />
     <Content Include="Modules\Default\Design\Index.cshtml" />
     <Content Include="Modules\Auth\Design\baseAuth.cshtml" />
-    <Content Include="Modules\Auth\Design\login.cshtml" />
+    <Content Include="Modules\Auth\Design\login.cshtml">
+      <Generator>RazorGenerator</Generator>
+    </Content>
     <Content Include="Modules\Auth\Design\LoginFormInner.cshtml" />
     <Content Include="Modules\Auth\Design\ModuleSettings.cshtml" />
     <Content Include="Modules\Auth\Design\PasswordRestore.cshtml" />

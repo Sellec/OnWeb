@@ -1,3 +1,4 @@
-@RenderPartial("login.cshtml", new Auth.Design.Model.Login() { Result = "Недостаточно прав для доступа в указанный раздел. Попробуйте авторизоваться либо обратитесь к администратору сайта." })
+@using OnWeb.Modules.Auth.Design.Model
+@this.RenderPartial("login.cshtml", new Login() { Result = "Недостаточно прав для доступа в указанный раздел. Попробуйте авторизоваться либо обратитесь к администратору сайта." })
 
 <b></b>

@@ -1,4 +1,5 @@
-@model Customer.Design.Model.Profile
+@using OnWeb.Modules.Customer.Design.Model
+@model Profile
 @{ Layout = "~/baseCustomer.cshtml"; }
 
-@RenderPartial("Customer/Design/customerProfileInner.cshtml", Model)
+@this.RenderPartial("Customer/Design/customerProfileInner.cshtml", Model)

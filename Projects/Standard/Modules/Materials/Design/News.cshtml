@@ -1,8 +1,10 @@
-@using Materials
-@model Materials.DB.News
+@using OnWeb.Modules.Materials
+@using OnWeb.Modules.Materials.DB
+@using OnWeb.Modules.Realty
+@model News
 @{
     Layout = "~/baseMaterial.cshtml";
-    Title = Model.name;
+    this.SetTitle(Model.name);
 }
 
 @section breadcrumbs {
@@ -74,8 +76,8 @@
             </div>
 
             @{
-                var module = this.GetAppCore().GetModulesManager().GetModule<Realty.ModuleRealty>();
-                var news = module?.GetNewsList(5) ?? new List<Materials.DB.News>();
+                var module = this.GetAppCore().GetModulesManager().GetModule<ModuleRealty>();
+                var news = module?.GetNewsList(5) ?? new List<News>();
                 var iteration = 1;
 
                 <div class="new-right-bar">
@@ -84,7 +86,7 @@
                         <div class="list-popular-news__content">
                             @foreach (var item in news)
                             {
-                                if (Model is Materials.DB.News && (Model as Materials.DB.News).id == item.id) { continue; }
+                                if (Model is News && (Model as News).id == item.id) { continue; }
 
                                 <div class="popular-new-item">
                                     <h5 class="popular-new-item__title">

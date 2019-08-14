@@ -1,5 +1,8 @@
-@model Materials.DB.News
-@{ var moduleAdmin = this.GetAppCore().Get<Admin.ModuleAdmin>(); }
+@using OnWeb.Modules.Admin
+@using OnWeb.Modules.Materials
+@using OnWeb.Modules.Materials.DB
+@model News
+@{ var moduleAdmin = this.GetAppCore().Get<ModuleAdmin>(); }
 
 <script type='text/javascript'>
     $(document).ready(function () {

@@ -88,20 +88,6 @@ namespace OnWeb.CoreBind.Razor
                     {
                         try
                         {
-                            _Initialize.WebRazorHostFactoryInjector.LoadIntoHost();
-
-                            if (WebConfigurationManager.GetSection(HostSection.SectionName) is HostSection hostSection)
-                            {
-                                //hostSection.FactoryType = typeof(CustomMvcWebRazorHostFactory).AssemblyQualifiedName;
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Debug.WriteLine("FactoryType: {0}", ex.Message);
-                        }
-
-                        try
-                        {
                             /*
                              * Устанавливаем провайдер сессий
                              * */

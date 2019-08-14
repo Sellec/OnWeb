@@ -1,4 +1,5 @@
-@model List<Sitemap.SitemapItem>
+@using OnWeb.Modules.Sitemap
+@model List<SitemapItem>
 
 <?xml version="1.0" encoding="UTF-8" ?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -18,31 +19,31 @@
             var value = string.Empty;
             switch (pair.ChangeFrequency.Value)
             {
-                case Sitemap.SitemapPriority.Always:
+                case SitemapPriority.Always:
                     value = "always";
                     break;
 
-                case Sitemap.SitemapPriority.Hourly:
+                case SitemapPriority.Hourly:
                     value = "hourly";
                     break;
 
-                case Sitemap.SitemapPriority.Daily:
+                case SitemapPriority.Daily:
                     value = "daily";
                     break;
 
-                case Sitemap.SitemapPriority.Weekly:
+                case SitemapPriority.Weekly:
                     value = "weekly";
                     break;
 
-                case Sitemap.SitemapPriority.Monthly:
+                case SitemapPriority.Monthly:
                     value = "monthly";
                     break;
 
-                case Sitemap.SitemapPriority.Yearly:
+                case SitemapPriority.Yearly:
                     value = "yearly";
                     break;
 
-                case Sitemap.SitemapPriority.Never:
+                case SitemapPriority.Never:
                     value = "never";
                     break;
 

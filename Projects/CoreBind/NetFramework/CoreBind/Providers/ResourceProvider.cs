@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using OnUtils.Architecture.AppCore;
 using System.Threading;
 
 namespace OnWeb.CoreBind.Providers
@@ -23,6 +24,16 @@ namespace OnWeb.CoreBind.Providers
         public ResourceProvider(IViewEngine previousViewEngine)
         {
             _previousViewEngine = previousViewEngine;
+            if (_previousViewEngine is RazorViewEngine razorEngine)
+            {
+                var locationFormats = razorEngine.ViewLocationFormats.ToList();
+                locationFormats.Insert(0, "{0}");
+                razorEngine.ViewLocationFormats = locationFormats.ToArray();
+
+                locationFormats = razorEngine.MasterLocationFormats.ToList();
+                locationFormats.Insert(0, "{0}");
+                razorEngine.MasterLocationFormats = locationFormats.ToArray();
+            }
         }
 
         protected override void OnStartProvider()
@@ -56,6 +67,8 @@ namespace OnWeb.CoreBind.Providers
 
         ViewEngineResult IViewEngine.FindView(ControllerContext controllerContext, string viewName, string masterName, bool useCache)
         {
+            if (GetState() != CoreComponentState.Started) return null;
+
             //Debug.WriteLine("FindView: viewName={0}, masterName={1}, useCache={2}", viewName, masterName, useCache);
             _currentModuleContext.Value = GetModuleNameFromContext(controllerContext);
 
@@ -64,7 +77,8 @@ namespace OnWeb.CoreBind.Providers
 
             if (!string.IsNullOrEmpty(viewNamePath))
             {
-                var res = new ViewEngineResult(CreateView(controllerContext, viewNamePath, masterNamePath ?? masterName), this);
+                //var res = new ViewEngineResult(CreateView(controllerContext, viewNamePath, masterNamePath ?? masterName), this);
+                var res = _previousViewEngine.FindView(controllerContext, viewNamePath, masterNamePath, false);
                 return res;
             }
 
@@ -74,6 +88,8 @@ namespace OnWeb.CoreBind.Providers
 
         ViewEngineResult IViewEngine.FindPartialView(ControllerContext controllerContext, string partialViewName, bool useCache)
         {
+            if (GetState() != CoreComponentState.Started) return null;
+
             //Debug.WriteLine("FindPartialView: partialViewName={0}, useCache={1}", partialViewName, useCache);
 
             var namesToSearch = new List<string>();
@@ -102,6 +118,8 @@ namespace OnWeb.CoreBind.Providers
 
         void IViewEngine.ReleaseView(ControllerContext controllerContext, IView view)
         {
+            if (GetState() != CoreComponentState.Started) return;
+
             (view as IDisposable)?.Dispose();
         }
 
@@ -119,6 +137,8 @@ namespace OnWeb.CoreBind.Providers
         #region IVirtualPathFactory
         object IVirtualPathFactory.CreateInstance(string virtualPath)
         {
+            if (GetState() != CoreComponentState.Started) return null;
+
             if (_currentVirtualPathCache.Value.TryGetValue(virtualPath, out var realPath))
             {
                 return _previousPathFactory.CreateInstance(realPath);
@@ -128,6 +148,9 @@ namespace OnWeb.CoreBind.Providers
 
         bool IVirtualPathFactory.Exists(string virtualPath)
         {
+            if (GetState() != CoreComponentState.Started) return false;
+            if (virtualPath.EndsWith("_ViewStart.cshtml")) return false;
+
             if (_currentModuleContext.IsValueCreated)
             {
                 var t = GetFilePath(_currentModuleContext.Value, virtualPath, true, out var searchLocations);
@@ -152,8 +175,10 @@ namespace OnWeb.CoreBind.Providers
             }
         }
 
-        public IHttpHandler GetHttpHandler(RequestContext requestContext)
+        IHttpHandler IRouteHandler.GetHttpHandler(RequestContext requestContext)
         {
+            if (GetState() != CoreComponentState.Started) return null;
+
             HttpContext.Current.Items["TimeStart"] = null;
 
             var fileRelative = "data/" + requestContext.RouteData.Values["filename"] as string;

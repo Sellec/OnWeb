@@ -4,14 +4,7 @@
     <IncludeAssemblies>
       Madaa.Lib.Win.Services
       PhoneNumbers
-      Ude.NetStandard
     </IncludeAssemblies>
-    <Unmanaged32Assemblies>
-      ManagedInjector-x86
-    </Unmanaged32Assemblies>
-    <Unmanaged64Assemblies>
-      ManagedInjector-x64
-    </Unmanaged64Assemblies>
   </Costura>
   <ModuleInit />
 </Weavers>

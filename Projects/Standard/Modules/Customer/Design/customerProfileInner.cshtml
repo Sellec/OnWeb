@@ -1,4 +1,6 @@
-@model Customer.Design.Model.Profile
+@using OnWeb.Modules.FileManager.CustomFieldsFileTypes
+@using OnWeb.Modules.Customer.Design.Model
+@model Profile
 <script type="text/javascript">
     $(function ()
     {
@@ -52,7 +54,7 @@
     
     @foreach (var field in Model.Edit.Fields.Values)
     {
-        if (field.FieldType is FileManager.CustomFieldsFileTypes.FileImageFieldType)
+        if (field.FieldType is FileImageFieldType)
         {
             <div class="editBlock">
                 @Html.LabelFor(field)

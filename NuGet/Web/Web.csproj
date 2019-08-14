@@ -50,16 +50,7 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <!-- netstandard (only core) -->
-    <Content Include="..\..\Projects\Core\bin\$(Configuration)\netstandard2.0\OnWeb.Core.*" Exclude="..\..\Projects\Core\bin\$(Configuration)\netstandard2.0\OnWeb.Core.*.config">
-      <Link>lib\netstandard2.0\%(RecursiveDir)%(Filename)%(Extension)</Link>
-      <Visible>true</Visible>
-    </Content>
     <!-- net461 -->
-    <Content Include="..\..\Projects\Core\bin\$(Configuration)\netstandard2.0\OnWeb.Core.*" Exclude="..\..\Projects\Core\bin\$(Configuration)\netstandard2.0\OnWeb.Core.*.config">
-      <Link>lib\net461\%(RecursiveDir)%(Filename)%(Extension)</Link>
-      <Visible>true</Visible>
-    </Content>
     <Content Include="..\..\Projects\CoreBind\NetFramework\bin\$(Configuration)MVC\OnWeb.CoreBind.*" Exclude="..\..\Projects\CoreBind\NetFramework\bin\$(Configuration)MVC\OnWeb.CoreBind.*.config">
       <Link>lib\net461\%(RecursiveDir)%(Filename)%(Extension)</Link>
       <Visible>true</Visible>
@@ -69,10 +60,6 @@
       <Visible>true</Visible>
     </Content>
     <!-- net core 2.0 -->
-    <Content Include="..\..\Projects\Core\bin\$(Configuration)\netstandard2.0_2\OnWeb.Core.*" Exclude="..\..\Projects\Core\bin\$(Configuration)\netstandard2.0_2\OnWeb.Core.*.config">
-      <Link>lib\netcoreapp2.0\%(RecursiveDir)%(Filename)%(Extension)</Link>
-      <Visible>true</Visible>
-    </Content>
     <Content Include="..\..\Projects\CoreBind\NetCore\bin\$(Configuration)\netcoreapp2.0\OnWeb.CoreBind.*" Exclude="..\..\Projects\CoreBind\NetCore\bin\$(Configuration)\netcoreapp2.0\OnWeb.CoreBind.*.config">
       <Link>lib\netcoreapp2.0\%(RecursiveDir)%(Filename)%(Extension)</Link>
       <Visible>true</Visible>
@@ -111,9 +98,6 @@
     <None Include="tools\install.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\Projects\Core\**\*.cs" Exclude="..\..\Projects\Core\Properties\AssemblyInfo.cs;..\..\Projects\Core\obj*\**\*.*;">
-      <Link>src\Core\%(RecursiveDir)%(Filename)%(Extension)</Link>
-    </Content>
     <Content Include="..\..\Projects\CoreBind\**\*.cs" Exclude="..\..\Projects\CoreBind\Properties\AssemblyInfo.cs;..\..\Projects\CoreBind\obj*\**\*.*;">
       <Link>src\CoreBind\%(RecursiveDir)%(Filename)%(Extension)</Link>
     </Content>

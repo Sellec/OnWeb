@@ -1,5 +1,7 @@
-@using Types
-@model Customer.Model.AdminUserEdit
+@using Core = OnWeb.Core.DB
+@using OnWeb.Modules.Customer.Model
+@using OnWeb.Types
+@model AdminUserEdit
 @{ 
     var userStateList = new List<SelectListItem>() {
         new SelectListItem() { Value = UserState.Active.ToString(), Text = UserState.GetName(UserState.Active) },
@@ -171,12 +173,12 @@ else
                 <div style="width:750px">
                     @if (Model.User.IdUser > 0)
                     {
-                        if (Model.User.State != Core.DB.UserState.RegisterWaitForModerate)
+                        if (Model.User.State != Core.UserState.RegisterWaitForModerate)
                         {
                             <input type='submit' value='Сохранить' style="float:right;">
                         }
                         <img src="/data/img/loading.gif" alt="" id="loading_img" style="display:none;float:right;">
-                        if (Model.User.State == Core.DB.UserState.RegisterWaitForModerate)
+                        if (Model.User.State == Core.UserState.RegisterWaitForModerate)
                         {
                             <input type='submit' value='Отклонить' class='button_red no_auto' rel='decline'> <input type='submit' style="float:right;" value='Принять заявку' class='button_green no_auto' rel='accept'>
                             <script type="text/javascript">

@@ -1,6 +1,7 @@
-@using ItemsCustomize.Model
+@using OnWeb.Modules.Admin
+@using OnWeb.Modules.ItemsCustomize.Model
 @model Fields
-@{ var moduleAdmin = this.GetAppCore().Get<Admin.ModuleAdmin>(); }
+@{ var moduleAdmin = this.GetAppCore().Get<ModuleAdmin>(); }
 
 <style type="text/css">
     .placeholder {

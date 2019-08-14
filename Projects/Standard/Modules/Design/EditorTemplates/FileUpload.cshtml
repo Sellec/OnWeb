@@ -1,4 +1,6 @@
-﻿@using System.ComponentModel.DataAnnotations
+﻿@using OnWeb.Modules.FileManager
+@using OnWeb.Modules.FileManager.MVC
+@using System.ComponentModel.DataAnnotations
 
 @{
     /**
@@ -67,12 +69,12 @@
     var uploadOptions = optionsFromAttributes as IDictionary<string, object>;
     uploadOptions["formData"] = new { moduleName = "" };
 
-    if (this.Module != null) { uploadOptions["formData"] = new { moduleName = this.Module.UrlName }; }
+    if (this.GetModule() != null) { uploadOptions["formData"] = new { moduleName = this.GetModule().UrlName }; }
     uploadOptions["multiple"] = isMultiple;
 
-    var fileManagerPath = Url.CreateRoute<FileManager.FileManager, FileManager.FileManagerController>(x => x.FileImage(null, null, null))?.ToString() ?? "";
+    var fileManagerPath = Url.CreateRoute<FileManager, FileManagerController>(x => x.FileImage(null, null, null))?.ToString() ?? "";
 
-    FileManager.MVC.FileRenderOptions options = null;
+    FileRenderOptions options = null;
     switch ((FileType)(ViewData.ModelMetadata.AdditionalValues.GetValueOrDefault(nameof(FileDataTypeAttribute.FileType)) ?? FileType.File))
     {
         case FileType.Image:
@@ -81,7 +83,7 @@
             if (imagePresentOptions != null && imagePresentOptions.MaxWidth.HasValue) { htmlSizes.Add($"max-width:{imagePresentOptions.MaxWidth}px;width: expression(this.width > {imagePresentOptions.MaxWidth } ? {imagePresentOptions.MaxWidth}: true);"); }
             if (imagePresentOptions != null && imagePresentOptions.MaxHeight.HasValue) { htmlSizes.Add($"max-height:{imagePresentOptions.MaxHeight}px;height: expression(this.height > {imagePresentOptions.MaxHeight } ? {imagePresentOptions.MaxHeight}: true);"); }
             var htmlSizesAttrs = "style='" + string.Join("; ", htmlSizes) + "'";
-            options = new FileManager.MVC.FileRenderOptions()
+            options = new FileRenderOptions()
             {
                 UploadedFileInfoJS = " \"<img alt='файл №\" + data + \"' src='" + fileManagerPath + "/\" + data + \"' " + htmlSizesAttrs + ">\" ",
                 UploadedFileInfo = new Func<int, string>(IdFile => $"<img alt='файл №{IdFile}' src='{fileManagerPath}/{IdFile}' {htmlSizesAttrs}>")
@@ -90,7 +92,7 @@
 
         case FileType.File:
         default:
-            options = new FileManager.MVC.FileRenderOptions()
+            options = new FileRenderOptions()
             {
                 UploadedFileInfoJS = " \"<label>файл №\" + data + \"</label>\" ",
                 UploadedFileInfo = new Func<int, string>(IdFile => $"<label>файл №{IdFile}</label>")

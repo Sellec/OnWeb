@@ -1,7 +1,8 @@
 @using OnUtils.Application.Modules.ItemsCustomize.Field
-@using ItemsCustomize.Model
+@using OnWeb.Modules.Admin
+@using OnWeb.Modules.ItemsCustomize.Model
 @model FieldEdit
-@{ var moduleAdmin = this.GetAppCore().Get<Admin.ModuleAdmin>(); }
+@{ var moduleAdmin = this.GetAppCore().Get<ModuleAdmin>(); }
 
 <script type='text/javascript'>
     function select_type(type) {

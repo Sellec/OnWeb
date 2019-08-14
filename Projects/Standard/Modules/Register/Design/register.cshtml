@@ -1,10 +1,11 @@
-@using Auth
-@using Customer
-@using Register
-@model Register.Model.Register
+@using OnWeb.Modules.Auth
+@using OnWeb.Modules.Customer
+@using OnWeb.Modules.Register
+@using OnWeb.Modules.Register.Model
+@model Register
 @{
     Layout = "~/baseCommon.cshtml";
-    Title = "Регистрация";
+    this.SetTitle("Регистрация");
 }
 
 @section head { <link rel="stylesheet" type="text/css" href="/data/js/uploadify/uploadify.css"> }

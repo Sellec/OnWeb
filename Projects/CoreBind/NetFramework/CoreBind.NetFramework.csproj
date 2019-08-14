@@ -51,12 +51,6 @@
     <AssemblyOriginatorKeyFile>D:\Projects\TraceStudio\SigningKeys\OnUtils.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ManagedInjector-x64">
-      <HintPath>..\..\..\External Libraries\ManagedInjector\ManagedInjector-x64.dll</HintPath>
-    </Reference>
-    <Reference Include="ManagedInjector-x86">
-      <HintPath>..\..\..\External Libraries\ManagedInjector\ManagedInjector-x86.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web">
@@ -80,9 +74,7 @@
     <Compile Include="Core\Modules\ModuleControllerAdmin.cs" />
     <Compile Include="CoreBind\Routing\ModuleControllerDefaultAttribute.cs" />
     <Compile Include="WebUtils\WebViewPageExtension.cs" />
-    <Compile Include="_Initialize\WebRazorHostFactoryInjector.cs" />
     <Compile Include="_Initialize\WebInitializer.cs" />
-    <Compile Include="CoreBind\Razor\TraceViewPage.cs" />
     <Compile Include="CoreBind\Binders\JsonDictionaryModelBinder.cs" />
     <Compile Include="CoreBind\Binders\TraceModelBinder.cs" />
     <Compile Include="CoreBind\Extensions\ModelMetadataExtension.cs" />
@@ -98,9 +90,6 @@
     <Compile Include="Core\Modules\ModuleActionAttribute.cs" />
     <Compile Include="Core\Modules\ModuleActionInvoker.cs" />
     <Compile Include="Core\Modules\ModuleControllerBase.cs" />
-    <Compile Include="CoreBind\Razor\CustomRazorBuildProvider.cs" />
-    <Compile Include="CoreBind\Razor\CustomMvcWebPageRazorHost.cs" />
-    <Compile Include="CoreBind\Razor\CustomMvcWebRazorHostFactory.cs" />
     <Compile Include="CoreBind\Razor\WebStartup.cs" />
     <Compile Include="Modules\Auth\Module2.cs" />
     <Compile Include="Startup.cs" />
@@ -113,8 +102,6 @@
     <Compile Include="CoreBind\Providers\TraceModelMultipleMetadataProvider.cs" />
     <Compile Include="CoreBind\Providers\TraceSessionStateCacheProvider.cs" />
     <Compile Include="CoreBind\Providers\TraceSessionStateProvider.cs" />
-    <Compile Include="CoreBind\Razor\HtmlMarkupParser.cs" />
-    <Compile Include="CoreBind\Razor\RazorResources.cs" />
     <Compile Include="CoreBind\Routing\AreaConstants.cs" />
     <Compile Include="CoreBind\Routing\ControllerRouteConstraint.cs" />
     <Compile Include="CoreBind\Routing\ControllerType.cs" />
@@ -191,11 +178,6 @@
     <PackageReference Include="StrongNamer">
       <Version>0.0.8</Version>
     </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="CoreBind\Razor\RazorResources.resx">
-      <DependentUpon>RazorResources.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="FodyWeavers.xml">

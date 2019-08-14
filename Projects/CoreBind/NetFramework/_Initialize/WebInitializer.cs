@@ -16,57 +16,6 @@ namespace OnWeb._Initialize
             {
 
                 if (Debug.IsDeveloper) Debug.WriteLine($"{typeof(OnWeb.NamespaceAnchor).Name}.Start: process='{System.Diagnostics.Process.GetCurrentProcess().ProcessName}'");
-
-                if (System.Diagnostics.Process.GetCurrentProcess().ProcessName == "Microsoft.VisualStudio.Web.Host")
-                {
-                    var runtimeVersion = IntPtr.Size == 4 ? "32" : "64";
-                    var managerInjectorType = IntPtr.Size == 4 ?
-                        Type.GetType("ManagedInjector.Injector, ManagedInjector-x86, Version=1.0.7025.18016, Culture=neutral, PublicKeyToken=8e22adab863b765a", false) :
-                        Type.GetType("ManagedInjector.Injector, ManagedInjector-x64, Version=1.0.7025.18014, Culture=neutral, PublicKeyToken=8e22adab863b765a", false);
-
-                    if (Debug.IsDeveloper) Debug.WriteLine($"{typeof(OnWeb.NamespaceAnchor).Name}.Start: managerInjectorType='{managerInjectorType?.ToString()}'");
-                    if (managerInjectorType != null) 
-                    {
-                        var launchMethod = managerInjectorType.GetMethod("Launch");
-                        var loadAssemblyMethod = managerInjectorType.GetMethod("LoadAssembly");
-                        if (launchMethod != null && loadAssemblyMethod != null)
-                        {
-                            var utilsInjectorType = typeof(ModuleInjector);
-                            var webInjectorType = typeof(WebRazorHostFactoryInjector);
-
-                            var newtonsoftAssembly = typeof(Newtonsoft.Json.JsonSerializer).Assembly;
-                            var utilsAssembly = utilsInjectorType.Assembly;
-                            var applicationAssembly = typeof(ApplicationCore<>).Assembly;
-                            var mvcAssembly = typeof(System.Web.Mvc.ActionResult).Assembly;
-                            var webCoreAssembly = typeof(WebApplication).Assembly;
-                            var webAssembly = webInjectorType.Assembly;
-                            
-                            var devEnvProcesses = System.Diagnostics.Process.GetProcessesByName("devenv");
-                            foreach (var process in devEnvProcesses)
-                            {
-                                try
-                                {
-                                    loadAssemblyMethod.Invoke(null, new object[] { process.MainWindowHandle, newtonsoftAssembly.Location });
-                                    launchMethod.Invoke(null, new object[] { process.MainWindowHandle, utilsAssembly.Location, utilsInjectorType.FullName, nameof(ModuleInjector.InjectorLoader) });
-                                    loadAssemblyMethod.Invoke(null, new object[] { process.MainWindowHandle, applicationAssembly.Location });
-                                    loadAssemblyMethod.Invoke(null, new object[] { process.MainWindowHandle, mvcAssembly.Location });
-
-                                    loadAssemblyMethod.Invoke(null, new object[] { process.MainWindowHandle, webCoreAssembly.Location });
-                                    launchMethod.Invoke(null, new object[] { process.MainWindowHandle, webAssembly.Location, webInjectorType.FullName, nameof(WebRazorHostFactoryInjector.LoadIntoHost) });
-                                    Debug.WriteLine($"{typeof(OnWeb.NamespaceAnchor).Name}.Start: process '{process.ProcessName}' (pid {process.Id}), success");
-                                }
-                                catch (Exception ex)
-                                {
-                                    Debug.WriteLine(typeof(OnWeb.NamespaceAnchor).Name + ".Start: process '{0}' (pid {1}), error: {2}", process.ProcessName, process.Id, ex.ToString());
-                                }
-                            }
-                        }
-                        else if (launchMethod == null && loadAssemblyMethod == null && Debug.IsDeveloper) Debug.WriteLine($"{typeof(OnWeb.NamespaceAnchor).Name}.Start: launch && loadAssemblyMethod method not found");
-                        else if (launchMethod == null && Debug.IsDeveloper) Debug.WriteLine($"{typeof(OnWeb.NamespaceAnchor).Name}.Start: launch method not found");
-                        else if (loadAssemblyMethod == null && Debug.IsDeveloper) Debug.WriteLine($"{typeof(OnWeb.NamespaceAnchor).Name}.Start: loadAssemblyMethod method not found");
-                    }
-                    else if (Debug.IsDeveloper) Debug.WriteLine($"{typeof(OnWeb.NamespaceAnchor).Name}.Start: not managerInjectorType");
-                }
             }
             catch (Exception ex)
             {

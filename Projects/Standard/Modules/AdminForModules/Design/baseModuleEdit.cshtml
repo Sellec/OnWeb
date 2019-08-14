@@ -2,7 +2,7 @@
 @using OnWeb.Modules.Admin
 @model OnWeb.Core.Modules.Configuration.SaveModel
 @{ 
-    Layout = nameof(OnWeb.Modules.Admin) + "/Design/baseAdmin.cshtml";
+    Layout = "~/" + nameof(OnWeb.Modules.Admin) + "/Design/baseAdmin.cshtml";
     var moduleAdmin = this.GetAppCore().Get<ModuleAdmin>();
 }
 

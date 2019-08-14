@@ -1,10 +1,10 @@
-@using Customer
-@using Core.DB
+@using OnWeb.Modules.Customer
+@using OnWeb.Core.DB
 @using OnUtils.Application.Modules.ItemsCustomize.Field;
 @model User
 @{ 
     Layout = "~/baseCustomer.cshtml";
-    Title = "Личный кабинет | Общая информация";
+    this.SetTitle("Личный кабинет | Общая информация");
 }
 
 @section breadcrumbs {

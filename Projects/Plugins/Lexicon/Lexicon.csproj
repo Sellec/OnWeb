@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>OnWeb.Modules.Lexicon</AssemblyName>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IncludeSymbols>True</IncludeSymbols>
     <IncludeSource>True</IncludeSource>
@@ -23,11 +23,11 @@
   <ItemGroup>
     <PackageReference Include="OnUtils" Version="0.1.5" />
     <PackageReference Include="OnUtils.Application" Version="0.1.2.41" />
-    <PackageReference Include="OnWeb" Version="0.1.4.18" />
+    <PackageReference Include="OnWeb.Core" Version="0.1.5.2" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy /y &quot;$(TargetDir)..\*.nupkg&quot; &quot;$(SolutionDir)..\Build\&quot;" />
+  <Target Name="CopyPackage" AfterTargets="Pack">
+    <Exec Command="copy /y &quot;$(TargetDir)..\$(PackageId).$(Version).symbols.nupkg&quot; &quot;$(SolutionDir)..\Build\$(PackageId).$(Version).nupkg&quot;" />
   </Target>
 
 </Project>

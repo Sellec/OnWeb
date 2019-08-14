@@ -1,5 +1,7 @@
-@model Sitemap.Design.Model.Sitemap
-@{ var moduleAdmin = this.GetAppCore().Get<Admin.ModuleAdmin>(); }
+@using OnWeb.Modules.Admin
+@using OnWeb.Modules.Sitemap.Design.Model
+@model Sitemap
+@{ var moduleAdmin = this.GetAppCore().Get<ModuleAdmin>(); }
 
 <script type='text/javascript'>
     $(document).ready(function () {

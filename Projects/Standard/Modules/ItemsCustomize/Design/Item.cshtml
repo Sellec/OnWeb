@@ -1,6 +1,7 @@
-﻿@using ItemsCustomize.Model
+﻿@using OnWeb.Modules.Admin
+@using OnWeb.Modules.ItemsCustomize.Model
 @model SchemeContainerItem
-@{ var moduleAdmin = this.GetAppCore().Get<Admin.ModuleAdmin>(); }
+@{ var moduleAdmin = this.GetAppCore().Get<ModuleAdmin>(); }
 
 <script type="text/javascript" src="/data/js/jquery.mjs.nestedSortable.js"></script>
 <script type='text/javascript'>

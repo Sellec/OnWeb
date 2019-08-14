@@ -1,4 +1,5 @@
-@model List<Core.DB.User>
+@using CoreUser = OnWeb.Core.DB.User
+@model List<CoreUser>
 
 <script type='text/javascript'>
 mUsersData = @Model.jsobject();
@@ -8,15 +9,15 @@ function update_all()
 	try {
 		$('#table_results').tablefill(mUsersData, function(tr_elem, data){
 			$(tr_elem).find('td').each(function(ichild){
-				if ( ichild == 0 ) $(this).text(data.@nameof(Core.DB.User.IdUser));
-				else if ( ichild == 1 ) $(this).html(data.@nameof(Core.DB.User.name) + '<br>' + data.@nameof(Core.DB.User.email) + '<br>' + data.@nameof(Core.DB.User.phone));
-				else if ( ichild == 2 ) $(this).text(data.@nameof(Core.DB.User.Superuser) != 0 ? 'Суперпользователь' : 'Пользователь');
-				else if ( ichild == 3 ) $(this).text(data.@nameof(Core.DB.User.State));
-				else if ( ichild == 5 ) $(this).text(data.@nameof(Core.DB.User.CommentAdmin));
+				if ( ichild == 0 ) $(this).text(data.@nameof(CoreUser.IdUser));
+				else if ( ichild == 1 ) $(this).html(data.@nameof(CoreUser.name) + '<br>' + data.@nameof(CoreUser.email) + '<br>' + data.@nameof(CoreUser.phone));
+				else if ( ichild == 2 ) $(this).text(data.@nameof(CoreUser.Superuser) != 0 ? 'Суперпользователь' : 'Пользователь');
+				else if ( ichild == 3 ) $(this).text(data.@nameof(CoreUser.State));
+				else if ( ichild == 5 ) $(this).text(data.@nameof(CoreUser.CommentAdmin));
 			});
 			
 			$(tr_elem).find('a.user_link, a.user_delete').each(function(){
-			    $(this).attr('href', $(this).attr('href') + data.@nameof(Core.DB.User.IdUser))
+			    $(this).attr('href', $(this).attr('href') + data.@nameof(CoreUser.IdUser))
 			});
 		}, null, function(){
 		    $("a.user_delete").click(function(){
