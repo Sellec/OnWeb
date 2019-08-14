@@ -43,6 +43,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{DF70
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreFakeForLibphonenumbers", "..\Projects\CoreFakeForLibphonenumbers\CoreFakeForLibphonenumbers.csproj", "{AA782ADB-FA03-4D02-A962-1F8AE6D640FF}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lexicon", "..\Projects\Plugins\Lexicon\Lexicon.csproj", "{764A7A21-82E6-43C9-8657-33FFE947C126}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{AA782ADB-FA03-4D02-A962-1F8AE6D640FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA782ADB-FA03-4D02-A962-1F8AE6D640FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA782ADB-FA03-4D02-A962-1F8AE6D640FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{764A7A21-82E6-43C9-8657-33FFE947C126}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{764A7A21-82E6-43C9-8657-33FFE947C126}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{764A7A21-82E6-43C9-8657-33FFE947C126}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{764A7A21-82E6-43C9-8657-33FFE947C126}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,6 +96,7 @@ Global
 		{C2F8EECD-3B64-4E84-A714-F657A537097F} = {1CF2A268-413B-40E0-AD79-C8C410E63110}
 		{DF70E181-C3DF-448E-9762-9BD0C27569CC} = {1CF2A268-413B-40E0-AD79-C8C410E63110}
 		{AA782ADB-FA03-4D02-A962-1F8AE6D640FF} = {620AF6BB-950C-49F1-AA20-76FB9C95A3DF}
+		{764A7A21-82E6-43C9-8657-33FFE947C126} = {DF70E181-C3DF-448E-9762-9BD0C27569CC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EED38A6B-FD8B-4735-9632-1F78301B6F9F}
