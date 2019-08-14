@@ -8,6 +8,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Standard.NetFramework", "..\Projects\Standard\Standard.NetFramework.csproj", "{C844D3BE-EC89-4A5F-B54E-B07D9DFCB4C9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "..\Projects\Core\Core.csproj", "{F61FFCC5-3711-4D42-916A-EF83032F542A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AA782ADB-FA03-4D02-A962-1F8AE6D640FF} = {AA782ADB-FA03-4D02-A962-1F8AE6D640FF}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External Libraries", "External Libraries", "{EE2A716F-1C86-4268-930E-5913DE898128}"
 EndProject
@@ -38,6 +41,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NetCore", "NetCore", "{C2F8
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{DF70E181-C3DF-448E-9762-9BD0C27569CC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreFakeForLibphonenumbers", "..\Projects\CoreFakeForLibphonenumbers\CoreFakeForLibphonenumbers.csproj", "{AA782ADB-FA03-4D02-A962-1F8AE6D640FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -64,6 +69,10 @@ Global
 		{97E67E63-4E52-48B7-93D3-775B3FFAC10D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97E67E63-4E52-48B7-93D3-775B3FFAC10D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97E67E63-4E52-48B7-93D3-775B3FFAC10D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA782ADB-FA03-4D02-A962-1F8AE6D640FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA782ADB-FA03-4D02-A962-1F8AE6D640FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA782ADB-FA03-4D02-A962-1F8AE6D640FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA782ADB-FA03-4D02-A962-1F8AE6D640FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,6 +89,7 @@ Global
 		{965D6B85-8E0E-48FB-8B70-F7B87592DC9F} = {1CF2A268-413B-40E0-AD79-C8C410E63110}
 		{C2F8EECD-3B64-4E84-A714-F657A537097F} = {1CF2A268-413B-40E0-AD79-C8C410E63110}
 		{DF70E181-C3DF-448E-9762-9BD0C27569CC} = {1CF2A268-413B-40E0-AD79-C8C410E63110}
+		{AA782ADB-FA03-4D02-A962-1F8AE6D640FF} = {620AF6BB-950C-49F1-AA20-76FB9C95A3DF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EED38A6B-FD8B-4735-9632-1F78301B6F9F}
