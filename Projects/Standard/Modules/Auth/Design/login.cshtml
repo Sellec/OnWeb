@@ -4,7 +4,7 @@
 @using OnUtils.Application.Modules
 @model OnWeb.Modules.Auth.Design.Model.Login
 @{
-    Layout = "baseAuth.cshtml";
+    Layout = "~/baseAuth.cshtml";
     this.SetTitle(!this.GetCurrentUserContext().IsGuest ? "Управление профилем" : "Войти в систему");
     var moduleAdmin = this.GetAppCore().Get<ModuleAdmin>();
 }
@@ -27,7 +27,7 @@
     <div class="cover">
         @if (!this.GetCurrentUserContext().IsGuest != true)
         {
-            this.RenderPartial("LoginFormInner.cshtml");
+            @(this.RenderPartial("LoginFormInner.cshtml"))
         }
         else
         {

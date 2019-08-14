@@ -6,40 +6,19 @@ using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Threading;
 
 namespace OnWeb.CoreBind.Providers
 {
     using System.Web.WebPages;
     using Core.Modules;
 
-    class c : IVirtualPathFactory
+    class ResourceProvider : Core.Storage.ResourceProvider, IViewEngine, IRouteHandler, IVirtualPathFactory
     {
-        private IVirtualPathFactory _previous = null;
-
-        public c(IVirtualPathFactory previous)
-        {
-            _previous = previous;
-        }
-
-        object IVirtualPathFactory.CreateInstance(string virtualPath)
-        {
-            return _previous.CreateInstance(virtualPath);
-        }
-
-        bool IVirtualPathFactory.Exists(string virtualPath)
-        {
-            var result = _previous.Exists(virtualPath);
-            if (!result)
-            { }
-            else
-            { }
-            return result;
-        }
-    }
-
-    class ResourceProvider : Core.Storage.ResourceProvider, IViewEngine, IRouteHandler
-    {
+        private IVirtualPathFactory _previousPathFactory = null;
         private IViewEngine _previousViewEngine = null;
+        private ThreadLocal<string> _currentModuleContext = new ThreadLocal<string>();
+        private ThreadLocal<Dictionary<string, string>> _currentVirtualPathCache = new ThreadLocal<Dictionary<string, string>>(() => new Dictionary<string, string>());
 
         public ResourceProvider(IViewEngine previousViewEngine)
         {
@@ -57,7 +36,8 @@ namespace OnWeb.CoreBind.Providers
                     var instance = (VirtualPathFactoryManager)property.GetValue(null);
                     var list = (LinkedList<IVirtualPathFactory>)member.GetValue(instance);
                     var factory = list.First.Value;
-                    VirtualPathFactoryManager.RegisterVirtualPathFactory(new c(factory));
+                    _previousPathFactory = factory;
+                    VirtualPathFactoryManager.RegisterVirtualPathFactory(this);
                 }
             }
         }
@@ -77,9 +57,10 @@ namespace OnWeb.CoreBind.Providers
         ViewEngineResult IViewEngine.FindView(ControllerContext controllerContext, string viewName, string masterName, bool useCache)
         {
             //Debug.WriteLine("FindView: viewName={0}, masterName={1}, useCache={2}", viewName, masterName, useCache);
+            _currentModuleContext.Value = GetModuleNameFromContext(controllerContext);
 
-            var viewNamePath = GetFilePath(GetModuleNameFromContext(controllerContext), viewName, true, out IEnumerable<string> searchLocations);
-            var masterNamePath = GetFilePath(GetModuleNameFromContext(controllerContext), masterName, true, out searchLocations);
+            var viewNamePath = GetFilePath(_currentModuleContext.Value, viewName, true, out IEnumerable<string> searchLocations);
+            var masterNamePath = GetFilePath(_currentModuleContext.Value, masterName, true, out searchLocations);
 
             if (!string.IsNullOrEmpty(viewNamePath))
             {
@@ -132,6 +113,29 @@ namespace OnWeb.CoreBind.Providers
         private IView CreatePartialView(ControllerContext controllerContext, string partialPath)
         {
             return new RazorView(controllerContext, partialPath, null, false, new string[] { "cshtml", "vbhtml" }, null);
+        }
+        #endregion
+
+        #region IVirtualPathFactory
+        object IVirtualPathFactory.CreateInstance(string virtualPath)
+        {
+            if (_currentVirtualPathCache.Value.TryGetValue(virtualPath, out var realPath))
+            {
+                return _previousPathFactory.CreateInstance(realPath);
+            }
+            return _previousPathFactory.CreateInstance(virtualPath);
+        }
+
+        bool IVirtualPathFactory.Exists(string virtualPath)
+        {
+            if (_currentModuleContext.IsValueCreated)
+            {
+                var t = GetFilePath(_currentModuleContext.Value, virtualPath, true, out var searchLocations);
+                _currentVirtualPathCache.Value[virtualPath] = t;
+                if (!string.IsNullOrEmpty(t)) return true;
+            }
+
+            return _previousPathFactory.Exists(virtualPath);
         }
         #endregion
 
