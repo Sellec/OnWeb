@@ -1,8 +1,8 @@
-@using OnWeb.Modules.Admin
-@using OnWeb.Modules.Auth
-@using OnWeb.Modules.Customer
+@using Admin
+@using Auth
+@using Customer
 @using OnUtils.Application.Modules
-@model OnWeb.Modules.Auth.Design.Model.Login
+@model Auth.Design.Model.Login
 @{
     Layout = "baseAuth.cshtml";
     this.SetTitle(!this.GetCurrentUserContext().IsGuest ? "Управление профилем" : "Войти в систему");

@@ -1,7 +1,7 @@
-@using OnWeb.Modules.Auth
-@using OnWeb.Modules.Register
-@using OnWeb.Core.Users
-@model OnWeb.Modules.Auth.Design.Model.Login
+@using Auth
+@using Register
+@using Core.Users
+@model Auth.Design.Model.Login
 @{
     var moduleAuth = this.GetAppCore().Get<ModuleAuth>();
     var moduleReg = this.GetAppCore().Get<ModuleRegister>();

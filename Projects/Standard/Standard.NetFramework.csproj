@@ -81,6 +81,15 @@
     <PackageReference Include="Microsoft.AspNet.Mvc">
       <Version>5.2.7</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.Mvc.ru">
+      <Version>5.2.4</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.Razor.ru">
+      <Version>3.2.4</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.WebPages.ru">
+      <Version>3.2.4</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
       <Version>2.0.1</Version>
     </PackageReference>
@@ -1956,6 +1965,7 @@
     <None Include="Data\js\eckeditor\plugins\pastefromexcel\.editorconfig">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
+    <None Include="Data\temp\_ViewStart.cshtml" />
     <None Include="Modules\ItemsCustomize\Design\FieldEdit.cshtml">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
@@ -2051,6 +2061,7 @@
     <Content Include="Modules\Sitemap\Design\SitemapXml.cshtml" />
     <Content Include="Modules\MessagingEmail\Design\ModuleSettings.cshtml" />
     <Content Include="Modules\reCAPTCHA\Design\ModuleSettings.cshtml" />
+    <None Include="Modules\_ViewStart.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

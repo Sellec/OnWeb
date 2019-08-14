@@ -1,5 +1,5 @@
-@using OnWeb.Modules.Routing.DB
-@model OnWeb.Modules.Adminmain.Model.RoutingModule
+@using Routing.DB
+@model Adminmain.Model.RoutingModule
 
 <script type='text/javascript'>
     $(document).ready(function ()
@@ -16,13 +16,13 @@
 
                 $("div#routeEdit").show();
 
-                console.log(obj.Route.@nameof(Routing.IdModule) + "_" + obj.Route.@nameof(Routing.Action));
+                console.log(obj.Route.@nameof(Routing.DB.Routing.IdModule) + "_" + obj.Route.@nameof(Routing.DB.Routing.Action));
 
-                $("[name=@nameof(Routing.IdRoutingType)]").val(obj.Route.@nameof(Routing.IdRoutingType));
-                $("[name=@nameof(Routing.Action)]").val(obj.Route.@nameof(Routing.IdModule) + "_" + obj.Route.@nameof(Routing.Action));
-                $("[name=@nameof(Routing.Arguments)]").val(obj.Route.@nameof(Routing.Arguments));
-                $("[name=@nameof(Routing.IdItem)]").val(obj.@nameof(OnWeb.Modules.Adminmain.Model.RouteInfo.ItemName));
-                $("[name=@nameof(Routing.UrlFull)]").val(obj.Route.@nameof(Routing.UrlFull));
+                $("[name=@nameof(Routing.DB.Routing.IdRoutingType)]").val(obj.Route.@nameof(Routing.DB.Routing.IdRoutingType));
+                $("[name=@nameof(Routing.DB.Routing.Action)]").val(obj.Route.@nameof(Routing.DB.Routing.IdModule) + "_" + obj.Route.@nameof(Routing.DB.Routing.Action));
+                $("[name=@nameof(Routing.DB.Routing.Arguments)]").val(obj.Route.@nameof(Routing.DB.Routing.Arguments));
+                $("[name=@nameof(Routing.DB.Routing.IdItem)]").val(obj.@nameof(Adminmain.Model.RouteInfo.ItemName));
+                $("[name=@nameof(Routing.DB.Routing.UrlFull)]").val(obj.Route.@nameof(Routing.DB.Routing.UrlFull));
             });
         } catch (err) { alert(err); }
     });
@@ -31,11 +31,11 @@
 <h4>Маршрутизация модуля '@Model.Module.Caption (@Model.Module.UrlName)'</h4>
 <div id="routeEdit" style="display: none;">
     <form>
-        <label for="@nameof(Routing.IdRoutingType)">Тип маршрута: </label> @Html.DropDownList(nameof(Routing.IdRoutingType), Model.RoutingTypes)<br />
-        <label for="@nameof(Routing.Action)">Модуль и Action: </label> @Html.DropDownList(nameof(Routing.Action), Model.ModulesActions)<br />
-        <label for="@nameof(Routing.Arguments)">Аргументы: </label> @Html.TextArea(nameof(Routing.Arguments), new { rows = 3, cols = 50 })<br />
-        <label for="@nameof(Routing.IdItem)">Объект, к которому привязан маршрут: </label> @Html.TextBox(nameof(Routing.IdItem))<br />
-        <label for="@nameof(Routing.UrlFull)">Адрес маршрута: </label> @Html.TextBox(nameof(Routing.UrlFull))<br />
+        <label for="@nameof(Routing.DB.Routing.IdRoutingType)">Тип маршрута: </label> @Html.DropDownList(nameof(Routing.DB.Routing.IdRoutingType), Model.RoutingTypes)<br />
+        <label for="@nameof(Routing.DB.Routing.Action)">Модуль и Action: </label> @Html.DropDownList(nameof(Routing.DB.Routing.Action), Model.ModulesActions)<br />
+        <label for="@nameof(Routing.DB.Routing.Arguments)">Аргументы: </label> @Html.TextArea(nameof(Routing.DB.Routing.Arguments), new { rows = 3, cols = 50 })<br />
+        <label for="@nameof(Routing.DB.Routing.IdItem)">Объект, к которому привязан маршрут: </label> @Html.TextBox(nameof(Routing.DB.Routing.IdItem))<br />
+        <label for="@nameof(Routing.DB.Routing.UrlFull)">Адрес маршрута: </label> @Html.TextBox(nameof(Routing.DB.Routing.UrlFull))<br />
     </form>
 </div>
 <table class="tablesorter">
