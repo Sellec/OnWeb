@@ -37,8 +37,21 @@ namespace OnWeb.Modules.FileManager.DB
 
         public int DateChange { get; set; }
 
+        /// <summary>
+        /// Дата истечения времени жизни файла, после чего файл помечается на удаление и удаляется.
+        /// </summary>
         public DateTime? DateExpire { get; set; }
 
         public int IdUserChange { get; set; }
+
+        /// <summary>
+        /// Признак, означающий, что файл помещен в очередь на удаление.
+        /// </summary>
+        public bool IsRemoving { get; set; }
+
+        /// <summary>
+        /// Признак, означающий, что файл удален.
+        /// </summary>
+        public bool IsRemoved { get; set; }
     }
 }

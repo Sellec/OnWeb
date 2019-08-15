@@ -1,12 +1,40 @@
 using OnUtils.Data;
 using OnUtils.Application.DB;
+using OnUtils.Data.UnitOfWork;
 
 namespace OnWeb.Core.DB
 {
-
-#pragma warning disable CS1591 // todo внести комментарии.
-    public class CoreContext : UnitOfWorkBase
+    /// <summary>
+    /// Ѕазовый контекст веб-приложени€, корректно определ€ющий строку подключени€.
+    /// </summary>
+    public class CoreContextBase : UnitOfWorkBase
     {
+        /// <summary>
+        /// </summary>
+        protected sealed override void OnModelCreating(IModelAccessor modelAccessor)
+        {
+            modelAccessor.ConnectionString = ConnectionString;
+            OnModelCreatingCustom(modelAccessor);
+            modelAccessor.ConnectionString = ConnectionString;
+        }
+
+        /// <summary>
+        /// —м. <see cref="UnitOfWorkBase.OnModelCreating(IModelAccessor)"/>.
+        /// </summary>
+        protected virtual void OnModelCreatingCustom(IModelAccessor modelAccessor)
+        {
+        }
+
+        internal static string ConnectionString { get; set; }
+    }
+
+    /// <summary>
+    /// ќсновной контекст, содержащий все сущности €дра. 
+    /// </summary>
+    /// <seealso cref="CoreContextBase"/>
+    public class CoreContext : CoreContextBase
+    {
+#pragma warning disable CS1591 // todo внести комментарии.
         public IRepository<ModuleConfig> Module { get; }
 
         public IRepository<ItemParent> ItemParent { get; }

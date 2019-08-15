@@ -136,6 +136,9 @@
     <Compile Include="Design\Additionals\Helpers\PHPHelpers.cs" />
     <Compile Include="Design\Additionals\Helpers\UrlHelpers.cs" />
     <Compile Include="Design\Additionals\IntExtensions.cs" />
+    <Compile Include="Modules\FileManager\DB\DataContext.cs" />
+    <Compile Include="Modules\FileManager\DB\FileRemoveQueue.cs" />
+    <Compile Include="Modules\FileManager\FileTypeCommon.cs" />
     <Compile Include="Modules\ItemsCustomize\Model\ContainerItem.cs" />
     <Compile Include="Modules\ItemsCustomize\Model\FieldEdit.cs" />
     <Compile Include="Modules\ItemsCustomize\Model\Fields.cs" />

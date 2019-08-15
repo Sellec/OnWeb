@@ -5,10 +5,12 @@ using OnUtils.Data;
 using OnUtils.Tasks;
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Transactions;
+using System.Threading;
 using System.Web.Mvc;
 
 namespace OnWeb.Modules.FileManager
@@ -17,34 +19,13 @@ namespace OnWeb.Modules.FileManager
     using DictionaryFiles = Dictionary<int, DB.File>;
 
     /// <summary>
-    /// Общий тип файла.
-    /// </summary>
-    public enum FileTypeCommon : int
-    {
-        /// <summary>
-        /// Тип по-умолчанию. Назначается, когда ничего другого подходящего не было найдено.
-        /// </summary>
-        Default,
-
-        /// <summary>
-        /// Все типы изображений
-        /// </summary>
-        Image,
-
-        /// <summary>
-        /// Все типы видео
-        /// </summary>
-        Video,
-
-    }
-
-    /// <summary>
     /// Менеджер, позволяющий управлять файлами в хранилище файлов (локально или cdn).
     /// </summary>
     [ModuleCore("Управление файлами")]
-    public class FileManager : ModuleCore<FileManager>, IUnitOfWorkAccessor<UnitOfWork<DB.File>>
+    public class FileManager : ModuleCore<FileManager>, IUnitOfWorkAccessor<DB.DataContext>
     {
         private static FileManager _thisModule = null;
+        private static ConcurrentDictionary<string, int> _servicesFlags = new ConcurrentDictionary<string, int>();
 
         /// <summary>
         /// </summary>
@@ -71,6 +52,22 @@ namespace OnWeb.Modules.FileManager
             TasksManager.SetTask(typeof(FileManager).FullName + "_" + nameof(GCCollect) + "_minutely1", Cron.MinuteInterval(1), () => GCCollectStatic());
 #endif
 
+            TasksManager.SetTask(typeof(FileManager).FullName + "_" + nameof(PlaceFileIntoQueue) + "_0", DateTime.Now.AddSeconds(10), () => PlaceFileIntoQueue());
+            TasksManager.SetTask(typeof(FileManager).FullName + "_" + nameof(PlaceFileIntoQueue) + "_minutely5", Cron.MinuteInterval(5), () => PlaceFileIntoQueue());
+
+            // Не запускать не машине разработчика, иначе может быть так, что при подключении базе на удаленном сервере файлы физически останутся, а из базы будут удалены.
+            if (!Debug.IsDeveloper)
+            {
+                TasksManager.SetTask(typeof(FileManager).FullName + "_" + nameof(RemoveMarkedFiles) + "_0", DateTime.Now.AddSeconds(10), () => RemoveMarkedFiles());
+                TasksManager.SetTask(typeof(FileManager).FullName + "_" + nameof(RemoveMarkedFiles) + "_minutely1", Cron.MinuteInterval(1), () => RemoveMarkedFiles());
+            }
+
+            // Не запускать не машине разработчика, иначе может быть так, что при подключении базе на удаленном сервере файлы физически останутся, а из базы будут удалены.
+            if (!Debug.IsDeveloper)
+            {
+                TasksManager.SetTask(typeof(FileManager).FullName + "_" + nameof(CheckRemovedFiles) + "_0", DateTime.Now.AddSeconds(10), () => CheckRemovedFiles(true));
+            }
+
             ModelMetadataProviders.Current = new MVC.TraceModelMetadataProviderWithFiles();
         }
 
@@ -90,7 +87,7 @@ namespace OnWeb.Modules.FileManager
             {
                 using (var db = this.CreateUnitOfWork())
                 {
-                    result = db.Repo1.Where(x => x.IdFile == idFile).FirstOrDefault();
+                    result = db.File.Where(x => x.IdFile == idFile && !x.IsRemoved && !x.IsRemoving).FirstOrDefault();
                     return result != null ? NotFound.Success : NotFound.NotFound;
                 }
             }
@@ -121,7 +118,7 @@ namespace OnWeb.Modules.FileManager
                 {
                     try
                     {
-                        var query = db.Repo1.Where(searchExpression).FirstOrDefault();
+                        var query = db.File.Where(x => !x.IsRemoved && !x.IsRemoving).Where(searchExpression).FirstOrDefault();
                         result = query;
                     }
                     catch (NotSupportedException ex)
@@ -159,7 +156,7 @@ namespace OnWeb.Modules.FileManager
                 {
                     try
                     {
-                        var query = db.Repo1.Where(searchExpression);
+                        var query = db.File.Where(x => !x.IsRemoved && !x.IsRemoving).Where(searchExpression);
                         result = query.ToList();
                     }
                     catch (NotSupportedException ex)
@@ -199,7 +196,7 @@ namespace OnWeb.Modules.FileManager
                 {
                     using (var db = this.CreateUnitOfWork())
                     {
-                        var data = db.Repo1.Where(x => ids.Contains(x.IdFile)).OrderBy(x => x.NameFile).ToDictionary(x => x.IdFile, x => x);
+                        var data = db.File.Where(x => ids.Contains(x.IdFile) && !x.IsRemoved && !x.IsRemoving).OrderBy(x => x.NameFile).ToDictionary(x => x.IdFile, x => x);
                         return fileList.ToDictionary(x => x, x => data.ContainsKey(x) ? data[x] : null);
                     }
                 }
@@ -246,7 +243,7 @@ namespace OnWeb.Modules.FileManager
                 var pathFileOld = string.Empty;
                 using (var db = this.CreateUnitOfWork())
                 {
-                    var data = !string.IsNullOrEmpty(uniqueKey) ? (db.Repo1.Where(x => x.UniqueKey == uniqueKey).FirstOrDefault() ?? null) : null;
+                    var data = !string.IsNullOrEmpty(uniqueKey) ? (db.File.Where(x => x.UniqueKey == uniqueKey).FirstOrDefault() ?? null) : null;
 
                     if (data != null && pathFile != data.PathFile) pathFileOld = data.PathFile;
 
@@ -272,7 +269,7 @@ namespace OnWeb.Modules.FileManager
 
                     if (fileType == MimeTypes.JPEG || fileType == MimeTypes.PNG || fileType == MimeTypes.BMP || fileType == MimeTypes.GIF) data.TypeCommon = FileTypeCommon.Image;
 
-                    if (isNew) db.Repo1.Add(data);
+                    if (isNew) db.File.Add(data);
 
                     if (db.SaveChanges() > 0)
                     {
@@ -305,7 +302,7 @@ namespace OnWeb.Modules.FileManager
             {
                 using (var db = this.CreateUnitOfWork())
                 {
-                    var file = db.Repo1.Where(x => x.IdFile == idFile).FirstOrDefault();
+                    var file = db.File.Where(x => x.IdFile == idFile && !x.IsRemoved && !x.IsRemoving).FirstOrDefault();
                     if (file != null)
                     {
                         file.DateExpire = dateExpires;
@@ -351,8 +348,8 @@ namespace OnWeb.Modules.FileManager
                     var IdList5 = fileList.Length > 4 ? fileList[4] : 0;
 
                     var sql = fileList.Length > 5 ?
-                                db.Repo1.Where(x => fileList.Contains(x.IdFile)) :
-                                db.Repo1.Where(x => x.IdFile == IdList1 || x.IdFile == IdList2 || x.IdFile == IdList3 || x.IdFile == IdList4 || x.IdFile == IdList5);
+                                db.File.Where(x => fileList.Contains(x.IdFile) && !x.IsRemoved && !x.IsRemoving) :
+                                db.File.Where(x => (x.IdFile == IdList1 || x.IdFile == IdList2 || x.IdFile == IdList3 || x.IdFile == IdList4 || x.IdFile == IdList5) && !x.IsRemoved && !x.IsRemoving);
 
 
                     if (sql.ForEach(file => file.DateExpire = dateExpires) > 0) db.SaveChanges();
@@ -389,7 +386,7 @@ namespace OnWeb.Modules.FileManager
                 using (var db = this.CreateUnitOfWork())
                 using (var scope = db.CreateScope(TransactionScopeOption.RequiresNew))
                 {
-                    if (db.Repo1.Where(x => fileList.Contains(x.IdFile)).ForEach(file =>
+                    if (db.File.Where(x => fileList.Contains(x.IdFile) && !x.IsRemoved && !x.IsRemoving).ForEach(file =>
                     {
                         try
                         {
@@ -399,7 +396,7 @@ namespace OnWeb.Modules.FileManager
                         catch (UnauthorizedAccessException) { return; }
                         catch { }
 
-                        db.Repo1.Delete(file);
+                        db.File.Delete(file);
                     }) > 0)
                     {
                         db.SaveChanges();
@@ -431,10 +428,9 @@ namespace OnWeb.Modules.FileManager
                 using (var db = this.CreateUnitOfWork())
                 using (var scope = db.CreateScope(TransactionScopeOption.Required))
                 {
-                    if (db.Repo1.Where(x => fileList.Contains(x.IdFile)).ForEach(file =>
+                    if (db.File.Where(x => fileList.Contains(x.IdFile) && !x.IsRemoved && !x.IsRemoving).ForEach(file =>
                     {
-                        file.DateExpire = DateTime.Now.AddSeconds(-1);
-                        //todo добавить метку в таблицу для фонового задания.
+                        file.IsRemoving = true;
                     }) > 0)
                     {
                         db.SaveChanges();
@@ -448,47 +444,6 @@ namespace OnWeb.Modules.FileManager
             {
                 this.RegisterEvent(EventType.Error, "Ошибка удаления файлов с истекшим сроком", null, null, ex);
                 return false;
-            }
-        }
-
-        [ApiIrreversible]
-        public void ClearExpired()
-        {
-            try
-            {
-                int countCleared = 0;
-
-                using (var db = this.CreateUnitOfWork())
-                using (var scope = db.CreateScope(TransactionScopeOption.RequiresNew))
-                {
-                    var rootDirectory = AppCore.ApplicationWorkingFolder;
-
-                    db.Repo1.Where(x => x.DateExpire <= DateTime.Now).ForEach(file =>
-                    {
-                        try
-                        {
-                            if (File.Exists(Path.Combine(rootDirectory, file.PathFile)))
-                                File.Delete(Path.Combine(rootDirectory, file.PathFile));
-                        }
-                        catch (IOException) { return; }
-                        catch (UnauthorizedAccessException) { return; }
-                        catch { }
-
-                        db.Repo1.Delete(file);
-                    });
-
-                    countCleared = db.SaveChanges();
-                    scope.Commit();
-                }
-
-                if (countCleared > 0)
-                {
-                    this.RegisterEvent(EventType.Info, "Удаление файлов с истекшим сроком", $"Удалено {countCleared} файлов.");
-                }
-            }
-            catch (Exception ex)
-            {
-                this.RegisterEvent(EventType.Error, "Ошибка удаления файлов с истекшим сроком", null, null, ex);
             }
         }
 
@@ -509,7 +464,208 @@ namespace OnWeb.Modules.FileManager
         }
         #endregion
 
-        #region Maintenance indexes
+        #region FileManager tasks
+        internal static void PlaceFileIntoQueue()
+        {
+            if (_servicesFlags.AddOrUpdate("PlaceFileIntoQueue", 1, (k, o) => Math.Min(int.MaxValue, o + 1)) > 1) return;
+
+            try
+            {
+                using (var db = new DB.DataContext())
+                {
+                    db.DataContext.StoredProcedure<object>("FileManager_PlaceFileIntoQueue");
+                }
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception ex)
+            {
+                _thisModule?.RegisterEvent(EventType.Error, "Ошибка заполнения очереди удаления", null, ex);
+            }
+            finally
+            {
+                _servicesFlags["PlaceFileIntoQueue"] = 0;
+            }
+        }
+
+        internal static void RemoveMarkedFiles()
+        {
+            if (_servicesFlags.AddOrUpdate("RemoveMarkedFiles", 1, (k, o) => Math.Min(int.MaxValue, o + 1)) > 1) return;
+            int countFiles = 0;
+
+            try
+            {
+                var executionTimeLimit = TimeSpan.FromSeconds(50);
+                var dateStart = DateTime.Now;
+                int idFileMax = 0;
+                var rootDirectory = _thisModule?.AppCore?.ApplicationWorkingFolder;
+
+                using (var db = new DB.DataContext())
+                {
+                    while ((DateTime.Now - dateStart) < executionTimeLimit)
+                    {
+                        var fileToRemoveQuery = (from FileRemoveQueue in db.FileRemoveQueue
+                                                 join File in db.File on FileRemoveQueue.IdFile equals File.IdFile into File_j
+                                                 from File in File_j.DefaultIfEmpty()
+                                                 where FileRemoveQueue.IdFile > idFileMax
+                                                 orderby FileRemoveQueue.IdFile ascending
+                                                 select new { FileRemoveQueue, File }).Take(50);
+                        var fileToRemoveList = fileToRemoveQuery.ToList();
+                        if (fileToRemoveList.Count == 0) break;
+
+                        var removeList = new List<int>();
+                        var updateList = new List<DB.File>();
+
+                        fileToRemoveList.ForEach(row =>
+                        {
+                            try
+                            {
+                                if (row.File == null)
+                                {
+                                    removeList.Add(row.FileRemoveQueue.IdFile);
+                                }
+                                else
+                                {
+                                    if (File.Exists(Path.Combine(rootDirectory, row.File.PathFile)))
+                                        File.Delete(Path.Combine(rootDirectory, row.File.PathFile));
+
+                                    removeList.Add(row.FileRemoveQueue.IdFile);
+
+                                    row.File.IsRemoving = false;
+                                    row.File.IsRemoved = true;
+                                    updateList.Add(row.File);
+                                }
+                            }
+                            catch (IOException) { return; }
+                            catch (UnauthorizedAccessException) { return; }
+                            catch { }
+
+                            idFileMax = row.FileRemoveQueue.IdFile;
+                        });
+
+                        if (removeList.Count > 0 || updateList.Count > 0)
+                        {
+                            using (var scope = db.CreateScope(TransactionScopeOption.RequiresNew))
+                            {
+                                if (removeList.Count > 0)
+                                {
+                                    db.FileRemoveQueue.Where(x => removeList.Contains(x.IdFile)).Delete();
+                                    db.SaveChanges<DB.FileRemoveQueue>();
+                                }
+
+                                if (updateList.Count > 0)
+                                {
+                                    if (updateList.Any(x => x.IsRemoving || !x.IsRemoved)) throw new Exception("Флаги удаления сбросились!");
+
+                                    db.File.InsertOrDuplicateUpdate(updateList, new UpsertField(nameof(DB.File.IsRemoved)), new UpsertField(nameof(DB.File.IsRemoving)));
+                                }
+
+                                scope.Commit();
+                            }
+                            countFiles += updateList.Count;
+                        }
+                    }
+                }
+
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception ex)
+            {
+                _thisModule?.RegisterEvent(EventType.Error, "Ошибка заполнения очереди удаления", null, ex);
+            }
+            finally
+            {
+                _servicesFlags["RemoveMarkedFiles"] = 0;
+                if (countFiles > 0) _thisModule?.RegisterEvent(EventType.Info, "Удаление файлов", $"Удалено {countFiles} файлов.", null);
+            }
+        }
+
+        internal static void CheckRemovedFiles(bool isStart)
+        {
+            if (_servicesFlags.AddOrUpdate("CheckRemovedFiles", 1, (k, o) => Math.Min(int.MaxValue, o + 1)) > 1) return;
+            bool isFinalized = false;
+            int countFiles = 0;
+
+            try
+            {
+                if (isStart)
+                {
+                    _servicesFlags["CheckRemovedFilesMax"] = 0;
+                    TasksManager.SetTask(typeof(FileManager).FullName + "_" + nameof(CheckRemovedFiles) + "_minutely5", Cron.MinuteInterval(5), () => CheckRemovedFiles(false));
+                    _thisModule?.RegisterEvent(EventType.Info, "Запуск регулярной задачи проверки файлов.", null);
+                }
+
+                var executionTimeLimit = new TimeSpan(0, 4, 30);
+                var dateStart = DateTime.Now;
+                int idFileMax = _servicesFlags.GetOrAdd("CheckRemovedFilesMax", 0);
+                var rootDirectory = _thisModule?.AppCore?.ApplicationWorkingFolder;
+
+                using (var db = new DB.DataContext())
+                {
+                    while ((DateTime.Now - dateStart) < executionTimeLimit)
+                    {
+                        var filesQuery = db.File.Where(x => !x.IsRemoved && !x.IsRemoving && x.IdFile > idFileMax).OrderBy(x => x.IdFile).Take(100);
+                        var filesList = filesQuery.ToList();
+                        if (filesList.Count == 0)
+                        {
+                            isFinalized = true;
+                            break;
+                        }
+
+                        var updateList = new List<DB.File>();
+
+                        filesList.ForEach(file =>
+                        {
+                            try
+                            {
+                                if (!File.Exists(Path.Combine(rootDirectory, file.PathFile)))
+                                {
+                                    file.IsRemoving = true;
+                                    updateList.Add(file);
+                                }
+                            }
+                            catch (IOException) { return; }
+                            catch (UnauthorizedAccessException) { return; }
+                            catch { }
+
+                            idFileMax = file.IdFile;
+                        });
+
+                        if (updateList.Count > 0)
+                        {
+                            using (var scope = db.CreateScope(TransactionScopeOption.RequiresNew))
+                            {
+                                db.File.InsertOrDuplicateUpdate(updateList, new UpsertField(nameof(DB.File.IsRemoved)), new UpsertField(nameof(DB.File.IsRemoving)));
+                                scope.Commit();
+                            }
+                            countFiles += updateList.Count;
+                        }
+
+                        _servicesFlags["CheckRemovedFilesMax"] = idFileMax;
+                    }
+
+                    if (isFinalized)
+                    {
+                        TasksManager.RemoveTask(typeof(FileManager).FullName + "_" + nameof(CheckRemovedFiles) + "_minutely5");
+                        //TasksManager.SetTask(typeof(FileManager).FullName + "_" + nameof(CheckRemovedFiles) + "_0", DateTime.Now.AddHours(2), () => CheckRemovedFiles(true));
+                        TasksManager.SetTask(typeof(FileManager).FullName + "_" + nameof(CheckRemovedFiles) + "_0", DateTime.Now.AddMinutes(1), () => CheckRemovedFiles(true));
+                        _thisModule?.RegisterEvent(EventType.Info, "Удаление регулярной задачи проверки файлов.", null);
+                    }
+                }
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception ex)
+            {
+                _thisModule?.RegisterEvent(EventType.Error, "Ошибка заполнения очереди удаления", null, ex);
+            }
+            finally
+            {
+                _servicesFlags["CheckRemovedFiles"] = 0;
+                if (countFiles > 0) _thisModule?.RegisterEvent(EventType.Info, "Проверка удаленных файлов", $"На удаление помечено {countFiles} файлов.", null);
+            }
+        }
+        #endregion
+
+        #region Maintenance indexes tasks
         [ApiIrreversible]
         public static void MaintenanceIndexesStatic()
         {
@@ -537,7 +693,7 @@ namespace OnWeb.Modules.FileManager
         }
         #endregion
 
-        #region RazorPrecompilation
+        #region RazorPrecompilation tasks
         public static void RazorPrecompilationStatic()
         {
             var module = _thisModule;
@@ -562,7 +718,7 @@ namespace OnWeb.Modules.FileManager
         #endregion
 
 #if DEBUG
-        #region GC collect for debug
+        #region GC collect for debug tasks
         public static void GCCollectStatic()
         {
             var module = _thisModule;

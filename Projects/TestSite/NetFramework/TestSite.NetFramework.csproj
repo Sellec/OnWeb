@@ -60,7 +60,7 @@
       <Version>0.1.5</Version>
     </PackageReference>
     <PackageReference Include="OnUtils.Data.EntityFramework">
-      <Version>0.1.4</Version>
+      <Version>0.1.5.4</Version>
     </PackageReference>
     <PackageReference Include="System.ComponentModel.Annotations">
       <Version>4.5.0</Version>

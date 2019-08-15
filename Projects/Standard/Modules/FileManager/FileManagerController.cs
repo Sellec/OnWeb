@@ -62,30 +62,6 @@ namespace OnWeb.Modules.FileManager
             return ReturnJson(result);
         }
 
-        //[Route("{url}")]
-        //public ActionResult DownloadFile(string url)
-        //{
-        //    return File(url, "application/pdf");
-        //}
-
-        //[HttpPost]
-        //public ActionResult DeleteFile(string url)
-        //{
-        //    try
-        //    {
-        //        System.IO.File.Delete(url);
-        //        var msg = new { msg = "File Deleted!" };
-        //        return Json(msg);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        //If you want this working with a custom error you need to change the name of 
-        //        //variable customErrorKeyStr in line 85, from jquery-upload-file-error to jquery_upload_file_error 
-        //        var msg = new { jquery_upload_file_error = e.Message };
-        //        return Json(msg);
-        //    }
-        //}
-
         [ModuleAction("file")]
         public FileResult File(int? IdFile = null)
         {
@@ -95,10 +71,13 @@ namespace OnWeb.Modules.FileManager
 
                 using (var db = Module.CreateUnitOfWork())
                 {
-                    var file = db.Repo1.Where(x => x.IdFile == IdFile.Value).Select(x => new { x.PathFile, x.NameFile }).FirstOrDefault();
+                    var file = db.File.Where(x => x.IdFile == IdFile.Value && !x.IsRemoved && !x.IsRemoving).Select(x => new { x.PathFile, x.NameFile }).FirstOrDefault();
                     if (file == null) throw new Exception("Файл не найден.");
 
                     var rootDirectory = System.Web.Hosting.HostingEnvironment.MapPath("/");
+                    var filePath = Path.Combine(rootDirectory, file.PathFile);
+
+                    return base.File(filePath, System.Net.Mime.MediaTypeNames.Application.Octet, file.NameFile);
 
                     byte[] fileBytes = System.IO.File.ReadAllBytes(Path.Combine(rootDirectory, file.PathFile));
                     var result = File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, file.NameFile);
@@ -126,7 +105,7 @@ namespace OnWeb.Modules.FileManager
                 {
                     using (var db = Module.CreateUnitOfWork())
                     {
-                        var file = db.Repo1.Where(x => x.IdFile == IdFile.Value).Select(x => new { x.PathFile, x.NameFile }).FirstOrDefault();
+                        var file = db.File.Where(x => x.IdFile == IdFile.Value && !x.IsRemoved && !x.IsRemoving).Select(x => new { x.PathFile, x.NameFile }).FirstOrDefault();
                         if (file == null) filePath = "data/img/files/notfound.jpg"; //Файл не найден.
                         else
                         {
@@ -203,7 +182,7 @@ namespace OnWeb.Modules.FileManager
                 {
                     using (var db = Module.CreateUnitOfWork())
                     {
-                        var file = db.Repo1.Where(x => x.IdFile == IdFile.Value).Select(x => new { x.PathFile, x.NameFile, x.DateChange }).FirstOrDefault();
+                        var file = db.File.Where(x => x.IdFile == IdFile.Value && !x.IsRemoved && !x.IsRemoving).Select(x => new { x.PathFile, x.NameFile, x.DateChange }).FirstOrDefault();
                         if (file == null) filePath = "data/img/files/notfound.jpg"; //Файл не найден.
                         else
                         {
