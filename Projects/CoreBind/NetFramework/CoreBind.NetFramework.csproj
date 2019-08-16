@@ -73,6 +73,7 @@
     <Compile Include="CoreBind\Routing\ControllerTypeAdmin.cs" />
     <Compile Include="Core\Modules\ModuleControllerAdmin.cs" />
     <Compile Include="CoreBind\Routing\ModuleControllerDefaultAttribute.cs" />
+    <Compile Include="WebUtils\CompressBehaviourFilter.cs" />
     <Compile Include="WebUtils\WebViewPageExtension.cs" />
     <Compile Include="_Initialize\WebInitializer.cs" />
     <Compile Include="CoreBind\Binders\JsonDictionaryModelBinder.cs" />

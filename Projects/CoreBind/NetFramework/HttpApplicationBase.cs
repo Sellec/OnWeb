@@ -107,6 +107,7 @@ namespace OnWeb
 
             GlobalFilters.Filters.Add(new HandleErrorAttribute());
             GlobalFilters.Filters.Add(new External.ActionParameterAlias.ParameterAliasAttributeGlobal());
+            GlobalFilters.Filters.Add(new WebUtils.CompressBehaviourFilter());
 
             ModelBinders.Binders.Add(typeof(JsonDictionary), new JsonDictionaryModelBinder());
             ModelBinders.Binders.DefaultBinder = new TraceModelBinder();
@@ -238,8 +239,9 @@ namespace OnWeb
                             var reader = new System.IO.StreamReader(body, encoding);
                             string s = reader.ReadToEnd();
 
-                            var jsonRequestObject = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, object>>(s, new Newtonsoft.Json.JsonSerializerSettings() {
-                                 Error = null,
+                            var jsonRequestObject = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, object>>(s, new Newtonsoft.Json.JsonSerializerSettings()
+                            {
+                                Error = null,
                             });
                             if (jsonRequestObject != null && jsonRequestObject.Count > 0)
                             {
@@ -261,34 +263,12 @@ namespace OnWeb
             catch (ThreadAbortException) { throw; }
             catch { }
 
-            IsCompressionEnabled = true;
-
             try
             {
                 this.OnBeginRequest();
             }
             catch (ThreadAbortException) { throw; }
             catch (Exception ex) { Debug.WriteLine("OnBeginRequest: " + ex.Message); }
-
-            var encodings = Request.Headers.Get("Accept-Encoding");
-            if (IsCompressionEnabled && encodings != null)
-            {
-                // Check the browser accepts deflate or gzip (deflate takes preference)
-                encodings = encodings.ToLower();
-                if (encodings.Contains("deflate"))
-                {
-                    Response.Filter = new DeflateStream(Response.Filter, CompressionMode.Compress);
-                    Response.AppendHeader("Content-Encoding", "deflate");
-                    Response.AppendHeader("Vary", "Content-Encoding");
-                }
-                else if (encodings.Contains("gzip"))
-                {
-                    Response.Filter = new GZipStream(Response.Filter, CompressionMode.Compress);
-                    Response.AppendHeader("Content-Encoding", "gzip");
-                    Response.AppendHeader("Vary", "Content-Encoding");
-                }
-            }
-
         }
 
         internal void Application_AcquireRequestState(object sender, EventArgs e)
@@ -439,14 +419,6 @@ namespace OnWeb
             get => _applicationCore;
         }
 
-        /// <summary>
-        /// Указывает, следует ли использовать gzip/deflate, если браузер поддерживает сжатие.
-        /// </summary>
-        public bool IsCompressionEnabled
-        {
-            get;
-            set;
-        }
         #endregion
 
     }

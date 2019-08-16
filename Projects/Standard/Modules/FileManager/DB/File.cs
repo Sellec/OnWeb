@@ -31,7 +31,7 @@ namespace OnWeb.Modules.FileManager.DB
         public FileTypeCommon TypeCommon { get; set; }
 
         /// <summary>
-        /// Точный тип файла, определенный на основе расширения, заголовков и пр.
+        /// Точный mime-тип файла, определенный на основе расширения, заголовков и пр.
         /// </summary>
         public string TypeConcrete { get; set; }
 

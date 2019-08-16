@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
+using System.Web;
 
 namespace OnWeb.CoreBind
 {
@@ -217,7 +218,6 @@ namespace OnWeb.CoreBind
                     Response.AppendHeader("Vary", "Content-Encoding");
                 }
             }
-
         }
 
         internal void Application_AcquireRequestState(object sender, EventArgs e)
@@ -337,7 +337,7 @@ namespace OnWeb.CoreBind
         /// </summary>
         public bool IsCompressionEnabled
         {
-            get;
+            get => httpcon
             set;
         }
         #endregion
