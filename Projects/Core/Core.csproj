@@ -16,7 +16,7 @@
     <IncludeSymbols>True</IncludeSymbols>
     <IncludeSource>True</IncludeSource>
     <Authors>Sellec</Authors>
-    <Version>0.1.5.8</Version>
+    <Version>0.1.5.9</Version>
     <Copyright>Copyright © Петров Дмитрий 2016</Copyright>
     <AssemblyName>OnWeb.Core</AssemblyName>
     <RootNamespace>OnWeb</RootNamespace>

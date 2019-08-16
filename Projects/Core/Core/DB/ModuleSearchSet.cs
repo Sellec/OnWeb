@@ -19,6 +19,7 @@ namespace OnWeb.Core.DB
         private Lazy<ModuleCore<WebApplication>> _ownerModule = null;
 
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int IdSearchSet { get; set; }
 
         [StringLength(500)]
