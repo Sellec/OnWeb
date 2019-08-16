@@ -201,6 +201,8 @@ namespace OnWeb.Core.Modules
         /// </summary>
         protected sealed override void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            AppCore.Get<OnWeb.Modules.Routing.ModuleRouting>().PrepareCurrentThreadCache();
+
             if (filterContext.ActionDescriptor is ReflectedActionDescriptor)
             {
                 var attr = (filterContext.ActionDescriptor as ReflectedActionDescriptor).MethodInfo.GetCustomAttributes(typeof(ModuleActionAttribute), true);
@@ -217,6 +219,7 @@ namespace OnWeb.Core.Modules
         {
             filterContext.Result = PrepareActionResultToCurrentRequestType(filterContext.Result);
             OnAfterExecution(filterContext);
+            AppCore.Get<OnWeb.Modules.Routing.ModuleRouting>().ClearCurrentThreadCache();
         }
 
         /// <summary>

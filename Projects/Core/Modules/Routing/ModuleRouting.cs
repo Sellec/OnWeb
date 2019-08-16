@@ -4,18 +4,22 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace OnWeb.Modules.Routing
 {
     using Core.Items;
     using Core.Modules;
+    using DefferedDictionary = ConcurrentDictionary<Type, ConcurrentDictionary<Core.Items.ItemBase, int>>;
 
 #pragma warning disable CS1591 // todo внести комментарии.
     [ModuleCore("Маршрутизация")]
     public class ModuleRouting : ModuleCore<ModuleRouting>
     {
         internal static ModuleRouting _moduleLink = null;
-        private readonly object _syncRoot = new object();
+
+        private ThreadLocal<object> _syncRoot = new ThreadLocal<object>(() => new object());
+        private ThreadLocal<Tuple<int, DefferedDictionary>> _defferedObjects = new ThreadLocal<Tuple<int, DefferedDictionary>>(() => new Tuple<int, DefferedDictionary>(Thread.CurrentThread.ManagedThreadId, new DefferedDictionary()), true);
 
         public ModuleRouting()
         {
@@ -32,88 +36,16 @@ namespace OnWeb.Modules.Routing
             if (_moduleLink == this) _moduleLink = null;
         }
 
-        public void PrepareItems<T>(IEnumerable<T> items, int idItemType) where T : ItemBase
-        {
-            if (items != null && items.Count() > 0)
-            {
-                //var schemeFull = this.getSchemeFullByItem2(schemeItemID, schemeItemType, schemeID);
-                //if (schemeFull != null && schemeFull.Count > 0)
-            }
-        }
-
         #region Deffered
         #region Clear links
-        private class TimerData
-        {
-            public DateTime DateCreated { get; } = DateTime.Now;
-
-            public Dictionary<ItemBase, Type> Objects = new Dictionary<ItemBase, Type>();
-        }
-
-        private ConcurrentQueue<TimerData> _linksListsQueue = new ConcurrentQueue<TimerData>();
-
-        private TimerData TimerClearDeffered
-        {
-            get
-            {
-                TimerData data;
-                if (!_linksListsQueue.IsEmpty)
-                {
-                    var last = _linksListsQueue.Last();
-                    if ((DateTime.Now - last.DateCreated).TotalMinutes >= 1)
-                    {
-                        data = new TimerData();
-                        _linksListsQueue.Enqueue(data);
-                        return data;
-                    }
-                    else return last;
-                }
-                else
-                {
-                    data = new TimerData();
-                    _linksListsQueue.Enqueue(data);
-                    return data;
-                }
-            }
-        }
-
         private void TimerCallback()
         {
             try
             {
-                while (!_linksListsQueue.IsEmpty)
-                {
-                    if (_linksListsQueue.TryPeek(out var dataPeek))
-                    {
-                        if ((DateTime.Now - dataPeek.DateCreated).TotalMinutes >= 1)
-                        {
-                            if (_linksListsQueue.TryDequeue(out var dataDequeued) && object.ReferenceEquals(dataDequeued, dataPeek))
-                            {
-                                if (dataDequeued.Objects.Count > 0)
-                                {
-                                    var objectsGroupedByType = dataDequeued.Objects.Where(x => x.Key != null && x.Value != null).GroupBy(x => x.Value).ToDictionary(x => x.Key, x => x.ToList());
-                                    lock (_syncRoot)
-                                    {
-                                        foreach (var pair in objectsGroupedByType)
-                                        {
-                                            var objType = pair.Key;
-                                            if (_defferedObjects.TryGetValue(objType, out var list))
-                                            {
-                                                foreach (var obj in pair.Value)
-                                                {
-                                                    list.TryRemove(obj.Key, out var value);
-                                                }
-                                            }
-                                        }
-                                    }
-                                    dataDequeued.Objects.Clear();
-                                }
-                            }
-                        }
-                        else break;
-                    }
-                    else break;
-                }
+                var sumAll = _defferedObjects.Values.Sum(x => x.Item2.Sum(y => y.Value.Count));
+                Debug.WriteLine($"TimerCallback: {_defferedObjects.Values.Count} threads have containers with {sumAll} items.");
+                var rows = _defferedObjects.Values.OrderBy(x => x.Item1).Select(x => $"Thread-{x.Item1}: {x.Item2.Sum(y => y.Value.Count)} items in {x.Item2.Count} types;");
+                rows.ForEach(x => Debug.WriteLine($"TimerCallback: {x}"));
             }
             finally
             {
@@ -122,28 +54,42 @@ namespace OnWeb.Modules.Routing
         }
         #endregion
 
-        [Newtonsoft.Json.JsonIgnore]
-        private ConcurrentDictionary<Type, ConcurrentDictionary<ItemBase, int>> _defferedObjects = new ConcurrentDictionary<Type, ConcurrentDictionary<ItemBase, int>>();
+        /// <summary>
+        /// Для текущего потока обрабатывает все объекты в кеше.
+        /// </summary>
+        public void PrepareCurrentThreadCache()
+        {
+            var collection = _defferedObjects.Value.Item2;
+            collection.ForEach(x => CheckDeffered(x.Key));
+        }
+
+        /// <summary>
+        /// Для текущего потока очищает кеш объектов.
+        /// </summary>
+        public void ClearCurrentThreadCache()
+        {
+            var collection = _defferedObjects.Value.Item2;
+            collection.Values.ForEach(x => x.Clear());
+            collection.Clear();
+        }
 
         public void RegisterToQuery<TItem>(TItem obj) where TItem : ItemBase
         {
             try
             {
                 var objType = obj.GetType();
-                var list = _defferedObjects.GetOrAdd(objType, t => new ConcurrentDictionary<ItemBase, int>());
-
+                var list = _defferedObjects.Value.Item2.GetOrAdd(objType, t => new ConcurrentDictionary<ItemBase, int>());
                 list[obj] = 0;
-                TimerClearDeffered.Objects[obj] = objType;
             }
             catch { }
         }
 
-        internal void CheckDeffered(Type type = null)
+        internal void CheckDeffered(Type type)
         {
-            if (_defferedObjects.ContainsKey(type))
+            if (_defferedObjects.Value.Item2.ContainsKey(type))
             {
                 Dictionary<ItemBase, int> items = null;
-                lock (_syncRoot)
+                lock (_syncRoot.Value)
                 {
                     for (int i = 0; i < 3; i++)
                     {
@@ -152,7 +98,7 @@ namespace OnWeb.Modules.Routing
                             var newCollection = new ConcurrentDictionary<ItemBase, int>();
                             ConcurrentDictionary<ItemBase, int> oldCollection = null;
 
-                            _defferedObjects.AddOrUpdate(type, newCollection, (key, old) =>
+                            _defferedObjects.Value.Item2.AddOrUpdate(type, newCollection, (key, old) =>
                             {
                                 oldCollection = old;
                                 return newCollection;
