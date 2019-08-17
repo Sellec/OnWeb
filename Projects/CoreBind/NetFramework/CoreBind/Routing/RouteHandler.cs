@@ -11,13 +11,14 @@ namespace OnWeb.CoreBind.Routing
 {
     using Modules.Routing;
     using Modules.Routing.DB;
+    using Providers;
 
     class RouteHandler : MvcRouteHandler, IRouteConstraint
     {
         private ConcurrentDictionary<string, Routing> _dbCache = new ConcurrentDictionary<string, Routing>();
         private readonly WebApplication _core = null;
 
-        public RouteHandler(WebApplication core)
+        public RouteHandler(WebApplication core, CustomControllerFactory controllerFactory) : base(controllerFactory)
         {
             _core = core;
         }
@@ -74,9 +75,11 @@ namespace OnWeb.CoreBind.Routing
             if (string.IsNullOrEmpty(fileRelative)) return null;
 
             var fileRelativeQithoutQuery = fileRelative.Split(new char[] { '?' }, 2)[0];
-            var fileReal = ((Providers.ResourceProvider)_core.Get<Core.Storage.ResourceProvider>()).GetFilePath(null, fileRelativeQithoutQuery, false, out IEnumerable<string> searchLocations);
+            var fileReal = ((ResourceProvider)_core.Get<Core.Storage.ResourceProvider>()).GetFilePath(null, fileRelativeQithoutQuery, true, out IEnumerable<string> searchLocations);
             if (!string.IsNullOrEmpty(fileReal))
             {
+                if (fileReal.StartsWith("~/")) return fileReal;
+
                 var directoryRoot = System.IO.Path.GetDirectoryName(_core.ApplicationWorkingFolder);
                 var directoryFile = System.IO.Path.GetDirectoryName(fileReal);
                 if (directoryFile == directoryRoot) return fileReal;
@@ -88,8 +91,19 @@ namespace OnWeb.CoreBind.Routing
         {
             if (routeDirection == RouteDirection.IncomingRequest)
             {
-                if (GetMatchedRoute(values) != null) return true;
-                if (!string.IsNullOrEmpty(GetExistingFile(values))) return true;
+                var matchedFile = GetExistingFile(values);
+                if (!string.IsNullOrEmpty(matchedFile))
+                {
+                    values["matchedFile"] = matchedFile;
+                    return true;
+                }
+
+                var matchedRoute = GetMatchedRoute(values);
+                if (matchedRoute != null)
+                {
+                    values["matchedRoute"] = matchedRoute;
+                    return true;
+                }
             }
 
             return false;
@@ -97,7 +111,17 @@ namespace OnWeb.CoreBind.Routing
 
         protected override IHttpHandler GetHttpHandler(RequestContext requestContext)
         {
-            var route = GetMatchedRoute(requestContext.RouteData.Values);
+            var matchedFile = requestContext.RouteData.Values["matchedFile"] as string;
+            if (!string.IsNullOrEmpty(matchedFile))
+            {
+                WebUtils.CompressBehaviourFilter.PrepareCompression(requestContext.HttpContext.Request, requestContext.HttpContext.Response);
+                requestContext.HttpContext.RewritePath(matchedFile);
+
+                Type type = typeof(HttpApplication).Assembly.GetType("System.Web.StaticFileHandler", true);
+                return (IHttpHandler)Activator.CreateInstance(type, true);
+            }
+
+            var route = requestContext.RouteData.Values["matchedRoute"] as Routing;
             if (route != null)
             {
                 if (route.IdRoutingType == RoutingType.eTypes.Old)
@@ -135,12 +159,6 @@ namespace OnWeb.CoreBind.Routing
                     if (arguments != null)
                         arguments.ForEach(x => requestContext.RouteData.Values[x.ArgumentName] = x.ArgumentValue);
                 }
-            }
-
-            var routedFile = GetExistingFile(requestContext.RouteData.Values);
-            if (!string.IsNullOrEmpty(routedFile))
-            {
-                return ((Providers.ResourceProvider)_core.Get<Core.Storage.ResourceProvider>()).GetHttpHandler(requestContext, routedFile);
             }
 
             var handler = base.GetHttpHandler(requestContext);

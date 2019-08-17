@@ -1,4 +1,5 @@
 ﻿using System.IO.Compression;
+using System.Web;
 using System.Web.Mvc;
 
 namespace OnWeb.WebUtils
@@ -7,31 +8,39 @@ namespace OnWeb.WebUtils
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var isCompressionEnabled = filterContext.ActionDescriptor.GetCustomAttributes(typeof(IgnoreCompressionAttribute), true).Length == 0;
+            if (filterContext.ActionDescriptor.GetCustomAttributes(typeof(IgnoreCompressionAttribute), true).Length == 0)
+            {
+                PrepareCompression(filterContext.HttpContext.Request, filterContext.HttpContext.Response);
+            }
+        }
 
-            if (filterContext.HttpContext.Request.Url.ToString().Contains("disableCompress=1"))
+        public static void PrepareCompression(HttpRequestBase request, HttpResponseBase response)
+        {
+            var isCompressionEnabled = true;
+
+            if (request.Url.ToString().Contains("disableCompress=1"))
             {
                 isCompressionEnabled = false;
             }
 
             if (isCompressionEnabled)
             {
-                var encodings = filterContext.HttpContext.Request.Headers.Get("Accept-Encoding");
+                var encodings = request.Headers.Get("Accept-Encoding");
                 if (encodings != null)
                 {
                     // Check the browser accepts deflate or gzip (deflate takes preference)
                     encodings = encodings.ToLower();
                     if (encodings.Contains("deflate"))
                     {
-                        filterContext.HttpContext.Response.Filter = new DeflateStream(filterContext.HttpContext.Response.Filter, CompressionMode.Compress);
-                        filterContext.HttpContext.Response.AppendHeader("Content-Encoding", "deflate");
-                        filterContext.HttpContext.Response.AppendHeader("Vary", "Content-Encoding");
+                        response.Filter = new DeflateStream(response.Filter, CompressionMode.Compress);
+                        response.AppendHeader("Content-Encoding", "deflate");
+                        response.AppendHeader("Vary", "Content-Encoding");
                     }
                     else if (encodings.Contains("gzip"))
                     {
-                        filterContext.HttpContext.Response.Filter = new GZipStream(filterContext.HttpContext.Response.Filter, CompressionMode.Compress);
-                        filterContext.HttpContext.Response.AppendHeader("Content-Encoding", "gzip");
-                        filterContext.HttpContext.Response.AppendHeader("Vary", "Content-Encoding");
+                        response.Filter = new GZipStream(response.Filter, CompressionMode.Compress);
+                        response.AppendHeader("Content-Encoding", "gzip");
+                        response.AppendHeader("Vary", "Content-Encoding");
                     }
                 }
 

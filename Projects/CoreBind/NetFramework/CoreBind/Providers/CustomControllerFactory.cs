@@ -19,11 +19,11 @@ namespace OnWeb.CoreBind.Providers
     using Exceptions;
     using Routing;
 
-    class TraceControllerProvider : CoreComponentBase, IComponentSingleton, IUnitOfWorkAccessor<Core.DB.CoreContext>, IControllerFactory
+    class CustomControllerFactory : CoreComponentBase, IComponentSingleton, IUnitOfWorkAccessor<Core.DB.CoreContext>, IControllerFactory
     {
         private readonly IControllerFactory _controllerFactoryOld = null;
 
-        public TraceControllerProvider(IControllerFactory controllerFactoryOld)
+        public CustomControllerFactory(IControllerFactory controllerFactoryOld)
         {
             _controllerFactoryOld = controllerFactoryOld;
         }

@@ -14,7 +14,7 @@ namespace OnWeb.CoreBind.Providers
     using System.Web.WebPages;
     using Core.Modules;
 
-    class ResourceProvider : Core.Storage.ResourceProvider, IViewEngine, IRouteHandler, IVirtualPathFactory
+    class ResourceProvider : Core.Storage.ResourceProvider, IViewEngine, IVirtualPathFactory
     {
         private IVirtualPathFactory _previousPathFactory = null;
         private IViewEngine _previousViewEngine = null;
@@ -159,56 +159,6 @@ namespace OnWeb.CoreBind.Providers
             }
 
             return _previousPathFactory.Exists(virtualPath);
-        }
-        #endregion
-
-        #region IRouteHandler
-        class Handler : IHttpHandler
-        {
-            public bool IsReusable
-            {
-                get => true;
-            }
-
-            public void ProcessRequest(HttpContext context)
-            {
-            }
-        }
-
-        IHttpHandler IRouteHandler.GetHttpHandler(RequestContext requestContext)
-        {
-            if (GetState() != CoreComponentState.Started) return null;
-
-            HttpContext.Current.Items["TimeStart"] = null;
-
-            var fileRelative = "data/" + requestContext.RouteData.Values["filename"] as string;
-            var fileReal = GetFilePath(null, fileRelative, false, out IEnumerable<string> searchLocations);
-
-            return GetHttpHandler(requestContext, fileReal);
-        }
-
-        public IHttpHandler GetHttpHandler(RequestContext requestContext, string fileReal)
-        {
-            requestContext.HttpContext.Response.Clear();
-
-            if (fileReal == null)
-            {
-                requestContext.HttpContext.Response.StatusCode = 404;
-            }
-            else
-            {
-                var ctt = MimeMapping.GetMimeMapping(fileReal);
-                requestContext.HttpContext.Response.ContentType = ctt;
-                requestContext.HttpContext.Response.TransmitFile(fileReal);
-            }
-
-            //todo эти две строки ломают сжатие gzip, если его включить.
-            //HttpContext.Current.Response.Flush();
-            //HttpContext.Current.Response.SuppressContent = true;
-
-            HttpContext.Current.ApplicationInstance.CompleteRequest();
-
-            return new Handler();
         }
         #endregion
 

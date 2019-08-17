@@ -79,11 +79,15 @@ else
         <link href="/data/libs/jquery.uploadfile/uploadfile.css" rel="stylesheet">
         <script src="/data/libs/jquery.uploadfile/jquery.uploadfile.js"></script>
 
+        <script type="text/javascript" src="/data/js/arcticmodal/jquery.arcticmodal-0.3.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="/data/js/arcticmodal/jquery.arcticmodal-0.3.css" />
+        <link rel="stylesheet" type="text/css" href="/data/js/arcticmodal/themes/simple.css" />
+
         <!--[if lte IE 7]>
-        <style type="text/css">
-        html .jqueryslidemenu{height: 1%;} /*Holly Hack for IE7 and below*/
-        </style>
-        <![endif]-->
+    <style type="text/css">
+    html .jqueryslidemenu{height: 1%;} /*Holly Hack for IE7 and below*/
+    </style>
+    <![endif]-->
 
         <script type='text/javascript'>
         function changeTitle(new_title) {
@@ -238,6 +242,20 @@ else
                 <div class="wrapper h35"></div>
             </div>
         </div>
+
+        <!-- (popup-dialog) -->
+        <div class="none">
+            <div class="popup popup-dialog" id="popup-dialog">
+                <div class="popup__content">
+
+                </div>
+                <div class="popup__buttons">
+
+                </div>
+            </div>
+        </div>
+        <!-- End (popup-dialog) -->
+
     </body>
 </html>
 }

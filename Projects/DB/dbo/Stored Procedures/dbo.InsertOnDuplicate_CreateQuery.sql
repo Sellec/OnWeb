@@ -17,7 +17,7 @@ BEGIN
 	DECLARE	@InsertData_ NVARCHAR(MAX) = @InsertData;
 	DECLARE	@UpdateData_ NVARCHAR(MAX) = @UpdateData;
 
-	DECLARE	@TypeName sysname = N'TVP_' + @TableName_;
+	DECLARE	@TypeName sysname = N'TVP_' + @TableName;
 
 	----не убирать комментирование! ломается работа TransactionScope, если в нем есть вызов [InsertOnDuplicate_CreateQuery]
 	--IF EXISTS(SELECT * FROM fn_my_permissions(NULL, 'DATABASE') t WHERE t.permission_name='CREATE TYPE')
@@ -101,10 +101,10 @@ BEGIN
 									'SET NOCOUNT OFF;'  + CHAR(13) + CHAR(10) + CHAR(13) + CHAR(10) +
 									
 									CASE WHEN @FieldIdentity IS NULL THEN '' ELSE 
-										'SET IDENTITY_INSERT ' + @TableName_ + ' ON;' + CHAR(13) + CHAR(10) +
+										'SET IDENTITY_INSERT [' + @TableName_ + '] ON;' + CHAR(13) + CHAR(10) +
 										'BEGIN TRY' + CHAR(13) + CHAR(10) + CHAR(13) + CHAR(10) +
 										
-										'	MERGE ' + @TableName_ + ' AS T' + CHAR(13) + CHAR(10) +
+										'	MERGE [' + @TableName_ + '] AS T' + CHAR(13) + CHAR(10) +
 										'	USING (SELECT DISTINCT * FROM @t WHERE NOT [' + @FieldIdentity + '] = (' + @FieldIdentityDefaultValue + ')) AS S' + CHAR(13) + CHAR(10) +
 										'		ON (' + @FilterStr + ')' + CHAR(13) + CHAR(10) +
 										'	WHEN NOT MATCHED BY TARGET THEN INSERT ' + ISNULL(@FieldsInsertWithIdentity, '') + ' VALUES ' + ISNULL(@FieldsUpdateWithIdentity, '') + CHAR(13) + CHAR(10) + 
@@ -118,17 +118,17 @@ BEGIN
 										'	SET @ErrorSeverity = ERROR_SEVERITY();' + CHAR(13) + CHAR(10) +
 										'	SET @ErrorState = ERROR_STATE();' + CHAR(13) + CHAR(10) + CHAR(13) + CHAR(10) +
 										
-										'	SET IDENTITY_INSERT CustomFieldsValue OFF;' + CHAR(13) + CHAR(10) +
+										'	SET IDENTITY_INSERT [' + @TableName_ + '] OFF;' + CHAR(13) + CHAR(10) +
 										'	RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);' + CHAR(13) + CHAR(10) + CHAR(13) + CHAR(10) +
 										
 										'END CATCH' + CHAR(13) + CHAR(10) + 
-										'SET IDENTITY_INSERT ' + @TableName_ + ' OFF;' + CHAR(13) + CHAR(10)	+ CHAR(13) + CHAR(10) + CHAR(13) + CHAR(10) 
+										'SET IDENTITY_INSERT [' + @TableName_ + '] OFF;' + CHAR(13) + CHAR(10)	+ CHAR(13) + CHAR(10) + CHAR(13) + CHAR(10) 
 									END +
 									
 									--Теперь добавляем блок для вставки данных БЕЗ identity столбца.
 									'BEGIN TRY' + CHAR(13) + CHAR(10) + CHAR(13) + CHAR(10) +
 									
-									'	MERGE ' + @TableName_ + ' AS T' + CHAR(13) + CHAR(10) +
+									'	MERGE [' + @TableName_ + '] AS T' + CHAR(13) + CHAR(10) +
 									'	USING (SELECT DISTINCT * FROM @t ' + CASE WHEN @FieldIdentity IS NULL THEN '' ELSE ' WHERE [' + @FieldIdentity + '] = (' + @FieldIdentityDefaultValue + ')' END + ') AS S' + CHAR(13) + CHAR(10) +
 									'		ON (' + @FilterStr + ')' + CHAR(13) + CHAR(10) +
 									'	WHEN NOT MATCHED BY TARGET THEN INSERT ' + ISNULL(@FieldsInsertWithoutIdentity, '') + ' VALUES ' + ISNULL(@FieldsUpdateWithoutIdentity, '') + CHAR(13) + CHAR(10) + 

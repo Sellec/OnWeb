@@ -1983,6 +1983,15 @@
     <Content Include="Data\img\flick\images\ui-icons_ff0084_256x240.png" />
     <Content Include="Data\img\flick\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Data\img\flick\jquery-ui-1.8.custom.css" />
+    <None Include="Data\js\arcticmodal\jquery.arcticmodal-0.3.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\arcticmodal\jquery.arcticmodal-0.3.min.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\js\arcticmodal\themes\simple.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="FodyWeavers.xml">
       <SubType>Designer</SubType>
     </Content>

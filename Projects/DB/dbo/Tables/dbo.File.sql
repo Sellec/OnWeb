@@ -10,8 +10,12 @@
     [DateChange]   INT            CONSTRAINT [DF__file__DateChange__670A40DB] DEFAULT ((0)) NOT NULL,
     [DateExpire]   DATETIME       NULL,
     [IdUserChange] INT            CONSTRAINT [DF__file__IdUserChan__67FE6514] DEFAULT ((0)) NOT NULL,
+    [IsRemoving]   BIT            CONSTRAINT [DF_File_IsRemoving] DEFAULT ((0)) NOT NULL,
+    [IsRemoved]    BIT            CONSTRAINT [DF_File_IsRemoved] DEFAULT ((0)) NOT NULL,
     CONSTRAINT [PK_file_IdFile] PRIMARY KEY CLUSTERED ([IdFile] ASC)
 );
+
+
 
 
 
@@ -34,4 +38,10 @@ CREATE NONCLUSTERED INDEX [UniqueKey]
 GO
 CREATE NONCLUSTERED INDEX [FileUniqueKey2]
     ON [dbo].[File]([UniqueKey] ASC, [IdModule] ASC) WHERE ([UniqueKey] IS NOT NULL);
+
+
+GO
+CREATE NONCLUSTERED INDEX [NCI_Removing]
+    ON [dbo].[File]([IsRemoving] ASC, [IsRemoved] ASC)
+    INCLUDE([DateExpire]);
 

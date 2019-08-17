@@ -9,7 +9,11 @@
     [TypeConcrete] NVARCHAR (50)  NULL,
     [DateChange]   INT            DEFAULT ((0)) NOT NULL,
     [DateExpire]   DATETIME       NULL,
-    [IdUserChange] INT            DEFAULT ((0)) NOT NULL);
+    [IdUserChange] INT            DEFAULT ((0)) NOT NULL,
+    [IsRemoving]   BIT            DEFAULT ((0)) NOT NULL,
+    [IsRemoved]    BIT            DEFAULT ((0)) NOT NULL);
+
+
 
 
 

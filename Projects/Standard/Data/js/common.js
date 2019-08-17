@@ -832,3 +832,31 @@ $(function ()
     });
 });
 
+function ShowAlert(text, closeCallback) {
+    var id = Math.random() * 100;
+    var nameElement = "js-popup-alert__id" + id;
+
+    var bodyElement = $("<div></div>");
+    bodyElement.addClass("css-popup-alert__body");
+    bodyElement.data("id", nameElement);
+
+    $("body").append(bodyElement);
+
+    var messageElement = $("<span></span>");
+    messageElement.addClass("css-popup-alert__message");
+    messageElement.text(text);
+
+    bodyElement.append(messageElement);
+
+    bodyElement.showDialog({
+        buttons: ShowDialogButtons.OK,
+        closeOnPressEscape: true,
+        closeOnClickOutOfForm: true,
+        show: function () { },
+        cancel: function () {
+            bodyElement.remove();
+            if (closeCallback !== null && closeCallback !== undefined) closeCallback();
+        }
+    });
+}
+

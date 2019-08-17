@@ -61,6 +61,7 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationRuntimeOptions.cs" />
     <Compile Include="WebApplicationAspNetMvc.cs" />
     <Compile Include="HttpApplicationBase.cs" />
     <Compile Include="Modules\ItemsCustomize\Startup.cs" />
@@ -96,7 +97,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CoreBind\Providers\EmbeddedResourceProvider.cs" />
-    <Compile Include="CoreBind\Providers\TraceControllerProvider.cs" />
+    <Compile Include="CoreBind\Providers\CustomControllerFactory.cs" />
     <Compile Include="CoreBind\Providers\TraceJsonValueProvider.cs" />
     <Compile Include="CoreBind\Providers\TraceJsonValueProviderFactory.cs" />
     <Compile Include="CoreBind\Providers\TraceModelMetadataProvider.cs" />

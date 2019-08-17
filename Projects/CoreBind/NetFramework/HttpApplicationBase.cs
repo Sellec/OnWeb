@@ -25,6 +25,7 @@ namespace OnWeb
         private static bool _applicationCoreStarted = false;
         private static Uri _urlFirst = null;
         private static Guid _unique = Guid.NewGuid();
+        internal static ApplicationRuntimeOptions _runtimeOptions;
 
         [ThreadStatic]
         internal Queue<IDisposable> _requestSpecificDisposables;
@@ -32,8 +33,17 @@ namespace OnWeb
         /// <summary>
         /// Создает новый экземпляр приложения ASP.NET.
         /// </summary>
-        public HttpApplicationBase()
+        protected HttpApplicationBase()
         {
+            _runtimeOptions = ApplicationRuntimeOptions.None;
+        }
+
+        /// <summary>
+        /// Создает новый экземпляр приложения ASP.NET.
+        /// </summary>
+        protected HttpApplicationBase(ApplicationRuntimeOptions runtimeOptions)
+        {
+            _runtimeOptions = runtimeOptions;
         }
 
         #region "Virtual"
@@ -155,8 +165,6 @@ namespace OnWeb
                     Response.Write(@"[html]");
                     Response.End();
                 }
-
-                Response.Filter = null;
 
                 this.OnError(exception);
             }

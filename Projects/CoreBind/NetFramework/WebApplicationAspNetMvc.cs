@@ -52,10 +52,6 @@ namespace OnWeb
             /*
             * Инициализация провайдера контроллеров.
             */
-            var controllerProvider = new TraceControllerProvider(ControllerBuilder.Current.GetControllerFactory());
-            ((IComponentStartable)controllerProvider).Start(this);
-            ControllerBuilder.Current.SetControllerFactory(controllerProvider);
-
             if (!(ModelMetadataProviders.Current is TraceModelMetadataProvider))
                 ModelMetadataProviders.Current = new TraceModelMetadataProvider();
 
@@ -66,14 +62,6 @@ namespace OnWeb
              * */
             ValueProviderFactories.Factories.Insert(0, new TraceJsonValueProviderFactory());
 
-            /*
-             * 
-             * */
-            //TasksManager.SetTask(typeof(FileManager).FullName + "_" + nameof(FileManager.ClearExpired) + "_minutely1", Cron.MinuteInterval(1), () => FileManager.ClearExpired());
-            // todo TasksManager.SetTask(typeof(Core.Storage.IFileManager).FullName + "_" + nameof(Core.Storage.IFileManager.UpdateFileCount) + "_minutely5", Cron.MinuteInterval(5), () => FileManager.UpdateFileCount());
-
-            var d = HttpContext.Current;
-
             OnRegisterRoutes();
             OnRegisterBundles();
             OnRegisterWebApi();
@@ -81,28 +69,29 @@ namespace OnWeb
 
         private void OnRegisterRoutes()
         {
+            var controllerFactory = new CustomControllerFactory(ControllerBuilder.Current.GetControllerFactory());
+            ((IComponentStartable)controllerFactory).Start(this);
+            ControllerBuilder.Current.SetControllerFactory(controllerFactory);
+
             var routes = RouteTable.Routes;
 
             routes.LowercaseUrls = true;
             routes.RouteExistingFiles = true;
-
-            routes.IgnoreRoute("ckeditor/{*pathInfo}");
-            routes.IgnoreRoute("ckfinder/{*pathInfo}");
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            routes.IgnoreRoute("{*favicon}", new { favicon = @"(.*/)?favicon.(.*)?" });
+            var routingHandler = new RouteHandler(this, controllerFactory);
 
-            routes.Add("data1", new Route(
-                "data/{*filename}",
+            // Универсальные маршруты.
+            routes.Add("RoutingAll", new Route(
+                "{*url}",
                 new RouteValueDictionary(new { controller = "AControllerThatDoesntExists" }),
-                (ResourceProvider)Get<Core.Storage.ResourceProvider>() 
+                new RouteValueDictionary(new { url = routingHandler }),
+                routingHandler
             ));
 
             var languageChecker = new LanguageRouteConstraint(Get<Manager<WebApplication>>().GetLanguages()
                                                                             .Where(x => !string.IsNullOrEmpty(x.ShortName))
                                                                             .Select(x => x.ShortName).ToArray());
-
-            var routingHandler = new RouteHandler(this);
 
             // Маршруты админки идут перед универсальными.
             var moduleAdmin = Get<Modules.Admin.ModuleAdmin>();
@@ -113,7 +102,7 @@ namespace OnWeb
                 false,
                 null,
                 new RouteValueDictionary(new { area = AreaConstants.AdminPanel }),
-                new MvcRouteHandler()
+                new MvcRouteHandler(controllerFactory)
             ));
 
             routes.Add("AdminRoute2", new RouteWithDefaults(
@@ -122,27 +111,8 @@ namespace OnWeb
                 false,
                 null,
                 new RouteValueDictionary(new { area = AreaConstants.AdminPanel }),
-                new MvcRouteHandler()
+                new MvcRouteHandler(controllerFactory)
             ));
-
-            // Универсальные маршруты.
-            routes.Add("RoutingTable", new RouteWithDefaults(
-                this,
-                "{*url}",
-                true,
-                new RouteValueDictionary(new { url = routingHandler }),
-                new RouteValueDictionary(new { area = "unknown" }),
-                routingHandler
-            ));
-
-            //routes.Add("LanguageRoute", new Routing.RouteWithDefaults(
-            //    this,
-            //    "{language}/{controller}/{action}/{*url}",
-            //    false,
-            //    new RouteValueDictionary(new { language = languageChecker, controller = languageChecker, action = languageChecker }),
-            //    new RouteValueDictionary(new { area = Routing.AreaConstants.User }),
-            //    new MvcRouteHandler()
-            //));
 
             routes.Add("DefaultRoute", new RouteWithDefaults(
                 this,
@@ -150,7 +120,7 @@ namespace OnWeb
                 true,
                 new RouteValueDictionary(new { language = languageChecker, controller = languageChecker, action = languageChecker }),
                 new RouteValueDictionary(new { area = AreaConstants.User }),
-                new MvcRouteHandler()
+                new MvcRouteHandler(controllerFactory)
             ));
 
         }

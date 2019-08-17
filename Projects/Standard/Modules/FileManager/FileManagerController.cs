@@ -73,13 +73,19 @@ namespace OnWeb.Modules.FileManager
 
                 using (var db = Module.CreateUnitOfWork())
                 {
-                    var file = db.File.Where(x => x.IdFile == IdFile.Value && !x.IsRemoved && !x.IsRemoving).Select(x => new { x.PathFile, x.NameFile, x.TypeConcrete }).FirstOrDefault();
+                    var file = db.File.
+                        Where(x => x.IdFile == IdFile.Value && !x.IsRemoved && !x.IsRemoving).
+                        Select(x => new { x.PathFile, x.NameFile, x.TypeConcrete, x.DateChange }).
+                        FirstOrDefault();
+
                     if (file == null) throw new Exception("Файл не найден.");
 
                     var rootDirectory = System.Web.Hosting.HostingEnvironment.MapPath("/");
                     var filePath = Path.Combine(rootDirectory, file.PathFile);
 
                     var mimeType = !string.IsNullOrEmpty(file.TypeConcrete) ? file.TypeConcrete : MediaTypeNames.Application.Octet;
+                    Response.Cache.SetCacheability(HttpCacheability.Public);
+                    Response.Cache.SetLastModified(file.DateChange.FromTimestamp());
                     return base.File(filePath, mimeType, file.NameFile);
                 }
             }
@@ -97,6 +103,7 @@ namespace OnWeb.Modules.FileManager
                 var rootDirectory = System.Web.Hosting.HostingEnvironment.MapPath("/");
                 var filePath = string.Empty;
                 var fileName = string.Empty;
+                DateTime? dbChangeTime = null;
                 var mimeType = MediaTypeNames.Application.Octet;
 
                 if (!IdFile.HasValue) filePath = "data/img/files/argumentzero.jpg"; //Не указан номер файла.
@@ -104,7 +111,12 @@ namespace OnWeb.Modules.FileManager
                 {
                     using (var db = Module.CreateUnitOfWork())
                     {
-                        var file = db.File.Where(x => x.IdFile == IdFile.Value && !x.IsRemoved && !x.IsRemoving).Select(x => new { x.PathFile, x.NameFile, x.TypeConcrete }).FirstOrDefault();
+                        var file = db.File.
+                            Where(x => x.IdFile == IdFile.Value && !x.IsRemoved && !x.IsRemoving).
+                            Select(x => new { x.PathFile, x.NameFile, x.TypeConcrete, x.DateChange }).
+                            FirstOrDefault();
+
+
                         if (file == null) filePath = "data/img/files/notfound.jpg"; //Файл не найден.
                         else
                         {
@@ -124,6 +136,7 @@ namespace OnWeb.Modules.FileManager
                             {
                                 filePath = file.PathFile;
                                 fileName = file.NameFile;
+                                dbChangeTime = file.DateChange.FromTimestamp();
                                 if (!string.IsNullOrEmpty(file.TypeConcrete)) mimeType = file.TypeConcrete;
                             }
                         }
@@ -142,7 +155,9 @@ namespace OnWeb.Modules.FileManager
                     {
                         var fileNameFinal = string.IsNullOrEmpty(fileName) ? Path.GetFileName(filePath) : fileName;
                         Response.Headers["Content-Disposition"] = $"inline; filename={fileNameFinal}";
-                        return base.File(path, mimeType, fileNameFinal);
+                        Response.Cache.SetCacheability(HttpCacheability.Public);
+                        if (dbChangeTime.HasValue) Response.Cache.SetLastModified(dbChangeTime.Value);
+                        return base.File(path, mimeType);
                     }
                     else
                     {
@@ -157,7 +172,9 @@ namespace OnWeb.Modules.FileManager
 
                                 var fileNameFinal = string.IsNullOrEmpty(fileName) ? Path.GetFileName(filePath) : fileName;
                                 Response.Headers["Content-Disposition"] = $"inline; filename={fileNameFinal}";
-                                return base.File(stream, mimeType, fileNameFinal);
+                                Response.Cache.SetCacheability(HttpCacheability.Public);
+                                if (dbChangeTime.HasValue) Response.Cache.SetLastModified(dbChangeTime.Value);
+                                return base.File(stream, mimeType);
                             }
                         }
                     }
@@ -187,7 +204,11 @@ namespace OnWeb.Modules.FileManager
                 {
                     using (var db = Module.CreateUnitOfWork())
                     {
-                        var file = db.File.Where(x => x.IdFile == IdFile.Value && !x.IsRemoved && !x.IsRemoving).Select(x => new { x.PathFile, x.NameFile, x.TypeConcrete, x.DateChange }).FirstOrDefault();
+                        var file = db.File.
+                            Where(x => x.IdFile == IdFile.Value && !x.IsRemoved && !x.IsRemoving).
+                            Select(x => new { x.PathFile, x.NameFile, x.TypeConcrete, x.DateChange }).
+                            FirstOrDefault();
+
                         if (file == null) filePath = "data/img/files/notfound.jpg"; //Файл не найден.
                         else
                         {
@@ -226,7 +247,9 @@ namespace OnWeb.Modules.FileManager
                     {
                         var fileNameFinal = string.IsNullOrEmpty(fileName) ? Path.GetFileName(filePath) : fileName;
                         Response.Headers["Content-Disposition"] = $"inline; filename={fileNameFinal}";
-                        return base.File(path, mimeType, fileNameFinal);
+                        Response.Cache.SetCacheability(HttpCacheability.Public);
+                        if (dbChangeTime.HasValue) Response.Cache.SetLastModified(dbChangeTime.Value);
+                        return base.File(path, mimeType);
                     }
                     else
                     {
@@ -254,7 +277,9 @@ namespace OnWeb.Modules.FileManager
                         {
                             var fileNameFinal = string.IsNullOrEmpty(fileName) ? Path.GetFileName(filePath) : fileName;
                             Response.Headers["Content-Disposition"] = $"inline; filename={fileNameFinal}";
-                            return base.File(filePath2, mimeType, fileNameFinal);
+                            Response.Cache.SetCacheability(HttpCacheability.Public);
+                            if (dbChangeTime.HasValue) Response.Cache.SetLastModified(dbChangeTime.Value);
+                            return base.File(filePath2, mimeType);
                         }
                     }
                 }
