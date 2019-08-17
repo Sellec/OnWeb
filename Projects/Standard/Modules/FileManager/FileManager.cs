@@ -9,10 +9,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Net.Mime;
 using System.Threading;
 using System.Transactions;
-using System.Web;
 using System.Web.Mvc;
 
 namespace OnWeb.Modules.FileManager
@@ -601,11 +599,11 @@ namespace OnWeb.Modules.FileManager
                 int idFileMax = _servicesFlags.GetOrAdd("CheckRemovedFilesMax", 0);
                 var rootDirectory = _thisModule?.AppCore?.ApplicationWorkingFolder;
 
-                using (var db = new DB.DataContext())
+                while ((DateTime.Now - dateStart) < executionTimeLimit)
                 {
-                    while ((DateTime.Now - dateStart) < executionTimeLimit)
+                    using (var db = new DB.DataContext())
                     {
-                        var filesQuery = db.File.Where(x => !x.IsRemoved && !x.IsRemoving && x.IdFile > idFileMax).OrderBy(x => x.IdFile).Take(100);
+                        var filesQuery = db.File.Where(x => !x.IsRemoved && !x.IsRemoving && x.IdFile > idFileMax).OrderBy(x => x.IdFile).Take(5000);
                         var filesList = filesQuery.ToList();
                         if (filesList.Count == 0)
                         {
@@ -644,14 +642,14 @@ namespace OnWeb.Modules.FileManager
 
                         _servicesFlags["CheckRemovedFilesMax"] = idFileMax;
                     }
+                }
 
-                    if (isFinalized)
-                    {
-                        TasksManager.RemoveTask(typeof(FileManager).FullName + "_" + nameof(CheckRemovedFiles) + "_minutely5");
-                        //TasksManager.SetTask(typeof(FileManager).FullName + "_" + nameof(CheckRemovedFiles) + "_0", DateTime.Now.AddHours(2), () => CheckRemovedFiles(true));
-                        TasksManager.SetTask(typeof(FileManager).FullName + "_" + nameof(CheckRemovedFiles) + "_0", DateTime.Now.AddMinutes(1), () => CheckRemovedFiles(true));
-                        _thisModule?.RegisterEvent(EventType.Info, "Удаление регулярной задачи проверки файлов.", null);
-                    }
+                if (isFinalized)
+                {
+                    TasksManager.RemoveTask(typeof(FileManager).FullName + "_" + nameof(CheckRemovedFiles) + "_minutely5");
+                    //TasksManager.SetTask(typeof(FileManager).FullName + "_" + nameof(CheckRemovedFiles) + "_0", DateTime.Now.AddHours(2), () => CheckRemovedFiles(true));
+                    TasksManager.SetTask(typeof(FileManager).FullName + "_" + nameof(CheckRemovedFiles) + "_0", DateTime.Now.AddMinutes(1), () => CheckRemovedFiles(true));
+                    _thisModule?.RegisterEvent(EventType.Info, "Удаление регулярной задачи проверки файлов.", null);
                 }
             }
             catch (ThreadAbortException) { }
