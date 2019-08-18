@@ -32,6 +32,6 @@ using System.Runtime.InteropServices;
 // Можно задать все значения или принять номер сборки и номер редакции по умолчанию.
 // используя "*", как показано ниже:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.1.5.6")]
-[assembly: AssemblyFileVersion("0.1.5.6")]
+[assembly: AssemblyVersion("0.1.5.7")]
+[assembly: AssemblyFileVersion("0.1.5.7")]
 [assembly: System.Web.PreApplicationStartMethod(typeof(OnWeb.CoreBind.Razor.WebStartup), nameof(OnWeb.CoreBind.Razor.WebStartup.PreApplicationStartMethod))]

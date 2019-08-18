@@ -504,11 +504,11 @@ namespace OnWeb.Modules.FileManager
                     while ((DateTime.Now - dateStart) < executionTimeLimit)
                     {
                         var fileToRemoveQuery = (from FileRemoveQueue in db.FileRemoveQueue
-                                                 join File in db.File on FileRemoveQueue.IdFile equals File.IdFile into File_j
+                                                 join File in db.File.AsNoTracking() on FileRemoveQueue.IdFile equals File.IdFile into File_j
                                                  from File in File_j.DefaultIfEmpty()
                                                  where FileRemoveQueue.IdFile > idFileMax
                                                  orderby FileRemoveQueue.IdFile ascending
-                                                 select new { FileRemoveQueue, File }).Take(50);
+                                                 select new { FileRemoveQueue, File }).Take(100);
                         var fileToRemoveList = fileToRemoveQuery.ToList();
                         if (fileToRemoveList.Count == 0) break;
 
@@ -599,11 +599,11 @@ namespace OnWeb.Modules.FileManager
                 int idFileMax = _servicesFlags.GetOrAdd("CheckRemovedFilesMax", 0);
                 var rootDirectory = _thisModule?.AppCore?.ApplicationWorkingFolder;
 
-                while ((DateTime.Now - dateStart) < executionTimeLimit)
+                using (var db = new DB.DataContext())
                 {
-                    using (var db = new DB.DataContext())
+                    while ((DateTime.Now - dateStart) < executionTimeLimit)
                     {
-                        var filesQuery = db.File.Where(x => !x.IsRemoved && !x.IsRemoving && x.IdFile > idFileMax).OrderBy(x => x.IdFile).Take(5000);
+                        var filesQuery = db.File.AsNoTracking().Where(x => !x.IsRemoved && !x.IsRemoving && x.IdFile > idFileMax).OrderBy(x => x.IdFile).Take(5000);
                         var filesList = filesQuery.ToList();
                         if (filesList.Count == 0)
                         {

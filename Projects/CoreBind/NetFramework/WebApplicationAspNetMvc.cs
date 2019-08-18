@@ -49,26 +49,11 @@ namespace OnWeb
         /// </summary>
         protected override void OnApplicationStart()
         {
-            /*
-            * Инициализация провайдера контроллеров.
-            */
             if (!(ModelMetadataProviders.Current is TraceModelMetadataProvider))
                 ModelMetadataProviders.Current = new TraceModelMetadataProvider();
 
-            // todo для Model.ValidateModel ModelValidatorProviders.Providers.Add(new TraceModelValidatorProvider());
-
-            /*
-             * 
-             * */
             ValueProviderFactories.Factories.Insert(0, new TraceJsonValueProviderFactory());
 
-            OnRegisterRoutes();
-            OnRegisterBundles();
-            OnRegisterWebApi();
-        }
-
-        private void OnRegisterRoutes()
-        {
             var controllerFactory = new CustomControllerFactory(ControllerBuilder.Current.GetControllerFactory());
             ((IComponentStartable)controllerFactory).Start(this);
             ControllerBuilder.Current.SetControllerFactory(controllerFactory);
@@ -79,21 +64,7 @@ namespace OnWeb
             routes.RouteExistingFiles = true;
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            var routingHandler = new RouteHandler(this, controllerFactory);
-
-            // Универсальные маршруты.
-            routes.Add("RoutingAll", new Route(
-                "{*url}",
-                new RouteValueDictionary(new { controller = "AControllerThatDoesntExists" }),
-                new RouteValueDictionary(new { url = routingHandler }),
-                routingHandler
-            ));
-
-            var languageChecker = new LanguageRouteConstraint(Get<Manager<WebApplication>>().GetLanguages()
-                                                                            .Where(x => !string.IsNullOrEmpty(x.ShortName))
-                                                                            .Select(x => x.ShortName).ToArray());
-
-            // Маршруты админки идут перед универсальными.
+            // Сначала маршруты панели управления, т.к. у них заведомо специфичный адрес.
             var moduleAdmin = Get<Modules.Admin.ModuleAdmin>();
 
             routes.Add("AdminRoute1", new RouteWithDefaults(
@@ -114,6 +85,21 @@ namespace OnWeb
                 new MvcRouteHandler(controllerFactory)
             ));
 
+            // Затем универсальный маршрут для поиска статики и ЧПУ в таблице роутинга.
+            var routingHandler = new RouteHandler(this, controllerFactory);
+
+            routes.Add("RoutingAll", new Route(
+                "{*url}",
+                new RouteValueDictionary(new { controller = "AControllerThatDoesntExists" }),
+                new RouteValueDictionary(new { url = routingHandler }),
+                routingHandler
+            ));
+
+            // Затем маршрут для поиска по пути модуль/action/параметры.
+            var languageChecker = new LanguageRouteConstraint(Get<Manager<WebApplication>>().GetLanguages()
+                                                                            .Where(x => !string.IsNullOrEmpty(x.ShortName))
+                                                                            .Select(x => x.ShortName).ToArray());
+
             routes.Add("DefaultRoute", new RouteWithDefaults(
                 this,
                 "{controller}/{action}/{*url}",
@@ -123,14 +109,6 @@ namespace OnWeb
                 new MvcRouteHandler(controllerFactory)
             ));
 
-        }
-
-        private void OnRegisterBundles()
-        {
-        }
-
-        private void OnRegisterWebApi()
-        {
         }
 
         #region Свойства

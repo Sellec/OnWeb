@@ -31,6 +31,11 @@ namespace OnWeb.CoreBind.Routing
                 else return true;
             }
 
+            if (parameterName == "controller" && values["controller"]?.ToString()?.ToLower() == "data")
+            {
+                return false;
+            }
+
             if (parameterName == "controller" || parameterName == "action")
             {
                 if ("admin".Equals(values["controller"]))

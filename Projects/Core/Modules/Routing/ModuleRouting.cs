@@ -12,17 +12,53 @@ namespace OnWeb.Modules.Routing
     using Core.Modules;
     using DefferedDictionary = ConcurrentDictionary<Type, ConcurrentDictionary<Core.Items.ItemBase, int>>;
 
+    class ThreadInfo
+    {
+        public int ThreadId { get; set; }
+
+        public object SyncRoot { get; set; }
+
+        public DefferedDictionary Collection { get; set; }
+
+        public DateTime DateCreate { get; set; }
+
+        public DateTime? DateClose { get; set; }
+    }
+
 #pragma warning disable CS1591 // todo внести комментарии.
     [ModuleCore("Маршрутизация")]
     public class ModuleRouting : ModuleCore<ModuleRouting>
     {
         internal static ModuleRouting _moduleLink = null;
 
-        private ThreadLocal<object> _syncRoot = new ThreadLocal<object>(() => new object());
-        private ThreadLocal<Tuple<int, DefferedDictionary>> _defferedObjects = new ThreadLocal<Tuple<int, DefferedDictionary>>(() => new Tuple<int, DefferedDictionary>(Thread.CurrentThread.ManagedThreadId, new DefferedDictionary()), true);
+        private ThreadLocal<ThreadInfo> _defferedObjects;
 
         public ModuleRouting()
         {
+            _defferedObjects = new ThreadLocal<ThreadInfo>(() =>
+             {
+                 var id = Thread.CurrentThread.ManagedThreadId;
+                 var oldSameIdThreads = _defferedObjects.Values.Where(x => x.ThreadId == id).ToList();
+                 if (oldSameIdThreads.Count > 0)
+                 {
+                     Debug.WriteLine($"TimerCallback: new threadID={id}, found {oldSameIdThreads.Count} old threads with {oldSameIdThreads.Sum(x => x.Collection.Sum(y => y.Value.Count))} items.");
+                     oldSameIdThreads.ForEach(pair =>
+                     {
+                         pair.Collection.Values.ForEach(x => x.Clear());
+                         pair.Collection.Clear();
+                         pair.DateClose = DateTime.Now;
+                     });
+                 }
+
+                 return new ThreadInfo()
+                 {
+                     ThreadId = id,
+                     DateCreate = DateTime.Now,
+                     Collection = new DefferedDictionary(),
+                     SyncRoot = new object()
+                 };
+             }, true);
+
             Task.Delay(60000).ContinueWith(t => TimerCallback());
         }
 
@@ -42,9 +78,17 @@ namespace OnWeb.Modules.Routing
         {
             try
             {
-                var sumAll = _defferedObjects.Values.Sum(x => x.Item2.Sum(y => y.Value.Count));
-                Debug.WriteLine($"TimerCallback: {_defferedObjects.Values.Count} threads have containers with {sumAll} items.");
-                var rows = _defferedObjects.Values.OrderBy(x => x.Item1).Select(x => $"Thread-{x.Item1}: {x.Item2.Sum(y => y.Value.Count)} items in {x.Item2.Count} types;");
+                var openedThreads = _defferedObjects.Values.Where(x => !x.DateClose.HasValue).ToList();
+                var countClosedThreads = _defferedObjects.Values.Count - openedThreads.Count;
+                var sumAll = openedThreads.Sum(x => x.Collection.Sum(y => y.Value.Count));
+
+                Debug.WriteLine($"TimerCallback: {openedThreads.Count} threads have containers with {sumAll} items. {countClosedThreads} threads are closed.");
+
+                var rows = openedThreads.
+                    Select(x => new { x.ThreadId, x.Collection, CountAll = x.Collection.Sum(y => y.Value.Count) }).
+                    Where(x => x.CountAll > 0).
+                    OrderBy(x => x.ThreadId).
+                    Select(x => $"Thread-{x.ThreadId}: {x.CountAll} items in {x.Collection.Count} types;");
                 rows.ForEach(x => Debug.WriteLine($"TimerCallback: {x}"));
             }
             finally
@@ -59,8 +103,11 @@ namespace OnWeb.Modules.Routing
         /// </summary>
         public void PrepareCurrentThreadCache()
         {
-            var collection = _defferedObjects.Value.Item2;
-            collection.ForEach(x => CheckDeffered(x.Key));
+            if (_defferedObjects.IsValueCreated)
+            {
+                var collection = _defferedObjects.Value.Collection;
+                collection.ForEach(x => CheckDeffered(x.Key));
+            }
         }
 
         /// <summary>
@@ -68,9 +115,12 @@ namespace OnWeb.Modules.Routing
         /// </summary>
         public void ClearCurrentThreadCache()
         {
-            var collection = _defferedObjects.Value.Item2;
-            collection.Values.ForEach(x => x.Clear());
-            collection.Clear();
+            if (_defferedObjects.IsValueCreated)
+            {
+                var collection = _defferedObjects.Value.Collection;
+                collection.Values.ForEach(x => x.Clear());
+                collection.Clear();
+            }
         }
 
         public void RegisterToQuery<TItem>(TItem obj) where TItem : ItemBase
@@ -78,7 +128,7 @@ namespace OnWeb.Modules.Routing
             try
             {
                 var objType = obj.GetType();
-                var list = _defferedObjects.Value.Item2.GetOrAdd(objType, t => new ConcurrentDictionary<ItemBase, int>());
+                var list = _defferedObjects.Value.Collection.GetOrAdd(objType, t => new ConcurrentDictionary<ItemBase, int>());
                 list[obj] = 0;
             }
             catch { }
@@ -86,10 +136,10 @@ namespace OnWeb.Modules.Routing
 
         internal void CheckDeffered(Type type)
         {
-            if (_defferedObjects.Value.Item2.ContainsKey(type))
+            if (_defferedObjects.IsValueCreated && _defferedObjects.Value.Collection.ContainsKey(type))
             {
                 Dictionary<ItemBase, int> items = null;
-                lock (_syncRoot.Value)
+                lock (_defferedObjects.Value.SyncRoot)
                 {
                     for (int i = 0; i < 3; i++)
                     {
@@ -98,7 +148,7 @@ namespace OnWeb.Modules.Routing
                             var newCollection = new ConcurrentDictionary<ItemBase, int>();
                             ConcurrentDictionary<ItemBase, int> oldCollection = null;
 
-                            _defferedObjects.Value.Item2.AddOrUpdate(type, newCollection, (key, old) =>
+                            _defferedObjects.Value.Collection.AddOrUpdate(type, newCollection, (key, old) =>
                             {
                                 oldCollection = old;
                                 return newCollection;
