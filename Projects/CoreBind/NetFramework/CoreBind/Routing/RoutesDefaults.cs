@@ -1,9 +1,9 @@
-﻿using OnUtils.Application.Languages;
-using System.Web.Routing;
+﻿using System.Web.Routing;
 
 namespace OnWeb.CoreBind.Routing
 {
     using Core.Modules;
+    using Languages;
 
     public class RouteWithDefaults : Route
     {
@@ -37,7 +37,7 @@ namespace OnWeb.CoreBind.Routing
         {
             public RoutesDefaultsWithLanguage(WebApplication core) : base(core)
             {
-                Language = core.Get<Manager<WebApplication>>().GetUserLanguage().ShortName;
+                Language = core.Get<Manager>().GetUserLanguage().ShortName;
             }
 
             public string Language
