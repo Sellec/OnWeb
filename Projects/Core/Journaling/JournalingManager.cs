@@ -8,10 +8,10 @@ namespace OnWeb.Journaling
 {
     using Core;
     using Core.Items;
-    using ExecutionRegisterResult = OnUtils.ExecutionResult<int?>;
-    using ExecutionResultJournalData = OnUtils.ExecutionResult<Journal>;
-    using ExecutionResultJournalDataList = OnUtils.ExecutionResult<List<Journal>>;
-    using ExecutionResultJournalName = OnUtils.ExecutionResult<JournalName>;
+    using ExecutionRegisterResult = ExecutionResult<int?>;
+    using ExecutionResultJournalData = ExecutionResult<Journal>;
+    using ExecutionResultJournalDataList = ExecutionResult<List<Journal>>;
+    using ExecutionResultJournalName = ExecutionResult<JournalName>;
     using JournalingManagerApp = JournalingManager<WebApplication>;
 
     /// <summary>

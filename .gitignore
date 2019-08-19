@@ -5,6 +5,7 @@
 /.vs
 /Build/
 /BuildSolutions/.vs
+/BuildSolutions/packages/
 /External Libraries/**/bin
 /External Libraries/**/obj
 /External Libraries/**/Build
@@ -20,6 +21,7 @@
 /NuGet/**/*.nupkg
 /NuGet/**/*.nupkg.bak
 
+/Projects/**/*.dacpac
 /Projects/**/web.Debug.config
 /Projects/**/web.Release.config
 /Projects/**/bin

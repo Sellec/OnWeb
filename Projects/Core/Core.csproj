@@ -16,7 +16,7 @@
     <IncludeSymbols>True</IncludeSymbols>
     <IncludeSource>True</IncludeSource>
     <Authors>Sellec</Authors>
-    <Version>0.1.5.12</Version>
+    <Version>0.1.5.20</Version>
     <Copyright>Copyright © Петров Дмитрий 2016</Copyright>
     <AssemblyName>OnWeb.Core</AssemblyName>
     <RootNamespace>OnWeb</RootNamespace>
@@ -53,6 +53,14 @@
     <None Remove="Modules\ModuleRegister\**" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\..\Build\Core.DB.dacpac" Link="DB\Core.DB.dacpac">
+      <PackagePath>contentFiles\any\any\DB;content\DB</PackagePath>
+    </Content>
+    <Content Include="..\..\Build\Application.DB.dacpac" Link="DB\Application.DB.dacpac">
+      <PackagePath>contentFiles\any\any\DB;content\DB</PackagePath>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Costura.Fody">
       <Version>3.3.3</Version>
     </PackageReference>
@@ -62,9 +70,12 @@
     </PackageReference>
     <PackageReference Include="ModuleInit.Fody" Version="1.9.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Include="OnUtils.Application" Version="0.1.2.46">
+      <ExcludeAssets>contentFiles;</ExcludeAssets>
+    </PackageReference>
+    
     <PackageReference Include="System.Data.SqlClient" Version="4.6.0" />
     <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
-    <PackageReference Include="OnUtils.Application" Version="0.1.2.41" />
     <PackageReference Include="OnUtils" Version="0.1.5" />
     <PackageReference Include="Ude.NetStandard" Version="1.2.0" />
   </ItemGroup>

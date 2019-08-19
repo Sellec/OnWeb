@@ -10,6 +10,7 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "..\Projects\Core\Core.csproj", "{F61FFCC5-3711-4D42-916A-EF83032F542A}"
 	ProjectSection(ProjectDependencies) = postProject
 		{AA782ADB-FA03-4D02-A962-1F8AE6D640FF} = {AA782ADB-FA03-4D02-A962-1F8AE6D640FF}
+		{9A323FE1-DAC9-405C-8C5D-3AA377C67CB5} = {9A323FE1-DAC9-405C-8C5D-3AA377C67CB5}
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External Libraries", "External Libraries", "{EE2A716F-1C86-4268-930E-5913DE898128}"
@@ -17,6 +18,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{620AF6BB-950C-49F1-AA20-76FB9C95A3DF}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Core.DB", "..\Projects\DB\Core.DB.sqlproj", "{9A323FE1-DAC9-405C-8C5D-3AA377C67CB5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AA782ADB-FA03-4D02-A962-1F8AE6D640FF} = {AA782ADB-FA03-4D02-A962-1F8AE6D640FF}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Madaa.Lib.Win.Services", "..\External Libraries\Madaa.Lib.Win.Services\Madaa.Lib.Win.Services.csproj", "{CBAA3A56-3772-4120-874D-C13F182D49F0}"
 EndProject

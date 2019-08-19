@@ -17,7 +17,7 @@
     <ModelCollation>1049,CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <TargetLanguage>CS</TargetLanguage>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <SqlServerVerification>False</SqlServerVerification>
@@ -68,6 +68,7 @@
     <EnableFullTextSearch>True</EnableFullTextSearch>
     <DefaultFilegroup>PRIMARY</DefaultFilegroup>
     <IncludeSchemaNameInFileName>True</IncludeSchemaNameInFileName>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -107,18 +108,12 @@
     <Folder Include="dbo\" />
     <Folder Include="dbo\Tables\" />
     <Folder Include="Security\" />
-    <Folder Include="dbo\Functions\" />
     <Folder Include="dbo\Stored Procedures\" />
-    <Folder Include="Database Triggers\" />
     <Folder Include="dbo\User Defined Types\" />
     <Folder Include="dbo\Views\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\dbo.SubscriptionHistory.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
-    <Build Include="dbo\Tables\dbo.ItemType.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
@@ -210,23 +205,7 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="dbo\Tables\dbo.ItemParent.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
-    <Build Include="dbo\Tables\dbo.Role.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
-    <Build Include="dbo\Tables\dbo.RolePermission.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
     <Build Include="dbo\Tables\dbo.PageCategory.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
-    <Build Include="dbo\Tables\dbo.RoleUser.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
@@ -242,39 +221,11 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="dbo\Tables\dbo.UserEntity.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
     <Build Include="dbo\Tables\dbo.Subscription.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="dbo\Functions\dbo.FROM_UNIXTIME.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
-    <Build Include="dbo\Functions\dbo.InsertOnDuplicate_TypesDefaultValues.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
-    <Build Include="dbo\Functions\dbo.InsertOnDuplicate_MergeFilters.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
     <Build Include="dbo\Stored Procedures\dbo.Job_FileCountUpdate.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
-    <Build Include="dbo\Stored Procedures\dbo.InsertOnDuplicate_CreateTableUDT.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
-    <Build Include="dbo\Stored Procedures\dbo.InsertOnDuplicate_CreateQuery.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
-    <Build Include="Database Triggers\DB_InsertOnDuplicate_TableUDT.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
@@ -283,8 +234,6 @@
     <Build Include="dbo\User Defined Types\dbo.TVP_Currency.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_CurrencyCoefficient.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_ModuleSearchSet.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_Role.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_ItemType.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_Sessions.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_File.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_CurrencyToday.sql" />
@@ -292,7 +241,6 @@
     <Build Include="dbo\User Defined Types\dbo.TVP_CustomFieldsScheme.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_CustomFieldsSchemeData.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_CustomFieldsValueType.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_ItemParent.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_Language.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_menus.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_ModuleSearchSetParameter.sql" />
@@ -301,8 +249,6 @@
     <Build Include="dbo\User Defined Types\dbo.TVP_Page.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_PageCategory.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_passwords_remember.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_RolePermission.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_RoleUser.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_Subscription.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_SubscriptionEmail.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_SubscriptionHistory.sql" />
@@ -310,11 +256,9 @@
     <Build Include="dbo\User Defined Types\dbo.TVP_SystemHistoryRecord.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_UrlTranslation.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_UrlTranslationType.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_UserEntity.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_UserLogHistory.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_UserLogHistoryEventType.sql" />
     <Build Include="dbo\User Defined Types\dbo.TVP_users.sql" />
-    <Build Include="Security\HangFire.sql" />
     <Build Include="dbo\Tables\dbo.UserHistory.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
@@ -336,26 +280,6 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="dbo\Tables\dbo.RoleUserHistory.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
-    <Build Include="dbo\Tables\dbo.MessageQueueHistory.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
-    <Build Include="dbo\Tables\dbo.MessageQueue.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
-    <Build Include="dbo\Tables\dbo.JournalName.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
-    <Build Include="dbo\Tables\dbo.Journal.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
     <Build Include="dbo\Views\dbo.размер_таблиц.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
@@ -365,25 +289,11 @@
       <QuotedIdentifier>On</QuotedIdentifier>
       <SuppressTSqlWarnings>71501</SuppressTSqlWarnings>
     </Build>
-    <Build Include="dbo\User Defined Types\dbo.TVP_RoleUserHistory.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_MessagesQueue.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_MessageQueueHistory.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_MessageQueue.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_JournalName.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_Journal.sql" />
     <Build Include="dbo\Tables\dbo.WordCase.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
-    <Build Include="dbo\Tables\dbo.InsertOnDuplicate_MergeFiltersCache.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
     <Build Include="dbo\Views\dbo.состояние индексов.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
-    <Build Include="dbo\Stored Procedures\dbo.RemoveHangfire.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
@@ -392,21 +302,6 @@
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
     <Build Include="dbo\User Defined Types\dbo.TVP_WordCase.sql" />
-    <Build Include="dbo\User Defined Types\dbo.TVP_InsertOnDuplicate_Filters.sql" />
-    <Build Include="dbo\Tables\dbo.ModuleConfig.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
-    <Build Include="dbo\User Defined Types\dbo.TVP_ModuleConfig.sql" />
-    <Build Include="Database Triggers\DB_InsertOnDuplicate_TableUDT_Remove.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
-    <Build Include="dbo\Tables\dbo.UserBase.sql">
-      <AnsiNulls>On</AnsiNulls>
-      <QuotedIdentifier>On</QuotedIdentifier>
-    </Build>
-    <Build Include="dbo\User Defined Types\dbo.TVP_UserBase.sql" />
     <Build Include="dbo\Tables\dbo.menus.sql">
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
@@ -427,8 +322,25 @@
       <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
       <DatabaseVariableLiteralValue>master</DatabaseVariableLiteralValue>
     </ArtifactReference>
+    <ArtifactReference Include="..\CoreFakeForLibphonenumbers\DB\Application.DB.dacpac">
+      <HintPath>..\CoreFakeForLibphonenumbers\DB\Application.DB.dacpac</HintPath>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+    </ArtifactReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Сравнение схем.scmp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CoreFakeForLibphonenumbers\CoreFakeForLibphonenumbers.csproj">
+      <Name>CoreFakeForLibphonenumbers</Name>
+      <Project>{aa782adb-fa03-4d02-a962-1f8ae6d640ff}</Project>
+      <Private>False</Private>
+      <IsModelAware>False</IsModelAware>
+      <GenerateSqlClrDdl>False</GenerateSqlClrDdl>
+      <IsVisible>False</IsVisible>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <PostBuildEvent>copy /y "$(ProjectDir)$(OutputPath)$(TargetDatabase).dacpac" "$(ProjectDir)..\..\Build\"</PostBuildEvent>
+  </PropertyGroup>
 </Project>
