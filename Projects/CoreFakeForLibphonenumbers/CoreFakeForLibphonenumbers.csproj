@@ -40,8 +40,8 @@
     <Reference Include="OnUtils, Version=0.1.5.0, Culture=neutral, PublicKeyToken=8e22adab863b765a, processorArchitecture=MSIL">
       <HintPath>..\..\BuildSolutions\packages\OnUtils.0.1.5\lib\net40\OnUtils.dll</HintPath>
     </Reference>
-    <Reference Include="OnUtils.Application, Version=0.1.2.46, Culture=neutral, PublicKeyToken=8e22adab863b765a, processorArchitecture=MSIL">
-      <HintPath>..\..\BuildSolutions\packages\OnUtils.Application.0.1.2.46\lib\netstandard2.0\OnUtils.Application.dll</HintPath>
+    <Reference Include="OnUtils.Application, Version=0.1.2.47, Culture=neutral, PublicKeyToken=8e22adab863b765a, processorArchitecture=MSIL">
+      <HintPath>..\..\BuildSolutions\packages\OnUtils.Application.0.1.2.47\lib\netstandard2.0\OnUtils.Application.dll</HintPath>
     </Reference>
     <Reference Include="PhoneNumbers, Version=8.10.17.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\BuildSolutions\packages\libphonenumber-csharp.8.10.17\lib\net46\PhoneNumbers.dll</HintPath>
