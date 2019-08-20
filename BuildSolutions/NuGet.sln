@@ -46,6 +46,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Fake", "..\Projects\Core.Fake\Core.Fake.csproj", "{C7938B5C-CD54-4F4D-8552-D3B95C52BFCD}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Core.DB", "..\Projects\Core.DB\Core.DB.sqlproj", "{9A323FE1-DAC9-405C-8C5D-3AA377C67CB5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C7938B5C-CD54-4F4D-8552-D3B95C52BFCD} = {C7938B5C-CD54-4F4D-8552-D3B95C52BFCD}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -102,18 +105,13 @@ Global
 		{C7938B5C-CD54-4F4D-8552-D3B95C52BFCD}.DebugBuildPart1|Any CPU.ActiveCfg = Debug|Any CPU
 		{C7938B5C-CD54-4F4D-8552-D3B95C52BFCD}.DebugBuildPart1|Any CPU.Build.0 = Debug|Any CPU
 		{C7938B5C-CD54-4F4D-8552-D3B95C52BFCD}.DebugBuildPart2|Any CPU.ActiveCfg = Debug|Any CPU
-		{C7938B5C-CD54-4F4D-8552-D3B95C52BFCD}.DebugBuildPart2|Any CPU.Build.0 = Debug|Any CPU
 		{C7938B5C-CD54-4F4D-8552-D3B95C52BFCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C7938B5C-CD54-4F4D-8552-D3B95C52BFCD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9A323FE1-DAC9-405C-8C5D-3AA377C67CB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9A323FE1-DAC9-405C-8C5D-3AA377C67CB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9A323FE1-DAC9-405C-8C5D-3AA377C67CB5}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{9A323FE1-DAC9-405C-8C5D-3AA377C67CB5}.DebugBuildPart1|Any CPU.ActiveCfg = Debug|Any CPU
 		{9A323FE1-DAC9-405C-8C5D-3AA377C67CB5}.DebugBuildPart1|Any CPU.Build.0 = Debug|Any CPU
-		{9A323FE1-DAC9-405C-8C5D-3AA377C67CB5}.DebugBuildPart1|Any CPU.Deploy.0 = Debug|Any CPU
 		{9A323FE1-DAC9-405C-8C5D-3AA377C67CB5}.DebugBuildPart2|Any CPU.ActiveCfg = Debug|Any CPU
-		{9A323FE1-DAC9-405C-8C5D-3AA377C67CB5}.DebugBuildPart2|Any CPU.Build.0 = Debug|Any CPU
-		{9A323FE1-DAC9-405C-8C5D-3AA377C67CB5}.DebugBuildPart2|Any CPU.Deploy.0 = Debug|Any CPU
 		{9A323FE1-DAC9-405C-8C5D-3AA377C67CB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A323FE1-DAC9-405C-8C5D-3AA377C67CB5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9A323FE1-DAC9-405C-8C5D-3AA377C67CB5}.Release|Any CPU.Deploy.0 = Release|Any CPU

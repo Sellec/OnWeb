@@ -16,7 +16,7 @@
     <IncludeSymbols>True</IncludeSymbols>
     <IncludeSource>True</IncludeSource>
     <Authors>Sellec</Authors>
-    <Version>0.1.5.26</Version>
+    <Version>0.1.5.28</Version>
     <Copyright>Copyright © Петров Дмитрий 2016</Copyright>
     <AssemblyName>OnWeb.Core</AssemblyName>
     <RootNamespace>OnWeb</RootNamespace>
@@ -71,7 +71,7 @@
     </PackageReference>
     <PackageReference Include="ModuleInit.Fody" Version="1.9.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="OnUtils.Application" Version="0.1.2.50">
+    <PackageReference Include="OnUtils.Application" Version="0.1.2.57">
       <ExcludeAssets>contentFiles;</ExcludeAssets>
     </PackageReference>
     

@@ -17,5 +17,22 @@ namespace OnWeb.ServiceMonitor
         public ServiceBase(Guid serviceID, string serviceName) : base(serviceID, serviceName)
         {
         }
+
+        protected sealed override void OnRunService()
+        {
+            var moduleRouting = AppCore.Get<Modules.Routing.ModuleRouting>();
+
+            try
+            {
+                moduleRouting?.ClearCurrentThreadCache();
+                OnRunServiceWeb();
+            }
+            finally
+            {
+                moduleRouting?.ClearCurrentThreadCache();
+            }
+        }
+
+        protected abstract void OnRunServiceWeb();
     }
 }

@@ -38,7 +38,7 @@ namespace OnWeb.Modules.Routing
             _defferedObjects = new ThreadLocal<ThreadInfo>(() =>
              {
                  var id = Thread.CurrentThread.ManagedThreadId;
-                 var oldSameIdThreads = _defferedObjects.Values.Where(x => x.ThreadId == id).ToList();
+                 var oldSameIdThreads = _defferedObjects.Values.Where(x => !x.DateClose.HasValue && x.ThreadId == id).ToList();
                  if (oldSameIdThreads.Count > 0)
                  {
                      Debug.WriteLine($"TimerCallback: new threadID={id}, found {oldSameIdThreads.Count} old threads with {oldSameIdThreads.Sum(x => x.Collection.Sum(y => y.Value.Count))} items.");
