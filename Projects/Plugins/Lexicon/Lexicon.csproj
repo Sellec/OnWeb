@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <PackageReference Include="OnUtils" Version="0.1.5" />
-    <PackageReference Include="OnUtils.Application" Version="0.1.2.49" />
+    <PackageReference Include="OnUtils.Application" Version="0.1.2.50" />
     <PackageReference Include="OnWeb.Core" Version="0.1.5.23" />
   </ItemGroup>
 

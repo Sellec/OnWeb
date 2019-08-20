@@ -21,7 +21,7 @@
       <group targetFramework="net461">
         <!-- common -->
         <dependency id="OnUtils" version="0.1.5" />
-        <dependency id="OnUtils.Application" version="0.1.2.49" />
+        <dependency id="OnUtils.Application" version="0.1.2.50" />
         <dependency id="OnUtils.Data.EntityFramework" version="0.1.5.4" />
         <dependency id="OnUtils.Tasks.MomentalThreading" version="0.1.1.5" />
         <dependency id="OnWeb.Core" version="0.1.5.26" />
@@ -43,7 +43,7 @@
       <group targetFramework="netcoreapp2.0">
         <!-- common -->
         <dependency id="OnUtils" version="0.1.5" />
-        <dependency id="OnUtils.Application" version="0.1.2.49" />
+        <dependency id="OnUtils.Application" version="0.1.2.50" />
         <dependency id="OnUtils.Data.EntityFramework" version="0.1.5.4" />
         <dependency id="OnUtils.Tasks.MomentalThreading" version="0.1.1.5" />
         <dependency id="OnWeb.Core" version="0.1.5.26" />
