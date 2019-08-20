@@ -61,7 +61,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>echo $([System.DateTime]::Now.ToString(yyyyMMdd-mmssttt)) &gt;$(ProjectDir)\time.stamp
-xcopy /y "$(TargetDir)PhoneNumbers.dll" "$(SolutionDir)..\Build\"
+copy /y "$(TargetDir)PhoneNumbers.dll" "$(SolutionDir)..\Build"
 </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
