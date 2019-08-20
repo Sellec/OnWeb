@@ -75,9 +75,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>echo $([System.DateTime]::Now.ToString(yyyyMMdd-mmssttt)) &gt;$(ProjectDir)\time.stamp
-xcopy /y "$(TargetDir)PhoneNumbers.dll" "$(SolutionDir)..\Build\"
-copy /y "$(ProjectDir)DB\*.dacpac" "$(ProjectDir)..\..\Build\"</PostBuildEvent>
+    <PostBuildEvent>xcopy /y "$(TargetDir)PhoneNumbers.dll" "$(SolutionDir)..\Build\"
+copy /y "$(ProjectDir)DB\*.dacpac" "$(ProjectDir)..\..\Build\"
+echo $([System.DateTime]::Now.ToString(yyyyMMdd-mmssttt)) &gt;$(ProjectDir)\time.stamp
+</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>echo $([System.DateTime]::Now.ToString(yyyyMMdd-mmssttt)) &gt;$(ProjectDir)\time.stamp</PreBuildEvent>
