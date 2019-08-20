@@ -2,7 +2,7 @@
 <package >
   <metadata minClientVersion="3.3.0">
     <id>OnWeb</id>
-    <version>0.1.5.36</version>
+    <version>0.1.5.37</version>
     <authors>Sellec</authors>
     <owners>Sellec</owners>
     <description>
@@ -21,10 +21,10 @@
       <group targetFramework="net461">
         <!-- common -->
         <dependency id="OnUtils" version="0.1.5" />
-        <dependency id="OnUtils.Application" version="0.1.2.41" />
+        <dependency id="OnUtils.Application" version="0.1.2.46" />
         <dependency id="OnUtils.Data.EntityFramework" version="0.1.5.4" />
         <dependency id="OnUtils.Tasks.MomentalThreading" version="0.1.1.5" />
-        <dependency id="OnWeb.Core" version="0.1.5.12" />
+        <dependency id="OnWeb.Core" version="0.1.5.21" />
         <dependency id="Newtonsoft.Json" version="12.0.1" />
         <dependency id="System.ComponentModel.Annotations" version="4.5.0" />
         <dependency id="Ude.NetStandard" version="1.2.0" />
@@ -43,10 +43,10 @@
       <group targetFramework="netcoreapp2.0">
         <!-- common -->
         <dependency id="OnUtils" version="0.1.5" />
-        <dependency id="OnUtils.Application" version="0.1.2.41" />
+        <dependency id="OnUtils.Application" version="0.1.2.46" />
         <dependency id="OnUtils.Data.EntityFramework" version="0.1.5.4" />
         <dependency id="OnUtils.Tasks.MomentalThreading" version="0.1.1.5" />
-        <dependency id="OnWeb.Core" version="0.1.5.12" />
+        <dependency id="OnWeb.Core" version="0.1.5.21" />
         <dependency id="Newtonsoft.Json" version="12.0.1" />
         <dependency id="System.ComponentModel.Annotations" version="4.5.0" />
         <dependency id="Ude.NetStandard" version="1.2.0" />

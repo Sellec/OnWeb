@@ -1,11 +1,8 @@
 ﻿using OnUtils.Application;
-using OnUtils.Application.Users;
-using OnUtils.Application.Languages;
 using OnUtils.Architecture.AppCore;
 using OnUtils.Architecture.AppCore.DI;
 using System;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
@@ -14,6 +11,7 @@ namespace OnWeb
     using Core;
     using CoreBind.Providers;
     using CoreBind.Routing;
+    using Languages;
 
     /// <summary>
     /// Ядро веб-приложения для ASP.Net MVC.
@@ -96,7 +94,7 @@ namespace OnWeb
             ));
 
             // Затем маршрут для поиска по пути модуль/action/параметры.
-            var languageChecker = new LanguageRouteConstraint(Get<Manager<WebApplication>>().GetLanguages()
+            var languageChecker = new LanguageRouteConstraint(Get<Manager>().GetLanguages()
                                                                             .Where(x => !string.IsNullOrEmpty(x.ShortName))
                                                                             .Select(x => x.ShortName).ToArray());
 

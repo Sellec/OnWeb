@@ -4,6 +4,8 @@ using OnUtils.Data.UnitOfWork;
 
 namespace OnWeb.Core.DB
 {
+    using Languages.DB;
+
     /// <summary>
     /// Ѕазовый контекст веб-приложени€, корректно определ€ющий строку подключени€.
     /// </summary>

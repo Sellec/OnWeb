@@ -6,6 +6,7 @@ using OnUtils.Application.Modules.CoreModule;
 namespace OnWeb
 {
     using Modules.WebCoreModule;
+    using OnUtils.Architecture.AppCore.DI;
 
     /// <summary>
     /// Ядро веб-приложения.
@@ -45,6 +46,15 @@ namespace OnWeb
 
                 throw;
             }
+        }
+
+        /// <summary>
+        /// </summary>
+        protected override void OnBindingsRequired(IBindingsCollection<WebApplication> bindingsCollection)
+        {
+            base.OnBindingsRequired(bindingsCollection);
+
+            bindingsCollection.SetSingleton<Languages.Manager>();
         }
 
         #region Свойства

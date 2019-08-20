@@ -12,6 +12,9 @@
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,8 +34,27 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\BuildSolutions\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="OnUtils, Version=0.1.5.0, Culture=neutral, PublicKeyToken=8e22adab863b765a, processorArchitecture=MSIL">
+      <HintPath>..\..\BuildSolutions\packages\OnUtils.0.1.5\lib\net40\OnUtils.dll</HintPath>
+    </Reference>
+    <Reference Include="OnUtils.Application, Version=0.1.2.46, Culture=neutral, PublicKeyToken=8e22adab863b765a, processorArchitecture=MSIL">
+      <HintPath>..\..\BuildSolutions\packages\OnUtils.Application.0.1.2.46\lib\netstandard2.0\OnUtils.Application.dll</HintPath>
+    </Reference>
+    <Reference Include="PhoneNumbers, Version=8.10.17.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\BuildSolutions\packages\libphonenumber-csharp.8.10.17\lib\net46\PhoneNumbers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections.Immutable, Version=1.2.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\BuildSolutions\packages\System.Collections.Immutable.1.5.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.SqlClient, Version=4.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\BuildSolutions\packages\System.Data.SqlClient.4.6.0\lib\net461\System.Data.SqlClient.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,16 +63,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="DB\Application.DB.dacpac" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="libphonenumber-csharp">
-      <Version>8.10.16</Version>
-    </PackageReference>
-    <PackageReference Include="StrongNamer">
-      <Version>0.0.8</Version>
-    </PackageReference>
+    <Compile Include="Class1.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="time.stamp" />
@@ -58,9 +76,17 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>echo $([System.DateTime]::Now.ToString(yyyyMMdd-mmssttt)) &gt;$(ProjectDir)\time.stamp
-xcopy /y "$(TargetDir)PhoneNumbers.dll" "$(SolutionDir)..\Build\"</PostBuildEvent>
+xcopy /y "$(TargetDir)PhoneNumbers.dll" "$(SolutionDir)..\Build\"
+copy /y "$(ProjectDir)DB\*.dacpac" "$(ProjectDir)..\..\Build\"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>echo $([System.DateTime]::Now.ToString(yyyyMMdd-mmssttt)) &gt;$(ProjectDir)\time.stamp</PreBuildEvent>
   </PropertyGroup>
+  <Import Project="..\..\BuildSolutions\packages\StrongNamer.0.0.8\build\StrongNamer.targets" Condition="Exists('..\..\BuildSolutions\packages\StrongNamer.0.0.8\build\StrongNamer.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Данный проект ссылается на пакеты NuGet, отсутствующие на этом компьютере. Используйте восстановление пакетов NuGet, чтобы скачать их.  Дополнительную информацию см. по адресу: http://go.microsoft.com/fwlink/?LinkID=322105. Отсутствует следующий файл: {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\BuildSolutions\packages\StrongNamer.0.0.8\build\StrongNamer.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\BuildSolutions\packages\StrongNamer.0.0.8\build\StrongNamer.targets'))" />
+  </Target>
 </Project>

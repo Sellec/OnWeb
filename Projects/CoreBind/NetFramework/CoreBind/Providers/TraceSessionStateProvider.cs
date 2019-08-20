@@ -9,10 +9,11 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.SessionState;
-using OnUtils.Application.DB;
 
 namespace OnWeb.CoreBind.Providers
 {
+    using Core.DB;
+
     /// <summary>
     /// Наш собственный провайдер.
     /// </summary>

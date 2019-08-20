@@ -1,4 +1,6 @@
-﻿namespace OnWeb.Types
+﻿using System.Collections.Generic;
+
+namespace OnWeb.Types
 {
 #pragma warning disable CS1591 // todo внести комментарии.
     public class UserState
@@ -26,19 +28,19 @@
             }
         }
 
-        ///// <summary>
-        ///// todo Возвращает список возможных состояний учетной записи пользователя.
-        ///// </summary>
-        ///// <returns></returns>
-        //public static IEnumerable<SelectListItem> GetList()
-        //{
-        //    return new List<SelectListItem>() {
-        //        new SelectListItem() { Value = Active.ToString(), Text = GetName(Active) },
-        //        new SelectListItem() { Value = WaitForAcceptEmail.ToString(), Text = GetName(WaitForAcceptEmail) },
-        //        new SelectListItem() { Value = WaitForAcceptAdmin.ToString(), Text = GetName(WaitForAcceptAdmin) },
-        //        new SelectListItem() { Value = Declined.ToString(), Text = GetName(Declined) },
-        //        new SelectListItem() { Value = Disabled.ToString(), Text = GetName(Disabled) }
-        //    };
-        //}
+        /// <summary>
+        /// Возвращает список возможных состояний учетной записи пользователя.
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<int, string> GetList()
+        {
+            return new Dictionary<int, string> {
+                { Active, GetName(Active) },
+                { WaitForAcceptEmail, GetName(WaitForAcceptEmail) },
+                { WaitForAcceptAdmin, GetName(WaitForAcceptAdmin) },
+                { Declined, GetName(Declined) },
+                { Disabled, GetName(Disabled) }
+            };
+        }
     }
 }
