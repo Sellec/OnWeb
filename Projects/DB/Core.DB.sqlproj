@@ -349,6 +349,7 @@
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
-    <PostBuildEvent>copy /y "$(ProjectDir)$(OutputPath)$(TargetDatabase).dacpac" "$(ProjectDir)..\..\Build"</PostBuildEvent>
+    <PostBuildEvent>mkdir -p "$(ProjectDir)..\..\Build\"
+copy /y "$(ProjectDir)$(OutputPath)$(TargetDatabase).dacpac" "$(ProjectDir)..\..\Build\"</PostBuildEvent>
   </PropertyGroup>
 </Project>

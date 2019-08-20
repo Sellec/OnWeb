@@ -3,7 +3,7 @@
 ################################################################################
 
 /.vs
-/Build/
+/Build/**
 /BuildSolutions/.vs
 /BuildSolutions/packages/
 /External Libraries/**/bin

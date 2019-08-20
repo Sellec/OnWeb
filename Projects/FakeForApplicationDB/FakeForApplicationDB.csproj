@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy /y &quot;$(TargetDir)DB\*.dacpac&quot; &quot;$(SolutionDir)..\Build&quot;&#xD;&#xA;echo $([System.DateTime]::Now.ToString(yyyyMMdd-mmssttt)) &gt;$(ProjectDir)\time.stamp&#xD;&#xA;" />
+    <Exec Command="mkdir -p &quot;$(SolutionDir)..\Build\&quot;&#xD;&#xA;copy /y &quot;$(TargetDir)DB\*.dacpac&quot; &quot;$(SolutionDir)..\Build\&quot;&#xD;&#xA;echo $([System.DateTime]::Now.ToString(yyyyMMdd-mmssttt)) &gt;$(ProjectDir)\time.stamp&#xD;&#xA;" />
   </Target>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
