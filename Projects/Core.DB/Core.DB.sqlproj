@@ -331,13 +331,12 @@
     <None Include="Сравнение схем.scmp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FakeForApplicationDB\FakeForApplicationDB.csproj">
-      <Name>FakeForApplicationDB</Name>
-      <Project>{bc1efee2-e900-4493-94ea-f789ffb4afd5}</Project>
-      <Private>False</Private>
-      <IsModelAware>False</IsModelAware>
-      <GenerateSqlClrDdl>False</GenerateSqlClrDdl>
-      <IsVisible>False</IsVisible>
+    <ProjectReference Include="..\Core.Fake\Core.Fake.csproj">
+      <Name>Core.Fake</Name>
+      <Project>{de1f63dd-2d91-4a10-8afa-48062fa600b8}</Project>
+      <Private>True</Private>
+      <IsModelAware>True</IsModelAware>
+      <GenerateSqlClrDdl>True</GenerateSqlClrDdl>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

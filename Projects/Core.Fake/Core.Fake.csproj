@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="libphonenumber-csharp" Version="8.10.17" />
+    <PackageReference Include="OnUtils.Application" Version="0.1.2.49" />
+    <PackageReference Include="StrongNamer" Version="0.0.8" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="if not exist &quot;$(SolutionDir)..\Build\&quot; mkdir &quot;$(SolutionDir)..\Build\&quot;&#xD;&#xA;copy /y &quot;$(TargetDir)DB\*.dacpac&quot; &quot;$(SolutionDir)..\Build\&quot;&#xD;&#xA;copy /y &quot;$(ProjectDir)obj\$(ConfigurationName)\netstandard2.0\SignedAssemblies\PhoneNumbers.dll&quot; &quot;$(SolutionDir)..\Build\&quot;&#xD;&#xA;echo $([System.DateTime]::Now.ToString(yyyyMMdd-mmssttt)) &gt;$(ProjectDir)\time.stamp&#xD;&#xA;" />
+  </Target>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="echo $([System.DateTime]::Now.ToString(yyyyMMdd-mmssttt)) &gt;$(ProjectDir)\time.stamp" />
+  </Target>
+
+</Project>
