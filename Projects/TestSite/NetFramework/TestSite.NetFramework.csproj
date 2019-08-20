@@ -54,7 +54,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="OnUtils.Application">
-      <Version>0.1.2.47</Version>
+      <Version>0.1.2.48</Version>
     </PackageReference>
     <PackageReference Include="OnUtils">
       <Version>0.1.5</Version>

@@ -333,15 +333,7 @@
   <ItemGroup>
     <ProjectReference Include="..\FakeForApplicationDB\FakeForApplicationDB.csproj">
       <Name>FakeForApplicationDB</Name>
-      <Project>{9d56bc43-44ee-45cb-a102-52b2579269d8}</Project>
-      <Private>False</Private>
-      <IsModelAware>False</IsModelAware>
-      <GenerateSqlClrDdl>False</GenerateSqlClrDdl>
-      <IsVisible>False</IsVisible>
-    </ProjectReference>
-    <ProjectReference Include="..\FakeForPhoneNumbers\FakeForPhoneNumbers.csproj">
-      <Name>FakeForPhoneNumbers</Name>
-      <Project>{aa782adb-fa03-4d02-a962-1f8ae6d640ff}</Project>
+      <Project>{bc1efee2-e900-4493-94ea-f789ffb4afd5}</Project>
       <Private>False</Private>
       <IsModelAware>False</IsModelAware>
       <GenerateSqlClrDdl>False</GenerateSqlClrDdl>
@@ -349,7 +341,7 @@
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
-    <PostBuildEvent>mkdir -p "$(ProjectDir)..\..\Build\"
+    <PostBuildEvent>if not exist "$(ProjectDir)..\..\Build\" mkdir "$(ProjectDir)..\..\Build\"
 copy /y "$(ProjectDir)$(OutputPath)$(TargetDatabase).dacpac" "$(ProjectDir)..\..\Build\"</PostBuildEvent>
   </PropertyGroup>
 </Project>

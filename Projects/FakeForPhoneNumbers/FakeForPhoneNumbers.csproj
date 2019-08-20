@@ -60,9 +60,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>echo $([System.DateTime]::Now.ToString(yyyyMMdd-mmssttt)) &gt;$(ProjectDir)\time.stamp
-mkdir -p "$(ProjectDir)..\..\Build\"
+    <PostBuildEvent>if not exist "$(SolutionDir)..\Build\" mkdir "$(SolutionDir)..\Build\"
 copy /y "$(TargetDir)PhoneNumbers.dll" "$(SolutionDir)..\Build\"
+echo $([System.DateTime]::Now.ToString(yyyyMMdd-mmssttt)) &gt;$(ProjectDir)\time.stamp
 </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
