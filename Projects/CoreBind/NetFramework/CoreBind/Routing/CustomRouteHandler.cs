@@ -13,12 +13,12 @@ namespace OnWeb.CoreBind.Routing
     using Modules.Routing.DB;
     using Providers;
 
-    class RouteHandler : MvcRouteHandler, IRouteConstraint
+    class CustomRouteHandler : MvcRouteHandler, IRouteConstraint
     {
         private ConcurrentDictionary<string, Routing> _dbCache = new ConcurrentDictionary<string, Routing>();
         private readonly WebApplication _core = null;
 
-        public RouteHandler(WebApplication core, CustomControllerFactory controllerFactory) : base(controllerFactory)
+        public CustomRouteHandler(WebApplication core, CustomControllerFactory controllerFactory) : base(controllerFactory)
         {
             _core = core;
         }
@@ -114,11 +114,21 @@ namespace OnWeb.CoreBind.Routing
             var matchedFile = requestContext.RouteData.Values["matchedFile"] as string;
             if (!string.IsNullOrEmpty(matchedFile))
             {
-                WebUtils.CompressBehaviourFilter.PrepareCompression(requestContext.HttpContext.Request, requestContext.HttpContext.Response);
-                requestContext.HttpContext.RewritePath(matchedFile);
+                var extension = System.IO.Path.GetExtension(matchedFile)?.ToLower();
+                if (extension == ".cshtml" || matchedFile == ".vbhtml")
+                {
+                    requestContext.HttpContext.Response.StatusCode = 404;
+                    requestContext.HttpContext.Response.SubStatusCode = 17;
+                    HttpContext.Current.ApplicationInstance.CompleteRequest();
+                }
+                else
+                {
+                    WebUtils.CompressBehaviourFilter.PrepareCompression(requestContext.HttpContext.Request, requestContext.HttpContext.Response);
+                    requestContext.HttpContext.RewritePath(matchedFile);
 
-                Type type = typeof(HttpApplication).Assembly.GetType("System.Web.StaticFileHandler", true);
-                return (IHttpHandler)Activator.CreateInstance(type, true);
+                    Type type = typeof(HttpApplication).Assembly.GetType("System.Web.StaticFileHandler", true);
+                    return (IHttpHandler)Activator.CreateInstance(type, true);
+                }
             }
 
             var route = requestContext.RouteData.Values["matchedRoute"] as Routing;
@@ -161,8 +171,7 @@ namespace OnWeb.CoreBind.Routing
                 }
             }
 
-            var handler = base.GetHttpHandler(requestContext);
-            return handler;
+            return base.GetHttpHandler(requestContext);
         }
     }
 

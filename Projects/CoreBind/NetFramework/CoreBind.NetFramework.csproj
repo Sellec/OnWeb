@@ -112,7 +112,7 @@
     <Compile Include="CoreBind\Routing\HttpContextExtensions.cs" />
     <Compile Include="CoreBind\Routing\LanguageRouteConstraint.cs" />
     <Compile Include="CoreBind\Routing\RoutingManager.cs" />
-    <Compile Include="CoreBind\Routing\RouteHandler.cs" />
+    <Compile Include="CoreBind\Routing\CustomRouteHandler.cs" />
     <Compile Include="CoreBind\Routing\RoutesDefaults.cs" />
     <Compile Include="Types\NSJsonResult.cs" />
     <Compile Include="Types\RequestAnswerType.cs" />

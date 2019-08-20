@@ -86,7 +86,7 @@ namespace OnWeb
             ));
 
             // Затем универсальный маршрут для поиска статики и ЧПУ в таблице роутинга.
-            var routingHandler = new RouteHandler(this, controllerFactory);
+            var routingHandler = new CustomRouteHandler(this, controllerFactory);
 
             routes.Add("RoutingAll", new Route(
                 "{*url}",
