@@ -39,6 +39,8 @@
 
 
 
+
+
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_SSMA_SOURCE', @value = N'fabrikae_fabrikanew.users', @level0type = N'SCHEMA', @level0name = N'dbo', @level1type = N'TABLE', @level1name = N'users';
 
@@ -124,5 +126,29 @@ BEGIN
 	--END TRY
 	--BEGIN CATCH
 	--END CATCH
+
+END
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE TRIGGER [dbo].[UsersDeleteOnUtilsApplication]
+   ON  [dbo].[users]
+   AFTER DELETE
+AS 
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+	BEGIN TRY
+		DELETE FROM [dbo].[UserBase]
+		FROM [dbo].[UserBase]
+		INNER JOIN deleted d ON [dbo].[UserBase].IdUser = d.id
+	END TRY
+	BEGIN CATCH
+	END CATCH
 
 END
