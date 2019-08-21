@@ -2,7 +2,7 @@
 using OnUtils.Application.DB;
 using OnUtils.Application.Items;
 using OnUtils.Application.Journaling;
-using OnUtils.Application.Journaling.DB;
+using JournalingDB = OnUtils.Application.Journaling.DB;
 using OnUtils.Application.Modules.CoreModule;
 using OnUtils.Data;
 using System;
@@ -298,26 +298,34 @@ namespace OnWeb.Modules.Adminmain
         [MenuAction("Журналы системы", "journals")]
         public virtual ActionResult Journals()
         {
-            using (var db = new UnitOfWork<JournalName, Journal>())
+            using (var db = new JournalingDB.DataContext())
             {
-                var query = from p in db.Repo2
-                            group p by p.IdJournal into gr
-                            select new { IdJournal = gr.Key, Count = gr.Count(), IdJournalDataLast = gr.Max(x => x.IdJournalData) };
+                var dbAccessor = AppCore.Get<JournalingDB.JournalingManagerDatabaseAccessor<WebApplication>>();
 
-                //var datetimeDefault = 
+                var queryDataBase = dbAccessor.CreateQueryJournalData(db);
+                var queryDataGrouped = from row in queryDataBase
+                                       group row.JournalData by row.JournalName.IdJournal into gr
+                                       select new { Count = gr.Count(), IdJournalDataLast = gr.Max(x => x.IdJournalData) };
 
-                var data = (from p in db.Repo1
-                            join d in query on p.IdJournal equals d.IdJournal
-                            join d2 in db.Repo2 on d.IdJournalDataLast equals d2.IdJournalData into d2_j
-                            from d2 in d2_j.DefaultIfEmpty()
-                            orderby p.Name
-                            select new Design.Model.JournalsList()
+                var query = from row in queryDataBase
+                            join sq2 in queryDataGrouped on row.JournalData.IdJournalData equals sq2.IdJournalDataLast
+                            select new Model.JournalQueries.QueryJournalData
                             {
-                                JournalName = p,
-                                EventsCount = d == null ? 0 : d.Count,
-                                EventLastDate = d2 == null ? null : (DateTime?)d2.DateEvent,
-                                EventLastType = d2 == null ? null : (EventType?)d2.EventType
-                            }).ToList();
+                                JournalData = row.JournalData,
+                                JournalName = row.JournalName,
+                                User = row.User,
+                                Count = sq2.Count
+                            };
+
+                var data = dbAccessor.
+                    FetchQueryJournalData<Model.JournalQueries.QueryJournalData, Model.JournalQueries.JournalData>(query, (row, instance) => instance.Count = row.Count).
+                    Select(x => new Design.Model.JournalsList()
+                    {
+                        JournalName = x.JournalInfo,
+                        EventsCount = x.Count,
+                        EventLastDate = x.DateEvent,
+                        EventLastType = x.EventType
+                    }).ToList();
 
                 return View("Journals.cshtml", data);
             }
@@ -334,12 +342,15 @@ namespace OnWeb.Modules.Adminmain
                     var result = AppCore.Get<JournalingManager>().GetJournal(IdJournal.Value);
                     if (!result.IsSuccess) throw new Exception(result.Message);
 
-                    using (var db = new UnitOfWork<Journal>())
+                    var dbAccessor = AppCore.Get<JournalingDB.JournalingManagerDatabaseAccessor<WebApplication>>();
+
+                    using (var db = new JournalingDB.DataContext())
                     {
                         int skip = 0;
                         int limit = 100;
 
-                        var data = db.Repo1.Where(x => x.IdJournal == result.Result.IdJournal).OrderByDescending(x => x.DateEvent).Skip(skip).Take(limit).ToList();
+                        var query = dbAccessor.CreateQueryJournalData(db).Where(x => x.JournalData.IdJournal == result.Result.IdJournal).OrderByDescending(x => x.JournalData.DateEvent).Skip(skip).Take(limit);
+                        var data = dbAccessor.FetchQueryJournalData(query);
                         return View("JournalDetails.cshtml", new Design.Model.JournalDetails()
                         {
                             JournalName = result.Result,
@@ -364,14 +375,13 @@ namespace OnWeb.Modules.Adminmain
             {
                 if (!IdJournal.HasValue) throw new Exception("Не указан идентификатор журнала.");
 
-                using (var db = new UnitOfWork<Journal>())
+                var result = AppCore.Get<JournalingManager>().GetJournal(IdJournal.Value);
+                if (!result.IsSuccess) throw new Exception(result.Message);
+
+                using (var db = new JournalingDB.DataContext())
                 using (var scope = db.CreateScope())
                 {
-                    var result = AppCore.Get<JournalingManager>().GetJournal(IdJournal.Value);
-                    if (!result.IsSuccess) throw new Exception(result.Message);
-
                     db.DataContext.ExecuteQuery("DELETE FROM Journal WHERE IdJournal=@IdJournal", new { IdJournal = result.Result.IdJournal });
-
                     scope.Commit();
                 }
                 answer.FromSuccess(null);
@@ -385,5 +395,4 @@ namespace OnWeb.Modules.Adminmain
         }
 
     }
-
 }

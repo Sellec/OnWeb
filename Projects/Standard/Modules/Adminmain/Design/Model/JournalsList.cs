@@ -1,12 +1,12 @@
 ﻿using OnUtils.Application.Journaling;
-using OnUtils.Application.Journaling.DB;
+using OnUtils.Application.Journaling.Model;
 using System;
 
 namespace OnWeb.Modules.Adminmain.Design.Model
 {
     public class JournalsList
     {
-        public JournalName JournalName { get; set; }
+        public JournalInfo JournalName { get; set; }
 
         public int EventsCount { get; set; }
 

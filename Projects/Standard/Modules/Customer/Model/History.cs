@@ -1,4 +1,4 @@
-﻿using OnUtils.Application.Journaling.DB;
+﻿using OnUtils.Application.Journaling.Model;
 using System;
 using System.Collections.Generic;
 
@@ -8,6 +8,6 @@ namespace OnWeb.Modules.Customer.Model
     {
         public DateTime DateStart;
         public DateTime DateEnd;
-        public IList<Journal> Records;
+        public IList<JournalData> Records;
     }
 }

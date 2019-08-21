@@ -1,5 +1,5 @@
 ﻿using OnUtils.Application.Journaling;
-using OnUtils.Application.Journaling.DB;
+using OnUtils.Application.Journaling.Model;
 using OnUtils.Application.ServiceMonitor;
 using System;
 using System.Collections.Concurrent;
@@ -15,7 +15,7 @@ namespace OnWeb.ServiceMonitor
     /// </summary>
     public sealed class Monitor : CoreComponentBase, IComponentSingleton
     {
-        private static ConcurrentDictionary<Guid, JournalName> _servicesJournalsList = new ConcurrentDictionary<Guid, JournalName>();
+        private static ConcurrentDictionary<Guid, JournalInfo> _servicesJournalsList = new ConcurrentDictionary<Guid, JournalInfo>();
         private static ConcurrentDictionary<Guid, ServiceInfo> _servicesList = new ConcurrentDictionary<Guid, ServiceInfo>();
 
         #region CoreComponentBase
@@ -71,7 +71,7 @@ namespace OnWeb.ServiceMonitor
         /// <summary>
         /// Возвращает журнал для указанного сервиса.
         /// </summary>
-        public IEnumerable<Journal> GetServiceJournal(IMonitoredService service)
+        public IEnumerable<JournalData> GetServiceJournal(IMonitoredService service)
         {
             return AppCore.Get<Monitor<WebApplication>>().GetServiceJournal(service);
         }
@@ -79,7 +79,7 @@ namespace OnWeb.ServiceMonitor
         /// <summary>
         /// Возвращает журнал для указанного идентификатора сервиса.
         /// </summary>
-        public IEnumerable<Journal> GetServiceJournal(Guid serviceID)
+        public IEnumerable<JournalData> GetServiceJournal(Guid serviceID)
         {
             return AppCore.Get<Monitor<WebApplication>>().GetServiceJournal(serviceID);
         }

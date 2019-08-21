@@ -22,8 +22,8 @@
 
   <ItemGroup>
     <PackageReference Include="OnUtils" Version="0.1.5" />
-    <PackageReference Include="OnUtils.Application" Version="0.1.2.57" />
-    <PackageReference Include="OnWeb.Core" Version="0.1.5.23" />
+    <PackageReference Include="OnUtils.Application" Version="0.1.2.64" />
+    <PackageReference Include="OnWeb.Core" Version="0.1.5.30" />
   </ItemGroup>
 
   <Target Name="CopyPackage" AfterTargets="Pack">

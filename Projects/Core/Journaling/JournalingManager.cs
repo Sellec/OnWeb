@@ -1,5 +1,5 @@
 ﻿using OnUtils.Application.Journaling;
-using OnUtils.Application.Journaling.DB;
+using OnUtils.Application.Journaling.Model;
 using System;
 using System.Collections.Generic;
 using OnUtils;
@@ -9,9 +9,9 @@ namespace OnWeb.Journaling
     using Core;
     using Core.Items;
     using ExecutionRegisterResult = ExecutionResult<int?>;
-    using ExecutionResultJournalData = ExecutionResult<Journal>;
-    using ExecutionResultJournalDataList = ExecutionResult<List<Journal>>;
-    using ExecutionResultJournalName = ExecutionResult<JournalName>;
+    using ExecutionResultJournalData = ExecutionResult<JournalData>;
+    using ExecutionResultJournalDataList = ExecutionResult<List<JournalData>>;
+    using ExecutionResultJournalName = ExecutionResult<JournalInfo>;
     using JournalingManagerApp = JournalingManager<WebApplication>;
 
     /// <summary>
@@ -37,9 +37,9 @@ namespace OnWeb.Journaling
         /// <summary>
         /// Регистрирует новый журнал или обновляет старый по ключу <paramref name="uniqueKey"/> (если передан).
         /// </summary>
-        /// <param name="idType">См. <see cref="JournalName.IdJournalType"/>.</param>
-        /// <param name="name">См. <see cref="JournalName.Name"/>.</param>
-        /// <param name="uniqueKey">См. <see cref="JournalName.UniqueKey"/>.</param>
+        /// <param name="idType">См. <see cref="JournalInfo.IdJournalType"/>.</param>
+        /// <param name="name">См. <see cref="JournalInfo.Name"/>.</param>
+        /// <param name="uniqueKey">См. <see cref="JournalInfo.UniqueKey"/>.</param>
         /// <returns>Возвращает объект <see cref="ExecutionResultJournalName"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. В случае ошибки свойство <see cref="ExecutionResult.Message"/> содержит сообщение об ошибке.</returns>
         /// <exception cref="ArgumentNullException">Возникает, если <paramref name="name"/> представляет пустую строку или null.</exception>
         [ApiIrreversible]
@@ -51,7 +51,7 @@ namespace OnWeb.Journaling
         /// <summary>
         /// Регистрирует новый журнал или обновляет старый на основе типа <typeparamref name="TJournalTyped"/>.
         /// </summary>
-        /// <param name="name">См. <see cref="JournalName.Name"/>.</param>
+        /// <param name="name">См. <see cref="JournalInfo.Name"/>.</param>
         /// <returns>Возвращает объект <see cref="ExecutionResultJournalName"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. В случае ошибки свойство <see cref="ExecutionResult.Message"/> содержит сообщение об ошибке.</returns>
         /// <exception cref="ArgumentNullException">Возникает, если <paramref name="name"/> представляет пустую строку или null.</exception>
         [ApiIrreversible]
@@ -124,12 +124,12 @@ namespace OnWeb.Journaling
         /// <summary>
         /// Регистрирует новое событие в журнале <paramref name="IdJournal"/>.
         /// </summary>
-        /// <param name="IdJournal">См. <see cref="Journal.IdJournal"/>.</param>
-        /// <param name="eventType">См. <see cref="Journal.EventType"/>.</param>
-        /// <param name="eventInfo">См. <see cref="Journal.EventInfo"/>.</param>
-        /// <param name="eventInfoDetailed">См. <see cref="Journal.EventInfoDetailed"/>.</param>
-        /// <param name="eventTime">См. <see cref="Journal.DateEvent"/>. Если передано значение null, то событие записывается на момент вызова метода.</param>
-        /// <param name="exception">См. <see cref="Journal.ExceptionDetailed"/>.</param>
+        /// <param name="IdJournal">См. <see cref="JournalData.JournalInfo"/>.</param>
+        /// <param name="eventType">См. <see cref="JournalData.EventType"/>.</param>
+        /// <param name="eventInfo">См. <see cref="JournalData.EventInfo"/>.</param>
+        /// <param name="eventInfoDetailed">См. <see cref="JournalData.EventInfoDetailed"/>.</param>
+        /// <param name="eventTime">См. <see cref="JournalData.DateEvent"/>. Если передано значение null, то событие записывается на момент вызова метода.</param>
+        /// <param name="exception">См. <see cref="JournalData.ExceptionDetailed"/>.</param>
         /// <returns>
         /// Возвращает объект <see cref="ExecutionRegisterResult"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. 
         /// В случае успеха свойство <see cref="ExecutionRegisterResult.Result"/> содержит идентификатор записи журнала (см. также <see cref="GetJournalData(int)"/>).
@@ -144,11 +144,11 @@ namespace OnWeb.Journaling
         /// <summary>
         /// Регистрирует новое событие в журнале на основе типа <typeparamref name="TJournalTyped"/>.
         /// </summary>
-        /// <param name="eventType">См. <see cref="Journal.EventType"/>.</param>
-        /// <param name="eventInfo">См. <see cref="Journal.EventInfo"/>.</param>
-        /// <param name="eventInfoDetailed">См. <see cref="Journal.EventInfoDetailed"/>.</param>
-        /// <param name="eventTime">См. <see cref="Journal.DateEvent"/>. Если передано значение null, то событие записывается на момент вызова метода.</param>
-        /// <param name="exception">См. <see cref="Journal.ExceptionDetailed"/>.</param>
+        /// <param name="eventType">См. <see cref="JournalData.EventType"/>.</param>
+        /// <param name="eventInfo">См. <see cref="JournalData.EventInfo"/>.</param>
+        /// <param name="eventInfoDetailed">См. <see cref="JournalData.EventInfoDetailed"/>.</param>
+        /// <param name="eventTime">См. <see cref="JournalData.DateEvent"/>. Если передано значение null, то событие записывается на момент вызова метода.</param>
+        /// <param name="exception">См. <see cref="JournalData.ExceptionDetailed"/>.</param>
         /// <returns>
         /// Возвращает объект <see cref="ExecutionRegisterResult"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. 
         /// В случае успеха свойство <see cref="ExecutionRegisterResult.Result"/> содержит идентификатор записи журнала (см. также <see cref="GetJournalData(int)"/>).
@@ -163,13 +163,13 @@ namespace OnWeb.Journaling
         /// <summary>
         /// Регистрирует новое событие, связанное с объектом <paramref name="relatedItem"/>, в журнале <paramref name="IdJournal"/>.
         /// </summary>
-        /// <param name="IdJournal">См. <see cref="Journal.IdJournal"/>.</param>
-        /// <param name="relatedItem">См. <see cref="Journal.IdJournal"/>.</param>
-        /// <param name="eventType">См. <see cref="Journal.EventType"/>.</param>
-        /// <param name="eventInfo">См. <see cref="Journal.EventInfo"/>.</param>
-        /// <param name="eventInfoDetailed">См. <see cref="Journal.EventInfoDetailed"/>.</param>
-        /// <param name="eventTime">См. <see cref="Journal.DateEvent"/>. Если передано значение null, то событие записывается на момент вызова метода.</param>
-        /// <param name="exception">См. <see cref="Journal.ExceptionDetailed"/>.</param>
+        /// <param name="IdJournal">См. <see cref="JournalData.JournalInfo"/>.</param>
+        /// <param name="relatedItem">См. <see cref="JournalData.IdRelatedItem"/> и <see cref="JournalData.IdRelatedItemType"/>.</param>
+        /// <param name="eventType">См. <see cref="JournalData.EventType"/>.</param>
+        /// <param name="eventInfo">См. <see cref="JournalData.EventInfo"/>.</param>
+        /// <param name="eventInfoDetailed">См. <see cref="JournalData.EventInfoDetailed"/>.</param>
+        /// <param name="eventTime">См. <see cref="JournalData.DateEvent"/>. Если передано значение null, то событие записывается на момент вызова метода.</param>
+        /// <param name="exception">См. <see cref="JournalData.ExceptionDetailed"/>.</param>
         /// <returns>
         /// Возвращает объект <see cref="ExecutionRegisterResult"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. 
         /// В случае успеха свойство <see cref="ExecutionRegisterResult.Result"/> содержит идентификатор записи журнала (см. также <see cref="GetJournalData(int)"/>).
@@ -185,12 +185,12 @@ namespace OnWeb.Journaling
         /// <summary>
         /// Регистрирует новое событие, связанное с объектом <paramref name="relatedItem"/>, в журнале на основе типа <typeparamref name="TJournalTyped"/>.
         /// </summary>
-        /// <param name="relatedItem">См. <see cref="Journal.IdJournal"/>.</param>
-        /// <param name="eventType">См. <see cref="Journal.EventType"/>.</param>
-        /// <param name="eventInfo">См. <see cref="Journal.EventInfo"/>.</param>
-        /// <param name="eventInfoDetailed">См. <see cref="Journal.EventInfoDetailed"/>.</param>
-        /// <param name="eventTime">См. <see cref="Journal.DateEvent"/>. Если передано значение null, то событие записывается на момент вызова метода.</param>
-        /// <param name="exception">См. <see cref="Journal.ExceptionDetailed"/>.</param>
+        /// <param name="relatedItem">См. <see cref="JournalData.IdRelatedItem"/> и <see cref="JournalData.IdRelatedItemType"/>.</param>
+        /// <param name="eventType">См. <see cref="JournalData.EventType"/>.</param>
+        /// <param name="eventInfo">См. <see cref="JournalData.EventInfo"/>.</param>
+        /// <param name="eventInfoDetailed">См. <see cref="JournalData.EventInfoDetailed"/>.</param>
+        /// <param name="eventTime">См. <see cref="JournalData.DateEvent"/>. Если передано значение null, то событие записывается на момент вызова метода.</param>
+        /// <param name="exception">См. <see cref="JournalData.ExceptionDetailed"/>.</param>
         /// <returns>
         /// Возвращает объект <see cref="ExecutionRegisterResult"/> со свойством <see cref="ExecutionResult.IsSuccess"/> в зависимости от успешности выполнения операции. 
         /// В случае успеха свойство <see cref="ExecutionRegisterResult.Result"/> содержит идентификатор записи журнала (см. также <see cref="GetJournalData(int)"/>).

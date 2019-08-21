@@ -1,4 +1,4 @@
-﻿using OnUtils.Application.Journaling.DB;
+﻿using OnUtils.Application.Journaling.Model;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
@@ -15,7 +15,7 @@ namespace OnWeb.Modules.Customer.Model
         }
 
         [ScaffoldColumn(false)]
-        public IList<Journal> history;
+        public IList<JournalData> history;
 
         public User User { get; set; }
 

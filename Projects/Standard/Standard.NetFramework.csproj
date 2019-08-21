@@ -100,7 +100,7 @@
       <Version>3.2.7</Version>
     </PackageReference>
     <PackageReference Include="OnUtils.Application">
-      <Version>0.1.2.57</Version>
+      <Version>0.1.2.64</Version>
     </PackageReference>
     <PackageReference Include="OnUtils">
       <Version>0.1.5</Version>
@@ -136,6 +136,7 @@
     <Compile Include="Design\Additionals\Helpers\PHPHelpers.cs" />
     <Compile Include="Design\Additionals\Helpers\UrlHelpers.cs" />
     <Compile Include="Design\Additionals\IntExtensions.cs" />
+    <Compile Include="Modules\Adminmain\Model\JournalQueries.cs" />
     <Compile Include="Modules\FileManager\DB\DataContext.cs" />
     <Compile Include="Modules\FileManager\DB\FileRemoveQueue.cs" />
     <Compile Include="Modules\FileManager\FileTypeCommon.cs" />

@@ -1,12 +1,12 @@
-﻿using OnUtils.Application.Journaling.DB;
+﻿using OnUtils.Application.Journaling.Model;
 using System.Collections.Generic;
 
 namespace OnWeb.Modules.Adminmain.Design.Model
 {
     public class JournalDetails
     {
-        public JournalName JournalName { get; set; }
+        public JournalInfo JournalName { get; set; }
 
-        public List<Journal> JournalData { get; set; }
+        public List<JournalData> JournalData { get; set; }
     }
 }
