@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>OnWeb.Modules.Lexicon</AssemblyName>
-    <Version>0.1.1</Version>
+    <Version>0.1.2</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IncludeSymbols>True</IncludeSymbols>
     <IncludeSource>True</IncludeSource>
@@ -20,14 +20,17 @@
     <PackageIconUrl>http://tracestudio.ru/favicon.ico</PackageIconUrl>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="OnUtils" Version="0.1.5" />
-    <PackageReference Include="OnUtils.Application" Version="0.1.2.64" />
-    <PackageReference Include="OnWeb.Core" Version="0.1.5.30" />
-  </ItemGroup>
-
   <Target Name="CopyPackage" AfterTargets="Pack">
     <Exec Command="copy /y &quot;$(TargetDir)..\$(PackageId).$(Version).symbols.nupkg&quot; &quot;$(SolutionDir)..\Build\$(PackageId).$(Version).nupkg&quot;" />
   </Target>
+
+  <ItemGroup>
+    <PackageReference Include="OnUtils" Version="0.1.5" />
+    <PackageReference Include="OnUtils.Application" Version="0.1.2.65" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Core\Core.csproj" />
+  </ItemGroup>
 
 </Project>
