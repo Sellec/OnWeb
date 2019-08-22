@@ -2,50 +2,93 @@
   <Import Project="..\..\..\Common\Common.props" />
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyName>OnWeb.Standard.AspNetMvc</AssemblyName>
+    <AssemblyName>OnWeb.Standard.AspNetMvc.Package</AssemblyName>
     <RootNamespace>OnWeb</RootNamespace>
+    <MinClientVersion>3.3.0</MinClientVersion>
     <IncludeSymbols>True</IncludeSymbols>
     <IncludeSource>True</IncludeSource>
-    <Version>0.1.6.1</Version>
+    <Version>0.1.6.6</Version>
     <Description>Базовые модули для ядра на ASP.NET MVC.</Description>
-    <LibraryPath>D:\Projects\GIT\Github\Repos\Sellec\OnWeb\Projects\Standard\AspNetMvc\Library\</LibraryPath>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>OnWeb.Standard.AspNetMvc</PackageId>
+    <Product>OnWeb.Standard.AspNetMvc</Product>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="..\Library\bin\OnWeb.Standard.AspNetMvc.Library.dll" Link="lib\$(TargetFramework)\OnWeb.Standard.AspNetMvc.Library.dll" Pack="True" PackagePath="%(Link)" />
-    <None Include="..\Library\bin\OnWeb.Standard.AspNetMvc.Library.pdb" Link="lib\$(TargetFramework)\OnWeb.Standard.AspNetMvc.Library.pdb" Pack="True" PackagePath="%(Link)" />
-    <None Include="..\Library\**\*.cs" Exclude="..\Library\obj*\**\*.*;">
-      <Pack>true</Pack>
+    <None Include="..\Library\bin\OnWeb.Standard.AspNetMvc.dll" Link="lib\$(TargetFramework)\OnWeb.Standard.AspNetMvc.dll" Pack="True" PackagePath="%(Link)" />
+    <None Include="..\Library\bin\OnWeb.Standard.AspNetMvc.pdb" Link="lib\$(TargetFramework)\OnWeb.Standard.AspNetMvc.pdb" Pack="True" PackagePath="%(Link)" />
+  </ItemGroup>
+  <ItemGroup>
+    <FileSource Include="..\Library\**\*.cs" Exclude="..\Library\obj*\**\*.*;">
       <Link>src\Library\%(RecursiveDir)%(Filename)%(Extension)</Link>
-      <PackagePath>src\Library\%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
-    </None>
-    <Content Include="..\Library\Data\**\*" Exclude="..\Library\**\*.cs">
-      <Pack>true</Pack>
-      <Link>Data\%(RecursiveDir)%(Filename)%(Extension)</Link>
-      <Visible>true</Visible>
-      <PackagePath>content\%(Link);contentFiles\any\$(TargetFramework)\%(Link)</PackagePath>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-      <PackageFlatten>false</PackageFlatten>
-    </Content>
-    <Content Include="..\Library\Design\**\*" Exclude="..\Library\**\*.cs">
-      <Pack>true</Pack>
+    </FileSource>
+    <FileContent Include="..\Library\Design\**\*" Exclude="..\Library\**\*.cs">
       <Link>Design\%(RecursiveDir)%(Filename)%(Extension)</Link>
-      <Visible>true</Visible>
-      <PackagePath>content\%(Link);contentFiles\any\$(TargetFramework)\%(Link)</PackagePath>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-      <PackageFlatten>false</PackageFlatten>
-    </Content>
-    <Content Include="..\Library\Modules\**\*" Exclude="..\Library\**\*.cs">
-      <Pack>true</Pack>
+    </FileContent>
+    <FileContent Include="..\Library\Data\**\*" Exclude="..\Library\**\*.cs">
+      <Link>Data\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </FileContent>
+    <FileContent Include="..\Library\Modules\**\*" Exclude="..\Library\**\*.cs">
       <Link>Modules\%(RecursiveDir)%(Filename)%(Extension)</Link>
-      <Visible>true</Visible>
-      <PackagePath>content\%(Link);contentFiles\any\$(TargetFramework)\%(Link)</PackagePath>
-      <PackageCopyToOutput>true</PackageCopyToOutput>
-      <PackageFlatten>false</PackageFlatten>
-    </Content>
+    </FileContent>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Linked\**" />
+    <EmbeddedResource Remove="Linked\**" />
+    <None Remove="Linked\**" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Binding\AspNetMvc\Package\Binding.Package.csproj" />
     <ProjectReference Include="..\..\..\Core\Core\Core.csproj" />
+    <PackageReference Include="Microsoft.AspNet.Mvc.ru">
+      <Version>5.2.7</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.Razor.ru">
+      <Version>3.2.7</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.WebPages.ru">
+      <Version>3.2.7</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
+      <Version>2.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.Mvc">
+      <Version>5.2.7</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.Razor">
+      <Version>3.2.7</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.WebPages">
+      <Version>3.2.7</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Web.Infrastructure">
+      <Version>1.0.0</Version>
+    </PackageReference>
   </ItemGroup>
+  <Target Name="CopyLinkedContentFiles" BeforeTargets="CoreCompile">
+    <ItemGroup>
+      <FilesToClean Include="Linked\**\*.*" />
+      <FoldersToClean Include="$([System.IO.Directory]::GetDirectories(&quot;Linked&quot;, &quot;*&quot;, System.IO.SearchOption.AllDirectories))" Condition="Exists(Linked)" />
+    </ItemGroup>
+    <!--<Message Text="%(FoldersToClean.Identity)" Importance="High" />
+    <Message Text="%(FilesToClean.Identity)" Importance="High" />-->
+
+    <Delete Files="@(FilesToClean)" />
+    <RemoveDir Directories="@(FoldersToClean);" />
+    <Copy SourceFiles="%(FileSource.Identity)" DestinationFiles="Linked\%(FileSource.Link)" SkipUnchangedFiles="true" OverwriteReadOnlyFiles="true" Condition="'%(FileSource.Link)' != ''" />
+    <Copy SourceFiles="%(FileContent.Identity)" DestinationFiles="Linked\%(FileContent.Link)" SkipUnchangedFiles="true" OverwriteReadOnlyFiles="true" Condition="'%(FileContent.Link)' != ''" />
+    <ItemGroup>
+      <None Include="Linked\%(FileSource.Link)">
+        <Pack>true</Pack>
+        <Link>%(FileSource.Link)</Link>
+        <PackagePath>%(FileSource.Link)</PackagePath>
+      </None>
+      <Content Include="Linked\%(FileContent.Link)">
+        <Pack>true</Pack>
+        <Link>%(FileContent.Link)</Link>
+        <PackagePath>content\%(FileContent.Link);contentFiles\any\$(TargetFramework)\%(FileContent.Link)</PackagePath>
+        <PackageCopyToOutput>true</PackageCopyToOutput>
+        <PackageFlatten>false</PackageFlatten>
+      </Content>
+    </ItemGroup>
+  </Target>
 </Project>

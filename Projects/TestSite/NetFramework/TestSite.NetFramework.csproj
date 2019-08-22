@@ -649,6 +649,10 @@
       <Project>{4819a652-4f35-4b7e-bdd4-15e713e9aa80}</Project>
       <Name>Binding.Library</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Binding\AspNetMvc\Package\Binding.Package.csproj">
+      <Project>{34741597-f382-4c69-88cf-79b31cd94ecf}</Project>
+      <Name>Binding.Package</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\Core\Core.csproj">
       <Project>{f61ffcc5-3711-4d42-916a-ef83032f542a}</Project>
       <Name>Core</Name>
@@ -656,6 +660,10 @@
     <ProjectReference Include="..\..\Standard\AspNetMvc\Library\Standard.Library.csproj">
       <Project>{c844d3be-ec89-4a5f-b54e-b07d9dfcb4c9}</Project>
       <Name>Standard.Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Standard\AspNetMvc\Package\Standard.Package.csproj">
+      <Project>{b63db320-89ee-46f6-8020-3dcf71e21e9e}</Project>
+      <Name>Standard.Package</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

@@ -11,7 +11,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OnWeb</RootNamespace>
-    <AssemblyName>OnWeb.Binding.AspNetMvc.Library</AssemblyName>
+    <AssemblyName>OnWeb.Binding.AspNetMvc</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />

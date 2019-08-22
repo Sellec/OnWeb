@@ -22,10 +22,10 @@ namespace OnWeb.Site
 #if DEBUG
                 var paths = new List<string>();
 
-                if (AppDomain.CurrentDomain.GetAssemblies().Where(x => x.FullName.StartsWith("OnWeb.Binding.AspNetMvc.Library,")).Count() > 0)
+                if (AppDomain.CurrentDomain.GetAssemblies().Where(x => x.FullName.StartsWith("OnWeb.Binding.AspNetMvc,")).Count() > 0)
                     paths.Add(Path.GetFullPath(Path.Combine(physicalApplicationPath, "../../Binding/AspNetMvc/Library")));
 
-                if (AppDomain.CurrentDomain.GetAssemblies().Where(x => x.FullName.StartsWith("OnWeb.Standard.AspNetMvc.Library,")).Count() > 0)
+                if (AppDomain.CurrentDomain.GetAssemblies().Where(x => x.FullName.StartsWith("OnWeb.Standard.AspNetMvc,")).Count() > 0)
                     paths.Add(Path.GetFullPath(Path.Combine(physicalApplicationPath, "../../Standard/AspNetMvc/Library")));
 
                 AppCore.Get<Core.Storage.ResourceProvider>().SourceDevelopmentPathList.AddRange(paths);
