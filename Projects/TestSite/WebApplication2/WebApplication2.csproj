@@ -69,8 +69,8 @@
     <Reference Include="OnUtils, Version=0.1.5.0, Culture=neutral, PublicKeyToken=8e22adab863b765a, processorArchitecture=MSIL">
       <HintPath>..\..\..\BuildSolutions\packages\OnUtils.0.1.5\lib\net40\OnUtils.dll</HintPath>
     </Reference>
-    <Reference Include="OnUtils.Application, Version=0.1.2.65, Culture=neutral, PublicKeyToken=8e22adab863b765a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\BuildSolutions\packages\OnUtils.Application.0.1.2.65\lib\netstandard2.0\OnUtils.Application.dll</HintPath>
+    <Reference Include="OnUtils.Application, Version=0.1.2.66, Culture=neutral, PublicKeyToken=8e22adab863b765a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\BuildSolutions\packages\OnUtils.Application.0.1.2.66\lib\netstandard2.0\OnUtils.Application.dll</HintPath>
     </Reference>
     <Reference Include="OnWeb.Binding.AspNetMvc, Version=0.1.6.2, Culture=neutral, PublicKeyToken=8e22adab863b765a, processorArchitecture=MSIL">
       <HintPath>..\..\..\BuildSolutions\packages\OnWeb.Binding.AspNetMvc.0.1.6.5\lib\net461\OnWeb.Binding.AspNetMvc.dll</HintPath>
@@ -822,7 +822,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DB\Application.DB.dacpac" />
     <Content Include="DB\Core.DB.dacpac" />
     <Content Include="Modules\Universal\Design\PaginationBlock.cshtml" />
     <Content Include="Modules\Sitemap\Design\SitemapXml.cshtml" />
@@ -961,6 +960,7 @@
     <Content Include="Data\js\eckeditor\LICENSE.md" />
     <Content Include="Data\js\eckeditor\CHANGES.md" />
     <Content Include="Data\js\ckeditor\.htaccess" />
+    <Content Include="DB\Application.DB.dacpac" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
