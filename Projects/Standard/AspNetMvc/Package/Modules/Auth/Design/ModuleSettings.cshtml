@@ -1,0 +1,41 @@
+@using OnWeb.Modules.Auth.Design.Model
+@model ModuleSettings
+@{ 
+    Layout = "~/AdminForModules/Design/baseModuleEdit.cshtml";
+    var eventTypeList = Model.EventTypes.Select(x => new SelectListItem() { Value = x.IdEventType.ToString(), Text = x.NameEventType });
+}
+
+@section scripts {
+<script type='text/javascript'>
+    $(document).ready(function () {
+    });
+
+</script>
+}
+
+@section ModuleConfiguration {
+    <tr>
+        <td>Событие удачной авторизации:</td>
+        <td>
+            @Html.DropDownListFor(x => x.EventLoginSuccess, eventTypeList)
+        </td>
+    </tr>
+    <tr>
+        <td>Событие неудачной авторизации:</td>
+        <td>
+            @Html.DropDownListFor(x => x.EventLoginError, eventTypeList)
+        </td>
+    </tr>
+    <tr>
+        <td>Событие обновления после периода неактивности:</td>
+        <td>
+            @Html.DropDownListFor(x => x.EventLoginUpdate, eventTypeList)
+        </td>
+    </tr>
+    <tr>
+        <td>Событие выхода:</td>
+        <td>
+            @Html.DropDownListFor(x => x.EventLogout, eventTypeList)
+        </td>
+    </tr>
+}

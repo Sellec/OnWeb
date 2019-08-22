@@ -1,0 +1,21 @@
+@using System.Collections
+
+@helper ShowTree(Hashtable local_data)
+{
+    foreach (Hashtable ad in local_data.Values)
+    {
+        @*<{urls type=check_url url=$ad.url assign=ret}>*@
+        var retClass = "active2";
+        var name = ViewBag.wrapText == true ? ((string)ad["name"]).WordWrap(20, "<br>") : (string)ad["name"];
+        
+        <li class='@retClass'><a href="#" data-url="@ad["url"].ToString().Replace("&", "&amp;")" class="nofollow" title=""> @name </a>
+
+        @if (ad["subs"] is Hashtable && (ad["subs"] as Hashtable).Count > 0)
+        {
+            ShowTree(ad["subs"] as Hashtable);
+        }
+        </li>
+    }
+}
+
+@ShowTree(ViewBag.links)

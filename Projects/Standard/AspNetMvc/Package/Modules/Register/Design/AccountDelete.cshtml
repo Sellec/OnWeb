@@ -1,0 +1,20 @@
+@{
+    Layout = "~/baseCommon.cshtml";
+    this.SetTitle("Удаление аккаунта");
+}
+
+<div class="subpath"><a href="/" title="Главная страница">Главная</a> &rarr; <a href="/profile" title="Личный кабинет">Личный кабинет</a></div>
+<h1><img src="/data/img/icon_register_del.jpg" alt="Удаление аккаунта" />Удаление аккаунта</h1>
+@if (ViewBag.has_result == true)
+{<text>@ViewBag.result</text>}
+
+@if (!this.GetCurrentUserContext().IsGuest)
+{
+    <p>Вы хотите удалить аккаунт?</p>
+    <form action='/@this.GetModule().UrlName/del2' method='post'>
+        Подтвердите свой пароль: <input type='password' name='pass' id='pass'><br>
+        Код проверки: <input type='text' name='c_num' class='reg_num' size='20' /><br>
+        <input type='submit' name='confirm_b' id="confirm_b" value='&nbsp;Удалить аккаунт&nbsp;' />
+    </form>
+    <div>@ViewBag.result</div>
+}

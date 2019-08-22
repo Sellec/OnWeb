@@ -1,0 +1,20 @@
+@using OnWeb.Modules.Auth
+@using OnWeb.Modules.Customer
+@using OnWeb.Modules.Register
+@*if (ViewBag.customer_tags != null)
+{
+    foreach (var tag in ViewBag.customer_tags) { <a href="/customer/tag/@tag"><i class="fa fa-tags"></i> @tag</a> }
+}*@
+@if (!this.GetCurrentUserContext().IsGuest)
+{
+    <a href='@(Url.CreateRoute<ModuleCustomer, ModuleControllerCustomer>())'><i class="fa fa-info-circle"></i> Общая информация</a></li>
+    <a href='@(Url.CreateRoute<ModuleCustomer, ModuleControllerCustomer>(x=>x.Profile()))' class='propanel'><i class="fa fa-user"></i> Данные профиля</a>
+    <a href='@(Url.CreateRoute<ModuleCustomer, ModuleControllerCustomer>(x=>x.passwordChange()))' class='propanel'><i class="fa fa-edit"></i> Изменить пароль</a>
+    @*<li><a href='/@this.GetModule().Name/subscribes' class='propanel'><i class="uk-icon-envelope-o"></i> Подписки</a></li>*@
+    <a href='@(Url.CreateRoute<ModuleAuth, ModuleAuthController>(x=>x.logout()))' class='propanel'><i class="fa fa-times-circle"></i> Выйти</a>
+}
+else
+{
+    <a href='@(Url.CreateRoute<ModuleRegister, ModuleRegisterController>())' class='propanel'><i class="fa fa-user"></i> Регистрация</a>
+    <a href='@(Url.CreateRoute<ModuleAuth, ModuleAuthController>())' class='propanel'><i class="fa fa-sign-in"></i> Вход</a>
+}

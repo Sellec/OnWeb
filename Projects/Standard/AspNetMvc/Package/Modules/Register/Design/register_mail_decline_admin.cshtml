@@ -1,0 +1,6 @@
+Заявка №@ViewBag.id на регистрацию с логином @ViewBag.login была отклонена.<br /><br />
+
+@if (!string.IsNullOrEmpty(ViewBag.comment)) { <text>Вероятная причина:<br /><strong>@ViewBag.comment</strong><br /><br /> </text> }
+
+Спасибо за внимание!<br />
+Почтовый робот сайта @Url.ContentFullPath("")

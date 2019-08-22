@@ -1,0 +1,71 @@
+@using OnWeb.Modules
+@using OnWeb.Modules.Admin
+@model OnWeb.Core.Modules.Configuration.SaveModel
+@{ 
+    Layout = "~/" + nameof(OnWeb.Modules.Admin) + "/Design/baseAdmin.cshtml";
+    var moduleAdmin = this.GetAppCore().Get<ModuleAdmin>();
+}
+
+<script type='text/javascript'>
+$(document).ready(function(){
+    $("#block").hide();
+    changeTitle("Редактирование модуля: @this.GetModule().Caption (@this.GetModule().UrlName)");
+    $(".i_adminmenu ul").show();
+
+    $("#loading_img, #res").hide();
+
+    $("form#config_form").requestJSON({
+        before: function () {  },
+        after: function (result, message)
+        {
+            if (message.length > 0) alert(message);
+        }
+    });
+});
+</script>
+@RenderSection("scripts", false)
+<form id="config_form" action="/@moduleAdmin.UrlName/madmin/@this.GetModule().IdModule/ConfigurationSave" method="post">
+    <table width='100%' id='table_results' class='admtable'>
+        <tr>
+            <th style="min-width:150px;" width='50%'>Параметр</th>
+            <th width='50%'>Значение</th>
+        </tr>
+        <tr>
+            <td>Название модуля (заголовок):</td>
+            <td><b>@this.GetModule().Caption</b></td>
+        </tr>
+        <tr>
+            <td>Query-тип модуля и использованная реализация:</td>
+            <td><b>@this.GetModule().QueryType.FullName -> @this.GetModule().GetType().FullName</b></td>
+        </tr>
+        <tr class="registered">
+            <td>ID модуля:</td>
+            <td><b>@this.GetModule().IdModule</b></td>
+        </tr>
+        <tr class="registered">
+            <td>Уникальное имя модуля:</td>
+            <td><b>@this.GetModule().UniqueName</b></td>
+        </tr>
+        <tr class="registered">
+            <td>Использующееся URL-доступное имя модуля:</td>
+            <td><b>@this.GetModule().UrlName</b></td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(x => x.UrlName)</td>
+            <td>
+                @Html.TextBoxFor(x => x.UrlName, new { size = 30 })<br />
+                @Html.ValidationMessageFor(x => x.UrlName)
+            </td>
+        </tr>
+        @RenderSection("ModuleConfiguration", false)
+        <tr>
+            <td colspan='2'>
+                <input type="submit" value="Сохранить" />
+                <div id='res' style="margin:5px 10px;padding:5px;"></div>
+                <div id='config'></div>
+            </td>
+        </tr>
+    </table>
+</form>
+
+@RenderBody()

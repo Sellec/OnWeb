@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\..\Common\Common.props" />
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <AssemblyName>OnWeb.Standard.AspNetMvc</AssemblyName>
+    <RootNamespace>OnWeb</RootNamespace>
+    <IncludeSymbols>True</IncludeSymbols>
+    <IncludeSource>True</IncludeSource>
+    <Version>0.1.6.1</Version>
+    <Description>Базовые модули для ядра на ASP.NET MVC.</Description>
+    <LibraryPath>D:\Projects\GIT\Github\Repos\Sellec\OnWeb\Projects\Standard\AspNetMvc\Library\</LibraryPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\Library\bin\OnWeb.Standard.AspNetMvc.Library.dll" Link="lib\$(TargetFramework)\OnWeb.Standard.AspNetMvc.Library.dll" Pack="True" PackagePath="%(Link)" />
+    <None Include="..\Library\bin\OnWeb.Standard.AspNetMvc.Library.pdb" Link="lib\$(TargetFramework)\OnWeb.Standard.AspNetMvc.Library.pdb" Pack="True" PackagePath="%(Link)" />
+    <None Include="..\Library\**\*.cs" Exclude="..\Library\obj*\**\*.*;">
+      <Pack>true</Pack>
+      <Link>src\Library\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <PackagePath>src\Library\%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
+    </None>
+    <Content Include="..\Library\Data\**\*" Exclude="..\Library\**\*.cs">
+      <Pack>true</Pack>
+      <Link>Data\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <Visible>true</Visible>
+      <PackagePath>content\%(Link);contentFiles\any\$(TargetFramework)\%(Link)</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+      <PackageFlatten>false</PackageFlatten>
+    </Content>
+    <Content Include="..\Library\Design\**\*" Exclude="..\Library\**\*.cs">
+      <Pack>true</Pack>
+      <Link>Design\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <Visible>true</Visible>
+      <PackagePath>content\%(Link);contentFiles\any\$(TargetFramework)\%(Link)</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+      <PackageFlatten>false</PackageFlatten>
+    </Content>
+    <Content Include="..\Library\Modules\**\*" Exclude="..\Library\**\*.cs">
+      <Pack>true</Pack>
+      <Link>Modules\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <Visible>true</Visible>
+      <PackagePath>content\%(Link);contentFiles\any\$(TargetFramework)\%(Link)</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+      <PackageFlatten>false</PackageFlatten>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Binding\AspNetMvc\Package\Binding.Package.csproj" />
+    <ProjectReference Include="..\..\..\Core\Core\Core.csproj" />
+  </ItemGroup>
+</Project>

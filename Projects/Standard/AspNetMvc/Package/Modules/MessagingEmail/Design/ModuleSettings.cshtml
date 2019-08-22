@@ -1,0 +1,89 @@
+@using OnWeb.Modules.MessagingEmail.Model
+@model Configuration
+@{
+    Layout = "~/AdminForModules/Design/baseModuleEdit.cshtml";
+    var smtpAttributes = new { @class = "js-smtp__block", size = 40 };
+}
+
+@section scripts {
+    <script type='text/javascript'>
+        var blockCheckerClass = "js-block-checker";
+        $(document).ready(function () {
+            InitSettings("@(smtpAttributes.@class)");
+        });
+
+        function InitSettings(className) {
+            $("input[type=checkbox]." + className).first().addClass(blockCheckerClass);
+
+            if ($("input[type=checkbox]." + className + "." + blockCheckerClass).is(":checked")) {
+                $("." + className).not("." + blockCheckerClass).each(function () {
+                    $(this).closest('tr').show();
+                });
+            }
+            else {
+                $("." + className).not("." + blockCheckerClass).each(function () {
+                    $(this).val("-");
+                    $(this).closest('tr').hide();
+                });
+            }
+            $("select." + className).attr("size", 1);
+
+            $("input[type=checkbox]." + className + "." + blockCheckerClass).change(function () {
+                if ($(this).is(":checked")) {
+                    $("." + className).not("." + blockCheckerClass).each(function () {
+                        $(this).val("");
+                        $(this).closest('tr').show();
+                    });
+                }
+                else {
+                    $("." + className).not("." + blockCheckerClass).each(function () {
+                        $(this).val("-");
+                        $(this).closest('tr').hide();
+                    });
+                }
+            });
+        }
+    </script>
+}
+
+@section ModuleConfiguration {
+    <tr>
+        <th colspan="2" align="center">@Html.CheckBoxFor(x => x.IsUseSmtp, smtpAttributes) @Html.LabelFor(x => x.IsUseSmtp)</th>
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(x => x.Smtp.Server)</td>
+        <td>
+            @Html.TextBoxFor(x => x.Smtp.Server, smtpAttributes)
+            @Html.ValidationMessageFor(x => x.Smtp.Server)
+        </td>
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(x => x.Smtp.IsSecure)</td>
+        <td>
+            @Html.CheckBoxFor(x => x.Smtp.IsSecure, smtpAttributes)
+            @Html.ValidationMessageFor(x => x.Smtp.IsSecure)
+        </td>
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(x => x.Smtp.Port)</td>
+        <td>
+            @Html.TextBoxFor(x => x.Smtp.Port, smtpAttributes)
+            @Html.ValidationMessageFor(x => x.Smtp.Port)
+        </td>
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(x => x.Smtp.Login)</td>
+        <td>
+            @Html.TextBoxFor(x => x.Smtp.Login, smtpAttributes)
+            @Html.ValidationMessageFor(x => x.Smtp.Login)
+        </td>
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(x => x.Smtp.Password, smtpAttributes)</td>
+        <td>
+            @Html.TextBoxFor(x => x.Smtp.Password)
+            @Html.ValidationMessageFor(x => x.Smtp.Password)
+        </td>
+    </tr>
+
+}

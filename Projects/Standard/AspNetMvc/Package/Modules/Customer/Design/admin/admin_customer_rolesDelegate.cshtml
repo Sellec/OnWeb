@@ -1,0 +1,264 @@
+@using OnWeb.Modules.Customer.Model
+@model AdminRolesDelegate
+
+<style>
+    .checkBoxList {
+        border: 2px solid #ccc;
+        height: 607px;
+        overflow-y: scroll;
+        padding: 5px;
+    }
+
+        .checkBoxList input, .checkBoxList span {
+            vertical-align: top;
+        }
+
+        .checkBoxList label {
+            width: 100%;
+            display: block;
+            margin-bottom: 8px;
+            padding-bottom: 1px;
+            border-bottom: 1px dotted #000;
+            text-decoration: none;
+        }
+</style>
+
+<script type='text/javascript'>
+    var UsersRoles = @Html.AsJSON(Model.RolesUser);
+    var User = null;
+    var Role = null;
+
+    function applyRolesToUser()
+    {
+        try
+        {
+            var roles = {};
+            $("table#UserRoles .plistRoles:checked").each(function(){
+                roles[$(this).val()] = $(this).val();
+            });
+
+            var roles2 = new Array();
+            $.each(roles, function(role){
+                roles2[roles2.length] = parseInt(role);
+            });
+
+            UsersRoles[User] = roles2;
+        } catch(err) { alert(err); }
+    }
+
+    function applyUsersToRole()
+    {
+        try
+        {
+            var users = new Array();
+            $("table#RoleUsers .plistUsers:checked").each(function(){
+                users[users.length] = $(this).val();
+            });
+
+            $.each(UsersRoles, function(userID, roles){
+                var roles2 = new Array();
+
+                $.each(roles, function(idx, role){
+                    if (role != Role) roles2[roles2.length] = role;
+                });
+
+                if ($.inArray(userID, users) != -1) roles2[roles2.length] = Role;
+
+                UsersRoles[userID] = roles2;
+            });
+        } catch(err) { alert(err); }
+    }
+
+    $(document).ready(function(){
+        changeTitle('Назначение ролей пользователям');
+        $("#block").hide();
+
+        $('form#delegateForm').submit(function(e){
+            try
+            {
+                $("#delegateTableResult").text('');
+
+                //if (User == null && User == undefined) throw new Error("Пользователь не выбран.");
+
+                $.requestJSON('/admin/madmin/@this.GetModule().UrlName/rolesDelegateSave/', {Roles : UsersRoles}, function(result, message){
+                    if (message != null && message.length > 0) $("#delegateTableResult").html(message);
+                });
+            }
+            catch(err) { $("#delegateTableResult").html(err); }
+            e.preventDefault();
+        });
+
+        /**
+         * Пользователи-роли
+         * */
+        $("table#UserRoles select.plistUsers").click(function(){
+            try
+            {
+                console.log("1");
+                var userID = $(this).val();
+                User = userID;
+
+                if (User != null && User != undefined)
+                {
+                    $("span#UserName").text($("option:selected", this).text());
+
+                    $("table#UserRoles .plistRoles").prop('checked', false);
+
+                    var roles = UsersRoles[User];
+                    $.each(roles, function(key, value){
+                        $("table#UserRoles .plistRoles[Value=" + value + "]").prop('checked', true);
+                    });
+
+                    $("table#UserRoles .plistRoles").prop("disabled", false);
+                }
+            } catch(err) { alert(err); }
+        });
+        $("table#UserRoles .plistRoles").click(applyRolesToUser).change(applyRolesToUser);
+
+        /**
+         * Роли-пользователи
+         * */
+        $("table#RoleUsers select.plistRoles").click(function(){
+            try
+            {
+                console.log("2");
+
+                var roleID = $(this).val();
+                Role = parseInt(roleID);
+
+                if (Role != null && Role != undefined)
+                {
+                    $("span#RoleName").text($("option:selected", this).text());
+
+                    $("table#RoleUsers .plistUsers").prop('checked', false);
+
+                    $.each(UsersRoles, function(key, value){
+                        if ($.inArray(Role, value) != -1) 
+                            $("table#RoleUsers .plistUsers[Value=" + key + "]").prop('checked', true);
+                    });
+                    $("table#RoleUsers .plistUsers").prop("disabled", false);
+                }
+            } catch(err) { alert(err); }
+        });
+        $("table#RoleUsers .plistUsers").click(applyUsersToRole).change(applyUsersToRole);
+
+        //$("select#plistUsers option[Value=<{$IdUser}>]").attr("selected", true);
+        //$("select#plistUsers").click();
+
+        $("table#UserRoles").bind('filterEnd', function(){
+            var table = this;
+
+            $("select.plistUsers option", table).hide();
+            $("tbody.rowsFiltered tr:not(.filtered)", this).each(function(e, element){
+                $("select.plistUsers option[data-id='" + $(this).data('id') + "']", table).show();
+            });
+        });
+
+        $("table#RoleUsers").bind('filterEnd', function(){
+            console.log(2);
+            var table = this;
+
+            $("input.plistUsers", table).parent().hide();
+            $("tbody.rowsFiltered tr:not(.filtered)", this).each(function(e, element){
+                $("input.plistUsers[data-id='" + $(this).data('id') + "']", table).parent().show();
+            });
+        });
+
+    });
+</script>
+<h2>Назначение ролей пользователям.</h2>
+
+<form method='post' id='delegateForm'>
+    <table class="tablesorter">
+        <tr>
+            <td style='vertical-align:top;width:700px;padding-right:10px;padding-left:10px;'>
+                <h2>Пользователь-роль</h2>
+                <span>Позволяет выбрать пользователя и указать его роли</span>
+                <table id="UserRoles" width="100%" class='tablesorter'>
+                    <thead>
+                        <tr>
+                            <th width="50%" class="filter">Пользователь</th>
+                            <th>Роли</th>
+                        </tr>
+                    </thead>
+                    <tbody class="rowsFiltered" style="display:none;">
+@foreach (var user in Model.Users)
+{
+    <tr data-id="@user.IdUser">
+        <td>(@user.IdUser) @user.ToString()</td>
+        <td></td>
+    </tr>
+}
+                    </tbody>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <select style='width:100%' class="plistUsers" size="40">
+                                @foreach (var user in Model.Users) { @Html.Option(user.IdUser, $"({user.IdUser}) {user.ToString()}", new { data_id = user.IdUser }) }
+                            </select>
+                        </td>
+                        <td>
+                            Роли, назначенные пользователю '<span id="UserName"></span>'<br>
+
+                            <div class="checkBoxList">
+                                @foreach (var role in Model.Roles)
+                                {
+                                    <label><input type="checkbox" value="@role.IdRole" class="plistRoles" disabled /> <span>@role.NameRole</span></label>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                        </tbody>
+                </table>
+            </td>
+            <td style="vertical-align:top;width:700px;padding-right:10px;padding-left:10px;">
+                <h2>Роль-пользователь</h2>
+                <span>Позволяет выбрать роль и указать относящихся к ней пользователей</span>
+                <table id="RoleUsers" width="100%" class='tablesorter'>
+                    <thead>
+                        <tr>
+                            <th>Роли</th>
+                            <th width="50%" class="filter">Пользователь</th>
+                        </tr>
+                    </thead>
+                    <tbody class="rowsFiltered" style="display:none;">
+                        @foreach (var user in Model.Users)
+                        {
+                            <tr data-id="@user.IdUser">
+                                <td></td>
+                                <td>(@user.IdUser) @user.ToString()</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <select style='width:100%' class="plistRoles" size="40">
+                                    @foreach (var role in Model.Roles)
+                                    { @Html.Option(role.IdRole, role.NameRole) }
+                                </select>
+                            </td>
+                            <td>
+                                Пользователи, которым назначена роль '<span id="RoleName"></span>'<br>
+
+                                <div class="checkBoxList">
+                                    @foreach (var user in Model.Users)
+                                    {
+                                        <label><input type="checkbox" value="@user.IdUser" data-id="@user.IdUser" class="plistUsers" disabled /> <span>(@user.IdUser) @user.ToString()</span></label>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan='2' align="center">
+                <input type='submit' value='Сохранить'>
+                <input type='button' value='Отменить' class='ButtonClose'>
+            </td>
+        </tr>
+    </table>
+    <div id='delegateTableResult'></div>
+</form>

@@ -1,0 +1,57 @@
+@using OnWeb.Modules.Adminmain
+@using OnWeb.Modules.Adminmain.Design.Model
+@using OnUtils.Application.Journaling
+@model JournalDetails
+@{ var formID = DateTime.Now.Ticks.ToString(); }
+
+<script type="text/javascript">
+$(function () {
+    $("input#ClearJournal").click(function () {
+        $(this).attr("disabled", true);
+        $.requestJSON("@(Url.CreateRoute<Module, ModuleController>(x => x.JournalClear(Model.JournalName.IdJournal)))", null, function (result, message) {
+            $(this).removeAttr("disabled");
+            if (message.length > 0) alert(message);
+            if (result == JsonResult.OK) {
+                $("table#FormID_@formID tbody tr:not(#not_founded)").remove();
+                $("table#FormID_@formID tbody tr#not_founded").show();
+            }
+        });
+    });
+});
+</script>
+
+<h4>Журнал: @Model.JournalName.Name / <input type="button" id="ClearJournal" value="Очистить журнал" /></h4>
+<table class='tablesorter' style="width:1140px" id="FormID_@formID">
+    <thead>
+        <tr>
+            <th style="width:120px;min-width:120px;max-width:120px">Тип события</th>
+            <th style="width:120px;min-width:120px;max-width:120px">Дата</th>
+            <th style="width:300px;min-width:300px;max-width:300px">Информация</th>
+            <th>Информация с детализацией</th>
+        </tr>
+    </thead>
+    <tr id='not_founded' style="@(Model.JournalData.Count > 0 ? "display:none;" : null)">
+        <td class="center" colspan='10'>
+            Журнал пуст
+        </td>
+    </tr>
+    @foreach (var pair in Model.JournalData)
+    {
+        <tr>
+            <td class="left" style="background-color: @(pair.EventType == EventType.CriticalError ? "#f44141 !important" : (pair.EventType == EventType.Error ? "#f48341 !important" : (pair.EventType == EventType.Warning ? "#f4c741 !important" : "")))">
+                <b>@Html.DisplayEnum(pair.EventType)</b>
+            </td>
+            <td class="left">@pair.DateEvent.ToString("dd.MM.yyyy HH:mm:ss")</td>
+            <td class="left">@pair.EventInfo</td>
+            <td class="left">
+                @Html.Nl2Br(pair.EventInfoDetailed)
+                @if (!string.IsNullOrEmpty(pair.ExceptionDetailed))
+                {
+                    <text>
+                        <br />Подробности исключения:<br />@Html.Nl2Br(pair.ExceptionDetailed)
+                    </text>
+                }
+            </td>
+        </tr>
+    }
+</table>

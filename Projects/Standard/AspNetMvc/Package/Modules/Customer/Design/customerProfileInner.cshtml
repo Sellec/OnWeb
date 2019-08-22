@@ -1,0 +1,96 @@
+@using OnWeb.Modules.FileManager.CustomFieldsFileTypes
+@using OnWeb.Modules.Customer.Design.Model
+@model Profile
+<script type="text/javascript">
+    $(function ()
+    {
+        $('form#datachangeform').requestJSON({
+            before: function () { $("#result").text(''); },
+            after: function (result, message)
+            {
+                if (message.length > 0) alert(message);
+            }
+        });
+
+        $(".gettop").click(function () { scroll(0, 0); return false });
+    });
+</script>
+
+
+<form action='@Url.Action("profileSave")' method='post' id='datachangeform' class="reg_form data_form">
+    @Html.HiddenFor(model => model.Edit.ID)<br />
+    <div class="editBlock">
+        @Html.LabelFor(model => model.Edit.IdPhoto)<br />
+        @Html.FileUploadFor(x => x.Edit.IdPhoto, new ImagePresentOptions() { MaxWidth = 200, MaxHeight = 100 })<br />
+        @Html.ValidationMessageFor(model => model.Edit.IdPhoto)
+    </div>
+    
+    <div class="lk-profile-form__item editBlock">
+        <div class="lk-edit-list-bars clearfix">
+            <div class="lk-edit-bar">
+                <div class="lk-profile-form__input-wrapper">
+                    @*Html.LabelFor(model => model.Edit.email)*@
+                    @Html.TextBoxFor(model => model.Edit.email, new { placeholder = Html.DisplayNameFor(model => model.Edit.email) })
+                    @Html.ValidationMessageFor(model => model.Edit.email)
+                </div>
+            </div>
+            <div class="lk-edit-bar editBlock">
+                <div class="lk-profile-form__input-wrapper">
+                    @*Html.LabelFor(model => model.Edit.phone)*@
+                    @Html.TextBoxFor(model => model.Edit.phone, new { placeholder = Html.DisplayNameFor(model => model.Edit.phone) })
+                    @Html.ValidationMessageFor(model => model.Edit.phone)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="lk-profile-form__item editBlock">
+        <div class="lk-profile-form__input-wrapper">
+            @*<input type="text" name="position" value="" placeholder="" class="lk-edit-bar__input">*@
+            @Html.TextBoxFor(model => model.Edit.name, new { placeholder = Html.DisplayNameFor(model => model.Edit.name) })
+            @Html.ValidationMessageFor(model => model.Edit.name)
+        </div>
+    </div>
+    
+    @foreach (var field in Model.Edit.Fields.Values)
+    {
+        if (field.FieldType is FileImageFieldType)
+        {
+            <div class="editBlock">
+                @Html.LabelFor(field)
+                @Html.EditorFor(field, new { size = 40, @class = "fieldsField" }, new ImagePresentOptions() { MaxWidth = 200 })
+                @* @Html.ValidationMessageFor(field) *@
+            </div>
+        }
+        else
+        {
+            <div class="lk-profile-form__item editBlock">
+                <div class="lk-profile-form__input-wrapper">
+                    @*Html.LabelFor(field)*@
+                    @Html.EditorFor(field, new { size = 40, @class = "fieldsField", placeholder = string.IsNullOrEmpty(field.nameAlt) ? field.name : field.nameAlt })
+                    @*@Html.EditorFor(field, new { size = 40, @class = "fieldsField" })*@
+                    @* @Html.ValidationMessageFor(field) *@
+                </div>
+            </div>
+        }
+    }
+    
+    <div class="lk-profile-form__item editBlock">
+        <div class="lk-profile-form__input-wrapper">
+            @*Html.LabelFor(model => model.Edit.Comment)*@
+            @Html.TextAreaFor(model => model.Edit.Comment, new { placeholder = Html.DisplayNameFor(model => model.Edit.Comment) })
+            @Html.ValidationMessageFor(model => model.Edit.Comment)
+        </div>
+    </div>
+
+    @*
+    <div>
+        <div>@CaptchManager.reRender("regReCaptcha1", "regReCaptcha2")</div>
+    </div>
+    <div>
+        <label>&nbsp;</label><input type='submit' class='isubmit ired' name='confirm_b' id="confirm_b" value='&nbsp;Сохранить&nbsp;' tabindex='' />
+    </div>
+    *@
+
+    <div id='result' style="width:450px;padding:10px 0 0 0;color:red;"></div>
+</form>

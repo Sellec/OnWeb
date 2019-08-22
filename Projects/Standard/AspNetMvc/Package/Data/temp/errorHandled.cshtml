@@ -1,0 +1,42 @@
+@model Exception
+@{
+    Layout = "~/baseCommon.cshtml";
+    this.SetTitle("Ошибка!");
+}
+
+@section breadcrumbs {
+    <!-- (breadcrumbs) -->
+    <div class="breadcrumbs inner-breadcrumbs">
+        <div class="breadcrumbs__cover cover">
+            <div class="breadcrumbs__links">
+                <a typeof="v:Breadcrumb" href="/" class="breadcrumbs__link">Главная</a>
+                <span class="breadcrumbs__arrow"></span>
+                <p class="breadcrumbs__last">Ошибка во время открытия страницы</p>
+            </div>
+        </div>
+    </div>
+    <!-- End (breadcrumbs) -->
+}
+
+<div class="site-error-page">
+    <div class="cover">
+
+        <h1>Ошибка!</h1>
+        <p>Уважаемый посетитель! Во время обработки запроса возникла ошибка. Если она повторяется, то обратитесь, пожалуйста, к администратору сайта.</p>
+
+        <div style="font-style: italic;font-weight: bold">
+            @Html.Nl2Br(this.GetCurrentUserContext().IsSuperuser ? Model.ToString() : Model.Message)
+        </div>
+        @if (Model is HttpCompileException && this.GetCurrentUserContext().IsSuperuser)
+        {
+            <br />
+            <div style="font-style: italic;font-weight: bold">
+                Ошибка компиляции шаблона. Ниже сгенерированное тело шаблона.
+            </div>
+            <div>
+                @Html.Nl2Br(((Model as HttpCompileException).SourceCode))
+            </div>
+        }
+
+    </div>
+</div>

@@ -1,0 +1,21 @@
+@model Exception
+@{
+    Layout = "~/baseAdmin.cshtml";
+    this.SetTitle("Адрес не найден");
+}
+
+<div class="site-error-page">
+    <div class="cover">
+
+        <h1>Адрес не найден!</h1>
+        <p>Уважаемый посетитель! Указанный адрес, который Вы пытаетесь открыть, не существует.</p>
+
+        @if (Model != null && !string.IsNullOrEmpty(Model.Message))
+        {
+            <div style="font-style: italic;font-weight: bold;margin-top:10px;">
+                Ошибка: @Html.Raw(Model.Message)
+            </div>
+        }
+
+    </div>
+</div>

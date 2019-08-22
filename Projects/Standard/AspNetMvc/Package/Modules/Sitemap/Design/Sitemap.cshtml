@@ -1,0 +1,54 @@
+@using OnWeb.Modules.Admin
+@using OnWeb.Modules.Sitemap.Design.Model
+@model Sitemap
+@{ var moduleAdmin = this.GetAppCore().Get<ModuleAdmin>(); }
+
+<script type='text/javascript'>
+    $(document).ready(function () {
+        try {
+            $("#block").hide();
+            changeTitle('Карта сайта');
+            $(".i_adminmenu ul").show();
+
+            $("form#form_ae").requestJSON({
+                before: function () { $("#loading_img").show(); },
+                after: function (result, message, data) {
+                    $("#loading_img").hide();
+                    if (message.length) alert(message);
+                }
+            });
+
+            $("#conf_submit").click(function () {
+                if (!$("#modules_list option:selected").length) {
+                    $("#modules_list option").each(function () {
+                        $(this).attr("selected", true);
+                    })
+                    $("#form_ae").submit();
+                    return false;
+                }
+            })
+        } catch (err) { alert(err); }
+    });
+
+</script>
+<h2>Карта сайта</h2>
+<br>
+Карта сайта автоматически собирается из данных, предоставляемых специальными провайдерами. На данный момент доступны следующие провайдеры:
+<table class="admtable">
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Тип</th>
+        </tr>
+    </thead>
+    @foreach (var provider in Model.ProviderList)
+    {
+        <tr>
+            <td @(provider.IsCreatedNormally ? "" : "style='background-color:red'")>@provider.NameProvider</td>
+            <td @(provider.IsCreatedNormally ? "" : "style='background-color:red'")>@provider.TypeName</td>
+        </tr>
+    }
+</table>
+<form action='/@moduleAdmin.UrlName/madmin/@this.GetModule().UrlName/SitemapGenerate' method='post' id='form_ae'>
+    <input type='submit' id='conf_submit' value='Обновить карту сайта'> <img src="/data/img/loading.gif" alt="" id="loading_img">
+</form>

@@ -1,0 +1,9 @@
+@{ Layout = "~/baseCommon.cshtml"; }
+
+@section scripts {
+    @RenderSection("scripts", false)
+}
+
+@section breadcrumbs { @RenderSection("breadcrumbs", false) }
+
+@RenderBody()

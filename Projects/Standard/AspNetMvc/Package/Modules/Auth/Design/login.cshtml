@@ -1,0 +1,83 @@
+@using OnWeb.Modules.Admin
+@using OnWeb.Modules.Auth
+
+@using OnWeb.Modules.Auth.Design.Model
+@using OnWeb.Modules.Customer
+@using OnUtils.Application.Modules
+@model Login
+@{
+    Layout = "~/baseAuth.cshtml";
+    this.SetTitle(!this.GetCurrentUserContext().IsGuest ? "Управление профилем" : "Войти в систему");
+    var moduleAdmin = this.GetAppCore().Get<ModuleAdmin>();
+}
+
+@section breadcrumbs {
+    <!-- (breadcrumbs) -->
+    <div class="breadcrumbs inner-breadcrumbs">
+        <div class="breadcrumbs__cover cover">
+            <div class="breadcrumbs__links">
+                <a typeof="v:Breadcrumb" href="/" class="breadcrumbs__link">Главная</a>
+                <span class="breadcrumbs__arrow"></span>
+                <p class="breadcrumbs__last">Вход на сайт</p>
+            </div>
+        </div>
+    </div>
+    <!-- End (breadcrumbs) -->
+}
+
+<div class="login-block">
+    <div class="cover">
+        @if (!this.GetCurrentUserContext().IsGuest != true)
+        {
+            @(this.RenderPartial("LoginFormInner.cshtml"))
+        }
+        else
+        {
+            <div class="login-block-inner">
+                <h1>Добро пожаловать</h1>
+                <div class="enter-block" id="enter_reg">
+                    <p>Уважаемый посетитель! Мы рады приветствовать вас на страницах нашего сайта!</p>
+
+                    <div class="reg_info">
+                        <ul class="user-login-panel">
+                            @if (moduleAdmin?.CheckPermission(this.GetCurrentUserContext(), ModulesConstants.PermissionManage) == CheckPermissionResult.Allowed)
+                            {
+                                <li><a href="/@moduleAdmin.UrlName" title="Панель администратора" target="_blank"><strong>Управление сайтом</strong></a></li> }
+                            @* <li><img src="/data/img/design/man.png" alt=""><a href='/profilepchange_usual' title='Сменить пароль'>Сменить пароль</a></li> *@
+                            <li><a href="@(Url.CreateRoute<ModuleCustomer, ModuleControllerCustomer>())" title="Личный кабинет">Личный кабинет</a></li>
+                            <li><img src="/data/img/design/lock.gif" alt=""><a href="@(Url.CreateRoute<ModuleAuth, ModuleAuthController>(x => x.logout()))" title="">Выйти</a></li>
+                        </ul>
+
+                        <div class="wrapper h10"></div>
+                        @if (!string.IsNullOrEmpty(Model.Result))
+                        {
+                            <i>@Model.Result</i><br />
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section scripts {
+    <style>
+        a {
+            color: green;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            regReCaptcha2();
+        });
+        function regReCaptcha1() {
+            $("#confirm_b").removeClass('disabled').attr("disabled", false).attr("enabled", true).show();
+        }
+
+        function regReCaptcha2() {
+            $("#confirm_b").addClass('disabled').attr("disabled", true).attr("enabled", false).hide();
+        }
+    </script>
+
+
+}

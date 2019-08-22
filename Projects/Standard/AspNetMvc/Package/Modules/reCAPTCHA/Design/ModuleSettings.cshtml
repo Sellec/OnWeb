@@ -1,0 +1,29 @@
+@using OnWeb.Modules.reCAPTCHA.Model
+@model Configuration
+@{
+    Layout = "~/AdminForModules/Design/baseModuleEdit.cshtml";
+}
+
+@section ModuleConfiguration {
+    <tr>
+        <td>@Html.LabelFor(x => x.IsEnabledValidation)</td>
+        <td>
+            @Html.CheckBoxFor(x => x.IsEnabledValidation)
+            @Html.ValidationMessageFor(x => x.IsEnabledValidation)
+        </td>
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(x => x.PublicKey)</td>
+        <td>
+            @Html.TextBoxFor(x => x.PublicKey, new { size = 50 })<br />
+            @Html.ValidationMessageFor(x => x.PublicKey)
+        </td>
+    </tr>
+    <tr>
+        <td>@Html.LabelFor(x => x.PrivateKey)</td>
+        <td>
+            @Html.TextBoxFor(x => x.PrivateKey, new { size = 50 })<br />
+            @Html.ValidationMessageFor(x => x.PrivateKey)
+        </td>
+    </tr>
+}

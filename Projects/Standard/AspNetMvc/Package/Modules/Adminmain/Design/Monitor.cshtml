@@ -1,0 +1,68 @@
+@using OnWeb.Modules.Admin
+@using OnWeb.Modules.Adminmain
+@using OnWeb.ServiceMonitor
+@{ var moduleAdmin = this.GetAppCore().Get<ModuleAdmin>(); }
+
+<script type='text/javascript'>
+    $(document).ready(function(){
+        $("#block").hide();
+
+        changeTitle('Состояние системы');
+
+        $("input.ShowJournal").click(function ()
+        {
+            $("#containerForLoading").html("<img src='/data/img/loading.gif'>").requestLoad("@(Url.CreateRoute<Module, ModuleController>(x => x.MonitorJournal(null)))/" + $(this).data("guid"), null, function (result, message)
+            {
+                if (message.length > 0) alert(message);
+            });
+        })
+    });
+</script>
+<h2>Состояние системы</h2>
+
+<table width='100%'>
+    <tr>
+        <td style='vertical-align:top;width:970px;min-width:970px;'>
+            @{ var services = this.GetAppCore().Get<Monitor>().GetServicesList(); }
+            <h4>Зарегистрированных сервисов: <span id="countRegistered">@services.Count</span></h4>
+            <table class='tablesorter' width="100%">
+                <thead>
+                    <tr>
+                        <th style="width:150px">Название</th>
+                        <th style="width:200px">Текущее/Последнее состояние</th>
+                        <th style="">Подробное состояние</th>
+                        <th style="width:120px">Дата последнего события</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                @if (services.Count == 0)
+                {
+                    <tr id='not_founded' style='display:none;'>
+                        <td class="center" colspan='10'>
+                            Ничего не найдено.
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var pair in services.OrderBy(x => x.Value.Name))
+                    {
+                        <tr>
+                            <td class="left">@pair.Value.Name</td>
+                            <td class="left">@Html.DisplayEnum(pair.Value.LastStatus)</td>
+                            <td class="left">@Html.Nl2Br(pair.Value.LastStatusDetailed)</td>
+                            <td class="left">@pair.Value.LastDateEvent.ToString("dd.MM.yyyy HH:mm:ss")</td>
+                            <td>
+                                <input type="button" class="ShowJournal" data-guid="@pair.Key" value="Журнал"><br />
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+
+        </td>
+        <td style='width:50px;'></td>
+        <td style='width:100%;vertical-align:top;align:left;padding-top:21px;' id="containerForLoading"></td>
+    </tr>
+</table>
+

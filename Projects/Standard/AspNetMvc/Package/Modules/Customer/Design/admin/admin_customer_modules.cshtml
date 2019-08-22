@@ -1,0 +1,53 @@
+<script type='text/javascript'>
+$(document).ready(function(){
+    try {
+    $("#block").hide();
+
+    changeTitle("Настройка модулей для личного кабинета.");
+    
+    $("#loading_img").hide();
+    
+    $('input.modules_menu').change(function(){
+    try {
+        var data = $(this).attr('name').match(/modules_(\d+)/i);
+        if ( data == null ) { return ;}
+        alert(data[1]);
+        var aj = new ajaxRequest();
+        aj.setPOST('ext_id',data[1]);
+        aj.setPOST('ext_status',$(this).attr('value'));
+        aj.load('/admin/madmin/@this.GetModule().UrlName/customer_modules_save','div_result');        
+    } catch(err) {alert(err);}
+    });
+    
+    $('#table_results').tableFillView();
+    } catch(err) {alert(err);}
+});
+</script>     
+<h2>Настройка модулей для личного кабинета.</h2>
+
+<div id="div_result" style="text-align: center;border:solid 1px red;background: #fff1f1;"></div>
+<table id='table_results' class='tablesorter'><thead>
+ <tr>
+  <th style="width:50px">Название</th>
+  <th style="width:250px">Имя файла</th>
+  <th style="width:100px">Настройка</th>
+ </tr>
+ </thead><tbody>
+ <{foreach from=$modules item=ad key=id}>
+ <tr>
+  <td class="center"><{$ad.m_name}></td>
+  <td class="center"><{$ad.m_filename}></td>  
+  <td>
+   Ссылка в панели ссылок личного кабинета:<br> 
+    <input type='radio' class='modules_menu' name='modules_<{$id}>' value='1' <{if isset($customer_modules[$id].cm_menu)&&$customer_modules[$id].cm_menu==1}>checked<{/if}>>&nbsp;Включено&nbsp;
+    <input type='radio' class='modules_menu' name='modules_<{$id}>' value='0' <{if !isset($customer_modules[$id])||!isset($customer_modules[$id].cm_menu)||$module_extensions[$id].cm_menu==0}>checked<{/if}>>&nbsp;Отключено<br>
+  </td>  
+ </tr>  
+ <{/foreach}>
+ </thead>
+</table>
+   
+
+<a href="" class="gettop">К началу</a>
+<br>
+<div id='item_result' style="padding:0 0 10px 10px;font-size:14px;"></div>

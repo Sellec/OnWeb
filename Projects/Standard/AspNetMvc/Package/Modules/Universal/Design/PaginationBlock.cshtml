@@ -1,0 +1,63 @@
+@using OnWeb.Modules.Universal.Pagination
+@model  PaginationViewModel
+@{
+    var currentUrl = Model.CurrentURL ?? Request.Url;
+    var dd = this;
+}
+
+<div class="pagination-block clearfix">
+    <div class="pagination-count">
+        <div class="pagination-count__text">
+            @if (Model.pages.pages == 0) { <text>Ничего не найдено</text>}
+            else if (Model.pages.pages == 1) { <text>Всего @Model.infoCount.all @Model.infoCount.all.Decliner("результат", "результата", "результатов")</text>}
+            else { <text>@Model.infoCount.objectsPerPage из @Model.infoCount.all@if (Model.pages.pages > 1)
+            {<text> (с @Model.infoCount.start по @(Model.infoCount.start + Model.infoCount.objectsPerPage - 1))</text>}</text>}
+        </div>
+    </div>
+    <div class="pagination">
+        @if (Model.pages.curpage > 1)
+        {
+            <span data-url="@(Model.pages.curpage > 1 ? currentUrl.AddParameter("page", (Model.pages.curpage - 1).ToString())?.ToString() : "")" class="nofollow pagination__link-prev @(Model.pages.curpage > 1 ? " active" : " disabled")">Предыдущая</span>
+        }
+
+        @if (Model.pages.pages > 1)
+        {
+            <ul class="pagination__list">
+                @if (!Model.pages.stpg.ContainsKey(1) && Model.pages.curpage != 1)
+                {
+                    <li class="pagination__item"><a href="@currentUrl.AddParameter("page", "1")" class="pagination__link" title="">1</a></li>
+                    <li class="pagination__item pagination-empty"><span class="pagination__link">...</span></li>
+                }
+                @foreach (var pair in Model.pages.stpg)
+                {
+                    var url = currentUrl;
+                    if (pair.Key > 1) { url = url.AddParameter("page", pair.Key.ToString()); }
+                    if (Request.QueryString.HasKey("sorting")) { url = url.AddParameter("sorting", Request.QueryString.Get("sorting")); }
+
+                    <li class="pagination__item"><a href="@url" class="pagination__link" title="">@pair.Key</a> </li>
+                }
+                <li class="pagination__item">
+                    <span class="pagination__link">@Model.pages.curpage</span>
+                </li>
+                @foreach (var pair in Model.pages.fnpg)
+                {
+                    var url = currentUrl;
+                    if (pair.Key > 1) { url = url.AddParameter("page", pair.Key.ToString()); }
+                    if (Request.QueryString.HasKey("sorting")) { url = url.AddParameter("sorting", Request.QueryString.Get("sorting")); }
+
+                    <li class="pagination__item"><a href="@currentUrl.AddParameter("page", pair.Key.ToString())" class="pagination__link" title="">@pair.Key</a></li>
+                }
+                @if (Model.pages.curpage < Model.pages.np)
+                {
+                    <li class="pagination__item pagination-empty"><a class="pagination__link">...</a></li>
+                    <li class="pagination__item"><a href="@currentUrl.AddParameter("page", Model.pages.pages.ToString())" class="pagination__link" title="">@Model.pages.pages</a></li>
+                }
+            </ul>
+        }
+
+        @if (Model.pages.curpage < Model.pages.pages)
+        {
+            <span data-url="@currentUrl.AddParameter("page", (Model.pages.curpage+1).ToString())" class="nofollow pagination__link-next @(Model.pages.curpage > 0 && Model.pages.curpage < Model.pages.pages ? " active" : " disabled")">Следующая</span>
+        }
+    </div>
+</div>

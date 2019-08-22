@@ -1,0 +1,26 @@
+@{ Layout = "~/baseCommon.cshtml"; }
+
+@RenderSection("breadcrumbs", false)
+
+@section pagetop
+{
+    @*111*@
+    <div class="left_block_inform_trade">
+        <div class="breadcrumbs" xmlns:v="http://rdf.data-vocabulary.org/#">
+            <span typeof="v:Breadcrumb"><a href="/">Главная</a></span> &rarr; Личный кабинет
+        </div>
+        <h1>Личный кабинет</h1>
+    </div>
+}
+
+@*@section sidebar*@
+
+@section scripts { @RenderSection("scripts", false) }
+
+<div class="customer-block">
+    <div id="customer_form" class="cover">
+
+        @RenderBody()
+
+    </div>
+</div>

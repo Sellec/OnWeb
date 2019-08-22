@@ -54,7 +54,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="OnUtils.Application">
-      <Version>0.1.2.64</Version>
+      <Version>0.1.2.65</Version>
     </PackageReference>
     <PackageReference Include="OnUtils">
       <Version>0.1.5</Version>
@@ -645,17 +645,17 @@
     <Folder Include="Data\temp\Customer\admin\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\CoreBind\NetFramework\CoreBind.NetFramework.csproj">
-      <Project>{97e67e63-4e52-48b7-93d3-775b3ffac10d}</Project>
-      <Name>CoreBind.NetFramework</Name>
+    <ProjectReference Include="..\..\Binding\AspNetMvc\Library\Binding.Library.csproj">
+      <Project>{4819a652-4f35-4b7e-bdd4-15e713e9aa80}</Project>
+      <Name>Binding.Library</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Core\Core.csproj">
+    <ProjectReference Include="..\..\Core\Core\Core.csproj">
       <Project>{f61ffcc5-3711-4d42-916a-ef83032f542a}</Project>
       <Name>Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Standard\Standard.NetFramework.csproj">
+    <ProjectReference Include="..\..\Standard\AspNetMvc\Library\Standard.Library.csproj">
       <Project>{c844d3be-ec89-4a5f-b54e-b07d9dfcb4c9}</Project>
-      <Name>Standard.NetFramework</Name>
+      <Name>Standard.Library</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

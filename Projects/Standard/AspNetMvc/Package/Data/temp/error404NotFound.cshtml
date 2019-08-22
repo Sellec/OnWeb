@@ -1,0 +1,38 @@
+@model Exception
+@{
+    Layout = "~/baseCommon.cshtml";
+    this.SetTitle("Адрес не найден");
+}
+
+@section breadcrumbs {
+    <!-- (breadcrumbs) -->
+    <div class="breadcrumbs inner-breadcrumbs">
+        <div class="breadcrumbs__cover cover">
+            <div class="breadcrumbs__links">
+                <a typeof="v:Breadcrumb" href="/" class="breadcrumbs__link">Главная</a>
+                <span class="breadcrumbs__arrow"></span>
+                <p class="breadcrumbs__last">Указанный адрес не найден</p>
+            </div>
+        </div>
+    </div>
+    <!-- End (breadcrumbs) -->
+}
+
+<div class="login-block">
+    <div class="cover">
+        <div class="login-block-inner">
+            <h1>Адрес не найден!</h1>
+            <div class="enter-block" id="enter_reg">
+                <div class="result">
+                    Уважаемый посетитель! Указанный адрес, который Вы пытаетесь открыть, не существует.
+                    @if (Model != null && !string.IsNullOrEmpty(Model.Message))
+                    {
+                        <div style="font-style: italic;font-weight: bold;margin-top:10px;">
+                            @Html.Raw(Model.Message)
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
