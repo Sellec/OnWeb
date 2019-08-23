@@ -1,21 +1,21 @@
 ﻿using Newtonsoft.Json;
 using OnUtils.Application.Journaling;
 using OnUtils.Application.Messaging;
-using OnUtils.Application.Messaging.Connectors;
+using OnUtils.Application.Messaging.MessageHandlers;
 using OnUtils.Architecture.ObjectPool;
 using System;
 using System.Net.Mail;
 using System.Text;
 
-namespace OnWeb.Modules.MessagingEmail.Connectors
+namespace OnWeb.Modules.MessagingEmail.MessageHandlers
 {
     using Core;
-    using Messaging.Connectors;
+    using Messaging.MessageHandlers;
 
     /// <summary>
     /// Предоставляет возможность отправки электронной почты через smtp-сервер. Поддерживается только <see cref="SmtpDeliveryMethod.Network"/>.
     /// </summary>
-    public sealed class SmtpServer : CoreComponentBase, IConnectorBase<EmailMessage>, IDisposable
+    public sealed class SmtpServer : CoreComponentBase, IOutcomingMessageHandler<EmailMessage>, IDisposable
     {
         private SmtpClient _client = null;
 
@@ -41,18 +41,18 @@ namespace OnWeb.Modules.MessagingEmail.Connectors
         }
         #endregion
 
-        #region IConnectorBase<Message>
+        #region IMessageHandler<Message>
         /// <summary>
-        /// См. <see cref="IConnectorBase{TAppCoreSelfReference, TMessage}.Init(string)"/>.
+        /// См. <see cref="IMessageHandler{TAppCoreSelfReference, TMessage}.Init(string)"/>.
         /// </summary>
-        /// <exception cref="InvalidOperationException">Возникает, если коннектор уже был инициализирован.</exception>
-        bool IConnectorBase<WebApplication, EmailMessage>.Init(string connectorSettings)
+        /// <exception cref="InvalidOperationException">Возникает, если обработчик уже был инициализирован.</exception>
+        bool IMessageHandler<WebApplication, EmailMessage>.Init(string handlerSettings)
         {
-            if (_client != null) throw new InvalidOperationException("Коннектор уже инициализирован.");
+            if (_client != null) throw new InvalidOperationException("Обработчик уже инициализирован.");
 
             try
             {
-                var settings = !string.IsNullOrEmpty(connectorSettings) ? JsonConvert.DeserializeObject<SmtpServerSettings>(connectorSettings) : new SmtpServerSettings();
+                var settings = !string.IsNullOrEmpty(handlerSettings) ? JsonConvert.DeserializeObject<SmtpServerSettings>(handlerSettings) : new SmtpServerSettings();
 
                 if (string.IsNullOrEmpty(settings.Server)) return false;
 
@@ -76,7 +76,7 @@ namespace OnWeb.Modules.MessagingEmail.Connectors
             }
         }
 
-        void IConnectorBase<WebApplication, EmailMessage>.Send(ConnectorMessage<EmailMessage> message, IMessagingService<WebApplication> service)
+        void IOutcomingMessageHandler<WebApplication, EmailMessage>.Send(HandlerMessage<EmailMessage> message, MessageServiceBase<WebApplication, EmailMessage> service)
         {
             try
             {
@@ -98,7 +98,7 @@ namespace OnWeb.Modules.MessagingEmail.Connectors
                 try
                 {
                     getClient().Send(mailMessage);
-                    message.HandledState = ConnectorMessageStateType.Sent;
+                    message.HandledState = HandlerMessageStateType.Completed;
                 }
                 catch (SmtpException ex)
                 {
@@ -130,7 +130,7 @@ namespace OnWeb.Modules.MessagingEmail.Connectors
                                 catch { }
 
                                 getClient().Send(mailMessage);
-                                message.HandledState = ConnectorMessageStateType.Sent;
+                                message.HandledState = HandlerMessageStateType.Completed;
                                 break;
 
                             default:
@@ -154,23 +154,23 @@ namespace OnWeb.Modules.MessagingEmail.Connectors
             }
             catch(FormatException)
             {
-                message.HandledState = ConnectorMessageStateType.Error;
+                message.HandledState = HandlerMessageStateType.Error;
                 message.State = "Некорректный Email-адрес";
             }
             catch (Exception)
             {
-                message.HandledState = ConnectorMessageStateType.Error;
+                message.HandledState = HandlerMessageStateType.Error;
                 message.State = "Необработанная ошибка во время отправки сообщения";
             }
         }
 
         private SmtpClient getClient()
         {
-            if (_client == null) throw new InvalidOperationException("Коннектор не был корректно инициализирован.");
+            if (_client == null) throw new InvalidOperationException("Обработчик не был корректно инициализирован.");
             return _client;
         }
 
-        string IConnectorBase<WebApplication, EmailMessage>.ConnectorName
+        string IMessageHandler<WebApplication, EmailMessage>.Name
         {
             get => "SMTP-сервер";
         }

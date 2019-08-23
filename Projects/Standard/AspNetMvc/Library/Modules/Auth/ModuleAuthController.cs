@@ -246,7 +246,7 @@ namespace OnWeb.Modules.Auth
                                     var code = DateTime.Now.Microtime().MD5();
                                     db.PasswordRemember.Add(new PasswordRemember() { user_id = user.IdUser, code = code });
 
-                                    AppCore.Get<IEmailService>().SendMailFromSite(
+                                    AppCore.Get<EmailService>().SendMailFromSite(
                                         user.Caption,
                                         user.email,
                                         "Восстановление пароля на сайте",
@@ -259,7 +259,7 @@ namespace OnWeb.Modules.Auth
                                     var code = OnUtils.Utils.StringsHelper.GenerateRandomString("0123456789", 4);
                                     db.PasswordRemember.Add(new PasswordRemember() { user_id = user.IdUser, code = code });
 
-                                    AppCore.Get<MessagingSMS.IService>().SendMessage(user.phone, "Код восстановления пароля: " + code);
+                                    AppCore.Get<MessagingSMS.Service>().SendMessage(user.phone, "Код восстановления пароля: " + code);
                                 }
 
                                 db.SaveChanges();

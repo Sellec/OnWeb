@@ -69,6 +69,7 @@
     <DefaultFilegroup>PRIMARY</DefaultFilegroup>
     <IncludeSchemaNameInFileName>True</IncludeSchemaNameInFileName>
     <TargetFrameworkProfile />
+    <GenerateSqlClrSymbols>False</GenerateSqlClrSymbols>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -331,8 +332,7 @@
     <None Include="Сравнение схем.scmp" />
   </ItemGroup>
   <PropertyGroup>
-    <PostBuildEvent>
-      if not exist "$(SolutionDir)..\Build\" mkdir "$(SolutionDir)..\Build\"
+    <PostBuildEvent>if not exist "$(SolutionDir)..\Build\" mkdir "$(SolutionDir)..\Build\"
       copy /y "$(ProjectDir)$(OutputPath)$(TargetDatabase).dacpac" "$(SolutionDir)..\Build\"</PostBuildEvent>
   </PropertyGroup>
 </Project>

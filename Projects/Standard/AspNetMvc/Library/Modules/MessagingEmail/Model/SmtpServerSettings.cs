@@ -8,7 +8,7 @@ namespace OnWeb.Modules.MessagingEmail.Model
     public class SmtpServerSettings
     {
         /// <summary>
-        /// См. <see cref="Connectors.SmtpServerSettings.Server"/>
+        /// См. <see cref="MessageHandlers.SmtpServerSettings.Server"/>
         /// </summary>
         [Display(Name = "Адрес smtp-сервера")]
         [Required]
@@ -16,20 +16,20 @@ namespace OnWeb.Modules.MessagingEmail.Model
         public string Server { get; set; }
 
         /// <summary>
-        /// См. <see cref="Connectors.SmtpServerSettings.IsSecure"/>
+        /// См. <see cref="MessageHandlers.SmtpServerSettings.IsSecure"/>
         /// </summary>
         [Display(Name = "Использовать подключение по SSL?")]
         [Required]
         public bool IsSecure { get; set; }
 
         /// <summary>
-        /// См. <see cref="Connectors.SmtpServerSettings.Port"/>
+        /// См. <see cref="MessageHandlers.SmtpServerSettings.Port"/>
         /// </summary>
         [Display(Name = "Порт подключения (необязателен для заполнения. По-умолчанию для небезопасного подключения используется порт 80, для безопасного 587)")]
         public int? Port { get; set; }
 
         /// <summary>
-        /// См. <see cref="Connectors.SmtpServerSettings.Login"/>
+        /// См. <see cref="MessageHandlers.SmtpServerSettings.Login"/>
         /// </summary>
         [Display(Name = "Логин для подключения к smtp-серверу")]
         [Required]
@@ -38,7 +38,7 @@ namespace OnWeb.Modules.MessagingEmail.Model
         public string Login { get; set; }
 
         /// <summary>
-        /// См. <see cref="Connectors.SmtpServerSettings.Password"/>
+        /// См. <see cref="MessageHandlers.SmtpServerSettings.Password"/>
         /// </summary>
         [Display(Name = "Пароль для подключения к smtp-серверу")]
         [Required]

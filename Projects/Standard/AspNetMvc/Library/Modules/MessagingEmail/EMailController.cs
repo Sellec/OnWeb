@@ -1,9 +1,8 @@
 ﻿using Newtonsoft.Json;
 using OnUtils.Application.Configuration;
 using OnUtils.Application.Messaging;
-using OnUtils.Application.Messaging.Connectors;
+using OnUtils.Application.Messaging.MessageHandlers;
 using OnUtils.Application.Modules.CoreModule;
-using System;
 using System.Linq;
 
 namespace OnWeb.Modules.MessagingEmail
@@ -18,27 +17,27 @@ namespace OnWeb.Modules.MessagingEmail
         {
             viewName = "ModuleSettings.cshtml";
 
-            var connectors = AppCore.AppConfig.ConnectorsSettings.
-                Where(x => x.ConnectorTypeName.StartsWith(typeof(Connectors.SmtpServer).Namespace)).
-                Select(x => new { x.ConnectorTypeName, Settings = JsonConvert.DeserializeObject<Connectors.SmtpServerSettings>(x.SettingsSerialized) }).
+            var handlers = AppCore.AppConfig.MessageHandlersSettings.
+                Where(x => x.TypeFullName.StartsWith(typeof(MessageHandlers.SmtpServer).Namespace)).
+                Select(x => new { x.TypeFullName, Settings = JsonConvert.DeserializeObject<MessageHandlers.SmtpServerSettings>(x.SettingsSerialized) }).
                 ToList();
 
-            var smtp = connectors.Where(x => x.ConnectorTypeName.EndsWith("." + nameof(Connectors.SmtpServer))).Select(x => x.Settings).FirstOrDefault();
+            var smtp = handlers.Where(x => x.TypeFullName.EndsWith("." + nameof(MessageHandlers.SmtpServer))).Select(x => x.Settings).FirstOrDefault();
 
             viewModelForFill.ApplyConfiguration(smtp);
         }
 
         protected override ModuleConfiguration<EMailModule> ConfigurationSaveCustom(Configuration formData, out string outputMessage)
         {
-            var connectors = AppCore.AppConfig.ConnectorsSettings.ToDictionary(x => x.ConnectorTypeName, x => x);
+            var handlers = AppCore.AppConfig.MessageHandlersSettings.ToDictionary(x => x.TypeFullName, x => x);
 
-            connectors.Remove(typeof(Connectors.SmtpServer).FullName);
+            handlers.Remove(typeof(MessageHandlers.SmtpServer).FullName);
             if (formData.IsUseSmtp)
             {
-                connectors[typeof(Connectors.SmtpServer).FullName] = new ConnectorSettings()
+                handlers[typeof(MessageHandlers.SmtpServer).FullName] = new MessageHandlerSettings()
                 {
-                    ConnectorTypeName = typeof(Connectors.SmtpServer).FullName,
-                    SettingsSerialized = JsonConvert.SerializeObject(new Connectors.SmtpServerSettings()
+                    TypeFullName = typeof(MessageHandlers.SmtpServer).FullName,
+                    SettingsSerialized = JsonConvert.SerializeObject(new MessageHandlers.SmtpServerSettings()
                     {
                         Server = formData?.Smtp?.Server,
                         IsSecure = formData?.Smtp?.IsSecure ?? false,
@@ -51,10 +50,10 @@ namespace OnWeb.Modules.MessagingEmail
 
             var cfg = AppCore.Get<CoreModule<WebApplication>>().GetConfigurationManipulator().GetEditable<CoreConfiguration<WebApplication>>();
 
-            cfg.ConnectorsSettings = connectors.Values.ToList();
+            cfg.MessageHandlersSettings = handlers.Values.ToList();
 
             AppCore.Get<CoreModule<WebApplication>>().GetConfigurationManipulator().ApplyConfiguration(cfg);
-            AppCore.Get<MessagingManager<WebApplication>>().UpdateConnectorsFromSettings();
+            AppCore.Get<MessagingManager<WebApplication>>().UpdateHandlersFromSettings();
 
             return base.ConfigurationSaveCustom(formData, out outputMessage);
         }

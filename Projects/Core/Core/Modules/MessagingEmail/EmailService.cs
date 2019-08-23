@@ -7,8 +7,13 @@ namespace OnWeb.Modules.MessagingEmail
 {
     using Messaging;
 
-    class EmailService : ServiceBase<EmailMessage>, IEmailService
+    /// <summary>
+    /// Представляет сервис отправки электронных писем (Email).
+    /// </summary>
+    public class EmailService : MessageServiceBase<EmailMessage>, ICriticalMessagesReceiver
     {
+        /// <summary>
+        /// </summary>
         public EmailService() : base("Email", "Email".GenerateGuid())
         {
             IsSupportsIncoming = false;
@@ -17,7 +22,20 @@ namespace OnWeb.Modules.MessagingEmail
         }
 
         #region Отправка
-        void IEmailService.SendMail(string name_from, string email_from, string name_to, string email_to, Encoding data_charset, Encoding send_charset, string subject, string body, ContentType contentType, List<int> files)
+        /// <summary>
+        /// Отправка письма на указанный адрес, с указанной темой, с указанным текстом.
+        /// </summary>
+        /// <param name="name_from">Имя отправителя</param>
+        /// <param name="email_from">email отправителя</param>
+        /// <param name="name_to">имя получателя</param>
+        /// <param name="email_to">email получателя</param>
+        /// <param name="data_charset">кодировка переданных данных</param>
+        /// <param name="send_charset">кодировка письма</param>
+        /// <param name="subject">тема письма</param>
+        /// <param name="body">текст письма</param>
+        /// <param name="files">Прикрепленные файлы</param>
+        /// <returns></returns>
+        public void SendMail(string name_from, string email_from, string name_to, string email_to, Encoding data_charset, Encoding send_charset, string subject, string body, ContentType contentType, List<int> files = null)
         {
             if (contentType == ContentType.Text) body = body.Replace("\n", "\n<br />");
 
@@ -29,17 +47,20 @@ namespace OnWeb.Modules.MessagingEmail
                 Body = body,
             };
 
-            RegisterMessage(message);
+            RegisterOutcomingMessage(message);
         }
 
-        void IEmailService.SendMailFromSite(string nameTo, string emailTo, string subject, string body, ContentType contentType, List<int> files)
+        /// <summary>
+        /// Отправка письма получателю <paramref name="nameTo"/> с адресом <paramref name="emailTo"/> с темой <paramref name="subject"/>, с текстом <paramref name="body"/>.
+        /// </summary>
+        public void SendMailFromSite(string nameTo, string emailTo, string subject, string body, ContentType contentType, List<int> files = null)
         {
-            ((IEmailService)this).SendMail("Почтовый робот сайта", GetNoReplyAddress(), nameTo, emailTo, null, null, subject, body, contentType, files);
+            SendMail("Почтовый робот сайта", GetNoReplyAddress(), nameTo, emailTo, null, null, subject, body, contentType, files);
         }
 
-        void IEmailService.SendMailToDeveloper(string subject, string body, ContentType contentType, List<int> files)
+        public void SendMailToDeveloper(string subject, string body, ContentType contentType, List<int> files = null)
         {
-            ((IEmailService)this).SendMail("Почтовый робот сайта", GetNoReplyAddress(), AppCore.WebConfig.DeveloperEmail, AppCore.WebConfig.DeveloperEmail, null, null, subject, body, contentType, files);
+            SendMail("Почтовый робот сайта", GetNoReplyAddress(), AppCore.WebConfig.DeveloperEmail, AppCore.WebConfig.DeveloperEmail, null, null, subject, body, contentType, files);
         }
 
         /**
@@ -49,7 +70,7 @@ namespace OnWeb.Modules.MessagingEmail
         * @param string     $subject
         * @param string     $body
         */
-        void IEmailService.SendMailSubscription(int idSubscription, string subject, string body, ContentType contentType)
+        public void SendMailSubscription(int idSubscription, string subject, string body, ContentType contentType)
         {
             AppCore.Get<ISubscriptionsManager>().send(idSubscription, subject, body, contentType);
         }
@@ -67,7 +88,7 @@ namespace OnWeb.Modules.MessagingEmail
 
         void ICriticalMessagesReceiver.SendToAdmin(string subject, string body)
         {
-            ((IEmailService)this).SendMail(
+            SendMail(
                 "Почтовый робот сайта",
                 GetNoReplyAddress(),
                 "admin",

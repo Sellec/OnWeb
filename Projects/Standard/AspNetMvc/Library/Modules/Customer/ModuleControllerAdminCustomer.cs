@@ -224,7 +224,7 @@ namespace OnWeb.Modules.Customer
                                             this.assign("login", Request.Form["email"]);
                                             this.assign("message", "Ваша заявка была одобрена администратором, вы можете зайти на сайт, используя логин и пароль, указанные при регистрации!");
 
-                                            AppCore.Get<IEmailService>().SendMailFromSite(
+                                            AppCore.Get<EmailService>().SendMailFromSite(
                                                 data.ToString(),
                                                 data.email,
                                                 "Успешная регистрация на сайте",
@@ -248,7 +248,7 @@ namespace OnWeb.Modules.Customer
                                             this.assign("login", data.email);
                                             this.assign("message", "Ваша заявка была отклонена администратором" + message);
 
-                                            AppCore.Get<IEmailService>().SendMailFromSite(
+                                            AppCore.Get<EmailService>().SendMailFromSite(
                                                 data.ToString(),
                                                 data.email,
                                                 "Регистрация на сайте отклонена",
@@ -276,7 +276,7 @@ namespace OnWeb.Modules.Customer
 
                                             this.assign("login", data.email);
                                             this.assign("message", "Ваш аккаунт заблокирован администратором" + message);
-                                            AppCore.Get<IEmailService>().SendMailFromSite(
+                                            AppCore.Get<EmailService>().SendMailFromSite(
                                                 data.ToString(),
                                                 data.email,
                                                 "Аккаунт заблокирован",

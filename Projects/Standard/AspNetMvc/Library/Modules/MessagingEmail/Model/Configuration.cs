@@ -9,7 +9,7 @@ namespace OnWeb.Modules.MessagingEmail.Model
 
         public SmtpServerSettings Smtp { get; set; }
 
-        public void ApplyConfiguration(Connectors.SmtpServerSettings smtp)
+        public void ApplyConfiguration(MessageHandlers.SmtpServerSettings smtp)
         {
             IsUseSmtp = smtp != null;
 

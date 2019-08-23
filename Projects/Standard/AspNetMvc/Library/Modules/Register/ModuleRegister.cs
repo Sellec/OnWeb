@@ -148,7 +148,7 @@ namespace OnWeb.Modules.Register
                             if (regMode == RegisterMode.Immediately)
                             {
                                 if (hasEmail)
-                                    AppCore.Get<IEmailService>().SendMailFromSite(
+                                    AppCore.Get<EmailService>().SendMailFromSite(
                                         data.name,
                                         data.email,
                                         "Регистрация на сайте",
@@ -157,14 +157,14 @@ namespace OnWeb.Modules.Register
                                     );
 
                                 if (hasPhone)
-                                    AppCore.Get<MessagingSMS.IService>()?.SendMessage(data.phone, "Регистрация на сайте прошла успешно.");
+                                    AppCore.Get<MessagingSMS.Service>()?.SendMessage(data.phone, "Регистрация на сайте прошла успешно.");
 
                                 answer.FromSuccess($"Вы успешно зарегистрировались на сайте и можете зайти, используя {credentitals}.");
                             }
                             else if (regMode == RegisterMode.SelfConfirmation)
                             {
                                 if (hasEmail)
-                                    AppCore.Get<IEmailService>().SendMailFromSite(
+                                    AppCore.Get<EmailService>().SendMailFromSite(
                                         data.name,
                                         data.email,
                                         "Регистрация на сайте",
@@ -177,7 +177,7 @@ namespace OnWeb.Modules.Register
                             else if (regMode == RegisterMode.ManualCheck)
                             {
                                 if (hasEmail)
-                                    AppCore.Get<IEmailService>().SendMailFromSite(
+                                    AppCore.Get<EmailService>().SendMailFromSite(
                                         data.name,
                                         data.email,
                                         "Регистрация на сайте",
@@ -193,7 +193,7 @@ namespace OnWeb.Modules.Register
                                     var mailAdmin = WebUtils.RazorRenderHelper.RenderView(this, "RegisterNotificationEmailAdmin.cshtml", query);
                                     usersToNotify.
                                         Where(x => !string.IsNullOrEmpty(x.email)).
-                                        ForEach(x => AppCore.Get<IEmailService>().SendMailFromSite(x.email, x.email, "Новая заявка на регистрацию", mailAdmin, ContentType.Html));
+                                        ForEach(x => AppCore.Get<EmailService>().SendMailFromSite(x.email, x.email, "Новая заявка на регистрацию", mailAdmin, ContentType.Html));
                                 }
                             }
 

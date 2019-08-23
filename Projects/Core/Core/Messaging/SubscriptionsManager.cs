@@ -90,7 +90,7 @@ namespace OnWeb.Messaging
                     {
                         if (excludedAddresses != null && excludedAddresses.Contains(pair.Key)) continue;
 
-                        AppCore.Get<IEmailService>().SendMailFromSite(pair.Value, pair.Key, subject, body, contentType, files);
+                        AppCore.Get<EmailService>().SendMailFromSite(pair.Value, pair.Key, subject, body, contentType, files);
                     }
 
                     if (!full) Debug.WriteLine("IdSubscription={0}. Исполнен частично.", IdSubscription);

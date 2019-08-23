@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace OnWeb.Modules.MessagingEmail.Connectors
+﻿namespace OnWeb.Modules.MessagingEmail.MessageHandlers
 {
     /// <summary>
     /// Хранит настройки подключения к smtp-серверу.
