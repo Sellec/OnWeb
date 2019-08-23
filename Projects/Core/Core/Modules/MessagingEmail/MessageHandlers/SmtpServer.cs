@@ -15,7 +15,7 @@ namespace OnWeb.Modules.MessagingEmail.MessageHandlers
     /// <summary>
     /// Предоставляет возможность отправки электронной почты через smtp-сервер. Поддерживается только <see cref="SmtpDeliveryMethod.Network"/>.
     /// </summary>
-    public sealed class SmtpServer : CoreComponentBase, IOutcomingMessageHandler<EmailMessage>, IDisposable
+    public sealed class SmtpServer : CoreComponentBase, IMessageSender<EmailMessage>, IDisposable
     {
         private SmtpClient _client = null;
 
@@ -76,7 +76,7 @@ namespace OnWeb.Modules.MessagingEmail.MessageHandlers
             }
         }
 
-        void IOutcomingMessageHandler<WebApplication, EmailMessage>.Send(HandlerMessage<EmailMessage> message, MessageServiceBase<WebApplication, EmailMessage> service)
+        void IMessageSender<WebApplication, EmailMessage>.Send(HandlerMessage<EmailMessage> message, MessageServiceBase<WebApplication, EmailMessage> service)
         {
             try
             {
