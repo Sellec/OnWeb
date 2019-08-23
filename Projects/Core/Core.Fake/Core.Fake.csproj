@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="libphonenumber-csharp" Version="8.10.17" />
-    <PackageReference Include="OnUtils.Application" Version="0.1.3.2" />
+    <PackageReference Include="OnUtils.Application" Version="0.1.3.3" />
     <PackageReference Include="StrongNamer" Version="0.0.8" />
   </ItemGroup>
 

@@ -7,11 +7,11 @@ namespace OnWeb.Modules.MessagingSMS
     /// <summary>
     /// Представляет сервис отправки СМС.
     /// </summary>
-    public abstract class Service : MessageServiceBase<Message>
+    public abstract class SMSService : MessageServiceBase<Message>
     {
         /// <summary>
         /// </summary>
-        protected Service(string serviceName, Guid serviceID) : base(serviceName, serviceID)
+        protected SMSService(string serviceName, Guid serviceID) : base(serviceName, serviceID)
         {
         }
         

@@ -259,7 +259,7 @@ namespace OnWeb.Modules.Auth
                                     var code = OnUtils.Utils.StringsHelper.GenerateRandomString("0123456789", 4);
                                     db.PasswordRemember.Add(new PasswordRemember() { user_id = user.IdUser, code = code });
 
-                                    AppCore.Get<MessagingSMS.Service>().SendMessage(user.phone, "Код восстановления пароля: " + code);
+                                    AppCore.Get<MessagingSMS.SMSService>().SendMessage(user.phone, "Код восстановления пароля: " + code);
                                 }
 
                                 db.SaveChanges();

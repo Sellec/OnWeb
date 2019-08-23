@@ -365,7 +365,7 @@ namespace OnWeb
             {
                 var appCore = _applicationCore;
                 _applicationCore = null;
-                if (appCore.GetState() == CoreComponentState.Started) appCore.Stop();
+                if (appCore?.GetState() == CoreComponentState.Started) appCore.Stop();
             }
             catch (Exception ex)
             {

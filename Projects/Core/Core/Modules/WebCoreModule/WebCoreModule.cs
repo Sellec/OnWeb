@@ -52,7 +52,7 @@ namespace OnWeb.Modules.WebCoreModule
         /// </summary>
         protected override void OnConfigurationApplied()
         {
-            var hasSmsService = AppCore.Get<MessagingSMS.Service>() != null;
+            var hasSmsService = AppCore.Get<MessagingSMS.SMSService>() != null;
             if (!hasSmsService)
             {
                 var cfg = GetConfigurationManipulator().GetEditable<WebCoreConfiguration>();
