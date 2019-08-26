@@ -1,4 +1,5 @@
 ﻿using OnUtils.Application.Messaging;
+using OnUtils.Application.Messaging.Messages;
 using System;
 
 namespace OnWeb.Messaging

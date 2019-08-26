@@ -1,13 +1,14 @@
 ﻿using Newtonsoft.Json;
 using OnUtils.Application.Journaling;
 using OnUtils.Application.Messaging;
-using OnUtils.Application.Messaging.MessageHandlers;
+using OnUtils.Application.Messaging.Components;
+using OnUtils.Application.Messaging.Messages;
 using OnUtils.Architecture.ObjectPool;
 using System;
 using System.Net.Mail;
 using System.Text;
 
-namespace OnWeb.Modules.MessagingEmail.MessageHandlers
+namespace OnWeb.Modules.MessagingEmail.Components
 {
     using Core;
     using Messaging.Components;
@@ -15,7 +16,7 @@ namespace OnWeb.Modules.MessagingEmail.MessageHandlers
     /// <summary>
     /// Предоставляет возможность отправки электронной почты через smtp-сервер. Поддерживается только <see cref="SmtpDeliveryMethod.Network"/>.
     /// </summary>
-    public sealed class SmtpServer : CoreComponentBase, IMessageSender<EmailMessage>, IDisposable
+    public sealed class SmtpServer : CoreComponentBase, IOutcomingMessageSender<EmailMessage>, IDisposable
     {
         private SmtpClient _client = null;
 
@@ -43,10 +44,10 @@ namespace OnWeb.Modules.MessagingEmail.MessageHandlers
 
         #region IMessageHandler<Message>
         /// <summary>
-        /// См. <see cref="IMessageHandler{TAppCoreSelfReference, TMessage}.Init(string)"/>.
+        /// См. <see cref="IMessageServiceComponent{TAppCoreSelfReference, TMessage}.Init(string)"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Возникает, если обработчик уже был инициализирован.</exception>
-        bool IMessageHandler<WebApplication, EmailMessage>.Init(string handlerSettings)
+        bool IMessageServiceComponent<WebApplication, EmailMessage>.Init(string handlerSettings)
         {
             if (_client != null) throw new InvalidOperationException("Обработчик уже инициализирован.");
 
@@ -76,29 +77,30 @@ namespace OnWeb.Modules.MessagingEmail.MessageHandlers
             }
         }
 
-        void IMessageSender<WebApplication, EmailMessage>.Send(HandlerMessage<EmailMessage> message, MessageServiceBase<WebApplication, EmailMessage> service)
+        bool IOutcomingMessageSender<WebApplication, EmailMessage>.Send(MessageInfo<EmailMessage> message, MessageServiceBase<WebApplication, EmailMessage> service)
         {
             try
             {
                 var mailMessage = new MailMessage()
                 {
-                    From = new MailAddress(message.MessageBody.From.ContactData, string.IsNullOrEmpty(message.MessageBody.From.Name) ? message.MessageBody.From.ContactData : message.MessageBody.From.Name),
+                    From = new MailAddress(message.Message.From.ContactData, string.IsNullOrEmpty(message.Message.From.Name) ? message.Message.From.ContactData : message.Message.From.Name),
                     SubjectEncoding = Encoding.UTF8,
-                    Subject = message.MessageBody.Subject,
+                    Subject = message.Message.Subject,
                     IsBodyHtml = true,
                     BodyEncoding = Encoding.UTF8,
-                    Body = message.MessageBody.Body?.ToString(),
+                    Body = message.Message.Body?.ToString(),
                 };
 
                 var developerEmail = AppCore.WebConfig.DeveloperEmail;
-                if (Debug.IsDeveloper && string.IsNullOrEmpty(developerEmail)) return;
+                if (Debug.IsDeveloper && string.IsNullOrEmpty(developerEmail)) return false;
 
-                message.MessageBody.To.ForEach(x => mailMessage.To.Add(new MailAddress(Debug.IsDeveloper ? developerEmail : x.ContactData, string.IsNullOrEmpty(x.Name) ? x.ContactData : x.Name)));
+                message.Message.To.ForEach(x => mailMessage.To.Add(new MailAddress(Debug.IsDeveloper ? developerEmail : x.ContactData, string.IsNullOrEmpty(x.Name) ? x.ContactData : x.Name)));
 
                 try
                 {
                     getClient().Send(mailMessage);
-                    message.HandledState = HandlerMessageStateType.Completed;
+                    message.StateType = MessageStateType.Completed;
+                    return true;
                 }
                 catch (SmtpException ex)
                 {
@@ -130,8 +132,8 @@ namespace OnWeb.Modules.MessagingEmail.MessageHandlers
                                 catch { }
 
                                 getClient().Send(mailMessage);
-                                message.HandledState = HandlerMessageStateType.Completed;
-                                break;
+                                message.StateType = MessageStateType.Completed;
+                                return true;
 
                             default:
                                 throw;
@@ -154,13 +156,15 @@ namespace OnWeb.Modules.MessagingEmail.MessageHandlers
             }
             catch(FormatException)
             {
-                message.HandledState = HandlerMessageStateType.Error;
+                message.StateType = MessageStateType.Error;
                 message.State = "Некорректный Email-адрес";
+                return true;
             }
             catch (Exception)
             {
-                message.HandledState = HandlerMessageStateType.Error;
+                message.StateType = MessageStateType.Error;
                 message.State = "Необработанная ошибка во время отправки сообщения";
+                return true;
             }
         }
 
@@ -170,7 +174,7 @@ namespace OnWeb.Modules.MessagingEmail.MessageHandlers
             return _client;
         }
 
-        string IMessageHandler<WebApplication, EmailMessage>.Name
+        string IMessageServiceComponent<WebApplication, EmailMessage>.Name
         {
             get => "SMTP-сервер";
         }

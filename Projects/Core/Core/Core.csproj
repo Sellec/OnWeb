@@ -13,7 +13,7 @@
     <Product>OnWeb</Product>
     <IncludeSymbols>True</IncludeSymbols>
     <IncludeSource>True</IncludeSource>
-    <Version>0.1.7.7</Version>
+    <Version>0.1.7.8</Version>
     <AssemblyName>OnWeb.Core</AssemblyName>
     <RootNamespace>OnWeb</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>

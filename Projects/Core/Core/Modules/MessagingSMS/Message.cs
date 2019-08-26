@@ -1,4 +1,4 @@
-﻿using OnUtils.Application.Messaging;
+﻿using OnUtils.Application.Messaging.Messages;
 
 namespace OnWeb.Modules.MessagingSMS
 {

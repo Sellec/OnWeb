@@ -8,7 +8,7 @@ namespace OnWeb.Modules.MessagingEmail
         void IConfigureBindings<WebApplication>.ConfigureBindings(IBindingsCollection<WebApplication> bindingsCollection)
         {
             bindingsCollection.SetSingleton<EmailService>();
-            bindingsCollection.SetTransient<MessageHandlers.SmtpServer>();
+            bindingsCollection.SetTransient<Components.SmtpServer>();
         }
     }
 }

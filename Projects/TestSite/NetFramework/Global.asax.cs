@@ -4,7 +4,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using OnUtils.Application.Messaging;
-using OnUtils.Application.Messaging.MessageHandlers;
+using OnUtils.Application.Messaging.Components;
 using OnUtils.Architecture.ObjectPool;
 using OnWeb.Modules.MessagingEmail;
 
