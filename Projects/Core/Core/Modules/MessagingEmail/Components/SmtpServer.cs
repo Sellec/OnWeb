@@ -1,69 +1,49 @@
 ﻿using Newtonsoft.Json;
 using OnUtils.Application.Journaling;
-using OnUtils.Application.Messaging;
-using OnUtils.Application.Messaging.Components;
 using OnUtils.Application.Messaging.Messages;
-using OnUtils.Architecture.ObjectPool;
 using System;
 using System.Net.Mail;
 using System.Text;
 
 namespace OnWeb.Modules.MessagingEmail.Components
 {
-    using Core;
     using Messaging.Components;
+    using OnWeb.Messaging;
 
     /// <summary>
     /// Предоставляет возможность отправки электронной почты через smtp-сервер. Поддерживается только <see cref="SmtpDeliveryMethod.Network"/>.
     /// </summary>
-    public sealed class SmtpServer : CoreComponentBase, IOutcomingMessageSender<EmailMessage>, IDisposable
+    public sealed class SmtpServer : OutcomingMessageSender<EmailMessage>
     {
         private SmtpClient _client = null;
 
-        #region CoreComponentBase
         /// <summary>
         /// </summary>
-        protected sealed override void OnStart()
+        public SmtpServer() : base("SMTP-сервер", 20)
         {
         }
 
+        #region OutcomingMessageSender<EmailMessage>
         /// <summary>
+        /// См. <see cref="MessageServiceComponent{TMessage}.OnInit(string)"/>.
         /// </summary>
-        protected sealed override void OnStop()
+        protected override bool OnInit(string settings)
         {
-            var client = _client;
-            _client = null;
-
-            if (client != null)
-            {
-                client.Dispose();
-                client = null;
-            }
-        }
-        #endregion
-
-        #region IMessageHandler<Message>
-        /// <summary>
-        /// См. <see cref="IMessageServiceComponent{TAppCoreSelfReference, TMessage}.Init(string)"/>.
-        /// </summary>
-        /// <exception cref="InvalidOperationException">Возникает, если обработчик уже был инициализирован.</exception>
-        bool IMessageServiceComponent<WebApplication, EmailMessage>.Init(string handlerSettings)
-        {
-            if (_client != null) throw new InvalidOperationException("Обработчик уже инициализирован.");
+            if (_client != null) throw new InvalidOperationException("Компонент уже инициализирован.");
 
             try
             {
-                var settings = !string.IsNullOrEmpty(handlerSettings) ? JsonConvert.DeserializeObject<SmtpServerSettings>(handlerSettings) : new SmtpServerSettings();
+                var settingsParsed = !string.IsNullOrEmpty(settings) ? JsonConvert.DeserializeObject<SmtpServerSettings>(settings) : new SmtpServerSettings();
 
-                if (string.IsNullOrEmpty(settings.Server)) return false;
+                if (string.IsNullOrEmpty(settingsParsed.Server)) return false;
 
                 var client = new SmtpClient()
                 {
-                    Host = settings.Server,
-                    Port = settings.Port.HasValue ? settings.Port.Value : (settings.IsSecure ? 587 : 80),
-                    EnableSsl = settings.IsSecure,
+                    Host = settingsParsed.Server,
+                    Port = settingsParsed.Port.HasValue ? settingsParsed.Port.Value : (settingsParsed.IsSecure ? 587 : 80),
+                    EnableSsl = settingsParsed.IsSecure,
                     DeliveryMethod = SmtpDeliveryMethod.Network,
-                    Credentials = new System.Net.NetworkCredential(settings.Login, settings.Password),
+                    Credentials = new System.Net.NetworkCredential(settingsParsed.Login, settingsParsed.Password),
                 };
 
                 _client = client;
@@ -77,7 +57,10 @@ namespace OnWeb.Modules.MessagingEmail.Components
             }
         }
 
-        bool IOutcomingMessageSender<WebApplication, EmailMessage>.Send(MessageInfo<EmailMessage> message, MessageServiceBase<WebApplication, EmailMessage> service)
+        /// <summary>
+        /// См. <see cref="OutcomingMessageSender{TMessage}.OnSend(MessageInfo{TMessage}, MessageServiceBase{TMessage})"/>.
+        /// </summary>
+        protected override bool OnSend(MessageInfo<EmailMessage> message, MessageServiceBase<EmailMessage> service)
         {
             try
             {
@@ -154,34 +137,25 @@ namespace OnWeb.Modules.MessagingEmail.Components
 
                 //$success = $mail->send();
             }
-            catch(FormatException)
+            catch (FormatException ex)
             {
+                service.RegisterServiceEvent(EventType.Error, "SMTP - ошибка отправки письма", "Некорректный Email-адрес", ex);
                 message.StateType = MessageStateType.Error;
                 message.State = "Некорректный Email-адрес";
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                message.StateType = MessageStateType.Error;
-                message.State = "Необработанная ошибка во время отправки сообщения";
-                return true;
+                service.RegisterServiceEvent(EventType.Error, "SMTP - ошибка отправки письма", null, ex);
+                return false;
             }
         }
 
         private SmtpClient getClient()
         {
-            if (_client == null) throw new InvalidOperationException("Обработчик не был корректно инициализирован.");
+            if (_client == null) throw new InvalidOperationException("Компонент не был корректно инициализирован.");
             return _client;
         }
-
-        string IMessageServiceComponent<WebApplication, EmailMessage>.Name
-        {
-            get => "SMTP-сервер";
-        }
         #endregion
-
-        void IDisposable.Dispose() => OnStop();
-
-        uint IPoolObjectOrdered.OrderInPool { get; } = 20;
     }
 }
