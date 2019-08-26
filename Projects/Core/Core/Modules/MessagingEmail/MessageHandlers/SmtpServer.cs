@@ -10,7 +10,7 @@ using System.Text;
 namespace OnWeb.Modules.MessagingEmail.MessageHandlers
 {
     using Core;
-    using Messaging.MessageHandlers;
+    using Messaging.Components;
 
     /// <summary>
     /// Предоставляет возможность отправки электронной почты через smtp-сервер. Поддерживается только <see cref="SmtpDeliveryMethod.Network"/>.

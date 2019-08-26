@@ -1,7 +1,7 @@
 ﻿using OnUtils.Application.Messaging;
 using OnUtils.Application.Messaging.MessageHandlers;
 
-namespace OnWeb.Messaging.MessageHandlers
+namespace OnWeb.Messaging.Components
 {
     /// <summary>
     /// Представляет обработчик для получения и регистрации сообщений определенного типа.
