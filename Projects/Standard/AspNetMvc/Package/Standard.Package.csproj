@@ -7,7 +7,7 @@
     <!--<IncludeSymbols>False</IncludeSymbols>
     <IncludeSource>True</IncludeSource>-->
     <MinClientVersion>3.3.0</MinClientVersion>
-    <Version>0.1.7.53</Version>
+    <Version>0.1.7.55</Version>
     <Description>Базовые модули для ядра на ASP.NET MVC.</Description>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>OnWeb.Standard.AspNetMvc</PackageId>
