@@ -7,7 +7,7 @@
     <RootNamespace>OnWeb</RootNamespace>
     <IncludeSymbols>True</IncludeSymbols>
     <IncludeSource>True</IncludeSource>
-    <Version>0.1.7.22</Version>
+    <Version>0.1.7.53</Version>
     <Description>Ядро веб-движка для работы с ASP.NET MVC.</Description>
     <PackageId>OnWeb.Binding.AspNetMvc</PackageId>
     <Product>OnWeb.Binding.AspNetMvc</Product>

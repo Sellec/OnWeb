@@ -25,15 +25,14 @@ namespace OnWeb.Modules.MessagingEmail.Components
 
         #region OutcomingMessageSender<EmailMessage>
         /// <summary>
-        /// См. <see cref="MessageServiceComponent{TMessage}.OnInit(string)"/>.
         /// </summary>
-        protected override bool OnInit(string settings)
+        protected override bool OnStartComponent()
         {
             if (_client != null) throw new InvalidOperationException("Компонент уже инициализирован.");
 
             try
             {
-                var settingsParsed = !string.IsNullOrEmpty(settings) ? JsonConvert.DeserializeObject<SmtpServerSettings>(settings) : new SmtpServerSettings();
+                var settingsParsed = !string.IsNullOrEmpty(SerializedSettings) ? JsonConvert.DeserializeObject<SmtpServerSettings>(SerializedSettings) : new SmtpServerSettings();
 
                 if (string.IsNullOrEmpty(settingsParsed.Server)) return false;
 

@@ -13,7 +13,7 @@
     <Product>OnWeb</Product>
     <IncludeSymbols>True</IncludeSymbols>
     <IncludeSource>True</IncludeSource>
-    <Version>0.1.7.22</Version>
+    <Version>0.1.7.53</Version>
     <AssemblyName>OnWeb.Core</AssemblyName>
     <RootNamespace>OnWeb</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -58,7 +58,7 @@
     </PackageReference>
     <PackageReference Include="ModuleInit.Fody" Version="1.9.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="OnUtils.Application" Version="0.1.3.9">
+    <PackageReference Include="OnUtils.Application" Version="0.1.3.18">
       <ExcludeAssets>contentFiles;</ExcludeAssets>
     </PackageReference>
     <PackageReference Include="OnUtils.Data.EntityFramework" Version="0.1.5.4" />
@@ -66,7 +66,7 @@
     
     <PackageReference Include="System.Data.SqlClient" Version="4.6.0" />
     <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
-    <PackageReference Include="OnUtils" Version="0.1.5" />
+    <PackageReference Include="OnUtils" Version="0.1.6" />
     <PackageReference Include="Ude.NetStandard" Version="1.2.0" />
   </ItemGroup>
   <ItemGroup>
