@@ -12,6 +12,7 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Transactions;
 using System.Web.Mvc;
+using OnUtils.Application.Types;
 
 namespace OnWeb.Modules.FileManager
 {
@@ -25,7 +26,8 @@ namespace OnWeb.Modules.FileManager
     public class FileManager : ModuleCore<FileManager>, IUnitOfWorkAccessor<DB.DataContext>
     {
         private static FileManager _thisModule = null;
-        private static ConcurrentDictionary<string, int> _servicesFlags = new ConcurrentDictionary<string, int>();
+        private static ConcurrentFlagLocker<string> _servicesFlags = new ConcurrentFlagLocker<string>();
+        private static int _checkRemovedFilesMax = 0;
 
         /// <summary>
         /// </summary>
@@ -467,7 +469,7 @@ namespace OnWeb.Modules.FileManager
         #region FileManager tasks
         internal static void PlaceFileIntoQueue()
         {
-            if (_servicesFlags.AddOrUpdate("PlaceFileIntoQueue", 1, (k, o) => Math.Min(int.MaxValue, o + 1)) > 1) return;
+            if (!_servicesFlags.TryLock("PlaceFileIntoQueue")) return;
 
             try
             {
@@ -483,13 +485,13 @@ namespace OnWeb.Modules.FileManager
             }
             finally
             {
-                _servicesFlags["PlaceFileIntoQueue"] = 0;
+                _servicesFlags.ReleaseLock("PlaceFileIntoQueue");
             }
         }
 
         internal static void RemoveMarkedFiles()
         {
-            if (_servicesFlags.AddOrUpdate("RemoveMarkedFiles", 1, (k, o) => Math.Min(int.MaxValue, o + 1)) > 1) return;
+            if (!_servicesFlags.TryLock("RemoveMarkedFiles")) return;
             int countFiles = 0;
 
             try
@@ -574,14 +576,14 @@ namespace OnWeb.Modules.FileManager
             }
             finally
             {
-                _servicesFlags["RemoveMarkedFiles"] = 0;
+                _servicesFlags.ReleaseLock("RemoveMarkedFiles");
                 if (countFiles > 0) _thisModule?.RegisterEvent(EventType.Info, "Удаление файлов", $"Удалено {countFiles} файлов.", null);
             }
         }
 
         internal static void CheckRemovedFiles(bool isStart)
         {
-            if (_servicesFlags.AddOrUpdate("CheckRemovedFiles", 1, (k, o) => Math.Min(int.MaxValue, o + 1)) > 1) return;
+            if (!_servicesFlags.TryLock("CheckRemovedFiles")) return;
             bool isFinalized = false;
             int countFiles = 0;
 
@@ -589,14 +591,14 @@ namespace OnWeb.Modules.FileManager
             {
                 if (isStart)
                 {
-                    _servicesFlags["CheckRemovedFilesMax"] = 0;
+                    _servicesFlags.ReleaseLock("CheckRemovedFilesMax");
                     TasksManager.SetTask(typeof(FileManager).FullName + "_" + nameof(CheckRemovedFiles) + "_minutely5", Cron.MinuteInterval(5), () => CheckRemovedFiles(false));
                     _thisModule?.RegisterEvent(EventType.Info, "Запуск регулярной задачи проверки файлов.", null);
                 }
 
                 var executionTimeLimit = new TimeSpan(0, 4, 30);
                 var dateStart = DateTime.Now;
-                int idFileMax = _servicesFlags.GetOrAdd("CheckRemovedFilesMax", 0);
+                int idFileMax = _checkRemovedFilesMax;
                 var rootDirectory = _thisModule?.AppCore?.ApplicationWorkingFolder;
 
                 using (var db = new DB.DataContext())
@@ -640,7 +642,7 @@ namespace OnWeb.Modules.FileManager
                             countFiles += updateList.Count;
                         }
 
-                        _servicesFlags["CheckRemovedFilesMax"] = idFileMax;
+                        _checkRemovedFilesMax = idFileMax;
                     }
                 }
 
@@ -659,7 +661,7 @@ namespace OnWeb.Modules.FileManager
             }
             finally
             {
-                _servicesFlags["CheckRemovedFiles"] = 0;
+                _servicesFlags.ReleaseLock("CheckRemovedFiles");
                 if (countFiles > 0) _thisModule?.RegisterEvent(EventType.Info, "Проверка удаленных файлов", $"На удаление помечено {countFiles} файлов.", null);
             }
         }
