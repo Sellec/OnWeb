@@ -7,11 +7,11 @@
     <!--<IncludeSymbols>False</IncludeSymbols>
     <IncludeSource>True</IncludeSource>-->
     <MinClientVersion>3.3.0</MinClientVersion>
-    <Version>0.1.7.57</Version>
+    <Version>0.1.7.59</Version>
     <Description>Базовые модули для ядра на ASP.NET MVC.</Description>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>OnWeb.Standard.AspNetMvc</PackageId>
-    <Product>OnWeb.Standard.AspNetMvc</Product>
+    <Product>OnWeb</Product>
 	<LinkedFolder>$(BaseIntermediateOutputPath)$(Configuration)\Linked\</LinkedFolder>
   </PropertyGroup>
   <ItemGroup>

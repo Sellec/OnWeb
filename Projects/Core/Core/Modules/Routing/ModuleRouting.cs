@@ -41,7 +41,8 @@ namespace OnWeb.Modules.Routing
                  var oldSameIdThreads = _defferedObjects.Values.Where(x => !x.DateClose.HasValue && x.ThreadId == id).ToList();
                  if (oldSameIdThreads.Count > 0)
                  {
-                     Debug.WriteLine($"TimerCallback: new threadID={id}, found {oldSameIdThreads.Count} old threads with {oldSameIdThreads.Sum(x => x.Collection.Sum(y => y.Value.Count))} items.");
+                     var sum = oldSameIdThreads.Sum(x => x.Collection.Sum(y => y.Value.Count));
+                     if (sum > 0) Debug.WriteLineNoLog($"TimerCallback: new threadID={id}, found {oldSameIdThreads.Count} old threads with {sum} items.");
                      oldSameIdThreads.ForEach(pair =>
                      {
                          pair.Collection.Values.ForEach(x => x.Clear());
@@ -82,14 +83,17 @@ namespace OnWeb.Modules.Routing
                 var countClosedThreads = _defferedObjects.Values.Count - openedThreads.Count;
                 var sumAll = openedThreads.Sum(x => x.Collection.Sum(y => y.Value.Count));
 
-                Debug.WriteLine($"TimerCallback: {openedThreads.Count} threads have containers with {sumAll} items. {countClosedThreads} threads are closed.");
+                if (sumAll > 0)
+                {
+                    Debug.WriteLineNoLog($"TimerCallback: {openedThreads.Count} threads have containers with {sumAll} items. {countClosedThreads} threads are closed.");
 
-                var rows = openedThreads.
-                    Select(x => new { x.ThreadId, x.Collection, CountAll = x.Collection.Sum(y => y.Value.Count) }).
-                    Where(x => x.CountAll > 0).
-                    OrderBy(x => x.ThreadId).
-                    Select(x => $"Thread-{x.ThreadId}: {x.CountAll} items in {x.Collection.Count} types;");
-                rows.ForEach(x => Debug.WriteLine($"TimerCallback: {x}"));
+                    var rows = openedThreads.
+                        Select(x => new { x.ThreadId, x.Collection, CountAll = x.Collection.Sum(y => y.Value.Count) }).
+                        Where(x => x.CountAll > 0).
+                        OrderBy(x => x.ThreadId).
+                        Select(x => $"Thread-{x.ThreadId}: {x.CountAll} items in {x.Collection.Count} types;");
+                    rows.ForEach(x => Debug.WriteLineNoLog($"TimerCallback: {x}"));
+                }
             }
             finally
             {
